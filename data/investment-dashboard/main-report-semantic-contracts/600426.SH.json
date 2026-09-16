@@ -1,0 +1,596 @@
+{
+  "schema_version": 1,
+  "ticker": "600426.SH",
+  "company": "山东华鲁恒升化工股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+    "report_sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "正文明确当前21.11元观察；18—21元是激进型小仓，15—17元和11—14元是更稳健的分批买入区。",
+      "加仓路径保留了价格与基本面两条并列逻辑，卖出条件保留为任一触发。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "华鲁恒升是值得长期跟踪的成本型周期制造商，但21.11元赔率不足，等待更好价格和半年报确认。",
+    "evidence": [
+      {
+        "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+        "line_start": 354,
+        "line_end": 354,
+        "quote": "### 明确结论：观察"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前观察；18—21元可小仓，15—17元或11—14元分批买入，均受周期和资本回报约束。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "18—21元小仓、分批，等待半年报确认。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 18,
+                "price_max": 21,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                    "line_start": 330,
+                    "line_end": 330,
+                    "quote": "| 激进型 | 18-21元 | 小仓、分批，等待半年报确认 | 押注经营修复延续，接受周期波动 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于18—21元。",
+                "node_id": "empty-trial-18-21-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "EXISTS",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                    "line_start": 330,
+                    "line_end": 330,
+                    "quote": "| 激进型 | 18-21元 | 小仓、分批，等待半年报确认 | 押注经营修复延续，接受周期波动 |"
+                  }
+                ],
+                "kind": "FILING",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "等待半年报确认经营修复。",
+                "node_id": "empty-trial-18-21-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                "line_start": 330,
+                "line_end": 330,
+                "quote": "| 激进型 | 18-21元 | 小仓、分批，等待半年报确认 | 押注经营修复延续，接受周期波动 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于18—21元，且等待半年报确认。",
+            "node_id": "empty-trial-18-21-condition"
+          },
+          "path_id": "empty-trial-18-21",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+              "line_start": 330,
+              "line_end": 330,
+              "quote": "| 激进型 | 18-21元 | 小仓、分批，等待半年报确认 | 押注经营修复延续，接受周期波动 |"
+            }
+          ]
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "15—17元进入稳健分批买入区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 15,
+            "price_max": 17,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                "line_start": 331,
+                "line_end": 331,
+                "quote": "| 稳健型 | 15-17元 | 分批买入 | 接近中性情景折现价值，开始具安全边际 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于15—17元稳健分批买入区。",
+            "node_id": "empty-entry-15-17-condition"
+          },
+          "path_id": "empty-entry-15-17",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+              "line_start": 331,
+              "line_end": 331,
+              "quote": "| 稳健型 | 15-17元 | 分批买入 | 接近中性情景折现价值，开始具安全边际 |"
+            }
+          ]
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "11—14元进入保守分批买入区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 11,
+            "price_max": 14,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                "line_start": 332,
+                "line_end": 332,
+                "quote": "| 保守型 | 11-14元 | 分批买入 | 接近悲观目标区，对低回报项目留出保护 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于11—14元保守分批买入区。",
+            "node_id": "empty-entry-11-14-condition"
+          },
+          "path_id": "empty-entry-11-14",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+              "line_start": 332,
+              "line_end": 332,
+              "quote": "| 保守型 | 11-14元 | 分批买入 | 接近悲观目标区，对低回报项目留出保护 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "| 空仓者 | 观察；18-21元只适合激进型小仓，稳健资金等待15-17元或半年报显著上修所有者收益判断 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者可持有核心仓，但21元以上不追；若量价、现金流和项目回报改善再评估。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD",
+          "summary": "持有核心仓，21元以上不追。",
+          "path_id": "holder-hold-core",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+              "line_start": 361,
+              "line_end": 361,
+              "quote": "| 持仓者 | 可持有核心仓，21元以上不追；若Q2价差、现金流和项目爬坡继续改善，可维持 |"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "加仓需要价格进入15—17元且基本面未恶化，或多项经营信号同时改善。",
+          "condition": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "BETWEEN",
+                    "value": null,
+                    "unit": null,
+                    "price_min": 15,
+                    "price_max": 17,
+                    "currency": "CNY",
+                    "price_role": "ADD_POSITION",
+                    "evidence": [
+                      {
+                        "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                        "line_start": 362,
+                        "line_end": 362,
+                        "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+                      }
+                    ],
+                    "kind": "PRICE_RANGE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "A股价格处于15—17元。",
+                    "node_id": "holder-add-gate-condition-1-1"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                        "line_start": 362,
+                        "line_end": 362,
+                        "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+                      }
+                    ],
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "基本面未恶化。",
+                    "node_id": "holder-add-gate-condition-1-2"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                    "line_start": 362,
+                    "line_end": 362,
+                    "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+                  }
+                ],
+                "kind": "ALL",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "价格进入15—17元且基本面未恶化。",
+                "node_id": "holder-add-gate-condition-1"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                        "line_start": 362,
+                        "line_end": 362,
+                        "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+                      }
+                    ],
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "连续两季毛利率高于20%。",
+                    "node_id": "holder-add-gate-condition-2-1"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                        "line_start": 362,
+                        "line_end": 362,
+                        "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+                      }
+                    ],
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "经营现金流改善并确认荆州新装置正ROIC。",
+                    "node_id": "holder-add-gate-condition-2-2"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                    "line_start": 362,
+                    "line_end": 362,
+                    "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+                  }
+                ],
+                "kind": "ALL",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "连续两季毛利率高于20%、经营现金流改善且荆州新装置正ROIC得到确认。",
+                "node_id": "holder-add-gate-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+                "line_start": 362,
+                "line_end": 362,
+                "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+              }
+            ],
+            "kind": "ANY",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "报告列示的两条加仓路径任一成立。",
+            "node_id": "holder-add-gate-condition"
+          },
+          "path_id": "holder-add-gate",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+              "line_start": 362,
+              "line_end": 362,
+              "quote": "| 加仓信号 | 股价进入15-17元且基本面未恶化；或连续两季毛利率高于20%、经营现金流改善并确认荆州新装置正ROIC |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "| 持仓者 | 可持有核心仓，21元以上不追；若Q2价差、现金流和项目爬坡继续改善，可维持 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "毛利率",
+          "operator": "LT",
+          "value": 15,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+              "line_start": 364,
+              "line_end": 364,
+              "quote": "| 卖出信号 | 连续四季毛利率低于15%、FCF/净利润持续低于50%，或主要新项目稳产后ROIC低于8% |"
+            }
+          ],
+          "kind": "METRIC_COMPARE",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "毛利率连续四季低于15%。",
+          "node_id": "redline-1-1"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "FCF/净利润",
+          "operator": "LT",
+          "value": 50,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+              "line_start": 364,
+              "line_end": 364,
+              "quote": "| 卖出信号 | 连续四季毛利率低于15%、FCF/净利润持续低于50%，或主要新项目稳产后ROIC低于8% |"
+            }
+          ],
+          "kind": "METRIC_COMPARE",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "FCF/净利润持续低于50%。",
+          "node_id": "redline-1-2"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "ROIC",
+          "operator": "LT",
+          "value": 8,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+              "line_start": 364,
+              "line_end": 364,
+              "quote": "| 卖出信号 | 连续四季毛利率低于15%、FCF/净利润持续低于50%，或主要新项目稳产后ROIC低于8% |"
+            }
+          ],
+          "kind": "METRIC_COMPARE",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "主要新项目稳产后ROIC低于8%。",
+          "node_id": "redline-1-3"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "| 卖出信号 | 连续四季毛利率低于15%、FCF/净利润持续低于50%，或主要新项目稳产后ROIC低于8% |"
+        }
+      ],
+      "kind": "ANY",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "连续四季毛利率低于15%、FCF/净利润持续低于50%或主要新项目稳产后ROIC低于8%时卖出。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "EXISTS",
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+          "line_start": 368,
+          "line_end": 368,
+          "quote": "2026年半年报是当前最重要的复核点：需要看Q1的量价齐升能否延续、经营现金流能否跟上利润、荆州新装置的负荷与毛利、净债务是否继续上升，以及管理层对剩余NMP/PBAT和TDI规划的正式表述。"
+        }
+      ],
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "2026年半年报是量价、现金流和荆州项目回报的关键验证点。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "COMPLEX_PRICE_TIERS",
+    "CYCLICAL_CAPEX_AND_ROIC"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/华鲁恒升/华鲁恒升研究报告-20260809.md",
+      "line_start": 354,
+      "line_end": 354,
+      "quote": "### 明确结论：观察"
+    }
+  ]
+}

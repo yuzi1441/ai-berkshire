@@ -1,0 +1,586 @@
+{
+  "schema_version": 1,
+  "ticker": "601398.SH",
+  "company": "工商银行",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+    "report_sha256": "3798f660964b9fa69e3e0e8c5168ae672b87ec81a8009572d9addba3e478f671"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "当前 7.12 元仅是可研究区，不能因低 PE/PB 或股息率直接判为买入",
+      "6.5-7.5 元同时写为观望或小仓配置，报告没有给出二者的选择规则",
+      "6.0-6.5 元仅为稳健型小仓/分批，6.0 元以下也写成重点研究/分批配置而非无条件重仓",
+      "H 股当前价只作行情参考，报告的价格区间明确仅针对 A 股",
+      "报告没有给出现有持仓者的独立动作"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "高股息金融公用事业，当前基准为观望至小仓配置。",
+    "evidence": [
+      {
+        "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+        "line_start": 26,
+        "line_end": 26,
+        "quote": "**基准判断**：观望至小仓配置。若 A股价格低于约 6.5 元、且资产质量没有恶化，可进入更有吸引力区间；若高于 8.0 元且净息差/ROE无改善，不宜用“高股息”叙事追高。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 7.12 元处于观望或小仓配置的未决区间；6.5 元以下且资产质量未恶化才更有吸引力。",
+      "entry_semantic": "AMBIGUOUS",
+      "action_paths": [
+        {
+          "path_id": "focus-or-batch-below-6",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "6.0 元以下可重点研究或分批配置，但报告未明确二者的选择规则。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 6.0,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+                "line_start": 356,
+                "line_end": 356,
+                "quote": "| ≤ 6.0 元 | ≤6x PE；≤0.55x PB | 较有安全边际，可重点研究/分批配置 |"
+              }
+            ],
+            "node_id": "price-below-6",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 6.0 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 356,
+              "line_end": 356,
+              "quote": "| ≤ 6.0 元 | ≤6x PE；≤0.55x PB | 较有安全边际，可重点研究/分批配置 |"
+            }
+          ]
+        },
+        {
+          "path_id": "stable-trial-6-6.5",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "6.0-6.5 元时稳健型可考虑小仓或分批。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 6.0,
+            "price_max": 6.5,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+                "line_start": 357,
+                "line_end": 357,
+                "quote": "| 6.0-6.5 元 | 6.0-6.5x PE；0.55-0.60x PB | 稳健型可考虑小仓或分批 |"
+              }
+            ],
+            "node_id": "price-6-6.5",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 6.0-6.5 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 357,
+              "line_end": 357,
+              "quote": "| 6.0-6.5 元 | 6.0-6.5x PE；0.55-0.60x PB | 稳健型可考虑小仓或分批 |"
+            }
+          ]
+        },
+        {
+          "path_id": "current-watch-or-trial-6.5-7.5",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "6.5-7.5 元可观望或小仓配置，报告未定义选择规则。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 6.5,
+            "price_max": 7.5,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+                "line_start": 358,
+                "line_end": 358,
+                "quote": "| 6.5-7.5 元 | 6.5-7.5x PE；0.60-0.69x PB | 当前附近，观望或小仓配置，重在股息而非弹性 |"
+              }
+            ],
+            "node_id": "price-6.5-7.5",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 6.5-7.5 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 358,
+              "line_end": 358,
+              "quote": "| 6.5-7.5 元 | 6.5-7.5x PE；0.60-0.69x PB | 当前附近，观望或小仓配置，重在股息而非弹性 |"
+            }
+          ]
+        },
+        {
+          "path_id": "avoid-above-8.5-unless-reversal",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "8.5 元以上不追，除非行业与 ROE 趋势明显反转。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GTE",
+                "value": null,
+                "unit": null,
+                "price_min": 8.5,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "NOT_ACTIONABLE",
+                "evidence": [
+                  {
+                    "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+                    "line_start": 360,
+                    "line_end": 360,
+                    "quote": "| ≥ 8.5 元 | ≥8.5x PE；≥0.78x PB | 不建议追高，除非行业和ROE趋势明显反转 |"
+                  }
+                ],
+                "node_id": "price-above-8.5",
+                "kind": "PRICE_RANGE",
+                "effect": "BLOCK_ENTRY",
+                "scope": "empty_position",
+                "description": "A 股价格不低于 8.5 元。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+                        "line_start": 360,
+                        "line_end": 360,
+                        "quote": "| ≥ 8.5 元 | ≥8.5x PE；≥0.78x PB | 不建议追高，除非行业和ROE趋势明显反转 |"
+                      }
+                    ],
+                    "node_id": "industry-roe-reversal",
+                    "kind": "QUALITATIVE",
+                    "effect": "POSITIVE_TRIGGER",
+                    "scope": "empty_position",
+                    "description": "行业和 ROE 趋势明显反转。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+                    "line_start": 360,
+                    "line_end": 360,
+                    "quote": "| ≥ 8.5 元 | ≥8.5x PE；≥0.78x PB | 不建议追高，除非行业和ROE趋势明显反转 |"
+                  }
+                ],
+                "node_id": "no-industry-roe-reversal",
+                "kind": "NOT",
+                "effect": "BLOCK_ENTRY",
+                "scope": "empty_position",
+                "description": "行业和 ROE 趋势尚未明显反转。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+                "line_start": 360,
+                "line_end": 360,
+                "quote": "| ≥ 8.5 元 | ≥8.5x PE；≥0.78x PB | 不建议追高，除非行业和ROE趋势明显反转 |"
+              }
+            ],
+            "node_id": "avoid-all",
+            "kind": "ALL",
+            "effect": "BLOCK_ENTRY",
+            "scope": "empty_position",
+            "description": "价格不低于 8.5 元且行业与 ROE 趋势未明显反转。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 360,
+              "line_end": 360,
+              "quote": "| ≥ 8.5 元 | ≥8.5x PE；≥0.78x PB | 不建议追高，除非行业和ROE趋势明显反转 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "line_start": 352,
+          "line_end": 360,
+          "quote": "### 9.2 价格区间建议（A股，基于2025 EPS 1.00 元、BVPS 10.83 元）"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "UNKNOWN",
+      "summary": "报告没有给出现有持仓者的独立当前动作。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [],
+      "evidence": [
+        {
+          "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "line_start": 18,
+          "line_end": 26,
+          "quote": "### 最终建议"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 372,
+              "line_end": 372,
+              "quote": "1. 净息差继续显著下行，且负债成本难以下降；"
+            }
+          ],
+          "node_id": "nim-keeps-falling",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "净息差继续显著下行且负债成本难以下降。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 373,
+              "line_end": 373,
+              "quote": "2. 房地产、个人贷款、地方平台风险显著暴露；"
+            }
+          ],
+          "node_id": "credit-risk-exposed",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "房地产、个人贷款或地方平台风险显著暴露。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 374,
+              "line_end": 374,
+              "quote": "3. 资本充足率下降导致分红政策受压；"
+            }
+          ],
+          "node_id": "capital-pressure-dividend",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "资本充足率下降导致分红政策受压。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 375,
+              "line_end": 375,
+              "quote": "4. 贷款减值损失持续快于收入增长；"
+            }
+          ],
+          "node_id": "impairment-faster-than-revenue",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "贷款减值损失持续快于收入增长。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+              "line_start": 376,
+              "line_end": 376,
+              "quote": "5. 股价上涨主要由“高股息抱团”推动，但基本面没有改善。"
+            }
+          ],
+          "node_id": "dividend-crowding-without-fundamentals",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "股价仅由高股息抱团推动而基本面没有改善。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "line_start": 370,
+          "line_end": 376,
+          "quote": "### 9.4 减仓/回避信号"
+        }
+      ],
+      "node_id": "avoid-on-any-negative-signal",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "任一减仓或回避信号出现时触发复核。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "line_start": 362,
+          "line_end": 368,
+          "quote": "### 9.3 加仓信号"
+        }
+      ],
+      "node_id": "monitor-add-signal-set",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控净息差、ROE、资产质量、手续费收入、分红和资本充足率；报告未定义五项的组合逻辑。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 7.12,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "**行情口径**：2026-07-06 收盘；A股 7.12 元，H股约 6.43 港元（新浪行情 + Yahoo Finance 交叉验证）"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 6.43,
+      "min": null,
+      "max": null,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "**行情口径**：2026-07-06 收盘；A股 7.12 元，H股约 6.43 港元（新浪行情 + Yahoo Finance 交叉验证）"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 3.7,
+      "max": 8.7,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "line_start": 207,
+          "line_end": 211,
+          "quote": "| 情景 | 年增速 | 目标PE | 3年后目标EPS | 目标股价 | 较当前涨跌幅 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +3% | 8x | 1.09 | 8.7 元 | +22.8% |\n| 中性 | 0% | 6x | 1.00 | 6.0 元 | -15.7% |\n| 悲观 | -3% | 4x | 0.91 | 3.7 元 | -48.7% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约只保留泛化观察和保守型 PB 条件，遗漏正文全部 A 股价格带，并将现有明确路径写成未给出。",
+    "evidence": [
+      {
+        "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+        "line_start": 438,
+        "line_end": 446,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 生意质量 强基础设施型，非高定价权型 |\n| 激进型动作 | 未给出 |\n| 激进型价格区间 | 未给出 |\n| 稳健型动作 | 未给出 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 等待更高股息率或 PB 明显低于 0.60x 再考虑 |\n| 保守型价格区间 | 未给出 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "AMBIGUOUS_REQUIRES_STRONG_REVIEW"
+  ],
+  "ambiguities": [
+    {
+      "code": "CURRENT_ZONE_ACTION_UNRESOLVED",
+      "summary": "6.5-7.5 元区间同时允许观望或小仓配置，但报告没有给出何时选择哪一种。",
+      "required_clarification": "明确当前区间中从观望切换到小仓配置所需的资产质量、股息或投资者类型条件。",
+      "evidence": [
+        {
+          "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+          "line_start": 358,
+          "line_end": 358,
+          "quote": "| 6.5-7.5 元 | 6.5-7.5x PE；0.60-0.69x PB | 当前附近，观望或小仓配置，重在股息而非弹性 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+      "line_start": 18,
+      "line_end": 26,
+      "quote": "### 最终建议"
+    },
+    {
+      "report_path": "reports/工商银行/工商银行投资研究报告_20260707.md",
+      "line_start": 338,
+      "line_end": 376,
+      "quote": "## 9. 分层操作建议"
+    }
+  ]
+}

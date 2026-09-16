@@ -1,0 +1,574 @@
+{
+  "schema_version": 1,
+  "ticker": "003816.SZ",
+  "company": "中国广核",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+    "report_sha256": "19959c035e90135a56505c16c12ffb62b23fe1351a42cfb4c4b97e8df247add4"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "A 股 4.06 元位于 3.60-4.30 元持有/不追价区间；3.20 元以下是可开始分批研究建仓，不能把当前价或目标价当作买入价。",
+      "3.20-3.60 元同时写成观察或极小仓，3.20 元以下又写成研究建仓；合同保留为试仓/人工复核边界，不擅自把两者合并成普通买入。",
+      "报告同时讨论 H 股；本批合同只保留 A 股动作路径，H 股价格只作非行动性参考，防止港元价格套入 A 股。",
+      "持仓者 4.30 元以上且盈利未上修时逐步降低机会成本，已保留为持仓者减仓触发，而不是空仓者买入条件。",
+      "新机组投产、电价、利润、杠杆等加仓信号及减仓/卖出信号没有声明任一或全部关系，保留人工复核。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "中国广核生意和长期需求确定性较高，但 A 股当前缺乏安全边际；空仓者等待更低价格和基本面验证，持仓者在逻辑未恶化时持有并控制机会成本。",
+    "evidence": [
+      {
+        "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+        "line_start": 242,
+        "line_end": 242,
+        "quote": "综合结论：公司值得长期跟踪；A 股当前观望，H 股可小仓研究。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "A 股当前 4.06 元处于 3.60-4.30 元持有/不追价区；不高于 3.20 元才进入分批研究建仓路径，3.20-3.60 元的观察或极小仓边界需人工确认。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-a-share-3.60-4.30",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 3.60-4.30 元以持有/观察为主，不追价。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 3.6,
+            "price_max": 4.3,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+                "line_start": 219,
+                "line_end": 219,
+                "quote": "3.60-4.30 元"
+              }
+            ],
+            "node_id": "watch-a-share-current-band",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 3.60-4.30 元持有、不追价区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 219,
+              "line_end": 219,
+              "quote": "| A 股 | 3.60-4.30 元 | 持有、不追价 | 当前 4.06 元处于此区间 |"
+            }
+          ]
+        },
+        {
+          "path_id": "trial-a-share-below-3.20",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股不高于 3.20 元时可开始分批研究建仓；‘研究建仓’是否等同实际试仓仍需确认。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 3.2,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+                "line_start": 217,
+                "line_end": 217,
+                "quote": "不高于 3.20 元"
+              }
+            ],
+            "node_id": "trial-a-share-below-3.20",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 3.20 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 217,
+              "line_end": 217,
+              "quote": "| A 股 | **不高于 3.20 元** | 可开始分批研究建仓 | 约 16.6x 2025 PE，安全边际开始出现 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-a-share-3.20-3.60-boundary",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 3.20-3.60 元被报告写成观察或极小仓，未明确是正式试仓还是仅观察，进入人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 3.2,
+            "price_max": 3.6,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+                "line_start": 218,
+                "line_end": 218,
+                "quote": "3.20-3.60 元"
+              }
+            ],
+            "node_id": "review-a-share-3.20-3.60",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 3.20-3.60 元观察或极小仓区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 218,
+              "line_end": 218,
+              "quote": "| A 股 | 3.20-3.60 元 | 观察或极小仓 | 约 16.6-18.7x PE |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 246,
+          "line_end": 246,
+          "quote": "不在 4.06 元追买 A 股"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "A 股持仓者在电价、项目进度和分红未恶化时继续持有；4.30 元以上且盈利未上修时逐步降低机会成本。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-a-share",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "电价、项目进度和分红未恶化时继续持有。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 247,
+              "line_end": 247,
+              "quote": "只要电价、项目进度和分红未恶化可继续持有"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-above-4.30-without-earnings-upgrade",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股高于 4.30 元且盈利未上修时逐步降低机会成本；不是空仓者买入条件。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 4.3,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+                    "line_start": 247,
+                    "line_end": 247,
+                    "quote": "4.30 元以上"
+                  }
+                ],
+                "node_id": "holder-price-above-4.30",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格高于 4.30 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+                    "line_start": 247,
+                    "line_end": 247,
+                    "quote": "且盈利未上修时逐步降低机会成本"
+                  }
+                ],
+                "node_id": "holder-earnings-not-upgraded",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "盈利未上修。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+                "line_start": 247,
+                "line_end": 247,
+                "quote": "4.30 元以上且盈利未上修时逐步降低机会成本"
+              }
+            ],
+            "node_id": "holder-reduce-all-above-4.30",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "A 股价格高于 4.30 元且盈利未上修。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 247,
+              "line_end": 247,
+              "quote": "4.30 元以上且盈利未上修时逐步降低机会成本"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 247,
+          "line_end": 247,
+          "quote": "A 股持仓者"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "INES 3 级及以上重大安全事件"
+            }
+          ],
+          "node_id": "ines-3-or-higher",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "发生 INES 3 级及以上重大安全事件。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "核准长期停滞"
+            }
+          ],
+          "node_id": "nuclear-approval-stalls",
+          "kind": "EVENT",
+          "effect": "NEGATIVE_TRIGGER",
+          "scope": "both",
+          "description": "核准长期停滞。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "项目回报持续低于资本成本"
+            }
+          ],
+          "node_id": "project-return-below-cost",
+          "kind": "EVENT",
+          "effect": "NEGATIVE_TRIGGER",
+          "scope": "both",
+          "description": "项目回报持续低于资本成本。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "治理底线被破坏"
+            }
+          ],
+          "node_id": "governance-bottom-line-broken",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "治理底线被破坏。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "卖出/否决信号"
+        }
+      ],
+      "node_id": "china-general-nuclear-veto-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "重大核安全事件、核准长期停滞、项目回报持续低于资本成本或治理底线被破坏时触发系统性否决/重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 249,
+          "line_end": 249,
+          "quote": "加仓信号"
+        }
+      ],
+      "node_id": "monitor-cgnpc-operating-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪新机组投产、平均市场化电价、归母净利恢复、资产负债率、项目进度、关联交易和分红。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 4.06,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "4.06 元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股当前价格（仅非行动性参考）",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 2.88,
+      "min": null,
+      "max": null,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "2.88 港元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 2.36,
+      "max": 4.6,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 207,
+          "line_end": 207,
+          "quote": "**4.60 元**"
+        },
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 209,
+          "line_end": 209,
+          "quote": "**2.36 元**"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "报告底部看板契约只保留空仓者摘要，遗漏正文的完整 A 股价格带、持仓者减仓条件以及 A/H 路径边界。",
+    "evidence": [
+      {
+        "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+        "line_start": 317,
+        "line_end": 317,
+        "quote": "空仓者 不在 4.06 元追买 A 股"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "ENTRY_ACTION_BOUNDARY",
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
+    "REPORT_CONTRACT_INCOMPLETE"
+  ],
+  "ambiguities": [
+    {
+      "code": "ENTRY_ACTION_BOUNDARY",
+      "summary": "不高于 3.20 元写成‘可开始分批研究建仓’，3.20-3.60 元写成‘观察或极小仓’，研究建仓、试仓和正式建仓的边界未定义。",
+      "required_clarification": "由人工或更强模型确认 3.20 元以下是否允许实际试仓，以及 3.20 元边界是否属于观察区还是试仓区；在确认前保留人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 217,
+          "line_end": 217,
+          "quote": "可开始分批研究建仓"
+        },
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 218,
+          "line_end": 218,
+          "quote": "观察或极小仓"
+        }
+      ]
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓、减仓和卖出/否决信号列出多个条件，但未说明任一、全部还是至少满足若干项。",
+      "required_clarification": "明确这些信号的组合逻辑后再生成自动加仓、减仓或退出路径；当前仅作为人工复核和监控。",
+      "evidence": [
+        {
+          "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+          "line_start": 249,
+          "line_end": 251,
+          "quote": "加仓信号"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/中国广核/中国广核-investment-research-20260724.md",
+      "line_start": 242,
+      "line_end": 251,
+      "quote": "综合结论：公司值得长期跟踪；A 股当前观望，H 股可小仓研究。"
+    }
+  ]
+}

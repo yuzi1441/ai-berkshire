@@ -1,0 +1,1292 @@
+{
+  "schema_version": 1,
+  "ticker": "600406.SH",
+  "company": "国电南瑞",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+    "report_sha256": "f2ea65766cc6e6927103501b08319f376f6d677409f0dce6b5cce807758523db"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "23.58 元是当前 A 股参考价；13.59—31.62 元三情景总现值和 17.48/15.29 元安全边际候选价均保持估值或行动角色，不把目标价当作买入价。",
+      "正文明确区分空仓者观察不买、持仓者持有不加仓、价格分层建仓以及卖出信号任一触发即重审。",
+      "加仓条件明确为价格门槛、卖出信号全部未触发，并且至少一条正向证据；保留为 ALL(价格 ANY, 红线未触发, 正向证据 ANY)。",
+      "底部看板契约省略分层动作字段，但与正文没有直接相反的结论；本候选以正文完整语义为准，并保留强复核标记。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "国电南瑞是资产负债表稳健、护城河真实的电网控制层公司，但主战场增速和毛利率约束使 23.58 元没有足够安全边际；空仓观察不买，持仓不加仓，等待更低价格和正向证据。",
+    "evidence": [
+      {
+        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+        "line_start": 8,
+        "line_end": 8,
+        "quote": "> **一句话结论**：**好公司，估值处历史中低位，但按 10% 要求回报仍无安全边际。观察，不买入；20% 安全边际候选价 17.48 元。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓者当前观察不买；21.84—25 元继续观察，17.48—21.84 元进入分批建仓区，≤17.48 元为红线未触发前提下的积极买入区，≤15.29 元为更高安全边际重仓候选。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "empty-watch-no-buy-current",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前空仓者观察，不买入，等待更低价格。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1056,
+              "line_end": 1056,
+              "quote": "| **空仓者** | **观察，不买入。** 纳入核心观察池。等待 ≤ 21.84 元（中性现值）开始分批、**≤ 17.48 元（20% 安全边际）积极建仓**。现价买入的期望年化约 7.8%（中性情景含股息），低于 10% 要求回报率，且承担 −42% 的悲观下行。**没有任何需要现在就买的理由**——公司不会消失，2026 年内已给过 21.68 元的机会（3 月至 7 月跌 31.2%）。 |"
+            }
+          ]
+        },
+        {
+          "path_id": "empty-watch-21-84-25",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "21.84—25 元为持有/观察区，价格公允偏贵且没有安全边际。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 21.84,
+            "price_max": 25,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                "line_start": 1017,
+                "line_end": 1017,
+                "quote": "| 21.84–25 元 | 18.8–21.6x | **持有 / 观察（现价 23.58 元在此区间）** | 质地可接受，价格公允偏贵，无安全边际 |"
+              }
+            ],
+            "node_id": "nari-watch-price-21-84-25",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 21.84—25 元，持有/观察而非建仓。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1017,
+              "line_end": 1017,
+              "quote": "| 21.84–25 元 | 18.8–21.6x | **持有 / 观察（现价 23.58 元在此区间）** | 质地可接受，价格公允偏贵，无安全边际 |"
+            }
+          ]
+        },
+        {
+          "path_id": "empty-entry-17-48-21-84",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "17.48—21.84 元进入中性现值下方的分批建仓区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 17.48,
+            "price_max": 21.84,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                "line_start": 1018,
+                "line_end": 1018,
+                "quote": "| 17.48–21.84 元 | 15.1–18.8x | **分批建仓** | 进入中性现值下方，接近 20% 安全边际 |"
+              }
+            ],
+            "node_id": "nari-entry-price-17-48-21-84",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 17.48—21.84 元分批建仓区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1018,
+              "line_end": 1018,
+              "quote": "| 17.48–21.84 元 | 15.1–18.8x | **分批建仓** | 进入中性现值下方，接近 20% 安全边际 |"
+            }
+          ]
+        },
+        {
+          "path_id": "empty-entry-below-17-48-redlines-clear",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "≤17.48 元达到 20% 安全边际候选价，但必须确认红线未触发。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 17.48,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                    "line_start": 1019,
+                    "line_end": 1019,
+                    "quote": "| ≤ 17.48 元 | < 15.1x | **20% 安全边际，可积极买入**（红线未触发为前提） | 中性现值 21.84 × 0.8 |"
+                  }
+                ],
+                "node_id": "nari-price-lte-17-48",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格不高于 17.48 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                    "line_start": 1019,
+                    "line_end": 1019,
+                    "quote": "| ≤ 17.48 元 | < 15.1x | **20% 安全边际，可积极买入**（红线未触发为前提） | 中性现值 21.84 × 0.8 |"
+                  }
+                ],
+                "node_id": "nari-redlines-not-triggered",
+                "kind": "MANUAL_REVIEW",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "卖出信号/论文红线未触发。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                "line_start": 1019,
+                "line_end": 1019,
+                "quote": "| ≤ 17.48 元 | < 15.1x | **20% 安全边际，可积极买入**（红线未触发为前提） | 中性现值 21.84 × 0.8 |"
+              }
+            ],
+            "node_id": "nari-entry-below-17-48-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 17.48 元且卖出/论文红线未触发。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1019,
+              "line_end": 1019,
+              "quote": "| ≤ 17.48 元 | < 15.1x | **20% 安全边际，可积极买入**（红线未触发为前提） | 中性现值 21.84 × 0.8 |"
+            }
+          ]
+        },
+        {
+          "path_id": "empty-entry-below-15-29-high-margin",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "≤15.29 元是 30% 安全边际的重仓候选区，仍受论文红线约束。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 15.29,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                "line_start": 1020,
+                "line_end": 1020,
+                "quote": "| ≤ 15.29 元 | < 13.2x | **30% 安全边际，重仓候选** | 21.84 × 0.7；接近悲观现值 13.59 元 |"
+              }
+            ],
+            "node_id": "nari-entry-below-15-29",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 15.29 元，达到 30% 安全边际重仓候选线。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1020,
+              "line_end": 1020,
+              "quote": "| ≤ 15.29 元 | < 13.2x | **30% 安全边际，重仓候选** | 21.84 × 0.7；接近悲观现值 13.59 元 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 1056,
+          "line_end": 1056,
+          "quote": "| **空仓者** | **观察，不买入。** 纳入核心观察池。等待 ≤ 21.84 元（中性现值）开始分批、**≤ 17.48 元（20% 安全边际）积极建仓**。现价买入的期望年化约 7.8%（中性情景含股息），低于 10% 要求回报率，且承担 −42% 的悲观下行。**没有任何需要现在就买的理由**——公司不会消失，2026 年内已给过 21.68 元的机会（3 月至 7 月跌 31.2%）。 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "持仓者持有不加仓；加仓必须同时满足价格门槛、卖出信号全部未触发以及至少一条正向证据，任何列示卖出信号触发则重审。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持有，不加仓；等待中报等判决点。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1057,
+              "line_end": 1057,
+              "quote": "| **持仓者** | **持有，不加仓。** 全部红线未触发（标准无保留审计、无处罚、无重大诉讼、无大股东减持、商誉 144.47 万元、有息负债率 0.60%、FCF/净利 1.29、分红率 60% 连续三年）。生意本质未变，防御属性明确（近 60 日跌幅为同业最小）。但已无安全边际，**不应在此价位增加仓位。若仓位 >15%，建议不再投入新资金，等 2026-08-27 中报。** |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-with-price-clear-redlines-and-positive-proof",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格达到 21.84 元或 17.48 元门槛、卖出信号全部未触发且至少一条正向证据成立时，才允许考虑加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "LTE",
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": 21.84,
+                    "currency": "CNY",
+                    "price_role": "ADD_POSITION",
+                    "evidence": [
+                      {
+                        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                        "line_start": 1059,
+                        "line_end": 1059,
+                        "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                      }
+                    ],
+                    "node_id": "nari-add-price-lte-21-84",
+                    "kind": "PRICE_RANGE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "A 股价格不高于 21.84 元。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "LTE",
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": 17.48,
+                    "currency": "CNY",
+                    "price_role": "ADD_POSITION",
+                    "evidence": [
+                      {
+                        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                        "line_start": 1059,
+                        "line_end": 1059,
+                        "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                      }
+                    ],
+                    "node_id": "nari-add-price-lte-17-48",
+                    "kind": "PRICE_RANGE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "A 股价格不高于 17.48 元。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                    "line_start": 1059,
+                    "line_end": 1059,
+                    "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                  }
+                ],
+                "node_id": "nari-add-price-any",
+                "kind": "ANY",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "价格不高于 21.84 元（分批）或不高于 17.48 元（积极）。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                    "line_start": 1059,
+                    "line_end": 1059,
+                    "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                  }
+                ],
+                "node_id": "nari-add-redlines-clear",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "上述卖出信号全部未触发。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                        "line_start": 1059,
+                        "line_end": 1059,
+                        "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                      }
+                    ],
+                    "node_id": "nari-q2-margin-positive",
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "中报 Q2 单季毛利率同比转正。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "归母净利润增速",
+                    "operator": "GTE",
+                    "value": 12,
+                    "unit": "%",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                        "line_start": 1059,
+                        "line_end": 1059,
+                        "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                      }
+                    ],
+                    "node_id": "nari-net-profit-growth-gte-12",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "归母增速回升至至少 12%。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "海外毛利率",
+                    "operator": "GTE",
+                    "value": 22,
+                    "unit": "%",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                        "line_start": 1059,
+                        "line_end": 1059,
+                        "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                      }
+                    ],
+                    "node_id": "nari-overseas-margin-gte-22",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "海外毛利率提升至至少 22%。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "OCCURS",
+                    "value": true,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                        "line_start": 1059,
+                        "line_end": 1059,
+                        "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                      }
+                    ],
+                    "node_id": "nari-buyback-capital-reduction",
+                    "kind": "EVENT",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "新一轮回购确定用于减少注册资本而非股权激励。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "网内业务收入增速",
+                    "operator": "GTE",
+                    "value": 10,
+                    "unit": "%",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                        "line_start": 1059,
+                        "line_end": 1059,
+                        "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                      }
+                    ],
+                    "node_id": "nari-grid-revenue-growth-gte-10",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "网内业务增速回升至至少 10%。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                    "line_start": 1059,
+                    "line_end": 1059,
+                    "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+                  }
+                ],
+                "node_id": "nari-positive-evidence-any",
+                "kind": "ANY",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "至少一条正向证据成立。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                "line_start": 1059,
+                "line_end": 1059,
+                "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+              }
+            ],
+            "node_id": "nari-add-position-gate",
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "满足价格门槛、卖出信号全部未触发，并且至少一条正向证据。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1059,
+              "line_end": 1059,
+              "quote": "| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-review-on-sell-signal",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "卖出信号任一触发即重审，不由合同自动直接卖出。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 1057,
+          "line_end": 1057,
+          "quote": "| **持仓者** | **持有，不加仓。** 全部红线未触发（标准无保留审计、无处罚、无重大诉讼、无大股东减持、商誉 144.47 万元、有息负债率 0.60%、FCF/净利 1.29、分红率 60% 连续三年）。生意本质未变，防御属性明确（近 60 日跌幅为同业最小）。但已无安全边际，**不应在此价位增加仓位。若仓位 >15%，建议不再投入新资金，等 2026-08-27 中报。** |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "GTE",
+              "value": null,
+              "unit": null,
+              "price_min": 30,
+              "price_max": null,
+              "currency": "CNY",
+              "price_role": "REDUCE_POSITION",
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-price-gte-30",
+              "kind": "PRICE_RANGE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "A 股价格不低于 30 元。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "归母净利润增速",
+              "operator": "LT",
+              "value": 10,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-profit-growth-lt-10",
+              "kind": "METRIC_COMPARE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "归母增速低于 10%。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ],
+          "node_id": "nari-price-30-and-growth-below-10",
+          "kind": "ALL",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "股价至少 30 元且归母增速低于 10%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ],
+          "node_id": "nari-ocf-below-profit-two-years",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "年度经营现金流连续 2 年低于净利润。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "综合毛利率",
+              "operator": "LT",
+              "value": 24,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-total-margin-lt-24",
+              "kind": "METRIC_COMPARE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "综合毛利率低于 24%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "核心电网智能业务毛利率",
+              "operator": "LT",
+              "value": 28,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-grid-intelligent-margin-lt-28",
+              "kind": "METRIC_COMPARE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "核心电网智能业务毛利率低于 28%。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ],
+          "node_id": "nari-margin-any-below-threshold",
+          "kind": "ANY",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "综合毛利率低于 24% 或核心电网智能业务毛利率低于 28%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ],
+          "node_id": "nari-grid-revenue-flat-two-years",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "网内收入连续 2 年零增长或负增长。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "非国网应收账款占比",
+              "operator": "GT",
+              "value": 55,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-non-grid-receivables-gte-55",
+              "kind": "METRIC_COMPARE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "非国网应收账款占比超过 55%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "非国网应收组合计提率",
+              "operator": "GT",
+              "value": 20,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-non-grid-provision-gt-20",
+              "kind": "METRIC_COMPARE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "非国网应收组合计提率超过 20%。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ],
+          "node_id": "nari-non-grid-receivables-risk",
+          "kind": "ALL",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "非国网应收账款占比超过 55% 且该组合计提率超过 20%。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-nonstandard-audit",
+              "kind": "EVENT",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "出现非标审计意见。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-nonstandard-control",
+              "kind": "EVENT",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "出现内控非标。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ],
+          "node_id": "nari-audit-or-control-nonstandard",
+          "kind": "ANY",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "出现非标审计意见或内控非标。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ],
+          "node_id": "nari-integrity-or-regulatory-event",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "控股股东或董监高出现重大诚信或监管处罚。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "2026 年营业收入",
+              "operator": "LT",
+              "value": 700,
+              "unit": "亿元",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-revenue-lt-700",
+              "kind": "METRIC_COMPARE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "2026 年收入低于 700 亿元。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+                  "line_start": 1058,
+                  "line_end": 1058,
+                  "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+                }
+              ],
+              "node_id": "nari-no-seasonality-explanation",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "holder",
+              "description": "没有季节性解释。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+              "line_start": 1058,
+              "line_end": 1058,
+              "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+            }
+          ],
+          "node_id": "nari-revenue-below-700-no-seasonality",
+          "kind": "ALL",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "2026 年收入低于 700 亿元且没有季节性解释。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 1058,
+          "line_end": 1058,
+          "quote": "| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |"
+        }
+      ],
+      "node_id": "nari-sell-signals-any",
+      "kind": "ANY",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "卖出信号任一触发即重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 1065,
+          "line_end": 1065,
+          "quote": "| **2026-08-27（中报，预约日已确认）** | **最重要的判决点** | ① **Q2 单季毛利率同比**（2025Q2 −3.82pct，Q2 是全年毛利率最高也是跌幅最大的季度）② 经营现金流是否从 Q1 的 −15.14 亿修复 ③ 存货是否从 165.91 亿回落、合同负债是否维持 86 亿+ ④ H1 收入占 750 亿目标的比例（2025H1 为 242.43 亿 = 全年 36.6%）⑤ 归母增速能否向 Q2–Q4 需要的 +13.09% 靠拢 ⑥ **陆股通持股是否继续回补**（2026Q1 为 7.107 亿股）⑦ **股东户数**（2026Q1 已达 302,939 户）⑧ 中期分红是否达到\"上限 40%\" |"
+        }
+      ],
+      "node_id": "nari-august-h1-and-tender-monitoring",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "重点跟踪 2026-08-27 中报、Q2 毛利率、经营现金流、存货、订单、回购用途及国网招标中标金额与均价。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 1067,
+          "line_end": 1067,
+          "quote": "| 2026 Q3–Q4 | 国网招标批次 | 特高压与输变电设备各批次中国电南瑞与许继、平高、四方的中标金额与均价（⚠️ **这是本报告最大的信息缺口**） |"
+        }
+      ],
+      "node_id": "nari-tender-margin-monitoring",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "国网招标中标份额与中标均价是报告明确的信息缺口，需要后续一手验证。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 23.58,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "> **报告日期**：2026-07-26（周日）｜**行情基准**：2026-07-24 收盘 **23.58 元**（腾讯/新浪/东财三源一致，偏差 0.00%）"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "乐观情景总现值",
+      "price_role": "SCENARIO_VALUE",
+      "value": 31.62,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 880,
+          "line_end": 880,
+          "quote": "| **乐观** | +12% | 25x | 1.826 元 | 45.64 元 | 28.34 元 | 3.28 元 | **31.62 元** | **+34.10%** |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "中性情景总现值",
+      "price_role": "SCENARIO_VALUE",
+      "value": 21.84,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 881,
+          "line_end": 881,
+          "quote": "| **中性** | **+8%** | **20x** | 1.522 元 | 30.44 元 | 18.90 元 | 2.94 元 | **21.84 元** | **−7.36%** |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "悲观情景总现值",
+      "price_role": "SCENARIO_VALUE",
+      "value": 13.59,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 882,
+          "line_end": 882,
+          "quote": "| **悲观** | +4% | 14x | 1.260 元 | 17.64 元 | 10.96 元 | 2.63 元 | **13.59 元** | **−42.36%** |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "20%与30%安全边际候选价",
+      "price_role": "VALUATION_REFERENCE",
+      "value": 17.48,
+      "min": 15.29,
+      "max": 17.48,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+          "line_start": 908,
+          "line_end": 908,
+          "quote": "**20% 安全边际候选价 = 21.84 × 0.8 = 17.48 元｜30% 安全边际 = 15.29 元**"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约省略分层动作、价格区间、买入失效条件、复核日期和置信度；正文完整行动段落没有与该摘要直接相反的结论。",
+    "evidence": [
+      {
+        "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+        "line_start": 1391,
+        "line_end": 1391,
+        "quote": "| 激进型动作 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_INCOMPLETE",
+    "MULTIPLE_PRICE_BANDS",
+    "COMPOUND_ADD_AND_REVIEW_LOGIC"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+      "line_start": 8,
+      "line_end": 8,
+      "quote": "> **一句话结论**：**好公司，估值处历史中低位，但按 10% 要求回报仍无安全边际。观察，不买入；20% 安全边际候选价 17.48 元。**"
+    },
+    {
+      "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+      "line_start": 1015,
+      "line_end": 1020,
+      "quote": "| ≥ 30 元 | > 25.9x | **减仓** | 超过中性现值 37%，需乐观情景全部兑现 |\n| 25–30 元 | 21.6–25.9x | **持有不加仓** | 超过中性现值，安全边际为负 |\n| 21.84–25 元 | 18.8–21.6x | **持有 / 观察（现价 23.58 元在此区间）** | 质地可接受，价格公允偏贵，无安全边际 |\n| 17.48–21.84 元 | 15.1–18.8x | **分批建仓** | 进入中性现值下方，接近 20% 安全边际 |\n| ≤ 17.48 元 | < 15.1x | **20% 安全边际，可积极买入**（红线未触发为前提） | 中性现值 21.84 × 0.8 |\n| ≤ 15.29 元 | < 13.2x | **30% 安全边际，重仓候选** | 21.84 × 0.7；接近悲观现值 13.59 元 |"
+    },
+    {
+      "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+      "line_start": 1056,
+      "line_end": 1059,
+      "quote": "| **空仓者** | **观察，不买入。** 纳入核心观察池。等待 ≤ 21.84 元（中性现值）开始分批、**≤ 17.48 元（20% 安全边际）积极建仓**。现价买入的期望年化约 7.8%（中性情景含股息），低于 10% 要求回报率，且承担 −42% 的悲观下行。**没有任何需要现在就买的理由**——公司不会消失，2026 年内已给过 21.68 元的机会（3 月至 7 月跌 31.2%）。 |\n| **持仓者** | **持有，不加仓。** 全部红线未触发（标准无保留审计、无处罚、无重大诉讼、无大股东减持、商誉 144.47 万元、有息负债率 0.60%、FCF/净利 1.29、分红率 60% 连续三年）。生意本质未变，防御属性明确（近 60 日跌幅为同业最小）。但已无安全边际，**不应在此价位增加仓位。若仓位 >15%，建议不再投入新资金，等 2026-08-27 中报。** |\n| **卖出信号（任一触发即重审）** | ① 股价 ≥ 30 元而归母增速仍 < 10%（估值透支）② 年度经营现金流连续 2 年低于净利润 ③ **综合毛利率跌破 24%，或核心电网智能业务毛利率跌破 28%**（护城河定价权失守）④ **网内（电网行业）收入连续 2 年零增长或负增长** ⑤ 非国网应收账款占比超 55% 且该组合计提率升破 20% ⑥ 非标审计意见或内控非标 ⑦ 控股股东/董监高重大诚信或监管处罚 ⑧ 2026 年收入低于 700 亿元（750 亿目标大幅落空且无季节性解释） |\n| **加仓信号（需同时满足）** | ① 价格 ≤ 21.84 元（分批）或 **≤ 17.48 元**（积极）② 上述卖出信号全部未触发 ③ **且至少一条正向证据**：中报 **Q2 单季毛利率同比转正**（2025Q2 曾 −3.82pct，是全年信息量最大的季度）／归母增速回升至 ≥ 12%／海外毛利率提升至 22%+／**新一轮回购确定用于\"减少注册资本\"而非股权激励**／网内业务增速回升至 ≥ 10% |"
+    },
+    {
+      "report_path": "reports/国电南瑞/国电南瑞-research-20260726.md",
+      "line_start": 1065,
+      "line_end": 1067,
+      "quote": "| **2026-08-27（中报，预约日已确认）** | **最重要的判决点** | ① **Q2 单季毛利率同比**（2025Q2 −3.82pct，Q2 是全年毛利率最高也是跌幅最大的季度）② 经营现金流是否从 Q1 的 −15.14 亿修复 ③ 存货是否从 165.91 亿回落、合同负债是否维持 86 亿+ ④ H1 收入占 750 亿目标的比例（2025H1 为 242.43 亿 = 全年 36.6%）⑤ 归母增速能否向 Q2–Q4 需要的 +13.09% 靠拢 ⑥ **陆股通持股是否继续回补**（2026Q1 为 7.107 亿股）⑦ **股东户数**（2026Q1 已达 302,939 户）⑧ 中期分红是否达到\"上限 40%\" |\n| 2026 Q3 | **新一轮回购方案** | 董事会是否审议通过 2026-07-19 的 5–10 亿元提议；**用途是\"股权激励\"还是\"减少注册资本\"**——后者才是真正的股东回报 |\n| 2026 Q3–Q4 | 国网招标批次 | 特高压与输变电设备各批次中国电南瑞与许继、平高、四方的中标金额与均价（⚠️ **这是本报告最大的信息缺口**） |"
+    }
+  ]
+}

@@ -1,0 +1,750 @@
+{
+  "schema_version": 1,
+  "ticker": "002049.SZ",
+  "company": "紫光国微",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+    "report_sha256": "1481457864f33da6256ab954f3f8e288547d02b0fa4a33bd2d1ec61bf7b9d627"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "55-60 元是小额分批试仓区，48-55 元和 38-48 元是条件买入区，当前 68 元明确不在买入带。",
+      "三年后目标价 37.6-112.1 元和约 54 元折现参考值是估值参考，不是当前买入价。",
+      "持仓者可观察持有；价格不高于 55 元且 LTM CFO/归母净利回到 70% 以上、特种 IC 未同步恶化时才定义加仓路径。",
+      "股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利没有同步改善时减仓；未把该持仓规则泄漏为空仓建仓。",
+      "特种 IC、现金流和并购商誉/治理条件按原文保留为论文失效逻辑。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "特种集成电路是高壁垒好业务，但回款、瑞能半导并购和稀释风险尚未被 68 元充分补偿，当前建议观察。",
+    "evidence": [
+      {
+        "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+        "line_start": 14,
+        "line_end": 14,
+        "quote": "| 一句话研究结论 | 特种集成电路是高壁垒好业务，但回款、并购和稀释风险尚未被 68 元充分补偿；建议观察。 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 68 元不在买入带；55-60 元可小额分批，48-55 元和 38-48 元等待更厚安全边际后买入。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-68",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前 68 元不在买入带，观察并等待半年报或更好的价格。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                "line_start": 212,
+                "line_end": 212,
+                "quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
+              }
+            ],
+            "node_id": "watch-current-price",
+            "kind": "QUALITATIVE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "当前 68 元不在买入带。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 212,
+              "line_end": 212,
+              "quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
+            }
+          ]
+        },
+        {
+          "path_id": "trial-55-60",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "55-60 元接近中性终值折现区，可小额分批，但仍需半年报确认现金流。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 55,
+            "price_max": 60,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                "line_start": 209,
+                "line_end": 209,
+                "quote": "| 激进型 | 55-60 元 | 小额分批 | 接近中性终值折现区，仍需半年报确认现金流 |"
+              }
+            ],
+            "node_id": "trial-price-55-60",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 55-60 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 209,
+              "line_end": 209,
+              "quote": "| 激进型 | 55-60 元 | 小额分批 | 接近中性终值折现区，仍需半年报确认现金流 |"
+            }
+          ]
+        },
+        {
+          "path_id": "conditional-48-55",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "48-55 元提供更多安全边际后分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 48,
+            "price_max": 55,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                "line_start": 210,
+                "line_end": 210,
+                "quote": "| 稳健型 | 48-55 元 | 分批买入 | 对约 54 元的折现中性参考值提供更多缓冲 |"
+              }
+            ],
+            "node_id": "entry-price-48-55",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 48-55 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 210,
+              "line_end": 210,
+              "quote": "| 稳健型 | 48-55 元 | 分批买入 | 对约 54 元的折现中性参考值提供更多缓冲 |"
+            }
+          ]
+        },
+        {
+          "path_id": "conditional-38-48",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "38-48 元接近悲观终值与历史低估区，排除基本面恶化后重点研究再买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 38,
+            "price_max": 48,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                "line_start": 211,
+                "line_end": 211,
+                "quote": "| 保守型 | 38-48 元 | 重点研究后买入 | 接近悲观终值与历史低估区，仍要排除基本面恶化 |"
+              }
+            ],
+            "node_id": "entry-price-38-48",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 38-48 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 211,
+              "line_end": 211,
+              "quote": "| 保守型 | 38-48 元 | 重点研究后买入 | 接近悲观终值与历史低估区，仍要排除基本面恶化 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+          "line_start": 212,
+          "line_end": 212,
+          "quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "已有持仓可持有观察，不因单季高增机械加仓；加仓和减仓均有额外条件。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-observe",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "可持有观察，但不因单季高增机械加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 238,
+              "line_end": 238,
+              "quote": "| 已有持仓者 | 未提供成本，不能替代卖出决定；可持有观察，但不宜因单季高增机械加仓。 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-under-55-with-confirmation",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格不高于 55 元，且现金流转换回到 70% 以上、特种 IC 未出现收入与毛利率同步恶化时才考虑加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 55,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                    "line_start": 239,
+                    "line_end": 239,
+                    "quote": "| 加仓条件 | 价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。 |"
+                  }
+                ],
+                "node_id": "holder-add-price-55",
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "价格不高于 55 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "LTM CFO/归母净利",
+                "operator": "GTE",
+                "value": "70%",
+                "unit": "ratio",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                    "line_start": 239,
+                    "line_end": 239,
+                    "quote": "| 加仓条件 | 价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。 |"
+                  }
+                ],
+                "node_id": "holder-add-cashflow-70",
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "LTM CFO/归母净利回到 70% 以上。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                    "line_start": 239,
+                    "line_end": 239,
+                    "quote": "| 加仓条件 | 价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。 |"
+                  }
+                ],
+                "node_id": "holder-add-special-ic-stable",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "特种 IC 未出现收入与毛利率同步恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                "line_start": 239,
+                "line_end": 239,
+                "quote": "| 加仓条件 | 价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。 |"
+              }
+            ],
+            "node_id": "holder-add-all",
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上、特种 IC 未出现收入与毛利率同步恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 239,
+              "line_end": 239,
+              "quote": "| 加仓条件 | 价格不高于 55 元，且 LTM CFO/归母净利回到 70% 以上，特种 IC 未出现收入与毛利率同步恶化。 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-above-85-without-improvement",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利没有同步改善时减仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 85,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                    "line_start": 240,
+                    "line_end": 240,
+                    "quote": "| 减仓条件 | 股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利兑现没有同步改善。 |"
+                  }
+                ],
+                "node_id": "holder-reduce-price-85",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "股价高于 85 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                    "line_start": 240,
+                    "line_end": 240,
+                    "quote": "| 减仓条件 | 股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利兑现没有同步改善。 |"
+                  }
+                ],
+                "node_id": "holder-reduce-no-improvement",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "TTM EPS、CFO 和瑞能半导盈利没有同步改善。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                "line_start": 240,
+                "line_end": 240,
+                "quote": "| 减仓条件 | 股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利兑现没有同步改善。 |"
+              }
+            ],
+            "node_id": "holder-reduce-all",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "股价高于 85 元且 TTM EPS、CFO 和瑞能半导盈利没有同步改善。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 240,
+              "line_end": 240,
+              "quote": "| 减仓条件 | 股价高于 85 元而 TTM EPS、CFO 和瑞能半导盈利兑现没有同步改善。 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+          "line_start": 238,
+          "line_end": 238,
+          "quote": "| 已有持仓者 | 未提供成本，不能替代卖出决定；可持有观察，但不宜因单季高增机械加仓。 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                  "line_start": 241,
+                  "line_end": 241,
+                  "quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+                }
+              ],
+              "node_id": "special-ic-revenue-down-two-periods",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "特种 IC 收入连续两个报告期同比下滑。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "特种 IC 毛利率",
+              "operator": "LT",
+              "value": "65%",
+              "unit": "ratio",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                  "line_start": 241,
+                  "line_end": 241,
+                  "quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+                }
+              ],
+              "node_id": "special-ic-margin-below-65",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "特种 IC 毛利率低于 65%。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 241,
+              "line_end": 241,
+              "quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+            }
+          ],
+          "node_id": "special-ic-decline-and-margin",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "LTM CFO/归母净利",
+          "operator": "LT",
+          "value": "50%",
+          "unit": "ratio",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 241,
+              "line_end": 241,
+              "quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+            }
+          ],
+          "node_id": "cashflow-below-50-two-periods",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "LTM CFO/归母净利连续两个报告期低于 50%。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                  "line_start": 241,
+                  "line_end": 241,
+                  "quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+                }
+              ],
+              "node_id": "post-merger-goodwill-impairment",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "并购后出现重大商誉减值。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+                  "line_start": 241,
+                  "line_end": 241,
+                  "quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+                }
+              ],
+              "node_id": "post-merger-governance-abnormal",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "并购后出现治理异常。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+              "line_start": 241,
+              "line_end": 241,
+              "quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+            }
+          ],
+          "node_id": "post-merger-goodwill-or-governance",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "并购后出现重大商誉减值或治理异常。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+          "line_start": 241,
+          "line_end": 241,
+          "quote": "| 论文失效 | 特种 IC 收入连续两个报告期同比下滑且毛利率低于 65%，或 LTM CFO/归母净利连续两个报告期低于 50%，或并购后出现重大商誉减值 / 治理异常。 |"
+        }
+      ],
+      "node_id": "thesis-invalidation-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "论文失效条件任一满足时重审或停止沿用原买入逻辑。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "| 空仓者 | 当前观察，不因 Q1 高增追价；先看 2026H1 的回款、特种 IC 毛利率与安全芯片收入。 |"
+        }
+      ],
+      "node_id": "half-year-cashflow-and-business-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待 2026H1，重点跟踪回款、特种 IC 毛利率、安全芯片收入及瑞能半导审核进展。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-08-10 收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 68.0,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+          "line_start": 10,
+          "line_end": 10,
+          "quote": "| 2026-08-10 收盘价 | 68.00 元 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年后情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 37.6,
+      "max": 112.1,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+          "line_start": 185,
+          "line_end": 189,
+          "quote": "| 情景 | EPS 年增速 | 终值 PE | 三年后目标价 | 相对 68 元 |\n|---|---:|---:|---:|---:|\n| 乐观 | 20% | 38 倍 | 112.1 元 | +64.8% |\n| 中性 | 12% | 30 倍 | 72.0 元 | +5.8% |\n| 悲观 | 0% | 22 倍 | 37.6 元 | -44.8% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约保留了空仓价格带和论文失效条件，但没有完整表达持仓者的加仓、减仓及等待半年报的语义。",
+    "evidence": [
+      {
+        "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+        "line_start": 281,
+        "line_end": 281,
+        "quote": "| 基本面建议动作 | 观察 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_CONFLICT",
+    "MERGER_UNCERTAINTY",
+    "MULTIPLE_PRICE_BANDS",
+    "CASH_FLOW_RISK"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/紫光国微/紫光国微-investment-research-20260810.md",
+      "line_start": 212,
+      "line_end": 212,
+      "quote": "| 当前 68.00 元 | 不在买入带 | **观察** | 中性情景回报不足以覆盖并购、回款与周期风险 |"
+    }
+  ]
+}

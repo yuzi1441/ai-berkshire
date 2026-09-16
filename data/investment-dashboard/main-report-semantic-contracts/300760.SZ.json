@@ -1,0 +1,499 @@
+{
+  "schema_version": 1,
+  "ticker": "300760.SZ",
+  "company": "迈瑞医疗",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+    "report_sha256": "d8ceaef154ca2f8e417faa2d76daf6b2fc7e21bd528450c73c15eb6e9202e489"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "139.68 元是当前参考价，处于 130-160 元合理观察区；当前不是重仓追买价。",
+      "115-120 元分批研究建仓还要求海外双位数增长、国内止跌和毛利率稳定，已保留为 ALL 条件，未压成单一价格买点。",
+      "125 元附近只设观察仓，100 元附近仍要求论文未破坏或连续两个季度经营修复；这些‘附近/或’表述未被擅自精确化为无条件买入。",
+      "持仓者是有条件持有；加仓/重新评级和减仓/论文重审信号均为多项列表，未声明任一还是全部，保留人工复核。",
+      "三情景目标价 81.80-260.20 元仅作为估值参考，不作为行动价格。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "迈瑞医疗仍是高质量全球医疗器械平台，但利润中枢和国内修复尚未确认；空仓等待，持仓有条件持有。",
+    "evidence": [
+      {
+        "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+        "line_start": 360,
+        "line_end": 360,
+        "quote": "空仓等待；持仓有条件持有；不在当前价重仓追买"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 139.68 元处于 130-160 元合理观察区；115-120 元且经营条件改善才开始分批研究，100 元附近仅进入更强安全边际复核。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-130-160",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "130-160 元为合理观察区，当前价在其中。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 130,
+            "price_max": 160,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+                "line_start": 320,
+                "line_end": 320,
+                "quote": "130-160 元"
+              }
+            ],
+            "node_id": "watch-price-130-160",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 130-160 元合理观察区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+              "line_start": 320,
+              "line_end": 320,
+              "quote": "当前所在区间；等待 2026H1/H2 证实国内与利润修复"
+            }
+          ]
+        },
+        {
+          "path_id": "review-aggressive-125-or-h1-repair",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "125 元附近只设观察仓，或等待 2026H1 利润明确转正后重新估值；‘附近’和观察仓边界需人工确认。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+                "line_start": 366,
+                "line_end": 366,
+                "quote": "125 元附近或 2026H1 利润明确转正后重新估值"
+              }
+            ],
+            "node_id": "review-aggressive-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "复核 125 元附近观察仓或 2026H1 利润明确转正后的重新估值。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+              "line_start": 366,
+              "line_end": 366,
+              "quote": "只设观察仓，不追涨"
+            }
+          ]
+        },
+        {
+          "path_id": "entry-115-120-with-repair",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "115-120 元且海外双位数增长、国内止跌、毛利率稳定时可分批研究建仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 115,
+                "price_max": 120,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+                    "line_start": 367,
+                    "line_end": 367,
+                    "quote": "115-120 元分批"
+                  }
+                ],
+                "node_id": "entry-price-115-120",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 115-120 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+                    "line_start": 367,
+                    "line_end": 367,
+                    "quote": "海外双位数增长"
+                  }
+                ],
+                "node_id": "entry-overseas-growth",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "海外保持双位数增长。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+                    "line_start": 367,
+                    "line_end": 367,
+                    "quote": "国内止跌"
+                  }
+                ],
+                "node_id": "entry-domestic-stabilizes",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "国内业务止跌。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+                    "line_start": 367,
+                    "line_end": 367,
+                    "quote": "毛利率稳定"
+                  }
+                ],
+                "node_id": "entry-margin-stable",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "毛利率稳定。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+                "line_start": 367,
+                "line_end": 367,
+                "quote": "115-120 元分批，且海外双位数增长、国内止跌、毛利率稳定"
+              }
+            ],
+            "node_id": "entry-price-and-repair-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 115-120 元，并且海外双位数增长、国内止跌、毛利率稳定。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+              "line_start": 367,
+              "line_end": 367,
+              "quote": "115-120 元分批，且海外双位数增长、国内止跌、毛利率稳定"
+            }
+          ]
+        },
+        {
+          "path_id": "review-conservative-100-or-repair",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "100 元附近且论文未破坏，或连续两个季度经营修复时重新复核；报告没有把‘继续观察’定义成自动建仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+                "line_start": 368,
+                "line_end": 368,
+                "quote": "100 元附近并确认论文未破坏，或连续两个季度经营修复"
+              }
+            ],
+            "node_id": "review-conservative-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "人工复核 100 元附近且论文未破坏，或连续两个季度经营修复。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+              "line_start": 368,
+              "line_end": 368,
+              "quote": "继续观察"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "空仓等待"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "已有持仓可有条件持有，仓位不过度集中，并按国内修复、利润、现金流、海外和并购信号跟踪。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-conditional-hold",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "仓位不过度集中时有条件持有，不只看股价。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+              "line_start": 369,
+              "line_end": 369,
+              "quote": "已有持仓 | 有条件持有"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 369,
+          "line_end": 369,
+          "quote": "已有持仓"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 379,
+          "line_end": 386,
+          "quote": "减仓或论文重审信号"
+        }
+      ],
+      "node_id": "mindray-reduce-review-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "国内收入持续双位数下降、海外增长与费用率恶化、毛利率继续下降、商誉/并购问题、重大合规事件或质押/继任不确定性时进行减仓或论文重审；列表组合关系未定义。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 371,
+          "line_end": 377,
+          "quote": "加仓或重新评级信号"
+        }
+      ],
+      "node_id": "mindray-add-review-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪国内收入和利润修复、经营现金流、IVD 毛利率与试剂产出、海外增长质量、新兴业务有机增长和惠泰 ROIC。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 139.68,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "139.68 元/股"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "五年三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 81.8,
+      "max": 260.2,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "260.20 元"
+        },
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 301,
+          "line_end": 301,
+          "quote": "81.80 元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约只保留观察动作和价格区间，遗漏正文的建仓前置条件、持仓者条件和减仓信号。",
+    "evidence": [
+      {
+        "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+        "line_start": 445,
+        "line_end": 452,
+        "quote": "基本面建议动作"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "ENTRY_PRICE_AND_FILING_SCOPE",
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "QUALITATIVE_PREREQUISITE",
+    "REPORT_CONTRACT_INCOMPLETE"
+  ],
+  "ambiguities": [
+    {
+      "code": "ENTRY_PRICE_AND_FILING_SCOPE",
+      "summary": "125 元附近、115-120 元、100 元附近分别对应观察、分批研究和继续观察，但‘附近’与利润修复的实际动作边界未完全定义。",
+      "required_clarification": "确定价格附近的容差、利润修复的验证标准和实际仓位动作；在确认前保留 REVIEW/条件路径。",
+      "evidence": [
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 366,
+          "line_end": 366,
+          "quote": "125 元附近"
+        }
+      ]
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓/重新评级与减仓/论文重审均为多项列表，未定义任一、全部或最少满足数量。",
+      "required_clarification": "由人工或更强模型确认组合逻辑后再生成自动 ADD、REDUCE 或 EXIT 条件。",
+      "evidence": [
+        {
+          "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+          "line_start": 371,
+          "line_end": 371,
+          "quote": "加仓或重新评级信号"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/迈瑞医疗/迈瑞医疗-investment-team-20260713.md",
+      "line_start": 348,
+      "line_end": 386,
+      "quote": "综合动作"
+    }
+  ]
+}

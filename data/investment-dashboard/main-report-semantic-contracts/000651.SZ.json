@@ -1,0 +1,549 @@
+{
+  "schema_version": 1,
+  "ticker": "000651.SZ",
+  "company": "格力电器",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+    "report_sha256": "871511ae68a8091c7f38b31f36be90d5744b4c72acdea4038d6e992e64c315b9"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "37.80 元是估值基准，不直接当作买入价；真正买入路径使用 38、32-35、30 元条件区间",
+      "38-52 元是持有观察区，高于 55 元是降低新增买入，不得转译为空仓买入",
+      "保守型 30 元以下还要求分红政策未恶化，条件不能丢失",
+      "正文没有独立的持仓者策略，不能把持有观察价格带当作 holder action",
+      "底部契约只保留分层买入价格，遗漏加仓/减仓信号和估值基准说明"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "成熟高现金流、高股息公司，价格有吸引力但增长与治理仍需约束；空仓者按价格和分红/基本面条件分批，非一次性满仓。",
+    "evidence": [
+      {
+        "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+        "line_start": 11,
+        "line_end": 11,
+        "quote": "格力电器仍是中国空调和暖通领域少数真正能持续产生高现金流的优质制造公司，当前估值隐含了较低增长预期和较高股息回报；但它更像“高股息、低增长、需严控买入价的成熟现金牛”，而不是可按高成长复利资产定价的公司。若以 37.80 元作为估值基准，报告建议为“谨慎乐观，分批型买入/持有”，真正的安全边际来自 8x 左右正常化利润与分红纪律，而非多元化叙事。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "低于 38 元可分批研究，32-35 元更有吸引力，30 元以下且分红未恶化才考虑更重仓。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "aggressive-below-38",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "38 元以下分批建仓，不因低 PE 一次性满仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LT",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 38,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+                "line_start": 121,
+                "line_end": 121,
+                "quote": "| 激进型  | 低于 38 元 | 可分批买入   | 接近悲观情景价值，股息率约 8%，适合接受低增长现金流资产。 |"
+              }
+            ],
+            "node_id": "price-below-38",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格低于 38 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+              "line_start": 121,
+              "line_end": 121,
+              "quote": "| 激进型  | 低于 38 元 | 可分批买入   | 接近悲观情景价值，股息率约 8%，适合接受低增长现金流资产。 |"
+            }
+          ]
+        },
+        {
+          "path_id": "stable-32-35",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "32-35 元是稳健型优先买入区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 32,
+            "price_max": 35,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+                "line_start": 122,
+                "line_end": 122,
+                "quote": "| 稳健型  | 32-35 元 | 优先买入区   | 对应约 6.1-6.7x 正常化 EPS，安全边际明显。   |"
+              }
+            ],
+            "node_id": "price-32-35",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 32-35 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+              "line_start": 122,
+              "line_end": 122,
+              "quote": "| 稳健型  | 32-35 元 | 优先买入区   | 对应约 6.1-6.7x 正常化 EPS，安全边际明显。   |"
+            }
+          ]
+        },
+        {
+          "path_id": "conservative-below-30-with-dividend",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "低于 30 元且分红政策未恶化时，保守型才考虑重仓候选。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LT",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 30,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+                    "line_start": 123,
+                    "line_end": 123,
+                    "quote": "| 保守型  | 低于 30 元 | 重仓候选区   | 约 5.8x 以下正常化 EPS，需要确认基本面未永久恶化。 |"
+                  }
+                ],
+                "node_id": "price-below-30",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格低于 30 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+                    "line_start": 202,
+                    "line_end": 202,
+                    "quote": "| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
+                  }
+                ],
+                "node_id": "dividend-policy-intact",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "分红政策未恶化且基本面未永久恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+                "line_start": 202,
+                "line_end": 202,
+                "quote": "| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
+              }
+            ],
+            "node_id": "conservative-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格低于 30 元且分红政策未恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+              "line_start": 202,
+              "line_end": 202,
+              "quote": "| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+          "line_start": 200,
+          "line_end": 202,
+          "quote": "| 激进型 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。 |\n| 稳健型 | 等待 32-35 元或基本面改善信号；更适合作为股息/现金流仓位。 |\n| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "UNKNOWN",
+      "summary": "报告的最终操作建议按激进/稳健/保守投资者分层，没有独立定义已有持仓者动作。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [],
+      "evidence": [
+        {
+          "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+          "line_start": 200,
+          "line_end": 202,
+          "quote": "| 激进型 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。 |\n| 稳健型 | 等待 32-35 元或基本面改善信号；更适合作为股息/现金流仓位。 |\n| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+                  "line_start": 214,
+                  "line_end": 214,
+                  "quote": "1. 扣非利润连续两年下滑，且经营现金流同步恶化。"
+                }
+              ],
+              "node_id": "profit-down",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "扣非利润连续两年下滑。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+                  "line_start": 214,
+                  "line_end": 214,
+                  "quote": "1. 扣非利润连续两年下滑，且经营现金流同步恶化。"
+                }
+              ],
+              "node_id": "cashflow-down",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "经营现金流同步恶化。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+              "line_start": 214,
+              "line_end": 214,
+              "quote": "1. 扣非利润连续两年下滑，且经营现金流同步恶化。"
+            }
+          ],
+          "node_id": "profit-cashflow-deteriorate",
+          "kind": "ALL",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "扣非利润连续两年下滑且经营现金流同步恶化。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+              "line_start": 215,
+              "line_end": 215,
+              "quote": "2. 空调主业份额明显流失，线上均价与毛利率下滑不可逆。"
+            }
+          ],
+          "node_id": "aircon-share-loss",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "空调主业份额明显流失，线上均价与毛利率下滑不可逆。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+              "line_start": 216,
+              "line_end": 216,
+              "quote": "3. 新能源、智能装备、格力钛继续消耗现金但无 ROIC 证明。"
+            }
+          ],
+          "node_id": "new-business-cash-burn",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "新能源、智能装备、格力钛继续消耗现金但无 ROIC 证明。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+              "line_start": 217,
+              "line_end": 217,
+              "quote": "4. 大股东持续减持或质押风险扩大，引发治理不稳定。"
+            }
+          ],
+          "node_id": "governance-instability",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "大股东持续减持或质押风险扩大并引发治理不稳定。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+              "line_start": 218,
+              "line_end": 218,
+              "quote": "5. 分红政策显著弱化，同时没有高回报再投资项目。"
+            }
+          ],
+          "node_id": "dividend-weakened",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "分红政策显著弱化且没有高回报再投资项目。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+          "line_start": 212,
+          "line_end": 218,
+          "quote": "减仓信号：\n\n1. 扣非利润连续两年下滑，且经营现金流同步恶化。\n2. 空调主业份额明显流失，线上均价与毛利率下滑不可逆。\n3. 新能源、智能装备、格力钛继续消耗现金但无 ROIC 证明。\n4. 大股东持续减持或质押风险扩大，引发治理不稳定。\n5. 分红政策显著弱化，同时没有高回报再投资项目。"
+        }
+      ],
+      "node_id": "reduce-signals-any",
+      "kind": "ANY",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "五项减仓信号任一出现时降低风险或重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+          "line_start": 204,
+          "line_end": 210,
+          "quote": "加仓信号：\n\n1. 2026-2027 年扣非利润恢复正增长，且不是靠一次性收益。\n2. 空调与中央空调份额稳定，毛利率不被价格战明显击穿。\n3. 张伟团队展示独立经营能力，高管和渠道体系稳定。\n4. 工业制品/绿色能源 ROIC 改善，现金流转正并扩大。\n5. 分红率和回购纪律继续保持，跨界投资收缩到能力圈内。"
+        }
+      ],
+      "node_id": "add-signals-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控扣非利润、主业份额/毛利率、管理层传承、工业制品 ROIC、现金流和分红回购纪律等加仓信号。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "估值基准价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 37.8,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+          "line_start": 83,
+          "line_end": 84,
+          "quote": "估值基准价：37.80 元/股。  \n说明：该价格仅作为 2026-07-06 报告估值基准，接近当日公开行情区间；由于本地行情接口未能稳定连通，交易价格需以正式行情终端为准。"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 35.7,
+      "max": 70.3,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+          "line_start": 109,
+          "line_end": 113,
+          "quote": "| 情景 | EPS 年增速 | 目标 PE | 3 年后 EPS | 目标股价 | 相对 37.80 元涨跌幅 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +4% | 12x | 5.86 元 | 70.3 元 | +86.0% |\n| 中性 | 0% | 10x | 5.21 元 | 52.1 元 | +37.8% |\n| 悲观 | -5% | 8x | 4.47 元 | 35.7 元 | -5.5% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约的结论摘要只写生意质量，未反映正文完整的价格区间、条件、加仓和减仓信号，也没有持仓者语义。",
+    "evidence": [
+      {
+        "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+        "line_start": 284,
+        "line_end": 292,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 生意质量 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |\n| 激进型动作 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围 |\n| 激进型价格区间 | 38 元 |\n| 稳健型动作 | 等待 32-35 元或基本面改善信号 |\n| 稳健型价格区间 | 32-35 元 |\n| 保守型动作 | 只在 30 元以下且分红政策未恶化时考虑重仓 |\n| 保守型价格区间 | 30 元 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "MISSING_HOLDER_ACTION",
+    "REPORT_CONTRACT_CONFLICT",
+    "PRICE_ROLE_DISAMBIGUATION"
+  ],
+  "ambiguities": [
+    {
+      "code": "MISSING_HOLDER_ACTION",
+      "summary": "正文没有明确已有持仓者的独立动作。",
+      "required_clarification": "人工确认持仓者应持有、加仓还是减仓；不得把投资者类型价格带当作 holder policy。",
+      "evidence": [
+        {
+          "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+          "line_start": 196,
+          "line_end": 202,
+          "quote": "操作建议：\n\n| 投资者类型 | 建议 |\n|---|---|\n| 激进型 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。 |\n| 稳健型 | 等待 32-35 元或基本面改善信号；更适合作为股息/现金流仓位。 |\n| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/格力电器/格力电器投资研究报告-20260706.md",
+      "line_start": 184,
+      "line_end": 218,
+      "quote": "## 10. 最终投资建议\n\n定性判断：\n\n| 维度 | 判断 |\n|---|---|\n| 生意质量 | 好生意，但已成熟；中央空调比家用零售端更值得跟踪。 |\n| 财务质量 | 很强，现金流和分红是核心吸引力。 |\n| 管理层 | 执行力强，资本配置与传承需折价。 |\n| 估值 | 便宜，但便宜的原因合理：市场担心增长、竞争和治理。 |\n| 时机 | 37-38 元附近可研究分批，32-35 元更有吸引力。 |\n\n操作建议：\n\n| 投资者类型 | 建议 |\n|---|---|\n| 激进型 | 可在 38 元以下分批建仓，把总仓位上限控制在组合可承受范围；不因低 PE 一次性满仓。 |\n| 稳健型 | 等待 32-35 元或基本面改善信号；更适合作为股息/现金流仓位。 |\n| 保守型 | 只在 30 元以下且分红政策未恶化时考虑重仓；否则观察。 |"
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "ticker": "600809.SH",
+  "company": "汾酒",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+    "report_sha256": "2caa0fd989ffbf604f09d51cca68eb40cfb9903ebec8527b8d77f205cd2dcd3d"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "正文最终结论为‘买入（分批、控节奏）’，但底部看板契约的基本面建议动作为‘观察’；两者属于当前动作冲突。",
+      "价格和持仓路径本身可以抽取，但在冲突未解决前不发布为ready。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "OPEN_POSITION",
+    "scope": "both",
+    "summary": "正文认为汾酒116元起可建观察仓、110元以下积极分批；底部契约却标为观察，需人工解决权威冲突。",
+    "evidence": [
+      {
+        "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+        "line_start": 250,
+        "line_end": 250,
+        "quote": "**最终结论：买入（分批、控节奏）**。116 元起可建观察仓，110 元以下积极分批，90-100 元重注；预期回报以\"5.6% 股息 + 中个位数利润复利 + 估值均值回归期权\"构成，持有期 3 年起，接受期间账面浮亏 20-30% 的可能。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "OPEN_POSITION",
+      "summary": "正文给出116元小观察仓、110元以下分批买入，当前动作受底部契约冲突影响。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "OPEN_POSITION",
+          "summary": "110元以下分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 110,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+                "line_start": 235,
+                "line_end": 235,
+                "quote": "| 空仓者 | **110 元以下分批买入**（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A股价格不高于110元。",
+            "node_id": "empty-entry-below-110-condition"
+          },
+          "path_id": "empty-entry-below-110",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+              "line_start": 235,
+              "line_end": 235,
+              "quote": "| 空仓者 | **110 元以下分批买入**（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+          "line_start": 235,
+          "line_end": 235,
+          "quote": "| 空仓者 | **110 元以下分批买入**（如 3 批：110 / 100 / 92），当前 116 元可先建 1/4 观察仓；不追反弹 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者持有收息，成本高于150元者可等中性目标区不补仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD",
+          "summary": "持有收息，等待批价和合同负债验证。",
+          "path_id": "holder-hold-income",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+              "line_start": 236,
+              "line_end": 236,
+              "quote": "| 持仓者 | 持有收息，成本高于 150 元者可等中性目标区不补仓；核心跟踪指标是青花20 批价（355-365 元是否守住）与季度合同负债 |"
+            }
+          ],
+          "condition": null
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+          "line_start": 236,
+          "line_end": 236,
+          "quote": "| 持仓者 | 持有收息，成本高于 150 元者可等中性目标区不补仓；核心跟踪指标是青花20 批价（355-365 元是否守住）与季度合同负债 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "| 卖出信号 | ① 青花20 批价跌破 320 元且持续一季（价盘失守）；② 分红率掉头下降或出现跨界并购（资本配置变质）；③ 股价升至 190-210 元（约 18-20 倍 2027E）而收入增速未回到双位数（估值透支）；④ 品质安全事件 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "青花20批价失守、分红率下降、估值透支或品质安全事件时退出或重审。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+          "line_start": 236,
+          "line_end": 236,
+          "quote": "| 持仓者 | 持有收息，成本高于 150 元者可等中性目标区不补仓；核心跟踪指标是青花20 批价（355-365 元是否守住）与季度合同负债 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪青花20批价和季度合同负债。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文最终结论为买入，而底部看板契约基本面建议动作为观察。",
+    "evidence": [
+      {
+        "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+        "line_start": 250,
+        "line_end": 250,
+        "quote": "**最终结论：买入（分批、控节奏）**。116 元起可建观察仓，110 元以下积极分批，90-100 元重注；预期回报以\"5.6% 股息 + 中个位数利润复利 + 估值均值回归期权\"构成，持有期 3 年起，接受期间账面浮亏 20-30% 的可能。"
+      },
+      {
+        "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+        "line_start": 300,
+        "line_end": 300,
+        "quote": "| 基本面建议动作 | 观察 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_CONFLICT",
+    "BODY_SAYS_BUY_BOTTOM_CONTRACT_SAYS_WATCH"
+  ],
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_CONFLICT",
+      "summary": "正文最终结论与看板决策契约的基本面建议动作不一致。",
+      "required_clarification": "明确应以正文最终决策还是底部契约作为当前动作权威，并同步修订另一处。",
+      "evidence": [
+        {
+          "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+          "line_start": 300,
+          "line_end": 300,
+          "quote": "| 基本面建议动作 | 观察 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/汾酒/汾酒投资研究报告-20260719.md",
+      "line_start": 250,
+      "line_end": 250,
+      "quote": "**最终结论：买入（分批、控节奏）**。116 元起可建观察仓，110 元以下积极分批，90-100 元重注；预期回报以\"5.6% 股息 + 中个位数利润复利 + 估值均值回归期权\"构成，持有期 3 年起，接受期间账面浮亏 20-30% 的可能。"
+    }
+  ]
+}

@@ -1,0 +1,532 @@
+{
+  "schema_version": 1,
+  "ticker": "600141.SH",
+  "company": "兴发集团",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+    "report_sha256": "f0ea8834da11d6ce87e4f4340560cbad376a660d2d2ba31b543d1e378d6d9c64"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "报告把兴发集团定义为优质但强周期的公司，当前约 48 元是概念异动高位，空仓者应回避追高而不是买入。",
+      "22-26 元和 26-32 元是重新研究/介入的价格路径，不应从‘观察’自动升级为买入。",
+      "加仓/关注和减仓/回避信号均为并列清单，未规定组合关系与处置幅度。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "兴发集团长期资产质量中上，但当前概念推动的约 48 元高位安全边际为负；空仓者观察回避追高，持仓者考虑部分止盈。",
+    "evidence": [
+      {
+        "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+        "line_start": 162,
+        "line_end": 162,
+        "quote": "**最终建议：这是一家值得放进观察名单长期跟踪的好公司，但当前处于投机情绪推动的高位，价值投资者应严守纪律、回避追高，耐心等待周期回落或概念退潮带来的更好价格（正常化 PE 10–12x，约 22–26 元）再重点研究介入。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前异动高位不追；26-32 元和 22-26 元仅进入重新研究/安全边际复核路径。",
+      "entry_semantic": "REVIEW_ONLY",
+      "action_paths": [
+        {
+          "path_id": "avoid-speculative-high",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "异动高位不新开仓，等待概念热度和周期回落。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+                "line_start": 135,
+                "line_end": 135,
+                "quote": "| 激进型 | 若已持有可部分止盈；**不建议在异动高位新开仓**，概念退潮下行风险大 | 现价 ~48 元 |"
+              }
+            ],
+            "node_id": "xingfa-speculative-high-block",
+            "kind": "MANUAL_REVIEW",
+            "effect": "BLOCK_ENTRY",
+            "scope": "empty_position",
+            "description": "确认当前仍处于概念催化的投机高位后，不新开仓。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+              "line_start": 135,
+              "line_end": 135,
+              "quote": "| 激进型 | 若已持有可部分止盈；**不建议在异动高位新开仓**，概念退潮下行风险大 | 现价 ~48 元 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-normalized-26-32",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "26-32 元对应正常化 PE 12-14 倍，进入研究复核区，不直接编译为买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 26,
+            "price_max": 32,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+                "line_start": 136,
+                "line_end": 136,
+                "quote": "| 稳健型 | **回避追高**，列入观察名单，等磷化工周期与概念热度回落 | 正常化 PE 12–14x → **26–32 元** 起研究 |"
+              }
+            ],
+            "node_id": "xingfa-normalized-review-26-32",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 26-32 元正常化估值研究区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+              "line_start": 136,
+              "line_end": 136,
+              "quote": "| 稳健型 | **回避追高**，列入观察名单，等磷化工周期与概念热度回落 | 正常化 PE 12–14x → **26–32 元** 起研究 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-cycle-bottom-22-26",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "22-26 元才接近正常化 PE 10-12 倍的重点研究区，仍需复核周期与环保风险。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 22,
+            "price_max": 26,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+                "line_start": 137,
+                "line_end": 137,
+                "quote": "| 保守型 | **等待周期底部/市场恐慌**，正常化 PE 10–12x 才具吸引力 | **22–26 元** |"
+              }
+            ],
+            "node_id": "xingfa-cycle-bottom-review-22-26",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 22-26 元正常化 PE 10-12 倍区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+              "line_start": 137,
+              "line_end": 137,
+              "quote": "| 保守型 | **等待周期底部/市场恐慌**，正常化 PE 10–12x 才具吸引力 | **22–26 元** |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "> 兴发集团是一门 **\"有好资产的周期生意\"**——坐拥不可复制的磷矿资源租金（12.5% 营收贡献 47.67% 毛利）和一颗真护城河种子兴福电子（电子级磷酸 70% 份额），管理层诚信专注、股东回报罕见慷慨。但**它不是\"成长股\"**：约 80% 收入无定价权、常态 ROE 仅 7%、利润峰谷相差 10 倍。**当下最大问题是价格**——晚 6 月被\"AI 算力磷化铟 + 固态电池 + 磷化工涨价\"三重概念催化暴涨 70%，现价约 48 元对应静态 PE 35.6x、正常化 PE 约 24x，**安全边际为负、下行风险不对称**。**结论：优质公司，但当前是投机高位，价值投资者应回避追高，列入观察名单，等周期回落至正常化 PE 10–12x（约 22–26 元）再研究介入。**"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "异动高位已有持仓可考虑部分止盈；后续加仓/关注信号只进入人工复核。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-partial-profit-high",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "已持有者在异动高位可部分止盈。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+                "line_start": 135,
+                "line_end": 135,
+                "quote": "| 激进型 | 若已持有可部分止盈；**不建议在异动高位新开仓**，概念退潮下行风险大 | 现价 ~48 元 |"
+              }
+            ],
+            "node_id": "xingfa-holder-profit-review",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工确认当前仍为概念异动高位后评估部分止盈。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+              "line_start": 135,
+              "line_end": 135,
+              "quote": "| 激进型 | 若已持有可部分止盈；**不建议在异动高位新开仓**，概念退潮下行风险大 | 现价 ~48 元 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-and-attention-signals-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "磷矿价格、兴福电子、固态电池订单和磷石膏治理信号需人工确认，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+                "line_start": 140,
+                "line_end": 145,
+                "quote": "**🔺 加仓/关注信号**\n1. 股价回落至正常化 PE 10–12x（22–26 元）区间\n2. 磷矿价格中枢因\"能源化\"需求确认性上台阶\n3. 兴福电子业绩超预期或估值显性化（分拆价值重估）\n4. 固态电池五硫化二磷放量、拿到头部电池厂正式订单\n5. 磷石膏\"零排放\"取得实质突破"
+              }
+            ],
+            "node_id": "xingfa-add-signals-review",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认并列加仓/关注信号的组合关系与仓位影响。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+              "line_start": 140,
+              "line_end": 145,
+              "quote": "**🔺 加仓/关注信号**\n1. 股价回落至正常化 PE 10–12x（22–26 元）区间\n2. 磷矿价格中枢因\"能源化\"需求确认性上台阶\n3. 兴福电子业绩超预期或估值显性化（分拆价值重估）\n4. 固态电池五硫化二磷放量、拿到头部电池厂正式订单\n5. 磷石膏\"零排放\"取得实质突破"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 135,
+          "line_end": 135,
+          "quote": "| 激进型 | 若已持有可部分止盈；**不建议在异动高位新开仓**，概念退潮下行风险大 | 现价 ~48 元 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 148,
+          "line_end": 148,
+          "quote": "1. 磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）"
+        }
+      ],
+      "node_id": "xingfa-indium-concept-invalidated",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "磷化铟/AI 算力概念被证伪。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 149,
+          "line_end": 149,
+          "quote": "2. 磷矿 2025–2026 新产能集中投放压垮价格"
+        }
+      ],
+      "node_id": "xingfa-phosphate-supply-pressure",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "磷矿 2025–2026 新产能集中投放压垮价格。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 150,
+          "line_end": 150,
+          "quote": "3. 有机硅反内卷失败、需求端无硬支撑"
+        }
+      ],
+      "node_id": "xingfa-silicone-failure",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "有机硅反内卷失败且需求端没有硬支撑。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 151,
+          "line_end": 151,
+          "quote": "4. 新能源材料持续亏损、资本开支失控侵蚀主业现金流"
+        }
+      ],
+      "node_id": "xingfa-new-materials-cashflow",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "新能源材料持续亏损、资本开支失控侵蚀主业现金流。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 152,
+          "line_end": 152,
+          "quote": "5. 概念热度退潮、股价从异动高位快速回落"
+        }
+      ],
+      "node_id": "xingfa-concept-cooldown",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "概念热度退潮、股价从异动高位快速回落。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 168,
+          "line_end": 168,
+          "quote": "**数据时点性风险**：本报告已修正股价（34.58 元过期 → 约 48 元），但 48 元系近期约 6/29 收盘参考，且该股正处异常波动期，**交易前必须以实时行情二次复核**。"
+        }
+      ],
+      "node_id": "monitor-xingfa-price-and-cycle",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "交易前重新核验实时价格、周期位置、现金流、磷矿价格和磷石膏环保进展。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "近期 A 股价格参考",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 48,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 7,
+          "line_end": 7,
+          "quote": "> **⚠️ 重要时点提示**：本标的于 **2026 年 6 月下旬发生投机性异动**——股价从月初约 28 元拉升至 6/29 收盘约 48 元（+70%），6/22 涨停、6/24–25 连续异常波动累计涨幅偏离超 20%。本报告已按**近期约 48 元**的真实价格重估估值（团队修正了初稿中沿用的 1 月 34.58 元过期价格）。"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "正常化估值研究区",
+      "price_role": "FAIR_VALUE",
+      "value": null,
+      "min": 22,
+      "max": 32,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 136,
+          "line_end": 136,
+          "quote": "| 稳健型 | **回避追高**，列入观察名单，等磷化工周期与概念热度回落 | 正常化 PE 12–14x → **26–32 元** 起研究 |"
+        },
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 137,
+          "line_end": 137,
+          "quote": "| 保守型 | **等待周期底部/市场恐慌**，正常化 PE 10–12x 才具吸引力 | **22–26 元** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REVIEW_NOT_BUY_SEMANTICS",
+    "CURRENT_PRICE_TIME_SENSITIVITY",
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "CONCEPT_DRIVEN_VALUATION"
+  ],
+  "ambiguities": [
+    {
+      "code": "REVIEW_NOT_BUY_SEMANTICS",
+      "summary": "正文用‘再研究介入’描述 22-26 元和 26-32 元，未明确这些价格是否已经构成可执行买入资格。",
+      "required_clarification": "确认低位价格区间对应研究复核、试仓还是正式建仓；在确认前保持 REVIEW_ONLY。",
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 162,
+          "line_end": 162,
+          "quote": "**最终建议：这是一家值得放进观察名单长期跟踪的好公司，但当前处于投机情绪推动的高位，价值投资者应严守纪律、回避追高，耐心等待周期回落或概念退潮带来的更好价格（正常化 PE 10–12x，约 22–26 元）再重点研究介入。**"
+        }
+      ]
+    },
+    {
+      "code": "CURRENT_PRICE_TIME_SENSITIVITY",
+      "summary": "报告明确当前约 48 元只是近期异常波动参考，交易前必须重新核验实时行情。",
+      "required_clarification": "确认实时价格后再决定是否仍处于异动高位。",
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 168,
+          "line_end": 168,
+          "quote": "**数据时点性风险**：本报告已修正股价（34.58 元过期 → 约 48 元），但 48 元系近期约 6/29 收盘参考，且该股正处异常波动期，**交易前必须以实时行情二次复核**。"
+        }
+      ]
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓/关注与减仓/回避信号为并列清单，未定义任一、全部或最低满足数量。",
+      "required_clarification": "确认信号组合与处置幅度后再生成自动化加仓、减仓或退出路径。",
+      "evidence": [
+        {
+          "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+          "line_start": 140,
+          "line_end": 152,
+          "quote": "**🔺 加仓/关注信号**\n1. 股价回落至正常化 PE 10–12x（22–26 元）区间\n2. 磷矿价格中枢因\"能源化\"需求确认性上台阶\n3. 兴福电子业绩超预期或估值显性化（分拆价值重估）\n4. 固态电池五硫化二磷放量、拿到头部电池厂正式订单\n5. 磷石膏\"零排放\"取得实质突破\n\n**🔻 减仓/回避信号**\n1. 磷化铟/AI 算力概念被证伪（公司暂无产能，纯研发阶段）\n2. 磷矿 2025–2026 新产能集中投放压垮价格\n3. 有机硅反内卷失败、需求端无硬支撑\n4. 新能源材料持续亏损、资本开支失控侵蚀主业现金流\n5. 概念热度退潮、股价从异动高位快速回落"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+      "line_start": 122,
+      "line_end": 137,
+      "quote": "## 7. 最终投资建议"
+    },
+    {
+      "report_path": "reports/兴发集团/兴发集团投资研究报告_20260708.md",
+      "line_start": 175,
+      "line_end": 194,
+      "quote": "## 看板决策契约"
+    }
+  ]
+}

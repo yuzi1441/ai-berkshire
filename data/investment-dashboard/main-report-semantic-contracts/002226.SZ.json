@@ -1,0 +1,517 @@
+{
+  "schema_version": 1,
+  "ticker": "002226.SZ",
+  "company": "江南化工",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+    "report_sha256": "837a6466719ebfeaabece5548ddefba4a124d9556a9c62c3fad9cbfea682659f"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "江南化工是牌照、区域产能和爆破工程服务一体化平台，但不是轻资产高 ROE 复利机器，当前 4.47 元观察。",
+      "4.0 元以下是更合理的事件驱动观察区；3.3-3.7 元要求利润/现金流改善确认；3.0-3.3 元或更低才接近保守安全边际。",
+      "三情景 2.7-6.1 元和所有者盈余估值 3.03 元是估值参考，不直接覆盖行动价格带。",
+      "五条加仓信号与五条减仓/重审信号未说明 AND、ANY 或最少满足数量；保留人工复核，不自动生成确定性 ADD/REDUCE。",
+      "底部看板契约未同步正文的完整价格带、治理安全门和复核逻辑。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "江南化工有民爆牌照、区域产能、央企资源和现金流基础，但利润承压、杠杆上升、治理变量和安全尾部风险要求折价，4.47 元更适合观察。",
+    "evidence": [
+      {
+        "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+        "line_start": 15,
+        "line_end": 15,
+        "quote": "江南化工是“牌照 + 区域产能 + 爆破工程服务一体化”的民爆平台型公司，有真实客户价值、央企资源和现金流基础；但它不是轻资产高ROE复利机器，2025年以来利润承压、杠杆上升、治理变量和安全尾部风险都要求估值折价。以2026-07-09约4.47元股价看，更适合列入观察池，等待更清晰的利润修复或更低价格提供安全边际。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "4.47 元观察；4.0 元以下只作事件驱动小仓观察，3.3-3.7 元等待利润/现金流改善，3.0-3.3 元或更低才考虑更厚安全边际。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-4-47",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前约 4.47 元列入观察池，不在无折价时高确信重仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+                "line_start": 15,
+                "line_end": 15,
+                "quote": "江南化工是“牌照 + 区域产能 + 爆破工程服务一体化”的民爆平台型公司，有真实客户价值、央企资源和现金流基础；但它不是轻资产高ROE复利机器，2025年以来利润承压、杠杆上升、治理变量和安全尾部风险都要求估值折价。以2026-07-09约4.47元股价看，更适合列入观察池，等待更清晰的利润修复或更低价格提供安全边际。"
+              }
+            ],
+            "node_id": "watch-current-price",
+            "kind": "QUALITATIVE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "当前价格更适合观察，等待利润修复或更低价格。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+              "line_start": 15,
+              "line_end": 15,
+              "quote": "江南化工是“牌照 + 区域产能 + 爆破工程服务一体化”的民爆平台型公司，有真实客户价值、央企资源和现金流基础；但它不是轻资产高ROE复利机器，2025年以来利润承压、杠杆上升、治理变量和安全尾部风险都要求估值折价。以2026-07-09约4.47元股价看，更适合列入观察池，等待更清晰的利润修复或更低价格提供安全边际。"
+            }
+          ]
+        },
+        {
+          "path_id": "review-below-4",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "4.0 元以下更合理，但仍是实控人变更、整合改善和利润修复的事件驱动观察，不等于无条件买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LT",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 4.0,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+                "line_start": 186,
+                "line_end": 186,
+                "quote": "| 激进型 | 小仓位观察/事件驱动 | 4.0元以下更合理；4.47元附近不追 | 博弈实控人变更、整合改善、利润修复，但承受治理与安全折价 |"
+              }
+            ],
+            "node_id": "review-price-below-4",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格低于 4.0 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+              "line_start": 186,
+              "line_end": 186,
+              "quote": "| 激进型 | 小仓位观察/事件驱动 | 4.0元以下更合理；4.47元附近不追 | 博弈实控人变更、整合改善、利润修复，但承受治理与安全折价 |"
+            }
+          ]
+        },
+        {
+          "path_id": "conditional-3-3-3-7-with-recovery",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "3.3-3.7 元接近或低于中性估值，需 2026 年利润和现金流改善确认后分批。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 3.3,
+                "price_max": 3.7,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+                    "line_start": 187,
+                    "line_end": 187,
+                    "quote": "| 稳健型 | 等待安全边际 | 3.3-3.7元 | 接近或低于中性估值，要求2026利润/现金流改善确认 |"
+                  }
+                ],
+                "node_id": "entry-price-3-3-3-7",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格处于 3.3-3.7 元区间。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+                    "line_start": 187,
+                    "line_end": 187,
+                    "quote": "| 稳健型 | 等待安全边际 | 3.3-3.7元 | 接近或低于中性估值，要求2026利润/现金流改善确认 |"
+                  }
+                ],
+                "node_id": "entry-profit-cashflow-improve",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "2026 年利润和现金流改善确认。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+                "line_start": 187,
+                "line_end": 187,
+                "quote": "| 稳健型 | 等待安全边际 | 3.3-3.7元 | 接近或低于中性估值，要求2026利润/现金流改善确认 |"
+              }
+            ],
+            "node_id": "entry-3-3-3-7-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 3.3-3.7 元且 2026 年利润和现金流改善。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+              "line_start": 187,
+              "line_end": 187,
+              "quote": "| 稳健型 | 等待安全边际 | 3.3-3.7元 | 接近或低于中性估值，要求2026利润/现金流改善确认 |"
+            }
+          ]
+        },
+        {
+          "path_id": "conditional-3-0-3-3",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "3.0-3.3 元或更低接近保守所有者盈余估值，才有较明确安全边际。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 3.3,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+                "line_start": 188,
+                "line_end": 188,
+                "quote": "| 保守型 | 只在深度折价时考虑 | 3.0-3.3元或更低 | 接近保守所有者盈余估值，才有较明确安全边际 |"
+              }
+            ],
+            "node_id": "entry-price-3-0-3-3",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 3.0-3.3 元或更低。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+              "line_start": 188,
+              "line_end": 188,
+              "quote": "| 保守型 | 只在深度折价时考虑 | 3.0-3.3元或更低 | 接近保守所有者盈余估值，才有较明确安全边际 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 180,
+          "line_end": 180,
+          "quote": "| 时机 | 等待更好价格或利润验证 | 当前更适合观察，不适合无脑追高 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "报告没有给出统一的持仓当前动作表，但加仓/减仓清单均要求结合治理、安全、利润和现金流事实人工复核。",
+      "entry_semantic": "AMBIGUOUS",
+      "action_paths": [
+        {
+          "path_id": "holder-signals-buy-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "五条加仓/买入信号需先确认组合逻辑，再决定是否加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+                "line_start": 193,
+                "line_end": 193,
+                "quote": "1. 实控人变更方案清晰，且有利于上市公司资产边界和同业竞争解决。"
+              }
+            ],
+            "node_id": "holder-buy-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认实控人变更、利润/现金流、爆破服务质量、并购兑现和价格区间等信号的组合关系。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+              "line_start": 193,
+              "line_end": 193,
+              "quote": "1. 实控人变更方案清晰，且有利于上市公司资产边界和同业竞争解决。"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-signals-manual-review",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "安全事故、治理恶化、利润/现金流恶化、债务抬升或股权供给冲击出现时人工复核减仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+                "line_start": 200,
+                "line_end": 200,
+                "quote": "1. 发生重大安全事故、环保处罚、许可证/爆破资质异常。"
+              }
+            ],
+            "node_id": "holder-reduce-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工核对五条减仓/重审信号，不由单一关键词自动卖出。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+              "line_start": 200,
+              "line_end": 200,
+              "quote": "1. 发生重大安全事故、环保处罚、许可证/爆破资质异常。"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 200,
+          "line_end": 204,
+          "quote": "1. 发生重大安全事故、环保处罚、许可证/爆破资质异常。\n2. 实控人变更导致不利资产注入、同业竞争加剧或关联交易扩大。\n3. 连续两个季度扣非净利下滑超过30%，经营现金流持续为负。\n4. 有息债务继续快速上升，财务费用明显侵蚀利润。\n5. 大股东可交换债换股/减持带来股权结构与市场供给冲击。"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 213,
+          "line_end": 213,
+          "quote": "4. **治理事件不确定性**：截至2026-07-09，实控人拟变更仍需程序推进，最终影响无法提前确定。"
+        }
+      ],
+      "node_id": "governance-change-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪实际控制人变更、同业竞争解决、关联交易和安全治理。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 194,
+          "line_end": 194,
+          "quote": "2. 连续2-3个季度扣非净利恢复增长，经营现金流同步改善。"
+        }
+      ],
+      "node_id": "profit-debt-cashflow-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪爆破服务毛利率、扣非利润、经营现金流和有息债务变化。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-07-09 股价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 4.47,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 48,
+          "line_end": 48,
+          "quote": "| 股价（2026-07-09） | - | 4.47元 | Yahoo Finance 002226.SZ 附近报价 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 2.7,
+      "max": 6.1,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 167,
+          "line_end": 167,
+          "quote": "乐观：EPS增速6%，目标PE 18x，目标价6.1元，较4.47元 +37.2%"
+        },
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 169,
+          "line_end": 169,
+          "quote": "悲观：EPS增速-2%，目标PE 10x，目标价2.7元，较4.47元 -39.8%"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "保守所有者盈余每股价值",
+      "price_role": "FAIR_VALUE",
+      "value": 3.03,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 164,
+          "line_end": 164,
+          "quote": "每股价值 = 80.325 / 26.489 = 3.03元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约只同步了观察和一档稳健价格，没有表达激进/保守价格带、持仓信号和治理安全门。",
+    "evidence": [
+      {
+        "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+        "line_start": 262,
+        "line_end": 262,
+        "quote": "| 基本面建议动作 | 观察 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "REPORT_CONTRACT_CONFLICT",
+    "GOVERNANCE_AND_SAFETY_RISK",
+    "LOW_ROE_LEVERAGE"
+  ],
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓五条与减仓五条信号的 AND/OR/最少满足数量未在报告中定义。",
+      "required_clarification": "由人工或更强模型确认各信号的组合关系后，才能生成确定性 ADD_POSITION、REDUCE 或 EXIT 条件。",
+      "evidence": [
+        {
+          "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+          "line_start": 193,
+          "line_end": 193,
+          "quote": "1. 实控人变更方案清晰，且有利于上市公司资产边界和同业竞争解决。"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/江南化工/江南化工-investment-team-20260709.md",
+      "line_start": 15,
+      "line_end": 15,
+      "quote": "江南化工是“牌照 + 区域产能 + 爆破工程服务一体化”的民爆平台型公司，有真实客户价值、央企资源和现金流基础；但它不是轻资产高ROE复利机器，2025年以来利润承压、杠杆上升、治理变量和安全尾部风险都要求估值折价。以2026-07-09约4.47元股价看，更适合列入观察池，等待更清晰的利润修复或更低价格提供安全边际。"
+    }
+  ]
+}

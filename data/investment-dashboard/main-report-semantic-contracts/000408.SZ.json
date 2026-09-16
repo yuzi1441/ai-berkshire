@@ -1,0 +1,396 @@
+{
+  "schema_version": 1,
+  "ticker": "000408.SZ",
+  "company": "藏格矿业",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+    "report_sha256": "17d3c8b263702338c9b240be8ec05610490f8a37d2eccf320725b545ab4bb7e3"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "空仓者在当前 74.72 元明确回避/观望；35-40 元只是回到安全边际后再评估，不升级为空仓买入价",
+      "持仓者的逢高分批减仓与空仓者策略分开，未把持仓动作泄漏为空仓建仓",
+      "100.8、46.8、15.1 元是三情景目标价，未作为买入路径",
+      "卖出信号保留为四项信号的 OR，其中估值 PB 6x 以上与盈利见顶保留为 AND",
+      "底部看板契约只写基本面动作和结论摘要，遗漏持仓动作及卖出/加仓信号，因此标记冲突并要求强审查"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "好生意与治理在改善，但当前资源周期估值昂贵，空仓者不宜新建仓，持仓者以减仓和等待安全边际为主。",
+    "evidence": [
+      {
+        "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+        "line_start": 25,
+        "line_end": 25,
+        "quote": "**藏格矿业不是一家盐湖锂公司，而是\"察尔汗钾肥现金牛 + 巨龙铜矿ETF + 麻米措锂期权\"的三合一资源控股平台，护城河是极致成本优势与不可复制的盐湖资源，但七成利润来自一个它不控股（30.78%参股）的铜矿。生意是\"对的\"，人（治理）刚从污点转向紫金体系正在改善，但价格（74.72元、PE 30x/PB 6.2x、一年涨约200%）明显偏贵——是\"好生意 + 改善中的人 + 昂贵的价格\"。当前价位对新建仓者不具吸引力。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "当前回避/观望，不建议在 74.72 元新建仓；35-40 元仅作为回到安全边际后的重新评估区。",
+      "entry_semantic": "REVIEW_ONLY",
+      "action_paths": [
+        {
+          "path_id": "re-review-at-35-40",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "回调至 35-40 元且基本面未恶化时重新评估，不代表自动买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 35,
+            "price_max": 40,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+                "line_start": 249,
+                "line_end": 249,
+                "quote": "| **空仓者** | **回避/观望**。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。**不建议在此价位新建仓。** 等回调至**35–40元附近（对应PB约3x、中性情景合理值）** 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |"
+              }
+            ],
+            "node_id": "review-zone-35-40",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "股价回落至 35-40 元附近后重新评估。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+              "line_start": 249,
+              "line_end": 249,
+              "quote": "| **空仓者** | **回避/观望**。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。**不建议在此价位新建仓。** 等回调至**35–40元附近（对应PB约3x、中性情景合理值）** 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+          "line_start": 249,
+          "line_end": 249,
+          "quote": "| **空仓者** | **回避/观望**。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。**不建议在此价位新建仓。** 等回调至**35–40元附近（对应PB约3x、中性情景合理值）** 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "核心逻辑未破坏，但估值透支，持仓者逢高分批减仓并保留底仓，不追加。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-reduce-high-valuation",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "逢高分批减仓/落袋，保留底仓，不在当前价位追加。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+              "line_start": 250,
+              "line_end": 250,
+              "quote": "| **持仓者** | **逢高分批减仓/落袋为主**。核心逻辑（低成本资源+巨龙扩产+高分红+治理改善）未破坏，但估值已透支未来3年成长，PB 6.2x处历史极值区。建议兑现部分涨幅、降低仓位，保留底仓享受巨龙放量与高分红，不宜在此价位持满仓或追加。 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+          "line_start": 250,
+          "line_end": 250,
+          "quote": "| **持仓者** | **逢高分批减仓/落袋为主**。核心逻辑（低成本资源+巨龙扩产+高分红+治理改善）未破坏，但估值已透支未来3年成长，PB 6.2x处历史极值区。建议兑现部分涨幅、降低仓位，保留底仓享受巨龙放量与高分红，不宜在此价位持满仓或追加。 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |"
+            }
+          ],
+          "node_id": "commodity-downtrend",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "锂、钾、铜价格明确转入趋势性下行。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |"
+            }
+          ],
+          "node_id": "related-party-harm",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "巨龙分红政策或与藏格关联交易明显损害少数股东利益。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |"
+            }
+          ],
+          "node_id": "mamicuo-delay",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "麻米措达产重大延期。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "PB",
+              "operator": "GTE",
+              "value": 6,
+              "unit": "x",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+                  "line_start": 251,
+                  "line_end": 251,
+                  "quote": "| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |"
+                }
+              ],
+              "node_id": "pb-at-least-6",
+              "kind": "METRIC_COMPARE",
+              "effect": "EXIT_TRIGGER",
+              "scope": "both",
+              "description": "PB 维持在 6x 以上。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+                  "line_start": 251,
+                  "line_end": 251,
+                  "quote": "| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |"
+                }
+              ],
+              "node_id": "earnings-peak",
+              "kind": "QUALITATIVE",
+              "effect": "EXIT_TRIGGER",
+              "scope": "both",
+              "description": "盈利见顶。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |"
+            }
+          ],
+          "node_id": "valuation-high-earnings-peak",
+          "kind": "ALL",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "估值维持 PB 6x 以上且盈利见顶。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |"
+        }
+      ],
+      "node_id": "exit-signals-any",
+      "kind": "ANY",
+      "effect": "EXIT_TRIGGER",
+      "scope": "both",
+      "description": "四项卖出信号任一出现时触发退出/重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+          "line_start": 252,
+          "line_end": 252,
+          "quote": "| **加仓信号** | ① 股价回落至35–40元且基本面未恶化（PB回到3x）；② 麻米措首期顺利投产、成本验证≤3.5万/吨；③ 巨龙二期产量兑现、三期获批；④ 商品价格周期确认新一轮上行起点。 |"
+        }
+      ],
+      "node_id": "add-signals-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控 35-40 元且基本面未恶化、麻米措成本、巨龙产量/三期和商品周期等加仓信号，具体组合逻辑需人工复核。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A股股价基准",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 74.72,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> 币种：人民币｜股价基准：74.72元/股（2026-07-06收盘，请以实时行情为准）"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 15.1,
+      "max": 100.8,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+          "line_start": 213,
+          "line_end": 217,
+          "quote": "| 情景 | 年增速 | 目标PE | 目标EPS | 目标股价 | 涨跌幅 |\n|---|---|---|---|---|---|\n| **乐观 Bull** | 18% | 25x | 4.03 | **100.8元** | **+35.0%** |\n| **中性 Base** | 6% | 16x | 2.92 | **46.8元** | **-37.4%** |\n| **悲观 Bear** | -12% | 9x | 1.67 | **15.1元** | **-79.8%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约把基本面动作写成观察且未给价格区间，遗漏正文中空仓者 35-40 元再评估、持仓者减仓、卖出信号与加仓信号。",
+    "evidence": [
+      {
+        "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+        "line_start": 317,
+        "line_end": 325,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 空仓者 回避/观望。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。不建议在此价位新建仓。 等回调至35–40元附近（对应PB约3x、中性情景合理值） 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |\n| 激进型动作 | 未给出 |\n| 激进型价格区间 | 未给出 |\n| 稳健型动作 | 未给出 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 未给出 |\n| 保守型价格区间 | 未给出 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "MULTIPLE_PRICE_ROLES",
+    "REPORT_CONTRACT_CONFLICT",
+    "CYCLICAL_VALUATION"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/藏格矿业/藏格矿业投资研究报告.md",
+      "line_start": 249,
+      "line_end": 252,
+      "quote": "| **空仓者** | **回避/观望**。生意与治理均在改善，但74.72元（PE 30x/PB 6.2x）已把三重利好price in殆尽，中性情景就要亏37%，安全边际为负。**不建议在此价位新建仓。** 等回调至**35–40元附近（对应PB约3x、中性情景合理值）** 再评估；若只想要铜的敞口，直接研究控股方紫金矿业，逻辑更顺、估值更合理。 |\n| **持仓者** | **逢高分批减仓/落袋为主**。核心逻辑（低成本资源+巨龙扩产+高分红+治理改善）未破坏，但估值已透支未来3年成长，PB 6.2x处历史极值区。建议兑现部分涨幅、降低仓位，保留底仓享受巨龙放量与高分红，不宜在此价位持满仓或追加。 |\n| **卖出信号** | ① 锂/钾/铜价格明确转入趋势性下行；② 巨龙分红政策或与藏格关联交易明显损害少数股东利益；③ 麻米措达产重大延期；④ 估值维持PB 6x以上而盈利见顶（双杀风险最大）。 |\n| **加仓信号** | ① 股价回落至35–40元且基本面未恶化（PB回到3x）；② 麻米措首期顺利投产、成本验证≤3.5万/吨；③ 巨龙二期产量兑现、三期获批；④ 商品价格周期确认新一轮上行起点。 |"
+    }
+  ]
+}

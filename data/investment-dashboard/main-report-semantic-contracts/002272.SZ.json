@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "ticker": "002272.SZ",
+  "company": "chuanrun",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+    "report_sha256": "12c0c7cce1b1ef856c819ab4b582f74491fab570d8d88f8a99807e60523115a6"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "18.50 元附近的正文结论是回避，7-11 元是合理估值/重新考虑区，不是当前买入价。",
+      "连续亏损、实控人减持和液冷叙事风险使空仓者没有明确建仓路径，不能把‘再考虑’编译成 OPEN_POSITION。",
+      "卖出信号和加仓信号使用分号并列，但没有定义 ANY、ALL 或最少满足数量；持仓动作保留人工复核。",
+      "底部契约把正文的回避/减仓结论写成观察，构成报告契约冲突。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "川润股份当前连续亏损且估值严重透支，空仓者回避，持仓者减仓至清仓；7-11 元只作为重新评估区。",
+    "evidence": [
+      {
+        "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+        "line_start": 316,
+        "line_end": 316,
+        "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "当前估值严重透支，空仓者回避；7-11 元进入重新评估区，但报告没有定义确定性买入条件。",
+      "entry_semantic": "EXPLICIT_NO_BUY",
+      "action_paths": [
+        {
+          "path_id": "avoid-current-valuation",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前价位回避，不因液冷或核电叙事买入。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+              "line_start": 316,
+              "line_end": 316,
+              "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
+            }
+          ]
+        },
+        {
+          "path_id": "review-7-11-reassess",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "7-11 元只重新评估，不自动建仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 7,
+            "price_max": 11,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+                "line_start": 316,
+                "line_end": 316,
+                "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
+              }
+            ],
+            "node_id": "review-price-7-11",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格回归 7-11 元后重新评估。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+              "line_start": 316,
+              "line_end": 316,
+              "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 316,
+          "line_end": 316,
+          "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "持仓者按正文建议减仓至清仓；卖出与加仓信号的组合关系未定义，后续只进行人工复核。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-reduce-to-exit",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前估值无安全边际，持仓者减仓至清仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+              "line_start": 317,
+              "line_end": 317,
+              "quote": "| **持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-sell-signals-manual-review",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四类卖出信号需人工确认严重程度和处置幅度，不由单一关键词自动清仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+                "line_start": 318,
+                "line_end": 318,
+                "quote": "| **卖出信号** | 实控人继续减持公告；2026H1液冷订单低于预期；连续两季度经营现金流为负；融资余额继续攀升（杠杆踩踏风险） |"
+              }
+            ],
+            "node_id": "holder-sell-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工确认实控人减持、液冷订单、经营现金流和融资余额信号的组合关系。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+              "line_start": 318,
+              "line_end": 318,
+              "quote": "| **卖出信号** | 实控人继续减持公告；2026H1液冷订单低于预期；连续两季度经营现金流为负；融资余额继续攀升（杠杆踩踏风险） |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四类加仓信号的组合关系未定义，只保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+                "line_start": 319,
+                "line_end": 319,
+                "quote": "| **加仓信号** | 股价回落至8-10元（PB ~3倍）；液冷订单超过5亿/年；连续两个季度盈利；实控人停止减持并增持 |"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认价格、液冷订单、盈利和实控人交易信号是否需要同时满足。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+              "line_start": 319,
+              "line_end": 319,
+              "quote": "| **加仓信号** | 股价回落至8-10元（PB ~3倍）；液冷订单超过5亿/年；连续两个季度盈利；实控人停止减持并增持 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "| **持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 318,
+          "line_end": 318,
+          "quote": "| **卖出信号** | 实控人继续减持公告；2026H1液冷订单低于预期；连续两季度经营现金流为负；融资余额继续攀升（杠杆踩踏风险） |"
+        }
+      ],
+      "node_id": "monitor-liquid-cooling-and-cashflow",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 2026H1 液冷订单、连续季度经营现金流和实控人交易变化。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-06-23 当前价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 18.5,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "**股价**：18.50元 | **市值**：89.7亿元 | **总股本**：4.85亿股"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 4.7,
+      "max": 23,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 266,
+          "line_end": 266,
+          "quote": "| 乐观 | 40% | 60x | 0.38元 | 23.0元 | **+24.6%** |"
+        },
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "| 悲观 | 10% | 25x | 0.19元 | 4.7元 | **-74.8%** |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "综合合理估值区间",
+      "price_role": "FAIR_VALUE",
+      "value": null,
+      "min": 7,
+      "max": 11,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 287,
+          "line_end": 287,
+          "quote": "| **综合合理区间** | **7-11元** | **当前价格高出70-160%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文最终决策是空仓回避、持仓减仓至清仓，但底部契约将基本面建议动作写成观察。",
+    "evidence": [
+      {
+        "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+        "line_start": 382,
+        "line_end": 383,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 空仓者 回避。 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "REPORT_CONTRACT_CONFLICT",
+    "EXPLICIT_NO_BUY",
+    "CONTINUED_LOSSES_AND_GOVERNANCE_RISK"
+  ],
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出信号和加仓信号以分号并列，但没有说明是任一触发、全部满足还是需要人工分层判断。",
+      "required_clarification": "由人工或更强模型定义卖出/加仓信号的组合逻辑；在此之前维持回避和减仓的正文结论，不生成自动加仓或清仓规则。",
+      "evidence": [
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 318,
+          "line_end": 318,
+          "quote": "| **卖出信号** | 实控人继续减持公告；2026H1液冷订单低于预期；连续两季度经营现金流为负；融资余额继续攀升（杠杆踩踏风险） |"
+        },
+        {
+          "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+          "line_start": 319,
+          "line_end": 319,
+          "quote": "| **加仓信号** | 股价回落至8-10元（PB ~3倍）；液冷订单超过5亿/年；连续两个季度盈利；实控人停止减持并增持 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/chuanrun/chuanrun-research-20260623.md",
+      "line_start": 316,
+      "line_end": 317,
+      "quote": "| **空仓者** | **回避。** 当前估值严重透支，风险/回报比极不对称。即使看好液冷和核电方向，也有更好的标的（英维克、高澜等）。等待估值回归至7-11元区间（PB 2.5-3倍）再考虑。 |\n| **持仓者** | **减仓至清仓。** 股价从6.80元涨至18.50元已实现172%涨幅，当前估值无安全边际。实控人都在卖，散户不应比实控人更有信心。 |"
+    }
+  ]
+}

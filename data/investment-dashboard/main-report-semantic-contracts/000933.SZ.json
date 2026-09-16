@@ -1,0 +1,595 @@
+{
+  "schema_version": 1,
+  "ticker": "000933.SZ",
+  "company": "神火股份",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+    "report_sha256": "4e2ce8cff968b1431bd60bae2425fcd2dd3f605977eb3bec04c7755982f85b10"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "25.37 元不追高；21-25 元是小仓位分批评估/观察区，不是无条件买入",
+      "18-21 元需要 H2 利润、资产负债表和现金流/分红条件，18 元以下仍要求确认不是永久恶化",
+      "正常化 EPS 和三情景目标价没有被误转成买入价",
+      "已持仓者仅保留持有并监控铝价、氧化铝、短借和经营现金流，没有泄漏为空仓策略",
+      "铝价、云南限电/电价、煤矿减值和治理升级被保留为任一减仓/卖出信号"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "公司是成本位置较好的煤电铝周期资产，但当前价格已反映部分高景气；空仓者不追高，等待更低价格和周期条件。",
+    "evidence": [
+      {
+        "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+        "line_start": 8,
+        "line_end": 8,
+        "quote": "一句话结论：**神火股份是成本位置较好的煤电铝周期资产，2026H1 业绩很强，但当前价格已经反映了相当部分高景气；空仓者不追高，等待 21 元以下再评估，18 元以下才有更厚安全边际。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "21-25 元先小仓位分批评估；18-21 元在利润、流动性和分红条件满足时才有较强积累吸引力；18 元以下仍需确认不是永久恶化。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "review-21-25",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "21-25 元为小仓位分批评估区，不追涨。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 21,
+            "price_max": 25,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                "line_start": 226,
+                "line_end": 226,
+                "quote": "| 21-25 元 | 小仓位分批评估 | H2 利润不塌、流动性缺口收窄 |"
+              },
+              {
+                "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                "line_start": 313,
+                "line_end": 314,
+                "quote": "| 激进型动作 | 21-25元小仓位分批评估 |\n| 激进型价格区间 | 21-25元 |"
+              }
+            ],
+            "node_id": "review-price-21-25",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 21-25 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 226,
+              "line_end": 226,
+              "quote": "| 21-25 元 | 小仓位分批评估 | H2 利润不塌、流动性缺口收窄 |"
+            }
+          ]
+        },
+        {
+          "path_id": "trial-18-21-with-conditions",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "18-21 元在资产负债表稳定且分红仍由现金流覆盖时，进入较有吸引力的积累区。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 18,
+                "price_max": 21,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                    "line_start": 227,
+                    "line_end": 227,
+                    "quote": "| 18-21 元 | 较有吸引力的积累区 | 资产负债表稳定，分红仍由现金流覆盖 |"
+                  }
+                ],
+                "node_id": "trial-price-18-21",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "价格处于 18-21 元区间。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                    "line_start": 227,
+                    "line_end": 227,
+                    "quote": "| 18-21 元 | 较有吸引力的积累区 | 资产负债表稳定，分红仍由现金流覆盖 |"
+                  }
+                ],
+                "node_id": "balance-sheet-stable",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "资产负债表稳定。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                    "line_start": 227,
+                    "line_end": 227,
+                    "quote": "| 18-21 元 | 较有吸引力的积累区 | 资产负债表稳定，分红仍由现金流覆盖 |"
+                  }
+                ],
+                "node_id": "dividend-covered-by-cashflow",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "分红仍由现金流覆盖。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                "line_start": 227,
+                "line_end": 227,
+                "quote": "| 18-21 元 | 较有吸引力的积累区 | 资产负债表稳定，分红仍由现金流覆盖 |"
+              }
+            ],
+            "node_id": "trial-18-21-all",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 18-21 元，资产负债表稳定且分红仍由现金流覆盖。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 227,
+              "line_end": 227,
+              "quote": "| 18-21 元 | 较有吸引力的积累区 | 资产负债表稳定，分红仍由现金流覆盖 |"
+            }
+          ]
+        },
+        {
+          "path_id": "trial-below-18-not-permanent-deterioration",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "18 元以下是深度安全边际区，但只有在确认下跌不是煤矿事故、监管或行业永久恶化导致时才考虑更积极分批。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LT",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 18,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                    "line_start": 228,
+                    "line_end": 228,
+                    "quote": "| 18 元以下 | 深度安全边际区 | 需确认不是煤矿事故、监管或行业永久恶化导致的下跌 |"
+                  },
+                  {
+                    "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                    "line_start": 251,
+                    "line_end": 251,
+                    "quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |"
+                  }
+                ],
+                "node_id": "trial-price-below-18",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "价格低于 18 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                    "line_start": 228,
+                    "line_end": 228,
+                    "quote": "| 18 元以下 | 深度安全边际区 | 需确认不是煤矿事故、监管或行业永久恶化导致的下跌 |"
+                  }
+                ],
+                "node_id": "not-permanent-deterioration",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "下跌不是煤矿事故、监管或行业永久恶化导致。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+                "line_start": 228,
+                "line_end": 228,
+                "quote": "| 18 元以下 | 深度安全边际区 | 需确认不是煤矿事故、监管或行业永久恶化导致的下跌 |"
+              }
+            ],
+            "node_id": "trial-below-18-all",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格低于 18 元且下跌不是永久性基本面恶化导致。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 228,
+              "line_end": 228,
+              "quote": "| 18 元以下 | 深度安全边际区 | 需确认不是煤矿事故、监管或行业永久恶化导致的下跌 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "已持仓者可持有但不默认加仓，以铝价、氧化铝、短借和经营现金流设监控线。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-with-cycle-monitoring",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "继续持有但不默认加仓，持续监控周期和流动性。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 252,
+              "line_end": 252,
+              "quote": "| 已持仓者 | 可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+          "line_start": 252,
+          "line_end": 252,
+          "quote": "| 已持仓者 | 可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "铝价",
+          "operator": "LT",
+          "value": "21,500",
+          "unit": "CNY/吨",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 146,
+              "line_end": 146,
+              "quote": "| 铝价回落而氧化铝反弹 | 中高 | 高 | 沪铝跌破 21,500 元/吨、氧化铝持续回升、吨铝利润下滑 |"
+            },
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 254,
+              "line_end": 254,
+              "quote": "| 减仓/卖出信号 | 铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电/电价上升；煤矿再大额减值；关联交易或监管问题升级 |"
+            }
+          ],
+          "node_id": "aluminum-price-below-21500",
+          "kind": "METRIC_COMPARE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "铝价跌破 21,500 元/吨并持续。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 254,
+              "line_end": 254,
+              "quote": "| 减仓/卖出信号 | 铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电/电价上升；煤矿再大额减值；关联交易或监管问题升级 |"
+            }
+          ],
+          "node_id": "alumina-rebounds",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "氧化铝反弹。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 254,
+              "line_end": 254,
+              "quote": "| 减仓/卖出信号 | 铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电/电价上升；煤矿再大额减值；关联交易或监管问题升级 |"
+            }
+          ],
+          "node_id": "yunnan-power-risk",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "云南限电或电价上升。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 254,
+              "line_end": 254,
+              "quote": "| 减仓/卖出信号 | 铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电/电价上升；煤矿再大额减值；关联交易或监管问题升级 |"
+            }
+          ],
+          "node_id": "coal-mine-impairment",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "煤矿再发生大额减值。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+              "line_start": 254,
+              "line_end": 254,
+              "quote": "| 减仓/卖出信号 | 铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电/电价上升；煤矿再大额减值；关联交易或监管问题升级 |"
+            }
+          ],
+          "node_id": "governance-regulatory-escalation",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "关联交易或监管问题升级。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+          "line_start": 254,
+          "line_end": 254,
+          "quote": "| 减仓/卖出信号 | 铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电/电价上升；煤矿再大额减值；关联交易或监管问题升级 |"
+        }
+      ],
+      "node_id": "cycle-governance-risk-any",
+      "kind": "ANY",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "铝价、云南限电/电价、煤矿减值或治理监管任一重大恶化时减仓/卖出复核。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+          "line_start": 253,
+          "line_end": 253,
+          "quote": "| 加仓信号 | 股价跌入 18-21 元；H2 铝价维持、氧化铝不反弹；流动性缺口收窄；分红由现金流覆盖 |"
+        }
+      ],
+      "node_id": "cycle-cashflow-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控铝价、氧化铝、H2 利润、短期借款、流动性缺口、经营现金流和分红覆盖。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "参考股价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 25.37,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "参考股价：25.37 元/股"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 11.4,
+      "max": 28.6,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+          "line_start": 212,
+          "line_end": 216,
+          "quote": "| 情景 | EPS 年增速 | 目标 PE | 3 年目标价 | 相对 25.37 元 |\n|---|---:|---:|---:|---:|\n| 乐观 | +2% | 11x | 28.60 元 | +12.7% |\n| 中性 | 0% | 9x | 22.10 元 | -13.1% |\n| 悲观 | -8% | 6x | 11.40 元 | -54.9% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约给出空仓价格带和失效条件，但没有表达正文中的持仓者规则、加仓监控和完整周期风险语义。",
+    "evidence": [
+      {
+        "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+        "line_start": 311,
+        "line_end": 319,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 25.37元不追高，21元以下再评估，18元以下安全边际更厚。 |\n| 激进型动作 | 21-25元小仓位分批评估 |\n| 激进型价格区间 | 21-25元 |\n| 稳健型动作 | 18-21元较有吸引力的积累区 |\n| 稳健型价格区间 | 18-21元 |\n| 保守型动作 | 18元以下深度安全边际区，确认基本面未永久恶化后再分批 |\n| 保守型价格区间 | 18元以下 |\n| 买入失效条件 | 铝价跌破21500元/吨并持续；氧化铝反弹；云南限电或电价上升；煤矿再大额减值；关联交易或监管问题升级。 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_CONFLICT",
+    "CYCLICAL_NORMALIZATION",
+    "MULTIPLE_PRICE_BANDS"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/神火股份/神火股份研究报告-20260803.md",
+      "line_start": 247,
+      "line_end": 254,
+      "quote": "### 8.2 投资者行动\n\n| 投资者 | 建议 |\n|---|---|\n| 空仓者 | 25.37 元不追；21 元以下进入观察买入区，18 元以下才考虑更积极分批 |\n| 已持仓者 | 可持有但不默认加仓；用铝价、氧化铝、短借和经营现金流设监控线 |\n| 加仓信号 | 股价跌入 18-21 元；H2 铝价维持、氧化铝不反弹；流动性缺口收窄；分红由现金流覆盖 |\n| 减仓/卖出信号 | 铝价跌破 21,500 元/吨并持续；氧化铝反弹；云南限电/电价上升；煤矿再大额减值；关联交易或监管问题升级 |"
+    }
+  ]
+}

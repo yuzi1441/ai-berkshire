@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "ticker": "002353.SZ",
+  "company": "Jereh",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/Jereh/Jereh-research-20260624.md",
+    "report_sha256": "13e7554f071183b0531ac904afa1568e689c1e725452c3eaf8bf9a242d29aa11"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "159.30 元和 57.7x PE 是当前参考与估值状态，不是买入价；63.9-271.6 元三情景目标价只是估值参考。",
+      "正文明确空仓者回避当前价位，80-100 元只是观察并重新评估，不应编译成无条件或条件买入。",
+      "持仓者建议部分止盈；卖出信号和加仓信号并列但未定义组合关系，保留人工复核。",
+      "燃气轮机机头依赖外部供应商、AI 电力第二曲线仍待交付验证，不能把订单叙事直接变成确定性买入。",
+      "底部契约写观察，未同步正文的回避和持仓部分止盈结论。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "杰瑞股份基本面公司质量较好，但 159 元和 57.7x PE 已透支乐观预期；空仓者回避，持仓者考虑部分止盈。",
+    "evidence": [
+      {
+        "report_path": "reports/Jereh/Jereh-research-20260624.md",
+        "line_start": 401,
+        "line_end": 401,
+        "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "159 元附近回避；80-100 元只进入观察和重新评估，不自动建仓。",
+      "entry_semantic": "EXPLICIT_NO_BUY",
+      "action_paths": [
+        {
+          "path_id": "avoid-current-159",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "回避 159 元当前价位。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/Jereh/Jereh-research-20260624.md",
+              "line_start": 401,
+              "line_end": 401,
+              "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-80-100-reassess",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "80-100 元进入观察价位，到达后重新评估。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 80,
+            "price_max": 100,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/Jereh/Jereh-research-20260624.md",
+                "line_start": 401,
+                "line_end": 401,
+                "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
+              }
+            ],
+            "node_id": "review-price-80-100",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 80-100 元观察区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/Jereh/Jereh-research-20260624.md",
+              "line_start": 401,
+              "line_end": 401,
+              "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/Jereh/Jereh-research-20260624.md",
+          "line_start": 401,
+          "line_end": 401,
+          "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "一年大涨后持仓者考虑减仓 30-50% 锁定利润，保留底仓；具体卖出信号仍需人工判断。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-partial-profit-taking",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "考虑减仓 30-50% 锁定利润，保留底仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/Jereh/Jereh-research-20260624.md",
+              "line_start": 402,
+              "line_end": 402,
+              "quote": "| **持仓者** | **考虑部分止盈。** 一年涨362%，大量乐观预期已反映在股价中。建议至少减仓30-50%锁定利润，保留底仓享受长期成长 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-sell-signals-manual-review",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四类卖出信号的组合关系和处置幅度需人工确认，不自动清仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/Jereh/Jereh-research-20260624.md",
+                "line_start": 403,
+                "line_end": 403,
+                "quote": "| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 |"
+              }
+            ],
+            "node_id": "holder-sell-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工确认燃机订单/交付、毛利率、出口限制和 AI 资本开支信号的组合关系。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/Jereh/Jereh-research-20260624.md",
+              "line_start": 403,
+              "line_end": 403,
+              "quote": "| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "三类加仓信号的组合关系未定义，只保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/Jereh/Jereh-research-20260624.md",
+                "line_start": 404,
+                "line_end": 404,
+                "quote": "| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认价格、自研燃机和毛利率信号是否需要同时满足。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/Jereh/Jereh-research-20260624.md",
+              "line_start": 404,
+              "line_end": 404,
+              "quote": "| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/Jereh/Jereh-research-20260624.md",
+          "line_start": 402,
+          "line_end": 402,
+          "quote": "| **持仓者** | **考虑部分止盈。** 一年涨362%，大量乐观预期已反映在股价中。建议至少减仓30-50%锁定利润，保留底仓享受长期成长 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/Jereh/Jereh-research-20260624.md",
+          "line_start": 403,
+          "line_end": 403,
+          "quote": "| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 |"
+        }
+      ],
+      "node_id": "monitor-north-america-gas-turbine-delivery",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪北美燃机订单交付、毛利率和 AI 资本开支周期。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-06-24 当前价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 159.3,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/Jereh/Jereh-research-20260624.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "**股价**：159.30元 | **市值**：1,631亿元 | **PE(TTM)**：57.7x"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 63.9,
+      "max": 271.6,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/Jereh/Jereh-research-20260624.md",
+          "line_start": 344,
+          "line_end": 344,
+          "quote": "| **乐观** | 35% | 6.79元 | 40x | 271.6元 | +70.5% |"
+        },
+        {
+          "report_path": "reports/Jereh/Jereh-research-20260624.md",
+          "line_start": 346,
+          "line_end": 346,
+          "quote": "| **悲观** | 5% | 3.20元 | 20x | 63.9元 | **-59.9%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约写观察，未同步正文的空仓回避和持仓部分止盈结论。",
+    "evidence": [
+      {
+        "report_path": "reports/Jereh/Jereh-research-20260624.md",
+        "line_start": 485,
+        "line_end": 486,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 空仓者 回避当前价位。 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "REPORT_CONTRACT_CONFLICT",
+    "EXTREME_VALUATION",
+    "SECOND_CURVE_SUPPLY_CHAIN_DEPENDENCY"
+  ],
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出信号和加仓信号虽列出多个条件，但没有说明是 ALL、ANY 或达到最少数量。",
+      "required_clarification": "由人工或更强模型确认信号组合及具体减仓/加仓幅度；在此之前保留人工复核，不自动触发交易动作。",
+      "evidence": [
+        {
+          "report_path": "reports/Jereh/Jereh-research-20260624.md",
+          "line_start": 403,
+          "line_end": 403,
+          "quote": "| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 |"
+        },
+        {
+          "report_path": "reports/Jereh/Jereh-research-20260624.md",
+          "line_start": 404,
+          "line_end": 404,
+          "quote": "| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/Jereh/Jereh-research-20260624.md",
+      "line_start": 401,
+      "line_end": 404,
+      "quote": "| **空仓者** | **回避当前价位。** 159元/57.7x PE对制造业公司来说风险收益比极差。建议设置观察价位：80-100元（对应25-35x PE），到达后重新评估 |\n| **持仓者** | **考虑部分止盈。** 一年涨362%，大量乐观预期已反映在股价中。建议至少减仓30-50%锁定利润，保留底仓享受长期成长 |\n| **卖出信号** | (1) 北美燃机订单增速放缓或交付出现问题；(2) 连续2个季度毛利率继续下滑至30%以下；(3) 西方对燃气轮机出口实施限制；(4) AI资本开支周期见顶 |\n| **加仓信号** | (1) 股价回落至80-100元区间（PE 25-35x）；(2) 自研燃气轮机取得突破性进展；(3) 连续多季度毛利率企稳回升并超过35% |"
+    }
+  ]
+}

@@ -1,0 +1,529 @@
+{
+  "schema_version": 1,
+  "ticker": "603606.SH",
+  "company": "东方电缆",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/东方电缆/东方电缆-research-20260726.md",
+    "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "将 36-45 元从普通估值区间纠正为受中报六项判决至少四项转正约束的空仓建仓区间",
+      "将 30-36 元保留为受‘中报未转负面’约束的条件路径，未错误转换为无条件买入区间",
+      "保留了中报判决的 AT_LEAST(4 of 6) 关系，以及订单与应收两项内部的嵌套 ALL 关系",
+      "底部看板契约的无范围‘持有’与正文空仓等待、持仓持有不加仓存在口径粗化，已按全文恢复并记录冲突",
+      "目标价、折现值、当前价及历史估值区间均未被编译为买入价格"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "当前观望，等待 2026 年中报对六项经营动能作出判决，不在判决前抢跑。",
+    "evidence": [
+      {
+        "report_path": "reports/东方电缆/东方电缆-research-20260726.md",
+        "line_start": 762,
+        "line_end": 764,
+        "quote": "> ## 观望 —— 估值确实处 5 年极低位，但六项经营动能指标同步走弱，构成典型的价值陷阱风险格局。等 2026 年中报（8 月 5 日）判决，不必在判决前抢跑。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓者在中报判决前不建仓；只有六项判决至少四项转正，才可在 36-45 元分批建仓。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "empty-entry-after-four-positive-h1-tests",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "summary": "中报六项判决至少四项转正，并且价格处于 36-45 元时分批建仓。",
+          "condition": {
+            "node_id": "empty-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "经营判决达到至少四项正面，并匹配 36-45 元价格区间。",
+            "children": [
+              {
+                "node_id": "h1-at-least-four-positive",
+                "kind": "AT_LEAST",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "六项中报判决至少四项转正面。",
+                "children": [
+                  {
+                    "node_id": "h1-ocf-nonnegative",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "H1 经营现金流大于或等于零。",
+                    "children": [],
+                    "minimum": null,
+                    "metric": "H1经营现金流",
+                    "operator": "GTE",
+                    "value": 0,
+                    "unit": "亿元",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":805,"line_end":805,"quote":"| **H1 经营现金流** | ≥ 0（季节性成立，参照 2025H1 +7.14 亿） | < 0（**季节性解释被证伪**，按回款恶化重定价） |"}]
+                  },
+                  {
+                    "node_id": "h1-subsea-margin-at-least-30",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "海缆分部毛利率大于或等于 30%。",
+                    "children": [],
+                    "minimum": null,
+                    "metric": "海缆分部毛利率",
+                    "operator": "GTE",
+                    "value": 30,
+                    "unit": "%",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":806,"line_end":806,"quote":"| **海缆分部毛利率** | ≥ 30%（H2-2025 为 38.15%） | < 27%（回到重述后的 2024 水平） |"}]
+                  },
+                  {
+                    "node_id": "h1-subsea-growth-above-company",
+                    "kind": "QUALITATIVE",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "海缆收入增速回升至公司整体增速之上。",
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":807,"line_end":807,"quote":"| **海缆收入增速** | 回升至公司整体增速之上 | 继续低于整体 |"}]
+                  },
+                  {
+                    "node_id": "h1-orders-positive",
+                    "kind": "ALL",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "在手订单总额守住 180 亿元且海缆守住 100 亿元。",
+                    "children": [
+                      {
+                        "node_id": "h1-total-orders-at-least-180",
+                        "kind": "METRIC_COMPARE",
+                        "effect": "ENTRY_GATE",
+                        "scope": "empty_position",
+                        "description": "在手订单总额大于或等于 180 亿元。",
+                        "children": [],
+                        "minimum": null,
+                        "metric": "在手订单总额",
+                        "operator": "GTE",
+                        "value": 180,
+                        "unit": "亿元",
+                        "price_min": null,
+                        "price_max": null,
+                        "currency": null,
+                        "price_role": null,
+                        "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":808,"line_end":808,"quote":"| **在手订单** | 总额守住 180 亿且海缆守住 100 亿 | 海缆跌破 90 亿 |"}]
+                      },
+                      {
+                        "node_id": "h1-subsea-orders-at-least-100",
+                        "kind": "METRIC_COMPARE",
+                        "effect": "ENTRY_GATE",
+                        "scope": "empty_position",
+                        "description": "海缆在手订单大于或等于 100 亿元。",
+                        "children": [],
+                        "minimum": null,
+                        "metric": "海缆在手订单",
+                        "operator": "GTE",
+                        "value": 100,
+                        "unit": "亿元",
+                        "price_min": null,
+                        "price_max": null,
+                        "currency": null,
+                        "price_role": null,
+                        "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":808,"line_end":808,"quote":"| **在手订单** | 总额守住 180 亿且海缆守住 100 亿 | 海缆跌破 90 亿 |"}]
+                      }
+                    ],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":808,"line_end":808,"quote":"| **在手订单** | 总额守住 180 亿且海缆守住 100 亿 | 海缆跌破 90 亿 |"}]
+                  },
+                  {
+                    "node_id": "h1-receivables-positive",
+                    "kind": "ALL",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "应收增速低于收入增速且 DSO 低于 136 天。",
+                    "children": [
+                      {
+                        "node_id": "h1-receivables-growth-below-revenue",
+                        "kind": "QUALITATIVE",
+                        "effect": "ENTRY_GATE",
+                        "scope": "empty_position",
+                        "description": "应收账款增速回落至收入增速以下。",
+                        "children": [],
+                        "minimum": null,
+                        "metric": null,
+                        "operator": null,
+                        "value": null,
+                        "unit": null,
+                        "price_min": null,
+                        "price_max": null,
+                        "currency": null,
+                        "price_role": null,
+                        "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":809,"line_end":809,"quote":"| **应收账款** | 增速回落至收入增速以下，DSO < 136 天 | 继续快于收入增长 |"}]
+                      },
+                      {
+                        "node_id": "h1-dso-below-136",
+                        "kind": "METRIC_COMPARE",
+                        "effect": "ENTRY_GATE",
+                        "scope": "empty_position",
+                        "description": "DSO 低于 136 天。",
+                        "children": [],
+                        "minimum": null,
+                        "metric": "DSO",
+                        "operator": "LT",
+                        "value": 136,
+                        "unit": "天",
+                        "price_min": null,
+                        "price_max": null,
+                        "currency": null,
+                        "price_role": null,
+                        "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":809,"line_end":809,"quote":"| **应收账款** | 增速回落至收入增速以下，DSO < 136 天 | 继续快于收入增长 |"}]
+                      }
+                    ],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":809,"line_end":809,"quote":"| **应收账款** | 增速回落至收入增速以下，DSO < 136 天 | 继续快于收入增长 |"}]
+                  },
+                  {
+                    "node_id": "h1-hedge-adjusted-margin-at-least-22",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "扣除套期影响后毛利率大于或等于 22%。",
+                    "children": [],
+                    "minimum": null,
+                    "metric": "扣除套期影响后毛利率",
+                    "operator": "GTE",
+                    "value": 22,
+                    "unit": "%",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":810,"line_end":810,"quote":"| **扣除套期影响后毛利率** | 仍 ≥ 22% | 明显低于 22%（说明改善靠一次性储备） |"}]
+                  }
+                ],
+                "minimum": 4,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":812,"line_end":812,"quote":"**四项及以上转正面 → 可按\"错杀\"处理；三项及以上转负面 → 按\"基本面拐点向下\"处理。**"}]
+              },
+              {
+                "node_id": "empty-entry-price-36-45",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "分批建仓价格为 36-45 元。",
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": "元",
+                "price_min": 36,
+                "price_max": 45,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":818,"line_end":818,"quote":"| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |"}]
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":818,"line_end":818,"quote":"| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |"}]
+          },
+          "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":818,"line_end":818,"quote":"| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |"}]
+        },
+        {
+          "path_id": "empty-entry-30-36-if-h1-not-negative",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "summary": "价格进入 30-36 元仍只形成条件建仓候选，必须同时确认中报未转负面。",
+          "condition": {
+            "node_id": "empty-entry-30-36-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格进入 30-36 元并且中报未转负面。",
+            "children": [
+              {
+                "node_id": "empty-entry-price-30-36",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格进入 30-36 元。",
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": "元",
+                "price_min": 30,
+                "price_max": 36,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]
+              },
+              {
+                "node_id": "empty-entry-h1-not-negative",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "中报未转负面。",
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]
+          },
+          "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]
+        }
+      ],
+      "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":818,"line_end":818,"quote":"| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |"}]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "持仓者当前持有但不加仓；满足中报正面条件或 30-36 元且中报未转负面后才允许加仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-add-after-four-positive-h1-tests",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "summary": "中报六项判决至少四项转正面后可加仓。",
+          "condition": {
+            "node_id": "holder-add-four-positive",
+            "kind": "AT_LEAST",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "中报判决表四项及以上转正面。",
+            "children": [
+              {"node_id":"holder-positive-ocf","kind":"QUALITATIVE","effect":"ADD_GATE","scope":"holder","description":"H1 经营现金流转正面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":805,"line_end":805,"quote":"| **H1 经营现金流** | ≥ 0（季节性成立，参照 2025H1 +7.14 亿） | < 0（**季节性解释被证伪**，按回款恶化重定价） |"}]},
+              {"node_id":"holder-positive-subsea-margin","kind":"QUALITATIVE","effect":"ADD_GATE","scope":"holder","description":"海缆分部毛利率转正面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":806,"line_end":806,"quote":"| **海缆分部毛利率** | ≥ 30%（H2-2025 为 38.15%） | < 27%（回到重述后的 2024 水平） |"}]},
+              {"node_id":"holder-positive-subsea-growth","kind":"QUALITATIVE","effect":"ADD_GATE","scope":"holder","description":"海缆收入增速转正面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":807,"line_end":807,"quote":"| **海缆收入增速** | 回升至公司整体增速之上 | 继续低于整体 |"}]},
+              {"node_id":"holder-positive-orders","kind":"QUALITATIVE","effect":"ADD_GATE","scope":"holder","description":"在手订单转正面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":808,"line_end":808,"quote":"| **在手订单** | 总额守住 180 亿且海缆守住 100 亿 | 海缆跌破 90 亿 |"}]},
+              {"node_id":"holder-positive-receivables","kind":"QUALITATIVE","effect":"ADD_GATE","scope":"holder","description":"应收账款转正面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":809,"line_end":809,"quote":"| **应收账款** | 增速回落至收入增速以下，DSO < 136 天 | 继续快于收入增长 |"}]},
+              {"node_id":"holder-positive-adjusted-margin","kind":"QUALITATIVE","effect":"ADD_GATE","scope":"holder","description":"扣除套期影响后毛利率转正面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":810,"line_end":810,"quote":"| **扣除套期影响后毛利率** | 仍 ≥ 22% | 明显低于 22%（说明改善靠一次性储备） |"}]}
+            ],
+            "minimum": 4,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]
+          },
+          "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]
+        },
+        {
+          "path_id": "holder-add-30-36-if-h1-not-negative",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "summary": "股价进入 30-36 元且中报没有转负面时可加仓。",
+          "condition": {
+            "node_id": "holder-add-price-and-not-negative",
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格进入 30-36 元并且中报未转负面。",
+            "children": [
+              {"node_id":"holder-add-price-30-36","kind":"PRICE_RANGE","effect":"ADD_GATE","scope":"holder","description":"股价进入 30-36 元。","children":[],"minimum":null,"metric":null,"operator":"BETWEEN","value":null,"unit":"元","price_min":30,"price_max":36,"currency":"CNY","price_role":"ADD_POSITION","evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]},
+              {"node_id":"holder-h1-not-negative","kind":"QUALITATIVE","effect":"ADD_GATE","scope":"holder","description":"中报未转负面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]}
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]
+          },
+          "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]
+        },
+        {
+          "path_id": "holder-reduce-on-any-listed-signal",
+          "action": "REDUCE",
+          "scope": "holder",
+          "summary": "六项卖出/减仓信号任一出现时触发处置。",
+          "condition": {
+            "node_id": "holder-reduce-any",
+            "kind": "ANY",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "任一列示的卖出或减仓信号出现。",
+            "children": [
+              {"node_id":"reduce-h1-ocf-negative","kind":"METRIC_COMPARE","effect":"REDUCE_TRIGGER","scope":"holder","description":"H1 经营现金流仍为负。","children":[],"minimum":null,"metric":"H1经营现金流","operator":"LT","value":0,"unit":"亿元","price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":821,"line_end":821,"quote":"| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"}]},
+              {"node_id":"reduce-margin-two-period-decline","kind":"EVENT","effect":"REDUCE_TRIGGER","scope":"holder","description":"海缆毛利率连续两期下行。","children":[],"minimum":null,"metric":null,"operator":"OCCURS","value":true,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":821,"line_end":821,"quote":"| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"}]},
+              {"node_id":"reduce-subsea-award-share-below-20-twice","kind":"METRIC_COMPARE","effect":"REDUCE_TRIGGER","scope":"holder","description":"新增中标海缆占比连续两次低于 20%。","children":[],"minimum":null,"metric":"新增中标海缆占比连续两次","operator":"LT","value":20,"unit":"%","price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":821,"line_end":821,"quote":"| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"}]},
+              {"node_id":"reduce-subsea-orders-below-90","kind":"METRIC_COMPARE","effect":"REDUCE_TRIGGER","scope":"holder","description":"在手订单海缆分部跌破 90 亿元。","children":[],"minimum":null,"metric":"海缆在手订单","operator":"LT","value":90,"unit":"亿元","price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":821,"line_end":821,"quote":"| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"}]},
+              {"node_id":"reduce-major-order-shrinks","kind":"EVENT","effect":"REDUCE_TRIGGER","scope":"holder","description":"重大订单再次出现青洲四式缩量。","children":[],"minimum":null,"metric":null,"operator":"OCCURS","value":true,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":821,"line_end":821,"quote":"| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"}]},
+              {"node_id":"reduce-governance-or-overseas-impairment","kind":"EVENT","effect":"REDUCE_TRIGGER","scope":"holder","description":"新增重大治理事件或海外减值。","children":[],"minimum":null,"metric":null,"operator":"OCCURS","value":true,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":821,"line_end":821,"quote":"| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"}]}
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":821,"line_end":821,"quote":"| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"}]
+          },
+          "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":821,"line_end":821,"quote":"| **卖出/减仓信号** | ①H1 经营现金流仍为负；②海缆毛利率连续两期下行；③新增中标海缆占比连续两次低于 20%；④在手订单海缆分部跌破 90 亿；⑤重大订单再次缩量（青洲四式）；⑥新增重大治理事件或海外减值 |"}]
+        }
+      ],
+      "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":819,"line_end":819,"quote":"| **持仓者** | **持有，不加仓**。当前 PE 6% 分位，因股价下跌而恐慌卖出缺乏估值依据；但中标结构与海缆增速的恶化是真的，不应在判决前加码 |"}]
+    }
+  },
+  "hard_blocks": [
+    {
+      "node_id": "empty-block-before-h1-review",
+      "kind": "MANUAL_REVIEW",
+      "effect": "BLOCK_ENTRY",
+      "scope": "empty_position",
+      "description": "在 2026 年中报六项判决完成前不建仓。",
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":818,"line_end":818,"quote":"| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |"}]
+    }
+  ],
+  "redlines": [
+    {
+      "node_id": "three-or-more-negative-h1-tests",
+      "kind": "AT_LEAST",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "六项中报判决中至少三项转负面，按基本面拐点向下处理。",
+      "children": [
+        {"node_id":"negative-ocf","kind":"QUALITATIVE","effect":"INVALIDATION","scope":"both","description":"H1 经营现金流转负面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":805,"line_end":805,"quote":"| **H1 经营现金流** | ≥ 0（季节性成立，参照 2025H1 +7.14 亿） | < 0（**季节性解释被证伪**，按回款恶化重定价） |"}]},
+        {"node_id":"negative-margin","kind":"QUALITATIVE","effect":"INVALIDATION","scope":"both","description":"海缆毛利率转负面。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":806,"line_end":806,"quote":"| **海缆分部毛利率** | ≥ 30%（H2-2025 为 38.15%） | < 27%（回到重述后的 2024 水平） |"}]},
+        {"node_id":"negative-growth","kind":"QUALITATIVE","effect":"INVALIDATION","scope":"both","description":"海缆收入增速继续低于整体。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":807,"line_end":807,"quote":"| **海缆收入增速** | 回升至公司整体增速之上 | 继续低于整体 |"}]},
+        {"node_id":"negative-orders","kind":"QUALITATIVE","effect":"INVALIDATION","scope":"both","description":"海缆在手订单跌破负面阈值。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":808,"line_end":808,"quote":"| **在手订单** | 总额守住 180 亿且海缆守住 100 亿 | 海缆跌破 90 亿 |"}]},
+        {"node_id":"negative-receivables","kind":"QUALITATIVE","effect":"INVALIDATION","scope":"both","description":"应收账款继续快于收入增长。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":809,"line_end":809,"quote":"| **应收账款** | 增速回落至收入增速以下，DSO < 136 天 | 继续快于收入增长 |"}]},
+        {"node_id":"negative-adjusted-margin","kind":"QUALITATIVE","effect":"INVALIDATION","scope":"both","description":"扣除套期影响后毛利率明显低于 22%。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":810,"line_end":810,"quote":"| **扣除套期影响后毛利率** | 仍 ≥ 22% | 明显低于 22%（说明改善靠一次性储备） |"}]}
+      ],
+      "minimum": 3,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":812,"line_end":812,"quote":"**四项及以上转正面 → 可按\"错杀\"处理；三项及以上转负面 → 按\"基本面拐点向下\"处理。**"}]
+    }
+  ],
+  "monitoring_conditions": [
+    {"node_id":"monitor-order-margin-uncertainty","kind":"MANUAL_REVIEW","effect":"MONITOR","scope":"both","description":"持续核验海缆订单能否以接近 33% 的毛利率交付。","children":[],"minimum":null,"metric":null,"operator":null,"value":null,"unit":null,"price_min":null,"price_max":null,"currency":null,"price_role":null,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":729,"line_end":729,"quote":"**因此，本股票的估值判断几乎完全押注在一个问题上：103.89 亿海缆在手订单，能否以接近 33% 的毛利率交付？**"}]}
+  ],
+  "valuation_references": [
+    {"label":"低于 30 元的安全边际参考","price_role":"VALUATION_REFERENCE","value":null,"min":null,"max":30,"currency":"CNY","actionable":false,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":735,"line_end":735,"quote":"| **低于 30 元** | PE < 18x、PB < 3.0x，较中性情景折现值有 16% 以上缓冲，安全边际充分 |"}]},
+    {"label":"30-36 元持仓加仓区","price_role":"ADD_POSITION","value":null,"min":30,"max":36,"currency":"CNY","actionable":true,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":820,"line_end":820,"quote":"| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"}]},
+    {"label":"36-45 元条件建仓区","price_role":"CONDITIONAL_ENTRY","value":null,"min":36,"max":45,"currency":"CNY","actionable":true,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":818,"line_end":818,"quote":"| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |"}]},
+    {"label":"45-55 元估值参考","price_role":"VALUATION_REFERENCE","value":null,"min":45,"max":55,"currency":"CNY","actionable":false,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":738,"line_end":738,"quote":"| **45 – 55 元** | 回到 5 年 PE 常态低位区（P25 约 29.9x），需盈利预测上修支撑 |"}]},
+    {"label":"高于 55 元赔率转差参考","price_role":"VALUATION_REFERENCE","value":55,"min":null,"max":null,"currency":"CNY","actionable":false,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":739,"line_end":739,"quote":"| **高于 55 元** | 接近 5 年 PE 中位数，赔率转差 |"}]},
+    {"label":"三情景目标价","price_role":"TARGET_PRICE","value":null,"min":24.77,"max":71.34,"currency":"CNY","actionable":false,"evidence":[{"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":705,"line_end":709,"quote":"| 乐观 | 海缆订单按 33% 毛利率交付、海外放量、深远海提价 | +20% | 25x | 2.85 元 | **71.34 元** | 55.09 元 | +81.7% |\n| 中性 | 订单正常兑现、竞争使估值回归 | +12% | 20x | 2.32 元 | **46.40 元** | 35.83 元 | +18.2% |\n| 悲观 | 增量订单低毛利化、套期储备耗尽、利润三年不增 | 0% | 15x | 1.65 元 | **24.77 元** | 19.13 元 | −36.9% |"}]}
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约仅给出无范围的‘持有’并遗漏正文的空仓等待、持仓不加仓和条件路径；全文能够明确恢复两类持仓状态，因此未保留为未决歧义。",
+    "evidence": [
+      {"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":818,"line_end":820,"quote":"| **空仓者** | **等 8 月 5 日中报**。距今仅约 10 天，等待成本极低，而信息增量极大（六项判决同时揭晓）。在此之前不建仓；中报四项及以上转正面，再于 36-45 元区间分批建仓 |\n| **持仓者** | **持有，不加仓**。当前 PE 6% 分位，因股价下跌而恐慌卖出缺乏估值依据；但中标结构与海缆增速的恶化是真的，不应在判决前加码 |\n| **加仓信号** | 中报判决表四项及以上转正面；或股价跌入 30-36 元且中报未转负面 |"},
+      {"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":964,"line_end":965,"quote":"| 基本面建议动作 | 持有 |\n| 结论摘要 | 7.7 价格区间（研究结论，非个人操作建议） |"}
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "AT_LEAST_N_REQUIRES_STRONG_REVIEW"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":764,"line_end":764,"quote":"> ## 观望 —— 估值确实处 5 年极低位，但六项经营动能指标同步走弱，构成典型的价值陷阱风险格局。等 2026 年中报（8 月 5 日）判决，不必在判决前抢跑。"},
+    {"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":801,"line_end":821,"quote":"### 8.3 中报判决表（8 月 5 日，二元判定）"},
+    {"report_path":"reports/东方电缆/东方电缆-research-20260726.md","line_start":953,"line_end":965,"quote":"## 看板决策契约"}
+  ]
+}

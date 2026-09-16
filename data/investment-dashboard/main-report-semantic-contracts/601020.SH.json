@@ -1,0 +1,394 @@
+{
+  "schema_version": 1,
+  "ticker": "601020.SH",
+  "company": "华钰矿业",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+    "report_sha256": "68abd7c3f1b90e0bf25b40a8197af64628c407e5f5f66f104dae4528761056c5"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "华钰矿业当前是观察/小仓事件跟踪，不是可忽略价格的复利资产。",
+      "17—18元试错区附带控制权过户和锑/金精矿销售或现金流至少一项改善；治理和项目节点仍需强复核。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "华钰资源期权真实但兑现、治理和控制权仍待证明，19.38元观察，不建议重仓。",
+    "evidence": [
+      {
+        "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+        "line_start": 289,
+        "line_end": 289,
+        "quote": "> 华钰值得进入金锑资源观察池，但当前仍是“资源好、兑现难、治理待证明”的高波动期权，而不是可以忽略价格的复利资产；19.38 元较前期回落后仍缺乏稳健安全边际，结论是观察或小仓事件跟踪，不建议重仓买入。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "17—18元且控制权/经营至少一项硬验证后小仓试错；13—15元继续等待，10—12元以下回避或再评估。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "17—18元且控制权过户、销售或经营现金流至少一项实质改善后试错。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 17,
+                "price_max": 18,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+                    "line_start": 277,
+                    "line_end": 277,
+                    "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于17—18元。",
+                "node_id": "empty-trial-17-18-condition-1"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+                        "line_start": 277,
+                        "line_end": 277,
+                        "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+                      }
+                    ],
+                    "kind": "QUALITATIVE",
+                    "effect": "TRIAL_GATE",
+                    "scope": "empty_position",
+                    "description": "控制权过户完成。",
+                    "node_id": "empty-trial-17-18-condition-2-1"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+                        "line_start": 277,
+                        "line_end": 277,
+                        "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+                      }
+                    ],
+                    "kind": "QUALITATIVE",
+                    "effect": "TRIAL_GATE",
+                    "scope": "empty_position",
+                    "description": "锑/金精矿销售实质改善。",
+                    "node_id": "empty-trial-17-18-condition-2-2"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+                        "line_start": 277,
+                        "line_end": 277,
+                        "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+                      }
+                    ],
+                    "kind": "QUALITATIVE",
+                    "effect": "TRIAL_GATE",
+                    "scope": "empty_position",
+                    "description": "经营现金流实质改善。",
+                    "node_id": "empty-trial-17-18-condition-2-3"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+                    "line_start": 277,
+                    "line_end": 277,
+                    "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+                  }
+                ],
+                "kind": "ANY",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "控制权过户、锑/金精矿销售或经营现金流至少一项实质改善。",
+                "node_id": "empty-trial-17-18-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+                "line_start": 277,
+                "line_end": 277,
+                "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于17—18元且至少一项经营/治理硬验证成立。",
+            "node_id": "empty-trial-17-18-condition"
+          },
+          "path_id": "empty-trial-17-18",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+              "line_start": 277,
+              "line_end": 277,
+              "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+            }
+          ]
+        },
+        {
+          "action": "REVIEW",
+          "summary": "13—15元继续等待，要求锑价、治理和泥堡节点不恶化。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 13,
+            "price_max": 15,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+                "line_start": 278,
+                "line_end": 278,
+                "quote": "| 空仓稳健型 | 继续等待 | 13-15 元，同时锑价企稳、治理不恶化、泥堡节点没有继续延后 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于13—15元继续等待区。",
+            "node_id": "empty-review-13-15-condition"
+          },
+          "path_id": "empty-review-13-15",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+              "line_start": 278,
+              "line_end": 278,
+              "quote": "| 空仓稳健型 | 继续等待 | 13-15 元，同时锑价企稳、治理不恶化、泥堡节点没有继续延后 |"
+            }
+          ]
+        },
+        {
+          "action": "AVOID",
+          "summary": "10—12元以下仍需先排除经营和治理风险。",
+          "path_id": "empty-avoid-below-12",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+              "line_start": 279,
+              "line_end": 279,
+              "quote": "| 空仓保守型 | 回避或极低价再评估 | 10-12 元以下，或先看到连续两个季度经营现金流与产销率改善再接受更高价格 |"
+            }
+          ],
+          "condition": null
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "| 空仓 | 19.38 元不追，优先等经营证据；激进者也应等 17-18 元与至少一项硬验证同时出现 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "小仓可观察，重仓应评估降低至可承受水平，不因协议转让价机械加仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有观察并设置库存、现金流、关联交易和项目节点硬触发器。",
+          "path_id": "holder-hold-hard-triggers",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+              "line_start": 280,
+              "line_end": 280,
+              "quote": "| 已持有者 | 持有观察但设硬触发器 | 19-20 元不宜因协议转让价盲目加仓；用库存、OCF、关联交易和项目进度管理仓位 |"
+            }
+          ],
+          "condition": null
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "| 已持有者 | 持有观察但设硬触发器 | 19-20 元不宜因协议转让价盲目加仓；用库存、OCF、关联交易和项目进度管理仓位 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "**减仓或回避信号**"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "库存和现金流继续恶化、泥堡延期、担保代偿或重大治理违规时减仓/回避。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "| 小仓持有 | 可继续观察，但把锑产销率、OCF 和控制权过户设为季度检查点 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪锑/金精矿产销率、经营现金流和控制权过户。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "GOVERNANCE_AND_CONTROL_TRANSFER",
+    "AT_LEAST_ONE_IMPROVEMENT",
+    "RESOURCE_OPTION"
+  ],
+  "ambiguities": [
+    {
+      "code": "GOVERNANCE_AND_SIGNAL_SCOPE",
+      "summary": "事件触发器与价格带同时存在，报告未把治理、销售和现金流验证拆成可独立判定的正式门槛。",
+      "required_clarification": "确认至少一项改善的判定口径、证据来源和控制权过户的截止条件。",
+      "evidence": [
+        {
+          "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "| 空仓激进型 | 等信号后小仓试错 | 17-18 元且控制权过户、锑/金精矿销售或 OCF 至少出现一项实质改善；不因单日金属涨价追高 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/华钰矿业/华钰矿业-investment-team-20260714.md",
+      "line_start": 289,
+      "line_end": 289,
+      "quote": "> 华钰值得进入金锑资源观察池，但当前仍是“资源好、兑现难、治理待证明”的高波动期权，而不是可以忽略价格的复利资产；19.38 元较前期回落后仍缺乏稳健安全边际，结论是观察或小仓事件跟踪，不建议重仓买入。"
+    }
+  ]
+}

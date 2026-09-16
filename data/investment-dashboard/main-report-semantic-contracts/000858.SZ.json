@@ -1,0 +1,427 @@
+{
+  "schema_version": 1,
+  "ticker": "000858.SZ",
+  "company": "五粮液",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+    "report_sha256": "84cc5fd62cac787e9b39e97cd6660141fa77b59de989412f9120745cba8d095f"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "当前结论明确为观望且不满足买入条件，未把七年低位或高股息自动转换为买入",
+      "60 元以下只保留为激进型不超过 3% 的试探仓路径",
+      "稳健型路径写‘三大重估信号齐备’，但其后实际列出五项，无法从报告确定究竟哪三项必须满足",
+      "70 元是信号齐备后的条件配置上限，不是当前无条件买点",
+      "保守型明确回避；离场信号保持为风险触发而非买入前提"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "当前观望且不满足买入条件，只作为高股息托底的困境反转候选跟踪。",
+    "evidence": [
+      {
+        "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+        "line_start": 12,
+        "line_end": 12,
+        "quote": "> 五粮液当前不是\"跌出来的价值股\"，而是\"高股息托底的困境反转候选\"：303亿会计差错更正证伪了历史增长质量，千元价位定价权已实质受损，按真实（重述后）盈利口径当前估值反而是四大名酒中最贵，2966亿市值的安全边际约为零。**建议观望，不满足买入条件**；跟踪可信口径下的动销验证与治理修复信号，回避重仓押注反转。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前不满足一般买入条件；激进型可在 60 元以下以不超过 3% 的观察仓试探，稳健型条件存在未决歧义，保守型回避。",
+      "entry_semantic": "AMBIGUOUS",
+      "action_paths": [
+        {
+          "path_id": "aggressive-trial-below-60",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "summary": "能承受大幅波动且愿赌困境反转者，可在 60 元以下以不超过 3% 的观察仓分批试探。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 60,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+                "line_start": 147,
+                "line_end": 147,
+                "quote": "| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |"
+              }
+            ],
+            "node_id": "trial-below-60",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格低于或等于 60 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+              "line_start": 147,
+              "line_end": 147,
+              "quote": "| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 145,
+          "line_end": 149,
+          "quote": "| 投资者类型 | 建议 | 价格区间参考 |\n|-----------|------|------------|\n| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |\n| 稳健型 | **观望**，放入观察清单，等三大重估信号齐备 | 信号未齐备前不设买点；齐备后70元以下可配置 |\n| 保守型 | **回避**；同样的钱优先考虑茅台（生意质量与治理均更优，估值18.3x反而更便宜） | 不参与 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "UNKNOWN",
+      "summary": "报告没有给出现有持仓者的独立当前动作。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [],
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 143,
+          "line_end": 149,
+          "quote": "### 分层操作建议"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 148,
+          "line_end": 158,
+          "quote": "| 稳健型 | **观望**，放入观察清单，等三大重估信号齐备 | 信号未齐备前不设买点；齐备后70元以下可配置 |"
+        }
+      ],
+      "node_id": "stable-entry-signals-unresolved",
+      "kind": "MANUAL_REVIEW",
+      "effect": "BLOCK_ENTRY",
+      "scope": "empty_position",
+      "description": "稳健型在重估信号齐备前不设买点，但报告对所需信号集合存在三项/五项矛盾。"
+    }
+  ],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+              "line_start": 161,
+              "line_end": 161,
+              "quote": "1. 普五批价跌破700元并停留两个季度以上，或官方正式下调1019元出厂价"
+            }
+          ],
+          "node_id": "price-below-700-two-quarters",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "普五批价跌破 700 元并持续两个季度，或官方下调出厂价。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+              "line_start": 162,
+              "line_end": 162,
+              "quote": "2. 问询升级为立案调查 / 年报被出非标意见"
+            }
+          ],
+          "node_id": "investigation-or-qualified-opinion",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "问询升级立案或年报被出非标意见。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+              "line_start": 163,
+              "line_end": 163,
+              "quote": "3. 分红承诺失守（2026年度分红<200亿或比例<70%）"
+            }
+          ],
+          "node_id": "dividend-promise-broken",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "2026 年分红低于 200 亿元或比例低于 70%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+              "line_start": 164,
+              "line_end": 164,
+              "quote": "4. 新任董事长或总经理再度被查（此项18个月内已发生两次，任何时候触发即离场重审）"
+            }
+          ],
+          "node_id": "leader-investigated-again",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "新任董事长或总经理再次被查。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+              "line_start": 165,
+              "line_end": 165,
+              "quote": "5. 汾酒营收正式反超五粮液（当前差距仅4.5%）"
+            }
+          ],
+          "node_id": "fenjiu-revenue-overtakes",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "汾酒营收正式超过五粮液。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 160,
+          "line_end": 165,
+          "quote": "**减仓/离场信号**："
+        }
+      ],
+      "node_id": "exit-on-any-redline",
+      "kind": "ANY",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "任一明确离场信号触发即离场或重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 153,
+          "line_end": 158,
+          "quote": "**加仓/重估信号**（三者齐备前维持观望）："
+        }
+      ],
+      "node_id": "monitor-repricing-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪批价、现金流、监管商品款项、治理问询及报表稳定性。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "激进试探上限",
+      "price_role": "TRIAL_ENTRY",
+      "value": 60,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": true,
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 147,
+          "line_end": 147,
+          "quote": "| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "赔率改善参考",
+      "price_role": "VALUATION_REFERENCE",
+      "value": 58,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 147,
+          "line_end": 147,
+          "quote": "| 激进型（能承受-50%波动、愿赌困境反转） | 观察仓/小仓位（≤3%），逐季验证信号后再加 | 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "稳健型条件配置上限",
+      "price_role": "CONDITIONAL_ENTRY",
+      "value": 70,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": true,
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 148,
+          "line_end": 148,
+          "quote": "| 稳健型 | **观望**，放入观察清单，等三大重估信号齐备 | 信号未齐备前不设买点；齐备后70元以下可配置 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 39.0,
+      "max": 133.5,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 68,
+          "line_end": 68,
+          "quote": "5. **三情景验证（工具验算）**：乐观133.5元（+74.7%）/ 中性77.9元（+1.9%）/ 悲观39.0元（-49.0%）——中性情景3年几乎零回报，赔率结构不佳；托底靠每年约3.4%股息+约3%回购。"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约只保留激进型价格和保守型回避，遗漏稳健型条件及三项/五项矛盾。",
+    "evidence": [
+      {
+        "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+        "line_start": 197,
+        "line_end": 204,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 激进型（能承受-50%波动、愿赌困境反转） 观察仓/小仓位（≤3%），逐季验证信号后再加 60元以下分批试探；58元（对应正常化净利150亿×15x）以下赔率才明显改善 |\n| 激进型动作 | 60元以下分批试探 |\n| 激进型价格区间 | 60元 |\n| 稳健型动作 | 未给出 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 回避 |\n| 保守型价格区间 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "AMBIGUOUS_REQUIRES_STRONG_REVIEW"
+  ],
+  "ambiguities": [
+    {
+      "code": "REPRICING_SIGNAL_COUNT_CONFLICT",
+      "summary": "正文要求‘三大重估信号齐备’，但紧接着列出五项信号，无法确定稳健型 70 元以下配置究竟要求哪三项。",
+      "required_clarification": "人工明确五项中必须满足的三项，或确认实际要求是五项全部满足。",
+      "evidence": [
+        {
+          "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+          "line_start": 148,
+          "line_end": 158,
+          "quote": "| 稳健型 | **观望**，放入观察清单，等三大重估信号齐备 | 信号未齐备前不设买点；齐备后70元以下可配置 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/五粮液/五粮液-投研团队报告-20260719.md",
+      "line_start": 132,
+      "line_end": 165,
+      "quote": "## 7. 最终投资建议"
+    }
+  ]
+}

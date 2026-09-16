@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "ticker": "301666.SZ",
+  "company": "DapuStor",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+    "report_sha256": "b8eb7739b430e9bd07f44684593bd3e69327452f5d23a650313affd777830381"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "705 元和 383x PB 是当前估值状态，不是买入价；30-150 元情景范围是估值参考。",
+      "空仓者坚决回避，2027 年解禁潮后只是重新评估，不应把合理价格区间直接当成当前买入条件。",
+      "持仓者立即卖出或大幅减仓；只有 80-120 元且连续四季度证明盈利可持续，才形成明确的加仓门槛。",
+      "加仓条件中的‘且’被保留为 ALL；当前合同不把任何估值参考自动转成买入。",
+      "底部看板契约写观察，与正文坚决回避/立即卖出结论冲突。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "大普微技术方向正确但估值极端，705 元没有安全边际；空仓者坚决回避，持仓者立即卖出或大幅减仓。",
+    "evidence": [
+      {
+        "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+        "line_start": 313,
+        "line_end": 314,
+        "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |\n| **持仓者** | **立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "705 元当前价坚决回避；2027 年解禁潮后再评估，不形成当前买入路径。",
+      "entry_semantic": "EXPLICIT_NO_BUY",
+      "action_paths": [
+        {
+          "path_id": "avoid-current-705",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前 705 元没有安全边际，坚决回避。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+              "line_start": 313,
+              "line_end": 313,
+              "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-after-2027-unlock",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "2027 年解禁潮后重新评估，不自动建仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 80,
+            "price_max": 120,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+                "line_start": 316,
+                "line_end": 316,
+                "quote": "| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
+              }
+            ],
+            "node_id": "review-price-80-120-after-earnings",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "80-120 元区间仅作为未来解禁后重新评估的价格范围。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+              "line_start": 313,
+              "line_end": 313,
+              "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+          "line_start": 313,
+          "line_end": 313,
+          "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "当前估值无法支撑，持仓者立即卖出或大幅减仓；未来 80-120 元且盈利连续验证后才讨论加仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-immediate-reduce",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "立即卖出或大幅减仓以锁定利润。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+              "line_start": 314,
+              "line_end": 314,
+              "quote": "| **持仓者** | **立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-exit-current-valuation",
+          "action": "EXIT",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "报告将当前估值描述为任何时候的卖出信号。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+              "line_start": 315,
+              "line_end": 315,
+              "quote": "| **卖出信号** | 任何时候都是卖出信号——当前估值已经远超任何合理范围 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-after-four-quarters",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "只有价格 80-120 元且连续四个季度证明盈利可持续，才形成加仓路径。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 80,
+                "price_max": 120,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+                    "line_start": 316,
+                    "line_end": 316,
+                    "quote": "| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
+                  }
+                ],
+                "node_id": "holder-add-price-80-120",
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "价格处于 80-120 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+                    "line_start": 316,
+                    "line_end": 316,
+                    "quote": "| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
+                  }
+                ],
+                "node_id": "holder-add-four-quarters",
+                "kind": "FILING",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "连续四个季度证明盈利可持续。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+                "line_start": 316,
+                "line_end": 316,
+                "quote": "| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
+              }
+            ],
+            "node_id": "holder-add-all",
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格处于 80-120 元且连续四个季度证明盈利可持续。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+              "line_start": 316,
+              "line_end": 316,
+              "quote": "| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "| **持仓者** | **立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+          "line_start": 315,
+          "line_end": 315,
+          "quote": "| **卖出信号** | 任何时候都是卖出信号——当前估值已经远超任何合理范围 |"
+        }
+      ],
+      "node_id": "current-valuation-exit",
+      "kind": "EVENT",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "当前估值已经远超任何合理范围，报告将任何时候视为卖出信号。"
+    }
+  ],
+  "monitoring_conditions": [],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-06-23 当前股价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 705,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "**当前股价**：705.00元（6/23收盘，-7.66%）"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "合理价格情景范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 30,
+      "max": 150,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+          "line_start": 322,
+          "line_end": 324,
+          "quote": "| 极端乐观（5年） | 130-150元 | 收入100亿，利润20亿，PE 30x |\n| 中性（3年） | 80-120元 | 收入60亿，利润10亿，PE 25x |\n| 悲观 | 30-50元 | 增长不及预期，回归E轮估值附近 |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文明确空仓坚决回避、持仓立即卖出或大幅减仓，但底部契约只写观察。",
+    "evidence": [
+      {
+        "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+        "line_start": 388,
+        "line_end": 389,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 空仓者 坚决回避。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "EXTREME_VALUATION",
+    "IPO_LOCKUP_AND_LIQUIDITY_RISK",
+    "NAND_CYCLE_RISK",
+    "REPORT_CONTRACT_CONFLICT"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/DapuStor/DapuStor-research-20260623.md",
+      "line_start": 313,
+      "line_end": 316,
+      "quote": "| **空仓者** | **坚决回避**。当前705元的价格不包含任何安全边际。即使大普微是一家优秀的技术公司，在这个价格买入几乎确定会亏钱。如果看好国产存储赛道，等2027年解禁潮后再评估——届时股价可能大幅回调，同时也有更多季度的盈利数据可以验证 |\n| **持仓者** | **立即卖出或大幅减仓**。如果有幸在IPO或低位买入，当前浮盈巨大，应锁定利润。3,074亿市值无法被任何合理估值模型支撑 |\n| **卖出信号** | 任何时候都是卖出信号——当前估值已经远超任何合理范围 |\n| **加仓信号** | 股价跌至80-120元区间（市值350-520亿，对应2027年合理PE 20-30x，假设年利润15-20亿），且连续4个季度证明盈利可持续 |"
+    }
+  ]
+}

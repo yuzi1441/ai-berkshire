@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "ticker": "600420.SH",
+  "company": "国药现代",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+    "report_sha256": "30da4da808294db012bd183f1230a15ecda0da857b76002d0408722b2511f637"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "正文明确当前是观察而非核心买入；7元以下的小仓试错还要求Q2/Q3毛利率止跌并跟踪API毛利和现金流。",
+      "持仓者可持有观察，但加仓信号是并列清单，报告没有规定需要任一、全部或多少项同时满足。",
+      "底部看板契约未完整表达正文的价格与条件路径，因此不静默升级为ready。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "国药现代是低估值但定价权弱、利润和API毛利仍承压的化药平台；当前观察，不作为高确定性核心买入。",
+    "evidence": [
+      {
+        "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+        "line_start": 9,
+        "line_end": 9,
+        "quote": "**一句话结论**：国药现代是“资产负债表安全、现金流不差、但定价权弱”的成熟化药平台；当前 8.70 元并不贵到离谱，但 2026Q1 利润断崖和原料药毛利下行说明周期仍未确认见底，适合作为低估值观察标的，不适合作为高确定性核心买入。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓者在8.70元附近观望；7元以下且Q2/Q3毛利率止跌时才可小仓试错。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "WATCH",
+          "summary": "8.70元附近观望，不急于买入。",
+          "path_id": "empty-watch-current",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+              "line_start": 254,
+              "line_end": 254,
+              "quote": "| 空仓、保守型 | 8.70 元附近 | **观望为主**；除非组合需要低估值医药观察仓，否则不急于买。 |"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "7元以下且Q2/Q3毛利率止跌时小仓试错。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 7,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+                    "line_start": 255,
+                    "line_end": 255,
+                    "quote": "| 空仓、价值型 | ≤ 7.0 元，且 Q2/Q3 毛利率止跌 | 可小仓试错，但必须跟踪 API 毛利和现金流。 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A股价格不高于7元。",
+                "node_id": "empty-trial-below-7-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+                    "line_start": 255,
+                    "line_end": 255,
+                    "quote": "| 空仓、价值型 | ≤ 7.0 元，且 Q2/Q3 毛利率止跌 | 可小仓试错，但必须跟踪 API 毛利和现金流。 |"
+                  }
+                ],
+                "kind": "MANUAL_REVIEW",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "Q2/Q3毛利率止跌，并跟踪API毛利和现金流。",
+                "node_id": "empty-trial-below-7-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+                "line_start": 255,
+                "line_end": 255,
+                "quote": "| 空仓、价值型 | ≤ 7.0 元，且 Q2/Q3 毛利率止跌 | 可小仓试错，但必须跟踪 API 毛利和现金流。 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格不高于7元，且Q2/Q3毛利率止跌并继续跟踪API毛利和现金流。",
+            "node_id": "empty-trial-below-7-condition"
+          },
+          "path_id": "empty-trial-below-7",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+              "line_start": 255,
+              "line_end": 255,
+              "quote": "| 空仓、价值型 | ≤ 7.0 元，且 Q2/Q3 毛利率止跌 | 可小仓试错，但必须跟踪 API 毛利和现金流。 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+          "line_start": 254,
+          "line_end": 254,
+          "quote": "| 空仓、保守型 | 8.70 元附近 | **观望为主**；除非组合需要低估值医药观察仓，否则不急于买。 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "已持有者可持有观察，不因低PB机械加仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "8—9元区间持有观察，不机械加仓。",
+          "path_id": "holder-hold-observe",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+              "line_start": 257,
+              "line_end": 257,
+              "quote": "| 已持有者 | 8-9 元区间 | 可持有观察，不建议因低 PB 机械加仓。 |"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "加仓前需逐项核验毛利率、现金流、产品贡献和价格，组合方式未定义。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+                "line_start": 310,
+                "line_end": 310,
+                "quote": "| 加仓信号 1 | 2026Q2/Q3 原料药及中间体毛利率明显回升，或至少不再恶化。 |"
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验报告列示的加仓信号，组合方式需人工确认。",
+            "node_id": "holder-add-signal-review-condition"
+          },
+          "path_id": "holder-add-signal-review",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+              "line_start": 310,
+              "line_end": 310,
+              "quote": "| 加仓信号 1 | 2026Q2/Q3 原料药及中间体毛利率明显回升，或至少不再恶化。 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+          "line_start": 257,
+          "line_end": 257,
+          "quote": "| 已持有者 | 8-9 元区间 | 可持有观察，不建议因低 PB 机械加仓。 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "| 减仓信号 1 | 2026 半年报继续出现收入和利润双位数下滑，且管理层无清晰改善路径。 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "半年报收入利润继续双位数下滑、API毛利长期低位或治理/质量风险扩大时减仓或回避。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+          "line_start": 303,
+          "line_end": 303,
+          "quote": "**对已有持仓者**：可以持有观察，但不要因为 PB < 1 就机械加仓。重点看 2026 半年报：原料药毛利率、经营现金流、制剂收入是否止跌。  "
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪2026半年报的API毛利率、经营现金流和制剂收入。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_INCOMPLETE",
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "PRICE_AND_FUNDAMENTAL_PRECONDITION"
+  ],
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓信号列成并列清单，但未说明任一、全部或最低数量的组合关系。",
+      "required_clarification": "明确加仓信号的组合逻辑及每项的硬性门槛。",
+      "evidence": [
+        {
+          "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+          "line_start": 310,
+          "line_end": 310,
+          "quote": "| 加仓信号 1 | 2026Q2/Q3 原料药及中间体毛利率明显回升，或至少不再恶化。 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/国药现代/国药现代-investment-team-20260708.md",
+      "line_start": 9,
+      "line_end": 9,
+      "quote": "**一句话结论**：国药现代是“资产负债表安全、现金流不差、但定价权弱”的成熟化药平台；当前 8.70 元并不贵到离谱，但 2026Q1 利润断崖和原料药毛利下行说明周期仍未确认见底，适合作为低估值观察标的，不适合作为高确定性核心买入。"
+    }
+  ]
+}

@@ -1,0 +1,626 @@
+{
+  "schema_version": 1,
+  "ticker": "002270.SZ",
+  "company": "华明装备",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+    "report_sha256": "68a60993dd36138005847247b02fb5e6124f7be63ffe866ad598ebf36f9bb9dd"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "17.81 元是当前参考价，不是买入价；三年目标价 9.4-28.6 元是估值参考，不能覆盖行动阈值。",
+      "空仓者的 14-16 元路径分别是分批建仓、试仓和等待验证，16-20 元只是观察/持有，20-24 元是大仓位复核，不能统一压成买入。",
+      "持仓者 18 元附近是不主动加仓；五条加仓信号与五条减仓/重审信号没有定义组合关系，保留人工判断。",
+      "报告底部契约只写观察，未完整表达正文的价格分层和持仓动作，因此标记冲突。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "华明装备是有真实细分护城河的电网设备公司，但 17.81 元已要求接近乐观经营路径；空仓者不追，持仓者观察持有并等待业绩或更好安全边际。",
+    "evidence": [
+      {
+        "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+        "line_start": 13,
+        "line_end": 13,
+        "quote": "> **短结论**：华明装备是分接开关这一“小部件、大责任”赛道中的优质细分冠军，国内护城河真实，海外与特高压提供增长期权；但 17.81 元仍隐含接近乐观情景的盈利要求。空仓者不追，优先等待 14—16 元或等待业绩先证明；持有者可观察持有。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "17.81 元不追；14-16 元按分层条件小仓或分批研究，16-20 元观察，20-24 元复核，超过 24 元基本面未上修时考虑减仓。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "entry-below-13-90-fundamentals-intact",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "不高于 13.90 元且基本面未损时分批买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 13.9,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                    "line_start": 321,
+                    "line_end": 321,
+                    "quote": "| **≤13.90 元** | 基本面未损时分批买入 | 中性情景约可满足 12% 年化总回报 |"
+                  }
+                ],
+                "node_id": "entry-price-below-13-90",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格不高于 13.90 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                    "line_start": 321,
+                    "line_end": 321,
+                    "quote": "| **≤13.90 元** | 基本面未损时分批买入 | 中性情景约可满足 12% 年化总回报 |"
+                  }
+                ],
+                "node_id": "entry-fundamentals-intact",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "基本面未损。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                "line_start": 321,
+                "line_end": 321,
+                "quote": "| **≤13.90 元** | 基本面未损时分批买入 | 中性情景约可满足 12% 年化总回报 |"
+              }
+            ],
+            "node_id": "entry-below-13-90-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格不高于 13.90 元且基本面未损。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 321,
+              "line_end": 321,
+              "quote": "| **≤13.90 元** | 基本面未损时分批买入 | 中性情景约可满足 12% 年化总回报 |"
+            }
+          ]
+        },
+        {
+          "path_id": "entry-13-90-14-67",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "13.90-14.67 元有吸引力，可分批建仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 13.9,
+            "price_max": 14.67,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                "line_start": 322,
+                "line_end": 322,
+                "quote": "| **13.90—14.67 元** | 较有吸引力，分批建仓 | 中性情景约可满足 10%—12% 年化 |"
+              }
+            ],
+            "node_id": "entry-price-13-90-14-67",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 13.90-14.67 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 322,
+              "line_end": 322,
+              "quote": "| **13.90—14.67 元** | 较有吸引力，分批建仓 | 中性情景约可满足 10%—12% 年化 |"
+            }
+          ]
+        },
+        {
+          "path_id": "trial-14-67-16",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "14.67-16.00 元只作小仓分批，并等待季报验证。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 14.67,
+            "price_max": 16,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                "line_start": 323,
+                "line_end": 323,
+                "quote": "| **14.67—16.00 元** | 小仓分批，等待季报验证 | 出现一定安全边际，但悲观情景仍有显著下行 |"
+              }
+            ],
+            "node_id": "trial-price-14-67-16",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 14.67-16.00 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 323,
+              "line_end": 323,
+              "quote": "| **14.67—16.00 元** | 小仓分批，等待季报验证 | 出现一定安全边际，但悲观情景仍有显著下行 |"
+            }
+          ]
+        },
+        {
+          "path_id": "watch-16-20",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "16.00-20.00 元观察，不主动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 16,
+            "price_max": 20,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                "line_start": 324,
+                "line_end": 324,
+                "quote": "| **16.00—20.00 元** | 观察或持有，不主动加仓 | 中性回报偏低，依赖乐观兑现 |"
+              }
+            ],
+            "node_id": "watch-price-16-20",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 16.00-20.00 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 324,
+              "line_end": 324,
+              "quote": "| **16.00—20.00 元** | 观察或持有，不主动加仓 | 中性回报偏低，依赖乐观兑现 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-20-24",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "20.00-24.00 元不新增，大仓位需要复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 20,
+            "price_max": 24,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                "line_start": 325,
+                "line_end": 325,
+                "quote": "| **20.00—24.00 元** | 不新增；大仓位复核 | 需要更高 EPS 增长或更高退出估值 |"
+              }
+            ],
+            "node_id": "review-price-20-24",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 20.00-24.00 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 325,
+              "line_end": 325,
+              "quote": "| **20.00—24.00 元** | 不新增；大仓位复核 | 需要更高 EPS 增长或更高退出估值 |"
+            }
+          ]
+        },
+        {
+          "path_id": "reduce-above-24-without-upgrade",
+          "action": "REDUCE",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "超过 24.00 元且基本面未上修时考虑减仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 24,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                    "line_start": 326,
+                    "line_end": 326,
+                    "quote": "| **>24.00 元** | 基本面未上修时考虑减仓 | 风险回报明显倾向乐观情景 |"
+                  }
+                ],
+                "node_id": "reduce-price-above-24",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "empty_position",
+                "description": "价格高于 24.00 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                    "line_start": 326,
+                    "line_end": 326,
+                    "quote": "| **>24.00 元** | 基本面未上修时考虑减仓 | 风险回报明显倾向乐观情景 |"
+                  }
+                ],
+                "node_id": "reduce-no-fundamental-upgrade",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "empty_position",
+                "description": "基本面未上修。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                "line_start": 326,
+                "line_end": 326,
+                "quote": "| **>24.00 元** | 基本面未上修时考虑减仓 | 风险回报明显倾向乐观情景 |"
+              }
+            ],
+            "node_id": "reduce-above-24-all",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "empty_position",
+            "description": "价格高于 24.00 元且基本面未上修。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 326,
+              "line_end": 326,
+              "quote": "| **>24.00 元** | 基本面未上修时考虑减仓 | 风险回报明显倾向乐观情景 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "line_start": 385,
+          "line_end": 385,
+          "quote": "| 空仓者 | 17.81 元不追；优先等 14—16 元 | 或 Q2/Q3 核心收入、扣非、毛利和现金流同步恢复 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "小仓持有者可持有观察，不主动加仓；大仓位在高价且无业绩上修时复核集中度和成本。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持有观察，不加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 386,
+              "line_end": 386,
+              "quote": "| 小仓持有者 | 持有观察，不加仓 | 海外毛利企稳、复购增加、特高压后续项目验证 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "五条加仓信号的组合关系未定义，需人工复核后决定是否加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                "line_start": 392,
+                "line_end": 396,
+                "quote": "1. 电力设备收入恢复双位数增长，扣非利润增速不低于收入。\n2. 海外收入继续增长且国际毛利率止跌，回款和销售费用效率改善。\n3. 500kV/±800kV 产品进入第二、第三个独立批量项目。\n4. 运维和在线监测收入、毛利率、渗透率开始单独披露。\n5. H 股发行条款合理，项目预期 ROIC 明显高于股权成本。"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认五条加仓信号的组合关系及实际证据。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 392,
+              "line_end": 396,
+              "quote": "1. 电力设备收入恢复双位数增长，扣非利润增速不低于收入。\n2. 海外收入继续增长且国际毛利率止跌，回款和销售费用效率改善。\n3. 500kV/±800kV 产品进入第二、第三个独立批量项目。\n4. 运维和在线监测收入、毛利率、渗透率开始单独披露。\n5. H 股发行条款合理，项目预期 ROIC 明显高于股权成本。"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-signals-manual-review",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "五条减仓或重审信号的组合关系未定义，需人工复核，不自动卖出。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+                "line_start": 400,
+                "line_end": 404,
+                "quote": "1. 重大质量事故、召回、索赔或供应商资格暂停。\n2. 连续两季核心收入、毛利、扣非和现金流同时弱化。\n3. 海外收入增长依赖更长账期，普通应收与坏账持续上升。\n4. H 股低价摊薄、跨能力圈并购或商誉/负债快速增加。\n5. 员工持股轻松解锁，但每股利润与 FCF 没有相应增长。"
+              }
+            ],
+            "node_id": "holder-reduce-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工确认五条减仓或重审信号的组合关系及严重程度。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+              "line_start": 400,
+              "line_end": 404,
+              "quote": "1. 重大质量事故、召回、索赔或供应商资格暂停。\n2. 连续两季核心收入、毛利、扣非和现金流同时弱化。\n3. 海外收入增长依赖更长账期，普通应收与坏账持续上升。\n4. H 股低价摊薄、跨能力圈并购或商誉/负债快速增加。\n5. 员工持股轻松解锁，但每股利润与 FCF 没有相应增长。"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "line_start": 386,
+          "line_end": 386,
+          "quote": "| 小仓持有者 | 持有观察，不加仓 | 海外毛利企稳、复购增加、特高压后续项目验证 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "line_start": 385,
+          "line_end": 385,
+          "quote": "| 空仓者 | 17.81 元不追；优先等 14—16 元 | 或 Q2/Q3 核心收入、扣非、毛利和现金流同步恢复 |"
+        }
+      ],
+      "node_id": "monitor-q2-q3-quality",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待 Q2/Q3 核心收入、扣非利润、毛利和经营现金流同步恢复。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-07-13 参考价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 17.81,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "line_start": 8,
+          "line_end": 8,
+          "quote": "| 参考价 | 17.81 元；腾讯与新浪收盘行情一致 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 9.4,
+      "max": 28.6,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "| 乐观 | +15% | 24x | 1.19 元 | **28.6 元** | +70.9% | +19.5% |"
+        },
+        {
+          "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "line_start": 301,
+          "line_end": 301,
+          "quote": "| 悲观 | 0% | 12x | 0.78 元 | **9.4 元** | -36.9% | -14.2% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约只写观察，未同步正文的六档价格行动、持仓不加仓和减仓/重审信号。",
+    "evidence": [
+      {
+        "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+        "line_start": 473,
+        "line_end": 474,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 空仓者 17.81 元不追；优先等 14—16 元 或 Q2/Q3 核心收入、扣非、毛利和现金流同步恢复 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "REPORT_CONTRACT_CONFLICT",
+    "GLOBALIZATION_EVIDENCE_INCOMPLETE",
+    "VALUATION_ACTION_BOUNDARY"
+  ],
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "五条加仓信号与五条减仓/重审信号没有说明是 ALL、ANY 还是达到最少数量后触发。",
+      "required_clarification": "由人工或更强模型确认加仓、减仓信号的组合关系后，才能生成确定性 ADD_POSITION 或 REDUCE 条件；在此之前仅保留人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "line_start": 392,
+          "line_end": 396,
+          "quote": "1. 电力设备收入恢复双位数增长，扣非利润增速不低于收入。\n2. 海外收入继续增长且国际毛利率止跌，回款和销售费用效率改善。\n3. 500kV/±800kV 产品进入第二、第三个独立批量项目。\n4. 运维和在线监测收入、毛利率、渗透率开始单独披露。\n5. H 股发行条款合理，项目预期 ROIC 明显高于股权成本。"
+        },
+        {
+          "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+          "line_start": 400,
+          "line_end": 404,
+          "quote": "1. 重大质量事故、召回、索赔或供应商资格暂停。\n2. 连续两季核心收入、毛利、扣非和现金流同时弱化。\n3. 海外收入增长依赖更长账期，普通应收与坏账持续上升。\n4. H 股低价摊薄、跨能力圈并购或商誉/负债快速增加。\n5. 员工持股轻松解锁，但每股利润与 FCF 没有相应增长。"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/华明装备/华明装备-investment-team-20260713.md",
+      "line_start": 13,
+      "line_end": 13,
+      "quote": "> **短结论**：华明装备是分接开关这一“小部件、大责任”赛道中的优质细分冠军，国内护城河真实，海外与特高压提供增长期权；但 17.81 元仍隐含接近乐观情景的盈利要求。空仓者不追，优先等待 14—16 元或等待业绩先证明；持有者可观察持有。"
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "schema_version": 1,
+  "ticker": "688676.SH",
+  "company": "金盘科技",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+    "report_sha256": "3143790bea40f5b97871dae98c47615f10fc7fd9fe65fc12c6e571c981882b02"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "金盘科技当前82.04元观望/持有跟踪；保守型要等约30倍可持续EPS或45—55元再评估，激进型只有事件驱动小仓。",
+      "报告没有给出激进型明确价格和完整空仓建仓门槛，不能把事件驱动小仓自动视为正式entry。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "金盘科技受益于电气化、AIDC和海外设备需求，但56.7倍PE已计入高增长，当前观望。",
+    "evidence": [
+      {
+        "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+        "line_start": 45,
+        "line_end": 45,
+        "quote": "**综合建议：观望 / 持有者谨慎持有；空仓者等待更好价格或更强现金流验证。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓等待估值回落至约30倍可持续EPS或45—55元再评估；激进型仅事件驱动小仓。",
+      "entry_semantic": "REVIEW_ONLY",
+      "action_paths": [
+        {
+          "action": "REVIEW",
+          "summary": "45—55元进入重新评估区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 45,
+            "price_max": 55,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+                "line_start": 333,
+                "line_end": 333,
+                "quote": "| 空仓保守型 | 等待 | 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于45—55元重新评估区。",
+            "node_id": "empty-review-45-55-condition"
+          },
+          "path_id": "empty-review-45-55",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+              "line_start": 333,
+              "line_end": 333,
+              "quote": "| 空仓保守型 | 等待 | 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估 |"
+            }
+          ]
+        },
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "只能在承认估值风险的前提下做事件驱动小仓，具体门槛待人工确认。",
+          "path_id": "empty-event-small",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+              "line_start": 335,
+              "line_end": 335,
+              "quote": "| 空仓激进型 | 只能事件驱动小仓 | 需要明确承认估值风险，不能当作安全边际投资 |"
+            }
+          ],
+          "condition": null
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+          "line_start": 333,
+          "line_end": 333,
+          "quote": "| 空仓保守型 | 等待 | 估值回落至约30x可持续EPS，或股价进入45-55元区间再重新评估 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "低成本持仓者可继续持有但设预警线，接近现价者谨慎持有/逢高降风险。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有跟踪并设置预警线。",
+          "path_id": "holder-hold-warning",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+              "line_start": 336,
+              "line_end": 336,
+              "quote": "| 已持有且成本低 | 可继续持有但设预警线 | 盯现金流、AIDC毛利、海外订单、储能毛利率 |"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "现金流、AIDC、海外订单、储能毛利和合理估值同时改善后再评估。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+                "line_start": 341,
+                "line_end": 341,
+                "quote": "1. 经营现金流连续两个半年度覆盖净利润；"
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验经营现金流、AIDC毛利、海外订单、储能毛利和价格。",
+            "node_id": "holder-add-review-condition"
+          },
+          "path_id": "holder-add-review",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+              "line_start": 341,
+              "line_end": 341,
+              "quote": "1. 经营现金流连续两个半年度覆盖净利润；"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "| 已持有且成本低 | 可继续持有但设预警线 | 盯现金流、AIDC毛利、海外订单、储能毛利率 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "1. 应收账款+合同资产/收入超过50%且账龄恶化；"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "应收合同资产恶化、主业毛利下降、储能低毛利扩张、海外认证/关税问题或高管治理风险时减仓/回避。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "1. 经营现金流连续两个半年度覆盖净利润；"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪经营现金流、AIDC毛利、海外订单、储能毛利和估值。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "NO_EXPLICIT_ACTION_PRICE",
+    "HIGH_VALUATION",
+    "AIDC_AND_OVERSEAS_EXECUTION"
+  ],
+  "ambiguities": [
+    {
+      "code": "NO_EXPLICIT_ACTION_PRICE",
+      "summary": "报告的事件驱动小仓没有明确价格或证据门槛，保守型价格是重新评估区而非自动买入区。",
+      "required_clarification": "补充事件驱动小仓的触发条件，明确其与正式建仓资格的边界。",
+      "evidence": [
+        {
+          "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+          "line_start": 335,
+          "line_end": 335,
+          "quote": "| 空仓激进型 | 只能事件驱动小仓 | 需要明确承认估值风险，不能当作安全边际投资 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/金盘科技/金盘科技研究报告-20260709.md",
+      "line_start": 45,
+      "line_end": 45,
+      "quote": "**综合建议：观望 / 持有者谨慎持有；空仓者等待更好价格或更强现金流验证。**"
+    }
+  ]
+}

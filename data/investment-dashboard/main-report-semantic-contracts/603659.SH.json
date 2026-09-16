@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "ticker": "603659.SH",
+  "company": "璞泰来",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+    "report_sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "璞泰来当前29元观察；22—25元是理想买入区，但正式小仓还附带Q2/Q3业绩持续向好等条件。",
+      "涂覆隔膜、负极、硅碳和固态路线的多业务条件需要强复核，底部契约未完整展开。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "璞泰来涂覆隔膜优势真实但负极材料和技术路线仍需验证，当前观察等待价格或证据。",
+    "evidence": [
+      {
+        "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+        "line_start": 427,
+        "line_end": 427,
+        "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "22—25元为理想区；若价格低于25元且Q2/Q3业绩持续向好，才考虑小仓。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "REVIEW",
+          "summary": "22—25元进入理想买入复核区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 22,
+            "price_max": 25,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+                "line_start": 402,
+                "line_end": 402,
+                "quote": "> **理想买入区间**：22-25元（对应2025年盈利的20-22x PE，提供了足够的悲观情景保护）"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于22—25元理想买入复核区。",
+            "node_id": "empty-review-22-25-condition"
+          },
+          "path_id": "empty-review-22-25",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+              "line_start": 402,
+              "line_end": 402,
+              "quote": "> **理想买入区间**：22-25元（对应2025年盈利的20-22x PE，提供了足够的悲观情景保护）"
+            }
+          ]
+        },
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "25元以下且Q2/Q3业绩持续向好时考虑建立小仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 25,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+                    "line_start": 427,
+                    "line_end": 427,
+                    "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A股价格不高于25元。",
+                "node_id": "empty-trial-below-25-with-q-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+                    "line_start": 427,
+                    "line_end": 427,
+                    "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "Q2/Q3业绩持续向好。",
+                "node_id": "empty-trial-below-25-with-q-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+                "line_start": 427,
+                "line_end": 427,
+                "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格不高于25元且Q2/Q3业绩持续向好。",
+            "node_id": "empty-trial-below-25-with-q-condition"
+          },
+          "path_id": "empty-trial-below-25-with-q",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+              "line_start": 427,
+              "line_end": 427,
+              "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+          "line_start": 427,
+          "line_end": 427,
+          "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "持仓者持有但需关注宁德采购、负极出货和涂覆隔膜市占率。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有并跟踪三项业务验证。",
+          "path_id": "holder-hold-monitor",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+              "line_start": 428,
+              "line_end": 428,
+              "quote": "| **持仓者** | **持有，但需要密切关注三个信号。** (1) 宁德时代采购量是否下降；(2) 负极材料出货量能否在2026年恢复至25万吨目标；(3) 涂覆隔膜市占率是否保持40%+。涂覆业务的价值足以支撑持有逻辑 |"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "价格、负极利用率、硅碳订单和港股上市等信号需人工核验。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+                "line_start": 430,
+                "line_end": 430,
+                "quote": "| **加仓信号** | (1) 股价回落至22-25元区间；(2) 负极材料行业产能利用率回升至80%+；(3) 硅碳负极大客户订单落地；(4) 港股成功上市且估值合理 |"
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验价格、负极产能利用率、硅碳订单和港股上市信号。",
+            "node_id": "holder-add-review-condition"
+          },
+          "path_id": "holder-add-review",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+              "line_start": 430,
+              "line_end": 430,
+              "quote": "| **加仓信号** | (1) 股价回落至22-25元区间；(2) 负极材料行业产能利用率回升至80%+；(3) 硅碳负极大客户订单落地；(4) 港股成功上市且估值合理 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+          "line_start": 428,
+          "line_end": 428,
+          "quote": "| **持仓者** | **持有，但需要密切关注三个信号。** (1) 宁德时代采购量是否下降；(2) 负极材料出货量能否在2026年恢复至25万吨目标；(3) 涂覆隔膜市占率是否保持40%+。涂覆业务的价值足以支撑持有逻辑 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+          "line_start": 429,
+          "line_end": 429,
+          "quote": "| **卖出信号** | (1) 宁德时代明确启动负极材料自建项目；(2) 涂覆隔膜市占率连续两季度下降至35%以下；(3) 梁丰被迫平仓质押股份；(4) 硅碳负极渗透率超过40%且璞泰来产品缺乏竞争力 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "宁德时代自建、涂覆市占率连续下降、质押风险或硅碳替代加速且产品失去竞争力时退出。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+          "line_start": 428,
+          "line_end": 428,
+          "quote": "| **持仓者** | **持有，但需要密切关注三个信号。** (1) 宁德时代采购量是否下降；(2) 负极材料出货量能否在2026年恢复至25万吨目标；(3) 涂覆隔膜市占率是否保持40%+。涂覆业务的价值足以支撑持有逻辑 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪涂覆隔膜市占率、负极出货、硅碳客户订单和固态路线。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_INCOMPLETE",
+    "MULTI_BUSINESS_FUTURE_GATES",
+    "BATTERY_TECHNOLOGY_RISK"
+  ],
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_INCOMPLETE",
+      "summary": "正文的理想价格与条件性小仓路径清楚，但底部契约没有完整拆出这些动作。",
+      "required_clarification": "确认22—25元是纯复核区还是在Q2/Q3改善后才可试仓，并补全正式契约。",
+      "evidence": [
+        {
+          "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+          "line_start": 522,
+          "line_end": 522,
+          "quote": "| 结论摘要 | 空仓者 观望为主，等待更好的买入时机。 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/Putailai/Putailai-investment-research-20260624.md",
+      "line_start": 427,
+      "line_end": 427,
+      "quote": "| **空仓者** | **观望为主，等待更好的买入时机。** 当前29元对应2026E约20x PE，不贵但也不便宜。理想买入区间22-25元（对应行业出清不及预期或港股IPO折价带来的回调）。如果股价回到25元以下且Q2/Q3业绩持续向好，可以考虑建立小仓位 |"
+    }
+  ]
+}

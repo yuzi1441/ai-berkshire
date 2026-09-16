@@ -1,0 +1,806 @@
+{
+  "schema_version": 1,
+  "ticker": "002179.SZ",
+  "company": "中航光电科技股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+    "report_sha256": "9afce21252d49e59c2cc384012bad9f27ae24d964547d1b807f850e60e914b67"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "当前 35.46 元位于三档买入区间之上，未把低于 52 周高点误解为低估。",
+      "29-32 元试仓必须同时看到毛利率停止下降和防务/数据中心至少一个终端出现可核验利润拐点。",
+      "24-28 元和 19-22 元保留各自的 EPS、现金流、库存/应收和低谷利润缓冲条件。",
+      "三年情景价值 16.5-45.1 元是估值参考，不直接等于买入价。",
+      "液冷、AI、汽车定点和军工订单没有被当成已确认利润；持仓加仓/减仓保留为人工核验门。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "中航光电的高可靠互连护城河真实，但 2025 年利润率与自由现金流恶化，当前价格预付了较强盈利修复，结论是观察而非追买。",
+    "evidence": [
+      {
+        "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+        "line_start": 9,
+        "line_end": 9,
+        "quote": "> **一句话论文：** 中航光电是国内高可靠互连平台型龙头，但 2025 年利润率与自由现金流断崖式恶化，当前价格已经预付了较强的盈利修复，结论是**观察，而非追买**。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 35.46 元高于全部买入带；29-32 元试仓、24-28 元稳健分批、19-22 元安全边际仓位都需要各自的盈利和现金流证据。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-above-buy-bands",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前 35.46 元位于三档买入区间之上，等待价格或盈利证据。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                "line_start": 300,
+                "line_end": 300,
+                "quote": "当前 ¥35.46 位于三档买入区间之上。下一次关键验证是 2026 年中报：若只是收入增长、毛利和现金流仍弱，不应因“AI 液冷”叙事上调价值；若毛利率回到 31% 以上且经营现金流明显改善，再重估合理。"
+              }
+            ],
+            "node_id": "watch-current-35-46",
+            "kind": "QUALITATIVE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "当前价格位于三档买入区间之上。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 300,
+              "line_end": 300,
+              "quote": "当前 ¥35.46 位于三档买入区间之上。下一次关键验证是 2026 年中报：若只是收入增长、毛利和现金流仍弱，不应因“AI 液冷”叙事上调价值；若毛利率回到 31% 以上且经营现金流明显改善，再重估合理。"
+            }
+          ]
+        },
+        {
+          "path_id": "trial-29-32-with-profit-inflection",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "29-32 元且毛利率停止下降、防务或数据中心至少一个终端出现可核验利润拐点时小仓试仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 29,
+                "price_max": 32,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                    "line_start": 296,
+                    "line_end": 296,
+                    "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
+                  }
+                ],
+                "node_id": "trial-price-29-32",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "价格处于 29-32 元区间。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                    "line_start": 296,
+                    "line_end": 296,
+                    "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
+                  }
+                ],
+                "node_id": "trial-margin-stops-falling",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "毛利率停止下降。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                        "line_start": 296,
+                        "line_end": 296,
+                        "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
+                      }
+                    ],
+                    "node_id": "trial-defense-inflection",
+                    "kind": "QUALITATIVE",
+                    "effect": "TRIAL_GATE",
+                    "scope": "empty_position",
+                    "description": "防务终端出现可核验利润拐点。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                        "line_start": 296,
+                        "line_end": 296,
+                        "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
+                      }
+                    ],
+                    "node_id": "trial-data-center-inflection",
+                    "kind": "QUALITATIVE",
+                    "effect": "TRIAL_GATE",
+                    "scope": "empty_position",
+                    "description": "数据中心终端出现可核验利润拐点。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                    "line_start": 296,
+                    "line_end": 296,
+                    "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
+                  }
+                ],
+                "node_id": "trial-terminal-inflection-any",
+                "kind": "ANY",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "防务或数据中心至少一个终端出现可核验利润拐点。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                "line_start": 296,
+                "line_end": 296,
+                "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
+              }
+            ],
+            "node_id": "trial-29-32-all",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 29-32 元，毛利率停止下降，且防务或数据中心至少一个终端出现可核验利润拐点。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 296,
+              "line_end": 296,
+              "quote": "| 激进型 | ¥29–32 | 小仓分批试仓 | 毛利率停止下降，防务或数据中心至少一个终端出现可核验利润拐点 |"
+            }
+          ]
+        },
+        {
+          "path_id": "conditional-24-28-with-financial-recovery",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "24-28 元且 TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近时分批买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 24,
+                "price_max": 28,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                    "line_start": 297,
+                    "line_end": 297,
+                    "quote": "| 稳健型 | ¥24–28 | 分批买入 | TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近 |"
+                  }
+                ],
+                "node_id": "entry-price-24-28",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格处于 24-28 元区间。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                    "line_start": 297,
+                    "line_end": 297,
+                    "quote": "| 稳健型 | ¥24–28 | 分批买入 | TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近 |"
+                  }
+                ],
+                "node_id": "entry-eps-stable",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "TTM EPS 稳定。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                    "line_start": 297,
+                    "line_end": 297,
+                    "quote": "| 稳健型 | ¥24–28 | 分批买入 | TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近 |"
+                  }
+                ],
+                "node_id": "entry-cfo-recovery",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "CFO/净利润回升。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                    "line_start": 297,
+                    "line_end": 297,
+                    "quote": "| 稳健型 | ¥24–28 | 分批买入 | TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近 |"
+                  }
+                ],
+                "node_id": "entry-working-capital-normalizes",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "库存与应收增速降至收入增速附近。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                "line_start": 297,
+                "line_end": 297,
+                "quote": "| 稳健型 | ¥24–28 | 分批买入 | TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近 |"
+              }
+            ],
+            "node_id": "entry-24-28-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 24-28 元，TTM EPS 稳定、CFO/净利润回升，库存与应收增速降至收入增速附近。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 297,
+              "line_end": 297,
+              "quote": "| 稳健型 | ¥24–28 | 分批买入 | TTM EPS 稳定、CFO/净利润回升、库存与应收增速降至收入增速附近 |"
+            }
+          ]
+        },
+        {
+          "path_id": "conditional-19-22-with-buffer",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "19-22 元才考虑建立安全边际仓位，前提是低谷盈利缓冲仍成立。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 19,
+            "price_max": 22,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                "line_start": 298,
+                "line_end": 298,
+                "quote": "| 保守型 | ¥19–22 | 才考虑建立安全边际仓位 | 即便盈利修复延迟，18–22x 低谷 EPS 仍有缓冲 |"
+              }
+            ],
+            "node_id": "entry-price-19-22",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 19-22 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 298,
+              "line_end": 298,
+              "quote": "| 保守型 | ¥19–22 | 才考虑建立安全边际仓位 | 即便盈利修复延迟，18–22x 低谷 EPS 仍有缓冲 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+          "line_start": 300,
+          "line_end": 300,
+          "quote": "当前 ¥35.46 位于三档买入区间之上。下一次关键验证是 2026 年中报：若只是收入增长、毛利和现金流仍弱，不应因“AI 液冷”叙事上调价值；若毛利率回到 31% 以上且经营现金流明显改善，再重估合理。"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "成本较低的持仓可观察持有，不因短期反弹加仓；加仓和减仓信号需人工核验。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-observe",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "若成本较低可持有观察，不因短期反弹加仓，等待中报验证毛利和现金流。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 324,
+              "line_end": 324,
+              "quote": "| 持仓者 | 若成本较低可持有观察，不因短期反弹加仓；重点等 2026 中报验证毛利和现金流 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "毛利率、订单/关联销售、现金流、库存与应收等加仓信号需要人工组合核验后执行。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                "line_start": 325,
+                "line_end": 325,
+                "quote": "| 加仓信号 | 毛利率回到 31% 以上；防务订单/关联销售企稳；CFO/净利润持续改善；库存与应收增速回落 |"
+              }
+            ],
+            "node_id": "holder-add-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "人工确认毛利率回到 31% 以上、防务订单或关联销售企稳、CFO/净利润持续改善、库存与应收增速回落。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 325,
+              "line_end": 325,
+              "quote": "| 加仓信号 | 毛利率回到 31% 以上；防务订单/关联销售企稳；CFO/净利润持续改善；库存与应收增速回落 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-signals-manual-review",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "毛利率、民品利润、产能利用率或海外准入恶化时人工复核减仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                "line_start": 326,
+                "line_end": 326,
+                "quote": "| 卖出/减仓信号 | 两季毛利率低于 28%；民品增长仍无法带动利润；新园区低利用率导致 ROIC 继续下降；海外准入显著恶化 |"
+              }
+            ],
+            "node_id": "holder-reduce-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工核对两季毛利率低于 28%、民品增长无法带动利润、新园区低利用率导致 ROIC 下降或海外准入恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 326,
+              "line_end": 326,
+              "quote": "| 卖出/减仓信号 | 两季毛利率低于 28%；民品增长仍无法带动利润；新园区低利用率导致 ROIC 继续下降；海外准入显著恶化 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+          "line_start": 324,
+          "line_end": 324,
+          "quote": "| 持仓者 | 若成本较低可持有观察，不因短期反弹加仓；重点等 2026 中报验证毛利和现金流 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                  "line_start": 327,
+                  "line_end": 327,
+                  "quote": "| 论文失效 | 防务与民品同时失速、质量资格受损，或经营现金流长期不能覆盖资本开支与分红 |"
+                }
+              ],
+              "node_id": "defense-stall",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "防务失速。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+                  "line_start": 327,
+                  "line_end": 327,
+                  "quote": "| 论文失效 | 防务与民品同时失速、质量资格受损，或经营现金流长期不能覆盖资本开支与分红 |"
+                }
+              ],
+              "node_id": "civil-stall",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "民品失速。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 327,
+              "line_end": 327,
+              "quote": "| 论文失效 | 防务与民品同时失速、质量资格受损，或经营现金流长期不能覆盖资本开支与分红 |"
+            }
+          ],
+          "node_id": "defense-and-civil-stall",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "防务与民品同时失速。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 327,
+              "line_end": 327,
+              "quote": "| 论文失效 | 防务与民品同时失速、质量资格受损，或经营现金流长期不能覆盖资本开支与分红 |"
+            }
+          ],
+          "node_id": "quality-qualification-damaged",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "质量资格受损。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+              "line_start": 327,
+              "line_end": 327,
+              "quote": "| 论文失效 | 防务与民品同时失速、质量资格受损，或经营现金流长期不能覆盖资本开支与分红 |"
+            }
+          ],
+          "node_id": "cfo-not-covering-capex-dividend",
+          "kind": "QUALITATIVE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "经营现金流长期不能覆盖资本开支与分红。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+          "line_start": 327,
+          "line_end": 327,
+          "quote": "| 论文失效 | 防务与民品同时失速、质量资格受损，或经营现金流长期不能覆盖资本开支与分红 |"
+        }
+      ],
+      "node_id": "thesis-invalidation-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "防务与民品同时失速、质量资格受损或经营现金流长期不能覆盖资本开支与分红时论文失效。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "下一次复核重点：2026 年中报中防务订单/关联销售、三类产品毛利率、数据中心收入线索、库存和应收、经营现金流、新园区利用率。"
+        }
+      ],
+      "node_id": "midyear-core-validation",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "复核 2026 年中报的防务订单/关联销售、三类产品毛利率、数据中心收入线索、库存和应收、经营现金流及新园区利用率。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-08-07 收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 35.46,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> **收盘价：** ¥35.46"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景价值范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 16.5,
+      "max": 45.1,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+          "line_start": 286,
+          "line_end": 286,
+          "quote": "| 乐观 | +18% | ¥1.50 | 30x | **¥45.1** | +27.1% |"
+        },
+        {
+          "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "| 悲观 | 0% | ¥0.91 | 18x | **¥16.5** | -53.6% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约有观察、三档价格和简化失效条件，但没有完整表达各价格带的证据门槛及持仓加减仓语义。",
+    "evidence": [
+      {
+        "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+        "line_start": 400,
+        "line_end": 400,
+        "quote": "| 基本面建议动作 | 观察 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_CONFLICT",
+    "PROFIT_RECOVERY_UNVERIFIED",
+    "MULTIPLE_PRICE_BANDS",
+    "DEFENSE_AND_CIVIL_MIX"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/中航光电/中航光电研究报告-20260809.md",
+      "line_start": 300,
+      "line_end": 300,
+      "quote": "当前 ¥35.46 位于三档买入区间之上。下一次关键验证是 2026 年中报：若只是收入增长、毛利和现金流仍弱，不应因“AI 液冷”叙事上调价值；若毛利率回到 31% 以上且经营现金流明显改善，再重估合理。"
+    }
+  ]
+}

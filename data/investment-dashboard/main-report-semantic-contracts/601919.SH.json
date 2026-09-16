@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "ticker": "601919.SH",
+  "company": "中远海控",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/中远海控/中远海控-research-20260707.md",
+    "report_sha256": "b035bd6acb731c30eea82409010ae0cb9d6ac6a29bbdd19ecef0dd171a4a8671"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "中远海控对A股空仓路径只有观察不追高；报告提出的H股试探性底仓未转写成A股买入路径。",
+      "A股持仓可持有但控制仓位，卖出和周期底部加仓信号保留为复核事项。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "中远海控是周期性高股息龙头，A股当前不追高；报告的试探性买入明确属于H股而非A股。",
+    "evidence": [
+      {
+        "report_path": "reports/中远海控/中远海控-research-20260707.md",
+        "line_start": 273,
+        "line_end": 273,
+        "quote": "| **空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**，把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "A股空仓者观望不追高；报告没有给出A股建仓价，H股路径不纳入本A股合同。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "WATCH",
+          "summary": "A股当前运价高位不追高。",
+          "path_id": "empty-a-share-watch",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中远海控/中远海控-research-20260707.md",
+              "line_start": 273,
+              "line_end": 273,
+              "quote": "| **空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**，把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |"
+            }
+          ],
+          "condition": null
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中远海控/中远海控-research-20260707.md",
+          "line_start": 273,
+          "line_end": 273,
+          "quote": "| **空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**，把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "A股持仓者可持有但控制仓位，运价/股价冲高时减到舒适仓位。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有但控制仓位。",
+          "path_id": "holder-hold-cycle",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中远海控/中远海控-research-20260707.md",
+              "line_start": 274,
+              "line_end": 274,
+              "quote": "| **持仓者** | **持有可，但控制仓位**。享受 7%+ 股息，但清醒认知盈利处于顶部区域。若仓位过重，可在运价/股价冲高时**减到舒适仓位**。 |"
+            }
+          ],
+          "condition": null
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中远海控/中远海控-research-20260707.md",
+          "line_start": 274,
+          "line_end": 274,
+          "quote": "| **持仓者** | **持有可，但控制仓位**。享受 7%+ 股息，但清醒认知盈利处于顶部区域。若仓位过重，可在运价/股价冲高时**减到舒适仓位**。 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中远海控/中远海控-research-20260707.md",
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "| **卖出信号** | ① 红海确认复航/停火；② SCFI 掉头持续下行且新船交付放量；③ 派息率跌破 30% 下限或分红政策生变；④ 若年报证实租赁负债导致实为净负债。 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "红海复航、SCFI持续下行、新船交付放量、派息率下限失守或租赁负债使净现金失真时减仓/重审。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中远海控/中远海控-research-20260707.md",
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "| **卖出信号** | ① 红海确认复航/停火；② SCFI 掉头持续下行且新船交付放量；③ 派息率跌破 30% 下限或分红政策生变；④ 若年报证实租赁负债导致实为净负债。 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪红海、SCFI、新船交付、派息率和租赁负债。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "MULTI_MARKET_A_H",
+    "SHIPPING_CYCLE_AND_RED_SEA"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/中远海控/中远海控-research-20260707.md",
+      "line_start": 273,
+      "line_end": 273,
+      "quote": "| **空仓者** | **观望为主，不追高**。若极度看重股息、能承受周期波动，可用 H 股（股息~7.9%、PB~0.79）建**试探性底仓（≤3成）**，把它当\"高股息+周期期权\"而非成长股。不建议在运价被红海托高的当下重仓。 |"
+    }
+  ]
+}

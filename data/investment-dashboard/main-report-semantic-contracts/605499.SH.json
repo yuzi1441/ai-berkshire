@@ -1,0 +1,316 @@
+{
+  "schema_version": 1,
+  "ticker": "605499.SH",
+  "company": "东鹏饮料（集团）股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+    "report_sha256": "01a623d88df0c9a6dd1936c01e6956eb9f45d97bfffb5da8dd5254e056cc8a8c"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "东鹏饮料报告明确当前130.83元已可小额首批，114—127元稳健分批、100—114元重点关注；行动价格均针对A股。",
+      "核心特饮放缓和新品效率作为加仓/失效条件保留，没有把回购价当成估值保证。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "OPEN_POSITION",
+    "scope": "both",
+    "summary": "东鹏饮料渠道和质价比护城河仍在扩大，当前可小额分批但核心特饮增速和新品效率需验证。",
+    "evidence": [
+      {
+        "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+        "line_start": 13,
+        "line_end": 13,
+        "quote": "| 一句话研究结论 | 渠道与高质价比护城河仍在扩大，当前价格已可小额分批买入，但核心特饮放缓和新品营销效率仍需验证。 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "OPEN_POSITION",
+      "summary": "130.83元可小额首批；114—127元稳健分批，100—114元在基本面不恶化时重点关注。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "127—140元小额首批。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 127,
+            "price_max": 140,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+                "line_start": 300,
+                "line_end": 300,
+                "quote": "| 激进型 | 127-140元 | 19-21倍 | 小额首批，必须接受核心增速继续下行风险 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于127—140元小额首批区。",
+            "node_id": "empty-trial-127-140-condition"
+          },
+          "path_id": "empty-trial-127-140",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+              "line_start": 300,
+              "line_end": 300,
+              "quote": "| 激进型 | 127-140元 | 19-21倍 | 小额首批，必须接受核心增速继续下行风险 |"
+            }
+          ]
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "114—127元进入稳健分批区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 114,
+            "price_max": 127,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+                "line_start": 301,
+                "line_end": 301,
+                "quote": "| 稳健型 | 114-127元 | 17-19倍 | 分批增加，赔率较均衡 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于114—127元稳健分批区。",
+            "node_id": "empty-entry-114-127-condition"
+          },
+          "path_id": "empty-entry-114-127",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+              "line_start": 301,
+              "line_end": 301,
+              "quote": "| 稳健型 | 114-127元 | 17-19倍 | 分批增加，赔率较均衡 |"
+            }
+          ]
+        },
+        {
+          "action": "REVIEW",
+          "summary": "100—114元在基本面不恶化时重点关注。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 100,
+            "price_max": 114,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+                "line_start": 302,
+                "line_end": 302,
+                "quote": "| 保守型 | 100-114元 | 15-17倍 | 重点关注，前提是基本面未恶化 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于100—114元重点关注区。",
+            "node_id": "empty-review-100-114-condition"
+          },
+          "path_id": "empty-review-100-114",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+              "line_start": 302,
+              "line_end": 302,
+              "quote": "| 保守型 | 100-114元 | 15-17倍 | 重点关注，前提是基本面未恶化 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+          "line_start": 332,
+          "line_end": 332,
+          "quote": "| 空仓者 | 130.83元可小额首批；114-127元进入稳健分批区；100-114元在基本面不恶化时重点关注 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者以持有为主，低于127元且H2扣非利润保持双位数增长时再评估增加。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD",
+          "summary": "以持有为主。",
+          "path_id": "holder-hold",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+              "line_start": 333,
+              "line_end": 333,
+              "quote": "| 持仓者 | 以持有为主；低于127元且H2扣非利润仍保持双位数增长时再评估增加 |"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "核心特饮恢复10%以上、茶饮高增且费用率不升，或新基地回报清晰时加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+                "line_start": 334,
+                "line_end": 334,
+                "quote": "| 加仓信号 | 东鹏特饮恢复10%以上增长；茶饮料高增同时销售费用率不升；海外或新基地披露明确回报 |"
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验核心特饮、茶饮、销售费用和新业务回报。",
+            "node_id": "holder-add-growth-condition"
+          },
+          "path_id": "holder-add-growth",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+              "line_start": 334,
+              "line_end": 334,
+              "quote": "| 加仓信号 | 东鹏特饮恢复10%以上增长；茶饮料高增同时销售费用率不升；海外或新基地披露明确回报 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+          "line_start": 333,
+          "line_end": 333,
+          "quote": "| 持仓者 | 以持有为主；低于127元且H2扣非利润仍保持双位数增长时再评估增加 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+          "line_start": 336,
+          "line_end": 336,
+          "quote": "| 减仓/卖出信号 | 核心能量饮料连续两个半年度零增长或份额下降超过3个百分点；重大低回报并购；治理或食品安全事件破坏品牌 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "核心能量饮料连续两个半年度零增长或份额下降超过3个百分点、重大低回报并购或食品安全事件时减仓/退出。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+          "line_start": 334,
+          "line_end": 334,
+          "quote": "| 加仓信号 | 东鹏特饮恢复10%以上增长；茶饮料高增同时销售费用率不升；海外或新基地披露明确回报 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪核心特饮增长、销售费用、新品回报和食品安全。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "MULTI_MARKET_A_H",
+    "CORE_PRODUCT_GROWTH_SLOWDOWN"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/东鹏饮料/东鹏饮料-investment-research-20260810.md",
+      "line_start": 13,
+      "line_end": 13,
+      "quote": "| 一句话研究结论 | 渠道与高质价比护城河仍在扩大，当前价格已可小额分批买入，但核心特饮放缓和新品营销效率仍需验证。 |"
+    }
+  ]
+}

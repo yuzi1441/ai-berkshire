@@ -1,0 +1,387 @@
+{
+  "schema_version": 1,
+  "ticker": "301308.SZ",
+  "company": "江波龙",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+    "report_sha256": "34648be7325882c68a86d3fb99ad001dd54d08398bb1831b8ec6a8d234a6183d"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "618.02 元是当前价格，不因 2026H1 预增或低动态 PE 把周期顶部价格当成安全买点。",
+      "空仓者明确回避；合理价值 240-300 元、安全边际买入区 180 元以下和三情景目标价均不是当前自动买入指令。",
+      "持仓者明确分批止盈、至少减半，保留为 REDUCE；加仓/买入仅在 PB 回到 8 倍以下且企业级存储收入占比达到 20% 以上后再评估。",
+      "卖出信号列出四项但未说明任一、全部或最少满足数量，保留人工复核，不自动 EXIT。",
+      "报告底部契约只保留空仓回避，未包含持仓止盈与周期信号。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "江波龙是存储周期放大器，当前价格按周期高位利润定价；空仓回避，持仓分批止盈并把剩余仓位视为周期头寸。",
+    "evidence": [
+      {
+        "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+        "line_start": 240,
+        "line_end": 241,
+        "quote": "空仓者 | **回避**。这是好周期股，不是好投资标的"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "当前空仓回避，不把 2026H1 预增和目标价参考转成买入。周期出清后满足 PB 与企业级收入占比条件时才重新评估。",
+      "entry_semantic": "EXPLICIT_NO_BUY",
+      "action_paths": [
+        {
+          "path_id": "avoid-current-cycle-peak",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前回避；好周期股不是当前价格下的好投资标的。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+              "line_start": 240,
+              "line_end": 240,
+              "quote": "空仓者 | **回避**"
+            }
+          ]
+        },
+        {
+          "path_id": "review-after-cycle-clears",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "周期下行出清后，PB 回到 8 倍以下且企业级存储收入占比升至 20% 以上时再评估，不自动转为买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "PB",
+                "operator": "LT",
+                "value": 8,
+                "unit": "x",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+                    "line_start": 243,
+                    "line_end": 243,
+                    "quote": "PB回到8倍（历史均值）以下"
+                  }
+                ],
+                "node_id": "pb-below-8",
+                "kind": "METRIC_COMPARE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "PB 低于 8 倍。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "企业级存储收入占比",
+                "operator": "GTE",
+                "value": 0.2,
+                "unit": "ratio",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+                    "line_start": 243,
+                    "line_end": 243,
+                    "quote": "企业级存储收入占比升至20%以上"
+                  }
+                ],
+                "node_id": "enterprise-share-at-least-20",
+                "kind": "METRIC_COMPARE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "企业级存储收入占比达到 20% 以上。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+                "line_start": 243,
+                "line_end": 243,
+                "quote": "PB回到8倍（历史均值）以下、且企业级存储收入占比升至20%以上"
+              }
+            ],
+            "node_id": "review-cycle-cleared-all",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "PB 回到 8 倍以下且企业级存储收入占比升至 20% 以上。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+              "line_start": 243,
+              "line_end": 243,
+              "quote": "两者同时满足再评估"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 240,
+          "line_end": 240,
+          "quote": "空仓者 | **回避**"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "持仓者分批止盈、至少减半；剩余仓位定义为周期投机头寸并设置严格卖出纪律。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-take-profit-at-least-half",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "分批止盈，至少减半；低成本持仓也应至少收回本金。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+                "line_start": 241,
+                "line_end": 241,
+                "quote": "分批止盈，至少减半"
+              }
+            ],
+            "node_id": "holder-take-profit-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工执行分批止盈并至少减半，剩余仓位按周期投机头寸管理。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+              "line_start": 241,
+              "line_end": 241,
+              "quote": "分批止盈，至少减半"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 241,
+          "line_end": 241,
+          "quote": "持仓者"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 242,
+          "line_end": 242,
+          "quote": "卖出信号"
+        }
+      ],
+      "node_id": "jiangbolong-sell-signals-manual",
+      "kind": "MANUAL_REVIEW",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "NAND/DRAM 合约价环比转负、存货跌价准备大额计提、实控人承诺到期后本人减持或定增落地价显著低于市价时进入卖出人工复核；列表未定义组合逻辑。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 274,
+          "line_end": 279,
+          "quote": "需要跟踪验证的问题清单"
+        }
+      ],
+      "node_id": "monitor-storage-cycle-and-enterprise-share",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 TrendForce 合约价、2026-08-06 后实控人持股变动、半年报存货与经营现金流、企业级存储收入占比和 2027 年国产晶圆产能释放。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 618.02,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 190,
+          "line_end": 190,
+          "quote": "618.02元 / 2,614.6亿元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 70.1,
+      "max": 863.8,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "**863.8元**"
+        },
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 208,
+          "line_end": 208,
+          "quote": "**70.1元**"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "合理价值区间（非自动买入）",
+      "price_role": "FAIR_VALUE",
+      "value": null,
+      "min": 240,
+      "max": 300,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 214,
+          "line_end": 214,
+          "quote": "合理价值区间：240~300元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约只呈现空仓回避，遗漏正文的持仓分批止盈、周期后复核条件和卖出信号。",
+    "evidence": [
+      {
+        "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+        "line_start": 307,
+        "line_end": 307,
+        "quote": "空仓者 回避"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "CYCLE_PEAK_UNCERTAINTY",
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "EXPLICIT_NO_BUY_WITH_FUTURE_REVIEW",
+    "REPORT_CONTRACT_INCOMPLETE"
+  ],
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出信号有四项，但未说明任一、全部还是至少满足若干项；加仓/买入条件虽写‘两者同时满足’，仍需确认其后的实际仓位动作。",
+      "required_clarification": "明确卖出信号组合逻辑和 PB/企业级收入条件满足后的仓位边界；当前只允许人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 242,
+          "line_end": 243,
+          "quote": "卖出信号"
+        }
+      ]
+    },
+    {
+      "code": "CYCLE_PEAK_UNCERTAINTY",
+      "summary": "报告明确无法准确预判存储周期何时见顶；因此当前回避结论稳定，但未来转入买入复核的时点不能由价格或单季预增单独决定。",
+      "required_clarification": "用连续周期数据和企业级业务证据重新审查，不以单一季度利润替代周期判断。",
+      "evidence": [
+        {
+          "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+          "line_start": 267,
+          "line_end": 267,
+          "quote": "**本轮存储周期何时见顶**"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/江波龙/江波龙投资研究报告-20260706.md",
+      "line_start": 236,
+      "line_end": 243,
+      "quote": "最终决策"
+    }
+  ]
+}

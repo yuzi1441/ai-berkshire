@@ -1,0 +1,925 @@
+{
+  "schema_version": 1,
+  "ticker": "000333.SZ",
+  "company": "美的集团",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+    "report_sha256": "8fc716cd94733a1ca8b3386b769a82304ad734d4c3acc41db0311403583964d5"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "当前 80.40 元属于观察/持有区，不因低 PE、高股息或回购自动判为买入",
+      "75.27 元以下是激进型小仓分批，68-71 元路径还要求扣非利润与现金流不继续恶化",
+      "65.87 元以下是保守型行动线，三情景 58-116.90 元目标价不作为买入价",
+      "H 股明确没有机械买入线，A 股价格区间不得套给 H 股",
+      "加仓信号未定义组合逻辑，只作为监控条件"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "优秀公司、合理价格，当前持有或观察优先，暂非高赔率买点。",
+    "evidence": [
+      {
+        "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+        "line_start": 489,
+        "line_end": 491,
+        "quote": "> **优秀公司，合理价格，暂非高赔率买点。**\n\n美的值得进入中国制造业核心观察池，低成本持有者可以继续持有并收取股息；空仓者不应因 13.85 倍 PE、5.35% 静态股息率和管理层回购就忽视增长降档。以 80.40 元计算，中性三年含股息年化约 7.61%，更符合“持有/观察”而不是“明显买入”。普通买入线约 71-75 元，强安全边际线不高于 66 元。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前不追；激进型 75.27 元以下小仓，稳健型 68-71 元需基本面条件，保守型 65.87 元以下再行动。",
+      "entry_semantic": "UNCONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "aggressive-trial-below-75.27",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 75.27 元以下可小仓分批。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 75.27,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                "line_start": 462,
+                "line_end": 462,
+                "quote": "| 空仓、激进型 | 75.27 元以下小仓分批 | 接受约 10% 中性情景回报 |"
+              }
+            ],
+            "node_id": "trial-price-75.27",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 75.27 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 462,
+              "line_end": 462,
+              "quote": "| 空仓、激进型 | 75.27 元以下小仓分批 | 接受约 10% 中性情景回报 |"
+            }
+          ]
+        },
+        {
+          "path_id": "stable-entry-68-71-with-quality",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 68-71 元且扣非利润与现金流不继续恶化时可较明确建仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 68,
+                "price_max": 71,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                    "line_start": 463,
+                    "line_end": 463,
+                    "quote": "| 空仓、稳健型 | 68-71 元开始较明确建仓 | 扣非利润和现金流不继续恶化 |"
+                  }
+                ],
+                "node_id": "stable-price-68-71",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 68-71 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                    "line_start": 463,
+                    "line_end": 463,
+                    "quote": "| 空仓、稳健型 | 68-71 元开始较明确建仓 | 扣非利润和现金流不继续恶化 |"
+                  }
+                ],
+                "node_id": "profit-and-cashflow-not-worse",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "扣非利润和现金流不继续恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                "line_start": 463,
+                "line_end": 463,
+                "quote": "| 空仓、稳健型 | 68-71 元开始较明确建仓 | 扣非利润和现金流不继续恶化 |"
+              }
+            ],
+            "node_id": "stable-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格为 68-71 元且扣非利润、现金流不继续恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 463,
+              "line_end": 463,
+              "quote": "| 空仓、稳健型 | 68-71 元开始较明确建仓 | 扣非利润和现金流不继续恶化 |"
+            }
+          ]
+        },
+        {
+          "path_id": "conservative-entry-below-65.87",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 65.87 元以下达到保守型行动线。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 65.87,
+            "currency": "CNY",
+            "price_role": "UNCONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                "line_start": 464,
+                "line_end": 464,
+                "quote": "| 空仓、保守型 | 65.87 元以下再行动 | 取得约 15% 中性情景要求回报 |"
+              }
+            ],
+            "node_id": "conservative-price-65.87",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 65.87 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 464,
+              "line_end": 464,
+              "quote": "| 空仓、保守型 | 65.87 元以下再行动 | 取得约 15% 中性情景要求回报 |"
+            }
+          ]
+        },
+        {
+          "path_id": "watch-75-88",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 75-88 元为观察/持有区，当前价位于其中。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 75,
+            "price_max": 88,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                "line_start": 407,
+                "line_end": 407,
+                "quote": "| 75-88 元 | 观察/持有 | 当前 80.40 元位于此区间，中性回报不高 |"
+              }
+            ],
+            "node_id": "watch-price-75-88",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 75-88 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 407,
+              "line_end": 407,
+              "quote": "| 75-88 元 | 观察/持有 | 当前 80.40 元位于此区间，中性回报不高 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+          "line_start": 462,
+          "line_end": 464,
+          "quote": "| 空仓、激进型 | 75.27 元以下小仓分批 | 接受约 10% 中性情景回报 |\n| 空仓、稳健型 | 68-71 元开始较明确建仓 | 扣非利润和现金流不继续恶化 |\n| 空仓、保守型 | 65.87 元以下再行动 | 取得约 15% 中性情景要求回报 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "低成本持有者继续持有收息；成本接近当前者持有并等待验证，当前不是明显加仓点。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "low-cost-holder-hold",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "低成本持有者继续持有并收息。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 465,
+              "line_end": 465,
+              "quote": "| 已持有、成本较低 | 继续持有并收息 | 跟踪五项季度指标，不因短期波动交易 |"
+            }
+          ]
+        },
+        {
+          "path_id": "current-cost-holder-hold",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "成本接近当前者持有并等待验证，当前不是明显加仓点。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 466,
+              "line_end": 466,
+              "quote": "| 已持有、成本接近当前 | 持有/等待验证 | 当前不是明显加仓点 |"
+            }
+          ]
+        },
+        {
+          "path_id": "reduce-above-100-unless-outperformance",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "股价高于 100 元时部分兑现或重审，除非海外 OBM 与楼宇 ROIC 显著超预期。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 100,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                    "line_start": 467,
+                    "line_end": 467,
+                    "quote": "| 股价高于 100 元 | 部分兑现或重审 | 除非海外 OBM 与楼宇 ROIC 显著超预期 |"
+                  }
+                ],
+                "node_id": "price-above-100",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格高于 100 元。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                        "line_start": 467,
+                        "line_end": 467,
+                        "quote": "| 股价高于 100 元 | 部分兑现或重审 | 除非海外 OBM 与楼宇 ROIC 显著超预期 |"
+                      }
+                    ],
+                    "node_id": "obm-roic-outperformance",
+                    "kind": "QUALITATIVE",
+                    "effect": "POSITIVE_TRIGGER",
+                    "scope": "holder",
+                    "description": "海外 OBM 与楼宇 ROIC 显著超预期。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                    "line_start": 467,
+                    "line_end": 467,
+                    "quote": "| 股价高于 100 元 | 部分兑现或重审 | 除非海外 OBM 与楼宇 ROIC 显著超预期 |"
+                  }
+                ],
+                "node_id": "not-obm-roic-outperformance",
+                "kind": "NOT",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "海外 OBM 与楼宇 ROIC 没有显著超预期。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                "line_start": 467,
+                "line_end": 467,
+                "quote": "| 股价高于 100 元 | 部分兑现或重审 | 除非海外 OBM 与楼宇 ROIC 显著超预期 |"
+              }
+            ],
+            "node_id": "reduce-above-100-all",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "价格高于 100 元且海外 OBM 与楼宇 ROIC 未显著超预期。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 467,
+              "line_end": 467,
+              "quote": "| 股价高于 100 元 | 部分兑现或重审 | 除非海外 OBM 与楼宇 ROIC 显著超预期 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+          "line_start": 465,
+          "line_end": 467,
+          "quote": "| 已持有、成本较低 | 继续持有并收息 | 跟踪五项季度指标，不因短期波动交易 |\n| 已持有、成本接近当前 | 持有/等待验证 | 当前不是明显加仓点 |\n| 股价高于 100 元 | 部分兑现或重审 | 除非海外 OBM 与楼宇 ROIC 显著超预期 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 248,
+              "line_end": 248,
+              "quote": "- 核心家电量价和毛利率连续两年同步下降。"
+            }
+          ],
+          "node_id": "core-home-appliance-decline",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "核心家电量价和毛利率连续两年同步下降。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                  "line_start": 249,
+                  "line_end": 249,
+                  "quote": "- ToB 三年增量 ROIC 低于资本成本，或重大减值超过一年自由现金流。"
+                }
+              ],
+              "node_id": "tob-roic-below-cost",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "ToB 三年增量 ROIC 低于资本成本。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                  "line_start": 249,
+                  "line_end": 249,
+                  "quote": "- ToB 三年增量 ROIC 低于资本成本，或重大减值超过一年自由现金流。"
+                }
+              ],
+              "node_id": "impairment-over-one-year-fcf",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "重大减值超过一年自由现金流。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 249,
+              "line_end": 249,
+              "quote": "- ToB 三年增量 ROIC 低于资本成本，或重大减值超过一年自由现金流。"
+            }
+          ],
+          "node_id": "tob-roic-or-impairment",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "ToB 三年增量 ROIC 低于资本成本，或重大减值超过一年自由现金流。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "海外利润率连续两年下降",
+              "operator": "GT",
+              "value": 3,
+              "unit": "pct",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                  "line_start": 250,
+                  "line_end": 250,
+                  "quote": "- 海外利润率连续两年下降超过 3 个百分点，且本地化投入继续加码。"
+                }
+              ],
+              "node_id": "overseas-margin-down-3pct",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "海外利润率连续两年下降超过 3 个百分点。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                  "line_start": 250,
+                  "line_end": 250,
+                  "quote": "- 海外利润率连续两年下降超过 3 个百分点，且本地化投入继续加码。"
+                }
+              ],
+              "node_id": "localization-investment-rises",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "本地化投入继续加码。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 250,
+              "line_end": 250,
+              "quote": "- 海外利润率连续两年下降超过 3 个百分点，且本地化投入继续加码。"
+            }
+          ],
+          "node_id": "overseas-margin-down-and-investment-up",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "海外利润率连续两年下降超过 3 个百分点且本地化投入继续加码。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "- 利润增长而经营现金流/净利润、资产周转连续三年恶化。"
+            }
+          ],
+          "node_id": "cash-conversion-and-turnover-worse",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "利润增长而经营现金流/净利润、资产周转连续三年恶化。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                  "line_start": 252,
+                  "line_end": 252,
+                  "quote": "- 接班无序、核心高管流失，并伴随大额跨界并购。"
+                }
+              ],
+              "node_id": "succession-disorder-and-exec-loss",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "接班无序且核心高管流失。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                  "line_start": 252,
+                  "line_end": 252,
+                  "quote": "- 接班无序、核心高管流失，并伴随大额跨界并购。"
+                }
+              ],
+              "node_id": "large-cross-industry-ma",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "伴随大额跨界并购。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 252,
+              "line_end": 252,
+              "quote": "- 接班无序、核心高管流失，并伴随大额跨界并购。"
+            }
+          ],
+          "node_id": "succession-and-cross-industry-ma",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "接班无序、核心高管流失并伴随大额跨界并购。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                  "line_start": 253,
+                  "line_end": 253,
+                  "quote": "- 连续两年依靠增债维持分红回购，或出现被迫削减分红。"
+                }
+              ],
+              "node_id": "debt-funded-payout-two-years",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "连续两年依靠增债维持分红回购。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+                  "line_start": 253,
+                  "line_end": 253,
+                  "quote": "- 连续两年依靠增债维持分红回购，或出现被迫削减分红。"
+                }
+              ],
+              "node_id": "dividend-cut",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "出现被迫削减分红。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+              "line_start": 253,
+              "line_end": 253,
+              "quote": "- 连续两年依靠增债维持分红回购，或出现被迫削减分红。"
+            }
+          ],
+          "node_id": "debt-funded-payout-or-cut",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "连续两年依靠增债维持分红回购，或被迫削减分红。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+          "line_start": 246,
+          "line_end": 253,
+          "quote": "出现任一项即应系统性重审，而不是解释为短期波动："
+        }
+      ],
+      "node_id": "thesis-review-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "任一论文失效条件出现即系统性重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+          "line_start": 471,
+          "line_end": 477,
+          "quote": "**加仓信号**"
+        }
+      ],
+      "node_id": "monitor-add-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控扣非利润与现金流、楼宇回报、海外 OBM、回购净注销以及 71 元以下且基本面未恶化；报告未定义组合逻辑。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 80.4,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "- **行情快照**：A 股 80.40 元，H 股 88.80 港元，均为 2026-07-13 收盘价；腾讯与新浪双源一致"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 88.8,
+      "min": null,
+      "max": null,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "- **行情快照**：A 股 80.40 元，H 股 88.80 港元，均为 2026-07-13 收盘价；腾讯与新浪双源一致"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 58.0,
+      "max": 116.9,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+          "line_start": 381,
+          "line_end": 385,
+          "quote": "| 情景 | EPS 年增速 | 退出 PE | 三年目标价 | 价格涨跌 | 含股息年化回报 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +8% | 16 倍 | 116.90 元 | +45.4% | +17.31% |\n| 中性 | +5% | 13 倍 | 87.28 元 | +8.6% | +7.61% |\n| 悲观 | 0% | 10 倍 | 58.00 元 | -27.9% | -4.10% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约遗漏保守型 65.87 元行动线、持仓者动作和 H 股不得机械套用 A 股价格带的限制。",
+    "evidence": [
+      {
+        "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+        "line_start": 568,
+        "line_end": 575,
+        "quote": "| 激进型动作 | 75.27 元以下小仓分批 |\n| 激进型价格区间 | 75.27 元 |\n| 稳健型动作 | 68-71 元开始较明确建仓 |\n| 稳健型价格区间 | 68-71 元 |\n| 保守型动作 | 未给出 |\n| 保守型价格区间 | 未给出 |\n| 买入失效条件 | 未给出 |\n| 下次复核日期 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "UNCONDITIONAL_ENTRY_REQUIRES_STRONG_REVIEW"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+      "line_start": 391,
+      "line_end": 412,
+      "quote": "### 3. 要求回报率倒推"
+    },
+    {
+      "report_path": "reports/美的集团/美的集团-investment-team-20260713.md",
+      "line_start": 458,
+      "line_end": 491,
+      "quote": "### 4. 分层操作建议"
+    }
+  ]
+}

@@ -1,0 +1,504 @@
+{
+  "schema_version": 1,
+  "ticker": "002916.SZ",
+  "company": "深南电路",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+    "report_sha256": "3e61557e1c3faf5a2949d1043700996c0b9f5e3094c95a2e63bd34633fa18e05"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "414.80 元是当前 A 股参考价；216.4-727.9 元多情景目标价是估值参考，不是买入价。",
+      "空仓保守路径是 250-300 元或 PE 45-55x 且基本面未恶化后重新评估，报告没有给出正式 OPEN_POSITION 价格。",
+      "空仓进取型只写能承受回撤时的研究仓参与，属于人工风险承受判断，不自动编译为买入。",
+      "加仓与减仓/重审均是项目列表，未明确组合逻辑；持仓路径按成本区分继续持有与降低暴露。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "深南电路是高端 PCB 与封装基板平台型公司，但 414.80 元已透支 AI/FC-BGA 乐观预期；空仓观察，持仓按成本和反证清单管理。",
+    "evidence": [
+      {
+        "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+        "line_start": 25,
+        "line_end": 25,
+        "quote": "好公司，当前更适合观察/持有纪律，而非无脑追高"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前价格观察不追高；250-300 元或 PE 45-55x 且基本面未恶化时重新评估，不自动建仓。",
+      "entry_semantic": "REVIEW_ONLY",
+      "action_paths": [
+        {
+          "path_id": "watch-current-no-chase",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前高估值下观察，不把 AI PCB 叙事当作无条件买入理由。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+              "line_start": 25,
+              "line_end": 25,
+              "quote": "当前更适合观察/持有纪律"
+            }
+          ]
+        },
+        {
+          "path_id": "review-price-or-valuation-and-fundamentals",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格回落到 250-300 元，或 PE 回到 45-55x 且基本面未恶化时重新评估。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 250,
+                "price_max": 300,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+                    "line_start": 305,
+                    "line_end": 305,
+                    "quote": "250-300 元区间"
+                  }
+                ],
+                "node_id": "review-price-250-300",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A 股价格处于 250-300 元。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+                        "line_start": 305,
+                        "line_end": 305,
+                        "quote": "PE 回到约 45-55x"
+                      }
+                    ],
+                    "node_id": "review-pe-45-55",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "PE 回到约 45-55x。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+                        "line_start": 305,
+                        "line_end": 305,
+                        "quote": "基本面未恶化"
+                      }
+                    ],
+                    "node_id": "review-fundamentals-intact",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "基本面未恶化。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+                    "line_start": 305,
+                    "line_end": 305,
+                    "quote": "PE 回到约 45-55x 且基本面未恶化"
+                  }
+                ],
+                "node_id": "review-valuation-and-fundamentals-all",
+                "kind": "ALL",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "PE 回到约 45-55x 且基本面未恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+                "line_start": 305,
+                "line_end": 305,
+                "quote": "250-300 元区间，或 PE 回到约 45-55x 且基本面未恶化，再重新评估"
+              }
+            ],
+            "node_id": "review-any-price-or-valuation",
+            "kind": "ANY",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 250-300 元，或 PE 处于约 45-55x 且基本面未恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+              "line_start": 305,
+              "line_end": 305,
+              "quote": "再重新评估"
+            }
+          ]
+        },
+        {
+          "path_id": "review-risk-tolerant-research-position",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "空仓进取型只有在能够承受 30%-45% 回撤时才考虑研究仓参与，属于人工风险判断。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+                "line_start": 306,
+                "line_end": 306,
+                "quote": "只有在能承受 -30% 到 -45% 回撤时，才考虑以研究仓参与"
+              }
+            ],
+            "node_id": "review-research-position-risk-tolerance",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "人工确认风险承受能力后，才讨论研究仓参与。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+              "line_start": 306,
+              "line_end": 306,
+              "quote": "小仓位跟踪"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "line_start": 25,
+          "line_end": 25,
+          "quote": "观察/持有纪律"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "低成本持仓可继续持有但要设反证清单；成本接近当前价时谨慎持有或分批降低暴露。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-low-cost-with-invalidation-list",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "低成本持仓可继续持有，但需设置 PCB 毛利率、现金流和 FC-BGA 反证清单。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+              "line_start": 307,
+              "line_end": 307,
+              "quote": "可继续持有，但设置反证清单"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-near-current-cost",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "成本接近当前价时，谨慎持有或分批降低暴露。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+              "line_start": 308,
+              "line_end": 308,
+              "quote": "谨慎持有/分批降低暴露"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "加仓信号涉及价格、订单、毛利率、现金流、FC-BGA、泰国工厂和再融资，组合逻辑未定义，保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+                "line_start": 310,
+                "line_end": 316,
+                "quote": "### 3. 加仓信号"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认五项加仓信号的组合关系、顺序和仓位。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+              "line_start": 310,
+              "line_end": 310,
+              "quote": "### 3. 加仓信号"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-review-signals-manual",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "减仓/重审信号需要结合周期和项目执行人工判断，不自动执行。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+                "line_start": 318,
+                "line_end": 325,
+                "quote": "### 4. 减仓/重审信号"
+              }
+            ],
+            "node_id": "holder-reduce-review-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认六项减仓/重审信号及 REDUCE/EXIT 动作。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+              "line_start": 318,
+              "line_end": 318,
+              "quote": "### 4. 减仓/重审信号"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "line_start": 307,
+          "line_end": 308,
+          "quote": "可继续持有，但设置反证清单"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "line_start": 367,
+          "line_end": 367,
+          "quote": "FC-BGA 高阶产品是否稳定盈利"
+        }
+      ],
+      "node_id": "monitor-fc-bga-roic-and-cashflow",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "持续核验 FC-BGA 高阶产品稳定盈利、扩产后 ROIC 和经营现金流是否跟上利润。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 414.8,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "line_start": 25,
+          "line_end": 25,
+          "quote": "414.80 元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "多情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 216.4,
+      "max": 727.9,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "line_start": 227,
+          "line_end": 227,
+          "quote": "727.9 元"
+        },
+        {
+          "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "line_start": 232,
+          "line_end": 232,
+          "quote": "216.4 元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "VALUATION_ACTION_BOUNDARY",
+    "FC_BGA_EXECUTION_UNCERTAINTY",
+    "FCF_AND_CAPEX_PRESSURE"
+  ],
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓与减仓/重审信号均为列表，未定义 ANY、ALL 或最低满足数量。",
+      "required_clarification": "由人工或更强模型确认信号组合以及 REDUCE/EXIT 动作；当前保留 REVIEW_ONLY。",
+      "evidence": [
+        {
+          "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "line_start": 310,
+          "line_end": 325,
+          "quote": "加仓信号"
+        }
+      ]
+    },
+    {
+      "code": "VALUATION_ACTION_BOUNDARY",
+      "summary": "报告给出 250-300 元、PE 45-55x 和研究仓条件，但没有定义正式建仓动作及仓位上限。",
+      "required_clarification": "确认这些条件是研究、试仓还是正式建仓；当前不生成 OPEN_POSITION。",
+      "evidence": [
+        {
+          "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+          "line_start": 303,
+          "line_end": 306,
+          "quote": "| 空仓保守型 | 观察，不追高"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+      "line_start": 301,
+      "line_end": 325,
+      "quote": "### 2. 分层操作建议"
+    },
+    {
+      "report_path": "reports/深南电路/深南电路研究报告-20260709.md",
+      "line_start": 371,
+      "line_end": 392,
+      "quote": "## 看板决策契约"
+    }
+  ]
+}

@@ -1,0 +1,741 @@
+{
+  "schema_version": 1,
+  "ticker": "600176.SH",
+  "company": "中国巨石股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+    "report_sha256": "b04095d4e3ff8ace2567af71c5731b52a57f22a8afbc1f4ad9d035a742cafcc3"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "44.38 元的正文结论是观察、不追价；30—34 元只是附带高端认证或批量订单及盈利兑现条件的小仓试投路径。",
+      "24—28 元和 24 元以下均不是价格单独触发，分别依赖景气、ROE、FCF、净债务和扩产回报前提。",
+      "卖出/论文失效信号是并列清单，报告没有规定各信号的组合关系或对应减仓幅度，因此不能自动化为单一交易触发。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "中国巨石的周期修复已兑现，但 44.38 元已计入高端电子布尚未被订单证明的成功；当前应等待安全边际或订单事实，不追价。",
+    "evidence": [
+      {
+        "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+        "line_start": 355,
+        "line_end": 355,
+        "quote": "**基本面建议：观察。** 中国巨石是好公司、行业复苏也是真的，但 44.38 元不是一个能容忍普通布价格回落、特种布认证延迟或扩产超支的价格。当前最合理的选择是等待价格进入安全边际，或等待高端产品订单把盈利质量的不确定性变成事实。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓不追涨；30—34 元可在盈利兑现且有高端认证/批量订单证据后小仓试投，24—28 元需景气正常化且 ROE/FCF 改善，24 元以下仍需净债务和扩产回报未恶化。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "empty-watch-current",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前不追涨，等待 30—34 元试投区间或更低的安全边际。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+              "line_start": 361,
+              "line_end": 361,
+              "quote": "| 空仓者 | 不追涨；优先等待 30—34 元试投区间，稳健投资者等待 24—28 元 |"
+            }
+          ]
+        },
+        {
+          "path_id": "empty-trial-30-34-with-proof",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "30—34 元仅在 2026 年盈利兑现且出现高端认证或批量订单可核验证据后小仓试投。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 30,
+                "price_max": 34,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 332,
+                    "line_end": 332,
+                    "quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
+                  }
+                ],
+                "node_id": "jushi-trial-price",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 30—34 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 332,
+                    "line_end": 332,
+                    "quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
+                  }
+                ],
+                "node_id": "jushi-2026-profit",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "2026 年盈利兑现。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "EXISTS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 332,
+                    "line_end": 332,
+                    "quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
+                  }
+                ],
+                "node_id": "jushi-high-end-proof",
+                "kind": "EVENT",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "出现高端认证或批量订单的可核验证据。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                "line_start": 332,
+                "line_end": 332,
+                "quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
+              }
+            ],
+            "node_id": "jushi-trial-entry-gate",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格进入 30—34 元，且 2026 年盈利兑现并有高端认证或批量订单可核验证据。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+              "line_start": 332,
+              "line_end": 332,
+              "quote": "| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |"
+            }
+          ]
+        },
+        {
+          "path_id": "empty-steady-24-28-with-recovery",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "24—28 元可在电子布景气正常化后仍确认 ROE 与 FCF 改善时分批买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 24,
+                "price_max": 28,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 333,
+                    "line_end": 333,
+                    "quote": "| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |"
+                  }
+                ],
+                "node_id": "jushi-steady-price",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 24—28 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 333,
+                    "line_end": 333,
+                    "quote": "| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |"
+                  }
+                ],
+                "node_id": "jushi-roefcf-recovery",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "电子布景气正常化后，ROE 与 FCF 仍改善。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                "line_start": 333,
+                "line_end": 333,
+                "quote": "| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |"
+              }
+            ],
+            "node_id": "jushi-steady-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 24—28 元，且电子布景气正常化后 ROE 与 FCF 仍改善。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+              "line_start": 333,
+              "line_end": 333,
+              "quote": "| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |"
+            }
+          ]
+        },
+        {
+          "path_id": "empty-conservative-below-24-with-balance-sheet",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "24 元以下仅在周期下行已计入且净债务和扩产回报未恶化时考虑较大仓位。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 24,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 334,
+                    "line_end": 334,
+                    "quote": "| 保守型 | 24 元以下再考虑较大仓位 | 周期下行压力已计入，净债务和扩产回报未恶化 |"
+                  }
+                ],
+                "node_id": "jushi-conservative-price",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格低于或等于 24 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 334,
+                    "line_end": 334,
+                    "quote": "| 保守型 | 24 元以下再考虑较大仓位 | 周期下行压力已计入，净债务和扩产回报未恶化 |"
+                  }
+                ],
+                "node_id": "jushi-debt-capex-not-worse",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "周期下行压力已计入，净债务和扩产回报未恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                "line_start": 334,
+                "line_end": 334,
+                "quote": "| 保守型 | 24 元以下再考虑较大仓位 | 周期下行压力已计入，净债务和扩产回报未恶化 |"
+              }
+            ],
+            "node_id": "jushi-conservative-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格低于或等于 24 元，且净债务和扩产回报未恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+              "line_start": 334,
+              "line_end": 334,
+              "quote": "| 保守型 | 24 元以下再考虑较大仓位 | 周期下行压力已计入，净债务和扩产回报未恶化 |"
+            }
+          ]
+        },
+        {
+          "path_id": "empty-watch-28-30",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "28—30 元赔率开始改善，但价格下降本身仍不是充分条件。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 28,
+            "price_max": 30,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                "line_start": 336,
+                "line_end": 336,
+                "quote": "价格在 28—30 元之间时，赔率开始改善但仍不满足稳健型安全边际；价格下降不是充分条件，基本面前提必须同时成立。"
+              }
+            ],
+            "node_id": "jushi-improving-odds-not-sufficient",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 28—30 元时赔率改善，但仍需基本面前提。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+              "line_start": 336,
+              "line_end": 336,
+              "quote": "价格在 28—30 元之间时，赔率开始改善但仍不满足稳健型安全边际；价格下降不是充分条件，基本面前提必须同时成立。"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "| 空仓者 | 不追涨；优先等待 30—34 元试投区间，稳健投资者等待 24—28 元 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "正常仓位可继续持有观察，但不在 44.38 元附近加仓；高仓位者利用景气和情绪高位降低集中度。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "仓位正常可继续持有核心观察仓，不在当前价格附近加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+              "line_start": 362,
+              "line_end": 362,
+              "quote": "| 已持有、仓位正常 | 可以继续持有核心观察仓，但不在 44.38 元附近加仓；用 H1 正式报告和产品认证检验论文 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-overweight-above-55",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "仓位过重且股价超过 55 元、盈利或高端订单未同步上修时考虑减仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 55,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 363,
+                    "line_end": 363,
+                    "quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
+                  }
+                ],
+                "node_id": "jushi-price-above-55",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股股价超过 55 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                    "line_start": 363,
+                    "line_end": 363,
+                    "quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
+                  }
+                ],
+                "node_id": "jushi-profit-order-not-upgraded",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "盈利或高端订单未同步上修。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+                "line_start": 363,
+                "line_end": 363,
+                "quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
+              }
+            ],
+            "node_id": "jushi-overweight-reduce-gate",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "股价超过 55 元且盈利或高端订单未同步上修。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+              "line_start": 363,
+              "line_end": 363,
+              "quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 362,
+          "line_end": 362,
+          "quote": "| 已持有、仓位正常 | 可以继续持有核心观察仓，但不在 44.38 元附近加仓；用 H1 正式报告和产品认证检验论文 |"
+        },
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 363,
+          "line_end": 363,
+          "quote": "| 已持有、仓位过重 | 利用景气与情绪高位降低集中度；若股价超过 55 元而盈利/高端订单未同步上修，考虑减仓 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": "ROE",
+      "operator": "LT",
+      "value": 10,
+      "unit": "%",
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "| 卖出/论文失效信号 | 普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负；净债务失控；同业竞争处理损害中小股东 |"
+        }
+      ],
+      "node_id": "jushi-roe-below-10",
+      "kind": "METRIC_COMPARE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "ROE 低于 10%。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "| 卖出/论文失效信号 | 普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负；净债务失控；同业竞争处理损害中小股东 |"
+        }
+      ],
+      "node_id": "jushi-fcf-negative-two-years",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "FCF 连续两年为负。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "| 卖出/论文失效信号 | 普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负；净债务失控；同业竞争处理损害中小股东 |"
+        }
+      ],
+      "node_id": "jushi-thesis-invalidating-signals-review",
+      "kind": "MANUAL_REVIEW",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "普通电子布价格和库存反转、特种认证持续失败、净债务失控或同业竞争处理损害中小股东等论文失效信号，需要人工确认触发组合和处置幅度。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 369,
+          "line_end": 375,
+          "quote": "1. 2400tex 直接纱、G75 电子纱和 7628 电子布月均价及库存。\n2. 中国玻纤纱产量增速、冷修产能和 2027 年特种电子产能投放。\n3. 巨石低介电/低膨胀产品的客户认证、批量收入、良率，而不只是“送样”。\n4. 淮安新线的爬坡速度与薄/超薄布占比。\n5. 季度资本开支、自由现金流、净债务和新增项目 ROIC。\n6. 海外收入、埃及/美国基地利用率及欧盟、美国实际税率。\n7. 2026 年末前同业竞争承诺的处理方案。"
+        }
+      ],
+      "node_id": "jushi-forward-monitoring",
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪电子布和粗纱价格库存、特种电子布认证与批量收入、产能爬坡、资本开支、FCF、净债务、项目 ROIC、海外基地和同业竞争处理。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 44.38,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 8,
+          "line_end": 8,
+          "quote": "| 收盘价 | 44.38 元 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "SCENARIO_VALUE",
+      "value": null,
+      "min": 15.5,
+      "max": 60.5,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 318,
+          "line_end": 322,
+          "quote": "| 情景 | EPS CAGR | 终值 PE | 2029E EPS | 三年目标价 | 相对 44.38 元 | 隐含年化回报 |\n|---|---:|---:|---:|---:|---:|---:|\n| 乐观 | +15% | 28x | 2.16 元 | **60.5 元** | +36.3% | +10.88% |\n| 中性 | +6% | 20x | 1.69 元 | **33.8 元** | -23.8% | -8.68% |\n| 悲观 | -8% | 14x | 1.11 元 | **15.5 元** | -65.1% | -29.58% |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "基本面价值区间",
+      "price_role": "FAIR_VALUE",
+      "value": null,
+      "min": 28.4,
+      "max": 35.5,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 328,
+          "line_end": 328,
+          "quote": "用 2026E EPS 1.42 元乘以 20—25x 的复苏期合理区间，得到当前基本面价值约 **28.4—35.5 元**。"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "PRICE_AND_FUNDAMENTAL_PRECONDITION",
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "CYCLICAL_EARNINGS_AND_CAPEX"
+  ],
+  "ambiguities": [
+    {
+      "code": "PRICE_AND_FUNDAMENTAL_PRECONDITION",
+      "summary": "30—34、24—28 和 24 元以下均同时依赖盈利、认证、景气、ROE/FCF 或债务/项目回报条件；报告没有把这些前提定义成可核验的稳定规则。",
+      "required_clarification": "明确各价位前提的核验指标、截止期间及满足标准，再决定是否可将相应路径升级为正式建仓。",
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 330,
+          "line_end": 336,
+          "quote": "| 投资者类型 | 基本面行动价位 | 前提 |\n|---|---:|---|\n| 激进型 | 30—34 元小仓试投 | 2026 盈利兑现，且出现高端认证/批量订单的可核验证据 |\n| 稳健型 | 24—28 元分批买入 | 电子布景气正常化后，ROE 与 FCF 仍改善 |\n| 保守型 | 24 元以下再考虑较大仓位 | 周期下行压力已计入，净债务和扩产回报未恶化 |\n\n价格在 28—30 元之间时，赔率开始改善但仍不满足稳健型安全边际；价格下降不是充分条件，基本面前提必须同时成立。"
+        }
+      ]
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出/论文失效信号以分号并列，且含‘或’，但没有规定任一信号、组合信号还是最低满足数量，以及相应减仓或退出幅度。",
+      "required_clarification": "由人工确认各信号的逻辑关系和处置动作；在此之前保持论文重审/人工复核，不自动执行。",
+      "evidence": [
+        {
+          "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "| 卖出/论文失效信号 | 普通电子布价格和库存反转；特种认证持续失败；ROE 低于 10% 或 FCF 连续两年为负；净债务失控；同业竞争处理损害中小股东 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/中国巨石/中国巨石-投资研究-20260809.md",
+      "line_start": 342,
+      "line_end": 355,
+      "quote": "## 第八步：最终决策与行动清单\n\n### 8.1 综合判断\n\n| 维度 | 结论 | 信心度 |\n|---|---|---|\n| 生意质量（段永平） | 全球成本领先、客户复购稳定，但普通品周期性强、资本密集 | 高 |\n| 护城河（巴菲特） | 规模/成本强，高端认证中等偏强；没有网络效应 | 中高 |\n| 管理层（段永平+巴菲特） | 制造系统成熟，分红和激励改善；扩产纪律与同业竞争待验证 | 中 |\n| 最大风险（芒格） | 把普通电子布涨价误判为特种布永久定价权，并在高估值下遭遇 2027 供给释放 | 中高 |\n| 文明趋势（李录） | 复材渗透是长期顺风，但价值不一定由玻纤上游独占 | 中高 |\n| 估值（巴菲特+段永平） | PE/PB 近五年约 98% 分位，乐观情景回报仍不宽裕 | 高 |\n\n**基本面建议：观察。** 中国巨石是好公司、行业复苏也是真的，但 44.38 元不是一个能容忍普通布价格回落、特种布认证延迟或扩产超支的价格。当前最合理的选择是等待价格进入安全边际，或等待高端产品订单把盈利质量的不确定性变成事实。"
+    }
+  ]
+}

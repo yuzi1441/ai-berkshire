@@ -1,0 +1,457 @@
+{
+  "schema_version": 1,
+  "ticker": "002600.SZ",
+  "company": "领益智造",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+    "report_sha256": "2e63adbbcd1fa2bdf53afb38ba600b6271298973ae3502008bf8f9b3ae7d1b8b"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "16.23 元是 A 股当前参考价；19.4、10.4、4.1 元三情景目标价是估值参考，不是买入价。",
+      "空仓者正文明确回避，不因跌停、破发或创新低抄底；只有扣非利润和估值条件改善后才重新评估。",
+      "报告同时讨论港股，但本合同只保留 A 股路径，未把港股价格或上市表现转成 A 股动作。",
+      "正文最终决策写‘回避’，底部基本面建议动作写‘观察’，属于需要人工确认的正式动作边界；卖出和加仓信号也未定义组合逻辑。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "领益智造是规模较大的精密制造商，但扣非利润下滑、现金流和负债口径存在缺口，估值仍处高位；空仓者回避，持仓者逢反弹减仓。",
+    "evidence": [
+      {
+        "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+        "line_start": 227,
+        "line_end": 227,
+        "quote": "**回避**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "当前 A 股回避，不因跌停、破发或创新低抄底；扣非利润重回增长且估值回落后再人工评估。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "avoid-current-no-bottom-fishing",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前回避，不把跌停、破发或创新低当作买入理由。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+              "line_start": 227,
+              "line_end": 227,
+              "quote": "不因\"跌停/破发/创新低\"而抄底"
+            }
+          ]
+        },
+        {
+          "path_id": "review-after-profit-and-valuation-recovery",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "扣非利润重回增长且估值回落至 30x 以下后重新评估，不自动生成买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+                    "line_start": 227,
+                    "line_end": 227,
+                    "quote": "扣非利润重回增长"
+                  }
+                ],
+                "node_id": "review-deducted-profit-recovers",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "扣非利润重回增长。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+                    "line_start": 227,
+                    "line_end": 227,
+                    "quote": "估值回落至30x以下"
+                  }
+                ],
+                "node_id": "review-valuation-below-30x",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "估值回落至 30x 以下。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+                "line_start": 227,
+                "line_end": 227,
+                "quote": "等待\"扣非利润重回增长 + 估值回落至30x以下\"再评估"
+              }
+            ],
+            "node_id": "review-all-profit-and-valuation",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "扣非利润重回增长且估值回落至 30x 以下。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+              "line_start": 227,
+              "line_end": 227,
+              "quote": "再评估"
+            }
+          ]
+        },
+        {
+          "path_id": "review-add-signal-bundle",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "加仓信号需要同时核验扣非利润、毛利率、新赛道分部利润和估值，但组合与动作未定义，保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+                "line_start": 230,
+                "line_end": 230,
+                "quote": "加仓信号"
+              }
+            ],
+            "node_id": "review-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "人工确认三项加仓信号的组合关系及是否达到正式建仓标准。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+              "line_start": 230,
+              "line_end": 230,
+              "quote": "加仓信号"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 227,
+          "line_end": 227,
+          "quote": "空仓者"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "持仓者逢反弹减仓；卖出和加仓信号需要人工确认，不自动套用 A/H 或技术报告结论。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-reduce-on-rebound",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持仓者逢反弹减仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+              "line_start": 228,
+              "line_end": 228,
+              "quote": "逢反弹减仓"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-sell-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四项卖出信号的组合关系和处置强度未定义，保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+                "line_start": 229,
+                "line_end": 229,
+                "quote": "卖出信号"
+              }
+            ],
+            "node_id": "holder-sell-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认扣非利润/毛利率、苹果份额、大股东减持或质押、商誉减值信号的组合及卖出动作。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+              "line_start": 229,
+              "line_end": 229,
+              "quote": "卖出信号"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "加仓信号列出三项条件，但未明确是全部满足还是分步满足，保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+                "line_start": 230,
+                "line_end": 230,
+                "quote": "加仓信号"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认加仓条件的组合、仓位和实际动作。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+              "line_start": 230,
+              "line_end": 230,
+              "quote": "加仓信号"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 228,
+          "line_end": 228,
+          "quote": "持仓者"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 249,
+          "line_end": 249,
+          "quote": "需一手验证"
+        }
+      ],
+      "node_id": "monitor-first-party-data-gaps",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "核验新赛道分部利润、经营现金流、货币资金和有息负债口径，并跟踪苹果供应链份额。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 16.23,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "当前股价：**16.23元**"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 4.1,
+      "max": 19.4,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 201,
+          "line_end": 201,
+          "quote": "19.4元"
+        },
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 203,
+          "line_end": 203,
+          "quote": "4.1元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文最终决策将空仓者定义为回避，但底部看板契约的基本面建议动作写为观察；需要人工确认正式状态。",
+    "evidence": [
+      {
+        "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+        "line_start": 227,
+        "line_end": 227,
+        "quote": "空仓者"
+      },
+      {
+        "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+        "line_start": 275,
+        "line_end": 275,
+        "quote": "基本面建议动作 | 观察"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_CONFLICT",
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
+    "FCF_AND_LIABILITY_DATA_CONFLICT",
+    "VALUATION_ACTION_BOUNDARY"
+  ],
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_CONFLICT",
+      "summary": "正文空仓动作是回避，底部契约基本面建议动作是观察，二者的正式优先级未说明。",
+      "required_clarification": "确认正文投资者分层结论是否覆盖底部契约的泛化动作；当前保留正文 A 股回避解释，但合同标记 ambiguous。",
+      "evidence": [
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 227,
+          "line_end": 227,
+          "quote": "空仓者"
+        },
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 275,
+          "line_end": 275,
+          "quote": "基本面建议动作 | 观察"
+        }
+      ]
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出和加仓信号均为项目列表，未明确 ANY、ALL 或最低满足数量。",
+      "required_clarification": "由人工或更强模型确认信号组合和处置动作；当前只保留 REVIEW_ONLY。",
+      "evidence": [
+        {
+          "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+          "line_start": 229,
+          "line_end": 230,
+          "quote": "卖出信号"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+      "line_start": 223,
+      "line_end": 230,
+      "quote": "### 最终决策"
+    },
+    {
+      "report_path": "reports/领益智造/领益智造投资研究报告-20260707.md",
+      "line_start": 264,
+      "line_end": 285,
+      "quote": "## 看板决策契约"
+    }
+  ]
+}

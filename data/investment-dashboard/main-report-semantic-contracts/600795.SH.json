@@ -1,0 +1,476 @@
+{
+  "schema_version": 1,
+  "ticker": "600795.SH",
+  "company": "guodian-power",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+    "report_sha256": "2c3e52159fc63f5c968c2832b7fe2d68b3bcda68689fe62de47fe23edcb2187b"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "4.81 元是当前参考价，3.6-9.2 元三情景目标价是估值参考；4.50 元以下更适合建立小仓，不能把目标价当买入价。",
+      "空仓者是高股息防御型 5-10% 小仓配置，不建议重仓；4.5-5.5 元是持有收息区，5.5-6.5 元观察，6.5 元以上减仓。",
+      "持仓者继续收息，价格回到 5.5 元以上可考虑部分减持；卖出与加仓清单组合关系未定义，保留人工复核。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "OPEN_POSITION",
+    "scope": "both",
+    "summary": "国电电力适合作为高股息防御型小仓配置，不适合重仓成长投资；持仓者继续收息并跟踪电价、煤价、负债和资产注入。",
+    "evidence": [
+      {
+        "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+        "line_start": 326,
+        "line_end": 326,
+        "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "OPEN_POSITION",
+      "summary": "5-10% 高股息防御小仓配置；优先等待 4.50 元以下，不建议重仓。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "small-position-under-4-50",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "4.50 元以下可作为 5-10% 小仓配置区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LT",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 4.5,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+                "line_start": 326,
+                "line_end": 326,
+                "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
+              }
+            ],
+            "node_id": "entry-price-below-4-50",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格低于 4.50 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+              "line_start": 326,
+              "line_end": 326,
+              "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
+            }
+          ]
+        },
+        {
+          "path_id": "trial-current-high-dividend",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前位置只能小仓位配置，定位为高股息防御，不重仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+                "line_start": 326,
+                "line_end": 326,
+                "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
+              }
+            ],
+            "node_id": "trial-current-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "人工确认 5-10% 仓位上限和高股息防御定位。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+              "line_start": 326,
+              "line_end": 326,
+              "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
+            }
+          ]
+        },
+        {
+          "path_id": "watch-5-5-6-5",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "5.5-6.5 元为观望区，停止加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 5.5,
+            "price_max": 6.5,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+                "line_start": 338,
+                "line_end": 338,
+                "quote": "| **5.5-6.5元** | 14-16x | 观望区——接近分析师目标价，停止加仓 |"
+              }
+            ],
+            "node_id": "watch-price-5-5-6-5",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 5.5-6.5 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+              "line_start": 338,
+              "line_end": 338,
+              "quote": "| **5.5-6.5元** | 14-16x | 观望区——接近分析师目标价，停止加仓 |"
+            }
+          ]
+        },
+        {
+          "path_id": "reduce-above-6-5",
+          "action": "REDUCE",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "6.5 元以上估值偏高，进入减仓区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "GT",
+            "value": null,
+            "unit": null,
+            "price_min": 6.5,
+            "price_max": null,
+            "currency": "CNY",
+            "price_role": "REDUCE_POSITION",
+            "evidence": [
+              {
+                "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+                "line_start": 339,
+                "line_end": 339,
+                "quote": "| **6.5元以上** | >16x | 减仓区——估值偏高 |"
+              }
+            ],
+            "node_id": "reduce-price-above-6-5",
+            "kind": "PRICE_RANGE",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "empty_position",
+            "description": "价格高于 6.5 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+              "line_start": 339,
+              "line_end": 339,
+              "quote": "| **6.5元以上** | >16x | 减仓区——估值偏高 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "line_start": 326,
+          "line_end": 326,
+          "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "继续持有收息；价格回到 5.5 元以上时考虑部分减持。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-for-income",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "继续持有收息。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+              "line_start": 327,
+              "line_end": 327,
+              "quote": "| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-reduce-above-5-5",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格回到 5.5 元以上时考虑部分减持。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "GT",
+            "value": null,
+            "unit": null,
+            "price_min": 5.5,
+            "price_max": null,
+            "currency": "CNY",
+            "price_role": "REDUCE_POSITION",
+            "evidence": [
+              {
+                "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+                "line_start": 327,
+                "line_end": 327,
+                "quote": "| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |"
+              }
+            ],
+            "node_id": "holder-reduce-price-above-5-5",
+            "kind": "PRICE_RANGE",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "股价回到 5.5 元以上。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+              "line_start": 327,
+              "line_end": 327,
+              "quote": "| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-sell-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四项卖出信号的组合关系需人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+                "line_start": 328,
+                "line_end": 328,
+                "quote": "| **卖出信号** | ① 电价连续2个季度降幅超10%；② 煤价反弹至1,000元/吨以上持续3个月+；③ 国家能源集团资产注入计划明确推迟或取消；④ 资产负债率突破76% |"
+              }
+            ],
+            "node_id": "holder-sell-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认电价、煤价、资产注入和负债率信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+              "line_start": 328,
+              "line_end": 328,
+              "quote": "| **卖出信号** | ① 电价连续2个季度降幅超10%；② 煤价反弹至1,000元/吨以上持续3个月+；③ 国家能源集团资产注入计划明确推迟或取消；④ 资产负债率突破76% |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四项加仓信号的组合关系需人工复核，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+                "line_start": 329,
+                "line_end": 329,
+                "quote": "| **加仓信号** | ① 股价跌至4.2元以下（PE ~10x，股息率6%+）；② 大渡河双江口/金川水电站超预期提前投产；③ 容量电价进一步上调至200元/千瓦·年以上；④ 国家能源集团宣布具体的资产注入方案 |"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认价格、水电投产、容量电价和资产注入信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+              "line_start": 329,
+              "line_end": 329,
+              "quote": "| **加仓信号** | ① 股价跌至4.2元以下（PE ~10x，股息率6%+）；② 大渡河双江口/金川水电站超预期提前投产；③ 容量电价进一步上调至200元/千瓦·年以上；④ 国家能源集团宣布具体的资产注入方案 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "line_start": 327,
+          "line_end": 327,
+          "quote": "| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "line_start": 328,
+          "line_end": 328,
+          "quote": "| **卖出信号** | ① 电价连续2个季度降幅超10%；② 煤价反弹至1,000元/吨以上持续3个月+；③ 国家能源集团资产注入计划明确推迟或取消；④ 资产负债率突破76% |"
+        }
+      ],
+      "node_id": "monitor-power-coal-debt-injection",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪电价、煤价、资产注入、负债率及股息承诺。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-06-23 当前股价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 4.81,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "> **当前股价**：4.81元（A股）"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 3.6,
+      "max": 9.2,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "| **乐观** | 15% | 15x | 0.61元 | **9.2元** | **+90.7%** |"
+        },
+        {
+          "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "line_start": 270,
+          "line_end": 270,
+          "quote": "| **悲观** | 0% | 9x | 0.40元 | **3.6元** | **-24.8%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "HIGH_LEVERAGE_AND_POWER_PRICE_RISK",
+    "DIVIDEND_DEPENDENCY",
+    "VALUATION_ACTION_BOUNDARY"
+  ],
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出和加仓各四项信号未定义是任一、全部还是最少满足数量。",
+      "required_clarification": "由人工或更强模型确认高股息持仓信号的组合逻辑后再生成自动减仓或加仓规则；当前保留人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "line_start": 328,
+          "line_end": 328,
+          "quote": "| **卖出信号** | ① 电价连续2个季度降幅超10%；② 煤价反弹至1,000元/吨以上持续3个月+；③ 国家能源集团资产注入计划明确推迟或取消；④ 资产负债率突破76% |"
+        },
+        {
+          "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+          "line_start": 329,
+          "line_end": 329,
+          "quote": "| **加仓信号** | ① 股价跌至4.2元以下（PE ~10x，股息率6%+）；② 大渡河双江口/金川水电站超预期提前投产；③ 容量电价进一步上调至200元/千瓦·年以上；④ 国家能源集团宣布具体的资产注入方案 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/guodian-power/guodian-power-research-20260623.md",
+      "line_start": 326,
+      "line_end": 329,
+      "quote": "| **空仓者** | **可小仓位配置（5-10%），定位为高股息防御标的。** 5%股息率+12x PE处于历史低位，下行有限（悲观场景3.6元，-25%）。但不建议重仓——ROE偏低、负债率高、管理层不确定性大。优先等$4.50以下（接近52周低点）再买。如果追求电力板块高股息，华电国际（PE 7x、股息率5.5%、负债率61%）可能是更优选择。 |\n| **持仓者** | **继续持有收息。** 60%分红承诺（2025-2027年）提供了确定性。如果股价回到5.5元+（接近分析师目标价下限），可以考虑减持部分仓位。 |\n| **卖出信号** | ① 电价连续2个季度降幅超10%；② 煤价反弹至1,000元/吨以上持续3个月+；③ 国家能源集团资产注入计划明确推迟或取消；④ 资产负债率突破76% |\n| **加仓信号** | ① 股价跌至4.2元以下（PE ~10x，股息率6%+）；② 大渡河双江口/金川水电站超预期提前投产；③ 容量电价进一步上调至200元/千瓦·年以上；④ 国家能源集团宣布具体的资产注入方案 |"
+    }
+  ]
+}

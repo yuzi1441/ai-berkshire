@@ -1,0 +1,646 @@
+{
+  "schema_version": 1,
+  "ticker": "600031.SH",
+  "company": "三一重工",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+    "report_sha256": "15cfd2e5b877a2a9731280d396b24bef1260e00dd407746bf6529cc49659760c"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "报告明确当前 19.58 元只适合观察或持有，三档价格带均不是无条件买入；价格必须与中报事实一起复核。",
+      "报告同时包含 A 股和 H 股，只保留 A 股价格与行动路径。",
+      "海外收入、国际毛利率和经营现金流的失效条件含有或/且组合，需保留为失效复核而不是自动交易指令。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "当前 19.58 元高于三档计划买入区间；空仓者观察等待，已有且仓位合理者可持有，不追价。",
+    "evidence": [
+      {
+        "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+        "line_start": 243,
+        "line_end": 243,
+        "quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前价格不追价；17.0-18.0、14.5-16.0、12.0-13.5 元分别对应不同强度的条件买入路径。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "aggressive-entry-17-18-with-facts",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 17.0-18.0 元可小仓分批，但需与中报事实共同复核。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 17,
+                "price_max": 18,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                    "line_start": 220,
+                    "line_end": 220,
+                    "quote": "| 激进 | 17.0—18.0 元 | 约 18.6—19.7x TTM PE，接受全球化溢价 | 小仓分批 |"
+                  }
+                ],
+                "node_id": "aggressive-price-17-18",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 17.0-18.0 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                    "line_start": 225,
+                    "line_end": 225,
+                    "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+                  }
+                ],
+                "node_id": "midyear-facts-entry-gate-aggressive",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                "line_start": 225,
+                "line_end": 225,
+                "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+              }
+            ],
+            "node_id": "aggressive-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "17.0-18.0 元且 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 220,
+              "line_end": 220,
+              "quote": "| 激进 | 17.0—18.0 元 | 约 18.6—19.7x TTM PE，接受全球化溢价 | 小仓分批 |"
+            },
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 225,
+              "line_end": 225,
+              "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+            }
+          ]
+        },
+        {
+          "path_id": "steady-entry-14-5-16-with-facts",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 14.5-16.0 元可分批买入，但仍受价格与事实组合约束。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 14.5,
+                "price_max": 16,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                    "line_start": 221,
+                    "line_end": 221,
+                    "quote": "| 稳健 | 14.5—16.0 元 | 约 15.8—17.5x TTM PE，接近优质整机厂合理溢价 | 分批买入 |"
+                  }
+                ],
+                "node_id": "steady-price-14-5-16",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 14.5-16.0 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                    "line_start": 225,
+                    "line_end": 225,
+                    "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+                  }
+                ],
+                "node_id": "midyear-facts-entry-gate-steady",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "中报事实仍需证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                "line_start": 225,
+                "line_end": 225,
+                "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+              }
+            ],
+            "node_id": "steady-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "14.5-16.0 元且中报事实没有破坏扣非利润、海外毛利、应收和逾期垫款假设。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 221,
+              "line_end": 221,
+              "quote": "| 稳健 | 14.5—16.0 元 | 约 15.8—17.5x TTM PE，接近优质整机厂合理溢价 | 分批买入 |"
+            },
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 225,
+              "line_end": 225,
+              "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+            }
+          ]
+        },
+        {
+          "path_id": "conservative-entry-12-13-5-with-facts",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 12.0-13.5 元才提供较厚安全边际，仍需先确认论文没有失效。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 12,
+                "price_max": 13.5,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                    "line_start": 222,
+                    "line_end": 222,
+                    "quote": "| 保守 | 12.0—13.5 元 | 约 13.1—14.7x TTM PE，接近国内整机同行 | 才有较厚安全边际 |"
+                  }
+                ],
+                "node_id": "conservative-price-12-13-5",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 12.0-13.5 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                    "line_start": 225,
+                    "line_end": 225,
+                    "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+                  }
+                ],
+                "node_id": "midyear-facts-entry-gate-conservative",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格进入区间后仍需复核中报事实与论文失效条件。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                "line_start": 225,
+                "line_end": 225,
+                "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+              }
+            ],
+            "node_id": "conservative-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "12.0-13.5 元且价格与中报事实共同通过复核。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 222,
+              "line_end": 222,
+              "quote": "| 保守 | 12.0—13.5 元 | 约 13.1—14.7x TTM PE，接近国内整机同行 | 才有较厚安全边际 |"
+            },
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 225,
+              "line_end": 225,
+              "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 243,
+          "line_end": 243,
+          "quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "已有且仓位合理者可持有，但当前不追价，也不能在论文触发后机械加仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "已有且仓位合理者可持有；不因价格进入区间就机械加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 243,
+              "line_end": 243,
+              "quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
+            },
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 225,
+              "line_end": 225,
+              "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 243,
+          "line_end": 243,
+          "quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "国际收入增速",
+              "operator": "LT",
+              "value": 5,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                  "line_start": 247,
+                  "line_end": 247,
+                  "quote": "- **主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
+                }
+              ],
+              "node_id": "international-growth-below-5",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "国际收入连续两个半年度增速低于 5%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "国际毛利率",
+              "operator": "LT",
+              "value": 28,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+                  "line_start": 247,
+                  "line_end": 247,
+                  "quote": "- **主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
+                }
+              ],
+              "node_id": "international-margin-below-28",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "国际毛利率低于 28%。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 247,
+              "line_end": 247,
+              "quote": "- **主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
+            }
+          ],
+          "node_id": "international-growth-or-margin-low",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "国际收入增速低于 5%，或国际毛利率低于 28%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+              "line_start": 247,
+              "line_end": 247,
+              "quote": "- **主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
+            }
+          ],
+          "node_id": "cashflow-below-profit",
+          "kind": "QUALITATIVE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "经营现金流持续弱于净利润。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 247,
+          "line_end": 247,
+          "quote": "- **主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
+        }
+      ],
+      "node_id": "globalization-quality-invalidation",
+      "kind": "ALL",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "国际收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，并且经营现金流持续弱于净利润时，重审全球化与盈利质量假设。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "1. 2026 中报：扣非净利是否转正增长，财务费用构成是否解释清楚。"
+        }
+      ],
+      "node_id": "monitor-sany-midyear-validation",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 2026 年中报扣非利润、财务费用、国际主营、信用资产、每股价值、资本配置和海外服务护城河。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 19.58,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 28,
+          "line_end": 28,
+          "quote": "| A 股收盘价 | 19.58 元 | 2026-08-07 未复权收盘 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 10.9,
+      "max": 30.6,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 208,
+          "line_end": 208,
+          "quote": "| 乐观 | 15% | 22x | 1.39 元 | 30.6 元 | +56.5% |"
+        },
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 210,
+          "line_end": 210,
+          "quote": "| 悲观 | -3% | 13x | 0.84 元 | 10.9 元 | -44.5% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
+    "CONDITIONAL_PRICE_AND_FACTS",
+    "INVALIDATION_LOGIC_REQUIRES_REVIEW"
+  ],
+  "ambiguities": [
+    {
+      "code": "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
+      "summary": "主报告同时给出 A 股和 H 股价格，但当前合同只编译 A 股行动路径。",
+      "required_clarification": "由人工确认 H 股内容不会改变 A 股价格和行动语义。",
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> **A / H 股价格：** 19.58 元 / 20.34 港元"
+        }
+      ]
+    },
+    {
+      "code": "CONDITIONAL_PRICE_AND_FACTS",
+      "summary": "三档价格区间明确不是独立价格信号，而是价格与中报事实的组合；组合是否满足后才能执行的边界需要人工确认。",
+      "required_clarification": "确认中报事实是所有价格层级的必要门槛，并确认各层级的仓位处置边界。",
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 225,
+          "line_end": 225,
+          "quote": "区间不是精确价值，而是“价格 + 事实”组合。若 2026 年中报证明扣非利润恢复、海外毛利不降、应收和逾期垫款受控，可上移合理区间；若论文触发条件出现，即使进入买入价也不应机械加仓。"
+        }
+      ]
+    },
+    {
+      "code": "INVALIDATION_LOGIC_REQUIRES_REVIEW",
+      "summary": "主要失效条件使用“或”与“同时”嵌套，虽可按 (收入或毛利率) 且现金流理解，但不应自动转成交易指令。",
+      "required_clarification": "确认失效条件只触发论文重审，还是还需要触发减仓/退出路径。",
+      "evidence": [
+        {
+          "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+          "line_start": 247,
+          "line_end": 247,
+          "quote": "- **主要失效条件：** 海外收入连续两个半年度增速低于 5% 或国际毛利率低于 28%，同时经营现金流持续弱于净利润；应重审全球化与盈利质量假设。"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+      "line_start": 243,
+      "line_end": 243,
+      "quote": "- **动作：观察；已有且仓位合理者可持有。** 当前 19.58 元高于三档计划买入区间，不追价。"
+    },
+    {
+      "report_path": "reports/三一重工/三一重工研究报告-20260808.md",
+      "line_start": 281,
+      "line_end": 300,
+      "quote": "## 看板决策契约"
+    }
+  ]
+}

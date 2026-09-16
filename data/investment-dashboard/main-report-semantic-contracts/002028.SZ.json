@@ -1,0 +1,719 @@
+{
+  "schema_version": 1,
+  "ticker": "002028.SZ",
+  "company": "思源电气",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+    "report_sha256": "17ba9a5ff240ce27997346dd3d1a4fbf7a23b83730ce125ef8e4232b9d0a2bef"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "145 元以上只跟踪/持有验证，125-145 元才是激进型小仓分批区，未把当前 154.27 元转成买入",
+      "110-125 元与 90-110 元需要核心毛利、现金流和论文未坏等条件，保留为复核区而非无条件 entry",
+      "三情景目标价 76.9-245.8 元和 28/25 倍退出 PE 是估值参考，不是买入价",
+      "已有仓位持有并设重审线，未把持有者策略泄漏为空仓买入",
+      "CFO/净利、核心毛利、海外回款/H 股、扩产、质量事故和技术路线风险保留为任一减仓/重审信号"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "公司质量较高但 2026H1 出现利润率、现金转化、汇率和少数股权扰动；154.27 元主要押注乐观增长，空仓不宜追高。",
+    "evidence": [
+      {
+        "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+        "line_start": 357,
+        "line_end": 357,
+        "quote": "> 思源电气是电网设备中兼具核心高压利润池、民营效率和海外扩张能力的优质平台，但 2026H1 已暴露利润率、现金转化、汇率和少数股权扰动，154.27 元仍主要押注乐观增长；当前更适合重点跟踪和有纪律持有，空仓不宜追高。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "145 元以上不追高；125-145 元仅小仓分批；110-125 元及 90-110 元需分别确认核心毛利/现金流和论文未坏。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-above-145",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "145 元以上以跟踪为主，等待正式中报和 H2 兑现。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "GT",
+            "value": null,
+            "unit": null,
+            "price_min": 145,
+            "price_max": null,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                "line_start": 343,
+                "line_end": 343,
+                "quote": "| **145 元以上** | 33.9x 以上 | 空仓者以跟踪为主；已有仓位持有验证 | 不追高，等正式中报和 H2 兑现 |"
+              }
+            ],
+            "node_id": "watch-price-above-145",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格高于 145 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 343,
+              "line_end": 343,
+              "quote": "| **145 元以上** | 33.9x 以上 | 空仓者以跟踪为主；已有仓位持有验证 | 不追高，等正式中报和 H2 兑现 |"
+            }
+          ]
+        },
+        {
+          "path_id": "trial-125-145",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "125-145 元仅小仓分批，接受估值压缩。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 125,
+            "price_max": 145,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                "line_start": 344,
+                "line_end": 344,
+                "quote": "| **125-145 元** | 29.2x-33.9x | 激进型 | 仅小仓分批，接受估值压缩 |"
+              }
+            ],
+            "node_id": "trial-price-125-145",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 125-145 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 344,
+              "line_end": 344,
+              "quote": "| **125-145 元** | 29.2x-33.9x | 激进型 | 仅小仓分批，接受估值压缩 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-110-125-with-confirmation",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "110-125 元开始具备较合理的基准回报，但必须确认核心业务毛利和现金流。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 110,
+                "price_max": 125,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                    "line_start": 345,
+                    "line_end": 345,
+                    "quote": "| **110-125 元** | 25.7x-29.2x | 稳健型 | 风险收益开始合理，需同时确认核心毛利和现金流 |"
+                  }
+                ],
+                "node_id": "review-price-110-125",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "价格处于 110-125 元区间。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                    "line_start": 345,
+                    "line_end": 345,
+                    "quote": "| **110-125 元** | 25.7x-29.2x | 稳健型 | 风险收益开始合理，需同时确认核心毛利和现金流 |"
+                  }
+                ],
+                "node_id": "core-margin-and-cash-confirmed",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "核心业务毛利和现金流得到确认。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                "line_start": 345,
+                "line_end": 345,
+                "quote": "| **110-125 元** | 25.7x-29.2x | 稳健型 | 风险收益开始合理，需同时确认核心毛利和现金流 |"
+              }
+            ],
+            "node_id": "review-110-125-all",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 110-125 元且核心毛利和现金流得到确认。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 345,
+              "line_end": 345,
+              "quote": "| **110-125 元** | 25.7x-29.2x | 稳健型 | 风险收益开始合理，需同时确认核心毛利和现金流 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-90-110-thesis-intact",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "90-110 元是保守资金更值得认真研究的区间，前提是论文未坏。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 90,
+                "price_max": 110,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                    "line_start": 346,
+                    "line_end": 346,
+                    "quote": "| **90-110 元** | 21.1x-25.7x | 保守型 | 安全边际较明显，前提是论文未坏 |"
+                  }
+                ],
+                "node_id": "review-price-90-110",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "价格处于 90-110 元区间。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                    "line_start": 346,
+                    "line_end": 346,
+                    "quote": "| **90-110 元** | 21.1x-25.7x | 保守型 | 安全边际较明显，前提是论文未坏 |"
+                  }
+                ],
+                "node_id": "thesis-not-broken",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "投资论文未坏。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                "line_start": 346,
+                "line_end": 346,
+                "quote": "| **90-110 元** | 21.1x-25.7x | 保守型 | 安全边际较明显，前提是论文未坏 |"
+              }
+            ],
+            "node_id": "review-90-110-all",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 90-110 元且投资论文未坏。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 346,
+              "line_end": 346,
+              "quote": "| **90-110 元** | 21.1x-25.7x | 保守型 | 安全边际较明显，前提是论文未坏 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+          "line_start": 388,
+          "line_end": 393,
+          "quote": "### 空仓投资者\n\n- 145 元以上不追高，先等待正式中报披露分产品毛利、应收、资本开支和汇兑金额；\n- 125-145 元只适合激进型小仓研究，不把小仓当成估值正确的证明；\n- 110-125 元开始具备较合理的基准回报，但必须同时确认核心业务没有恶化；\n- 90-110 元才是保守资金更值得认真研究的区间。"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "已有仓位可持有验证，但仓位上限取决于能否承受估值压缩；每季检查核心毛利、海外回款、CFO/净利、应收、H 股、扩产和质量事件。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-and-validate",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "有纪律持有并按季度验证，不默认加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 397,
+              "line_end": 399,
+              "quote": "已有仓位可以持有验证，但不应只用“行业长期好”解释所有短期数据。仓位上限应由能否承受估值压缩决定，而不是由对公司的喜爱决定。\n\n持有期间至少每季检查：核心两大业务毛利率、海外回款、CFO/净利、应收账龄、H 股条款、扩产利用率和质量事件。任一指标恶化不必立刻卖出，多个指标同向恶化则应重审论文。"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+          "line_start": 397,
+          "line_end": 399,
+          "quote": "已有仓位可以持有验证，但不应只用“行业长期好”解释所有短期数据。仓位上限应由能否承受估值压缩决定，而不是由对公司的喜爱决定。\n\n持有期间至少每季检查：核心两大业务毛利率、海外回款、CFO/净利、应收账龄、H 股条款、扩产利用率和质量事件。任一指标恶化不必立刻卖出，多个指标同向恶化则应重审论文。"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "CFO/净利",
+          "operator": "LT",
+          "value": "60%",
+          "unit": "ratio",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 413,
+              "line_end": 413,
+              "quote": "1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；"
+            }
+          ],
+          "node_id": "cashflow-below-60",
+          "kind": "METRIC_COMPARE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "CFO/净利连续两期低于 60%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 414,
+              "line_end": 414,
+              "quote": "2. 开关、变压器毛利率连续显著下滑，且不是单一交付结构造成；"
+            }
+          ],
+          "node_id": "core-margin-down",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "开关、变压器毛利率连续显著下滑，且不是单一交付结构造成。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 415,
+              "line_end": 415,
+              "quote": "3. 海外发生重大延期、坏账、索赔、制裁或供应资格问题；"
+            }
+          ],
+          "node_id": "overseas-material-risk",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "海外发生重大延期、坏账、索赔、制裁或供应资格问题。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                  "line_start": 416,
+                  "line_end": 416,
+                  "quote": "4. 订单增长放缓时，在建工程和产能仍快速扩张；"
+                }
+              ],
+              "node_id": "orders-slow",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "订单增长放缓。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+                  "line_start": 416,
+                  "line_end": 416,
+                  "quote": "4. 订单增长放缓时，在建工程和产能仍快速扩张；"
+                }
+              ],
+              "node_id": "capex-fast",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "在建工程和产能仍快速扩张。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 416,
+              "line_end": 416,
+              "quote": "4. 订单增长放缓时，在建工程和产能仍快速扩张；"
+            }
+          ],
+          "node_id": "orders-slow-capex-up",
+          "kind": "ALL",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "订单增长放缓时在建工程和产能仍快速扩张。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 417,
+              "line_end": 417,
+              "quote": "5. H 股大比例折价发行，或资金进入低回报并购；"
+            }
+          ],
+          "node_id": "h-share-low-return",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "H 股大比例折价发行，或资金进入低回报并购。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 418,
+              "line_end": 418,
+              "quote": "6. 创始团队异常减持、关键高管流失或继任安排恶化；"
+            }
+          ],
+          "node_id": "founder-or-key-personnel-risk",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "创始团队异常减持、关键高管流失或继任安排恶化。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 419,
+              "line_end": 419,
+              "quote": "7. 重大质量事故、召回、停标或客户资格受损；"
+            }
+          ],
+          "node_id": "quality-incident",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "重大质量事故、召回、停标或客户资格受损。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+              "line_start": 420,
+              "line_end": 420,
+              "quote": "8. SST、无 SF6 等技术迁移加速，而公司产品和认证明显落后。"
+            }
+          ],
+          "node_id": "technology-migration-lag",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "SST、无 SF6 等技术迁移加速，而公司产品和认证明显落后。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+          "line_start": 411,
+          "line_end": 420,
+          "quote": "### 减仓或论文重审信号\n\n1. CFO/净利连续两期低于 60%，应收账龄和收款诉讼继续上升；\n2. 开关、变压器毛利率连续显著下滑，且不是单一交付结构造成；\n3. 海外发生重大延期、坏账、索赔、制裁或供应资格问题；\n4. 订单增长放缓时，在建工程和产能仍快速扩张；\n5. H 股大比例折价发行，或资金进入低回报并购；\n6. 创始团队异常减持、关键高管流失或继任安排恶化；\n7. 重大质量事故、召回、停标或客户资格受损；\n8. SST、无 SF6 等技术迁移加速，而公司产品和认证明显落后。"
+        }
+      ],
+      "node_id": "thesis-review-any",
+      "kind": "ANY",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "减仓或论文重审信号任一出现时降低风险或重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+          "line_start": 401,
+          "line_end": 409,
+          "quote": "### 上修或加仓信号\n\n1. 正式中报或后续季度显示 CFO/净利回升至 80% 以上，应收周转不再恶化；\n2. 海外收入继续增长，同时海外毛利率、回款和套保效果改善；\n3. 开关、变压器核心毛利率与份额稳定，H2 高质量订单如期确认；\n4. EPC、储能的项目级利润和现金流改善，而不只是扩大收入；\n5. H 股发行价、股数和用途对现有股东友好，并给出可验证回报里程碑；\n6. 10.8 亿元扩产形成订单、产能利用率和 ROIC 的闭环；\n7. 环保 GIS 获得型式试验和关键海外认证，SST 从可研进入可验证产品阶段。"
+        }
+      ],
+      "node_id": "core-quality-and-capital-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪上修/加仓信号：CFO/净利、海外毛利与回款、核心毛利与 H2 订单、低毛利业务项目现金流、H 股条款、扩产 ROIC 及环保 GIS/SST 认证。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "报告股价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 154.27,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "> **股价**：154.27 元；腾讯与新浪同秒附近报价一致"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 76.9,
+      "max": 245.8,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+          "line_start": 331,
+          "line_end": 335,
+          "quote": "| 情景 | EPS CAGR | 第 3 年 EPS | 终值 PE | 第 3 年目标价 | 相对 154.27 元 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +18% | 7.02 元 | 35x | **245.8 元** | **+59.3%** |\n| 中性 | +10% | 5.69 元 | 28x | **159.3 元** | **+3.2%** |\n| 悲观 | 0% | 4.27 元 | 18x | **76.9 元** | **-50.1%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约只保留观察和 125-145 元激进型价格，未表达正文的 110-125/90-110 复核带、持仓规则、加仓信号和减仓重审条件。",
+    "evidence": [
+      {
+        "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+        "line_start": 499,
+        "line_end": 507,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 巴菲特买入前 Checklist |\n| 激进型动作 | 仅小仓分批，接受估值压缩 |\n| 激进型价格区间 | 125-145 元 |\n| 稳健型动作 | 未给出 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 未给出 |\n| 保守型价格区间 | 未给出 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_CONFLICT",
+    "MULTI_MARKET_AND_H_SHARE",
+    "MULTIPLE_PRICE_BANDS",
+    "CASH_CONVERSION_RISK"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/思源电气/思源电气-investment-team-20260714.md",
+      "line_start": 353,
+      "line_end": 369,
+      "quote": "## 第八步：最终决策与行动清单\n\n### 一句话结论\n\n> 思源电气是电网设备中兼具核心高压利润池、民营效率和海外扩张能力的优质平台，但 2026H1 已暴露利润率、现金转化、汇率和少数股权扰动，154.27 元仍主要押注乐观增长；当前更适合重点跟踪和有纪律持有，空仓不宜追高。\n\n### 质量与价格分开看\n\n| 维度 | 结论 | 等级 |\n|---|---|---|\n| 生意质量 | 高可靠核心设备是好生意，低毛利扩张业务稀释平台质量 | A- |\n| 护城河 | 认证、履历、产品矩阵和交付形成复合壁垒，但不排他 | A- |\n| 管理层 | 执行力强且持股高；承诺管理、合规、继任和资本配置需折价 | B+ |\n| 财务质量 | 长期 ROE/ROIC 与资产负债表较好，现金转化是主要扣分 | B+ |\n| 行业位置 | 长周期需求真实，竞争与供给反应也真实 | A- |\n| 当前估值 | 中性三年情景几乎无价差，安全边际不足 | C |\n| **总体建议** | **重点跟踪；已有仓位持有并设重审线；空仓不追高** | **中性偏谨慎** |"
+    }
+  ]
+}

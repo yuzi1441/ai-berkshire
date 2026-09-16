@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "ticker": "601126.SH",
+  "company": "四方股份",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+    "report_sha256": "9c2cb6961f0a1d96ea225183dde720caf4e474b04aa92661267a47e5b6436b07"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "四方股份明确空仓观望，35—45元才接近研究买点；持仓者可跟踪但需仓位和卖出纪律。",
+      "已将行业叙事与价格、利润增长、毛利率和现金流条件保留为AND门槛。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "四方股份受益于新型电力系统但估值偏高，空仓不追高，等待35—45元或业绩验证。",
+    "evidence": [
+      {
+        "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+        "line_start": 21,
+        "line_end": 21,
+        "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓观望；35—45元且基本面未恶化时才接近研究买点。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "WATCH",
+          "summary": "60元以上不追高。",
+          "path_id": "empty-watch-high",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+              "line_start": 288,
+              "line_end": 288,
+              "quote": "| 空仓者 | **观望**。不要因为新型电力系统/AIDC 叙事在 60 元以上追高。 |"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "35—45元且基本面未恶化时分批研究买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 35,
+                "price_max": 45,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+                    "line_start": 21,
+                    "line_end": 21,
+                    "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于35—45元。",
+                "node_id": "empty-entry-35-45-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+                    "line_start": 21,
+                    "line_end": 21,
+                    "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "基本面未恶化。",
+                "node_id": "empty-entry-35-45-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+                "line_start": 21,
+                "line_end": 21,
+                "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于35—45元且基本面未恶化。",
+            "node_id": "empty-entry-35-45-condition"
+          },
+          "path_id": "empty-entry-35-45",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+              "line_start": 21,
+              "line_end": 21,
+              "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+          "line_start": 21,
+          "line_end": 21,
+          "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者可持有跟踪，但应提前设置仓位上限和卖出纪律。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD",
+          "summary": "持有跟踪并设置仓位与卖出纪律。",
+          "path_id": "holder-hold-discipline",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+              "line_start": 21,
+              "line_end": 21,
+              "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "价格、利润、毛利率和现金流同时满足时再评估加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+                "line_start": 291,
+                "line_end": 291,
+                "quote": "| 加仓信号 | 股价回落到 35-45 元；2026/2027 利润维持 15%+ 增长；毛利率企稳；经营现金流/净利润恢复到 1x 以上。 |"
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验35—45元、利润增长、毛利率和经营现金流条件。",
+            "node_id": "holder-add-signals-condition"
+          },
+          "path_id": "holder-add-signals",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+              "line_start": 291,
+              "line_end": 291,
+              "quote": "| 加仓信号 | 股价回落到 35-45 元；2026/2027 利润维持 15%+ 增长；毛利率企稳；经营现金流/净利润恢复到 1x 以上。 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+          "line_start": 21,
+          "line_end": 21,
+          "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+          "line_start": 292,
+          "line_end": 292,
+          "quote": "| 卖出/减仓信号 | 综合毛利率跌破 28%；经营现金流连续两年弱于净利润；大客户订单或回款恶化；新业务收入增长但利润率持续低迷；估值维持 60x 而增速降至 10% 附近。 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "毛利率、现金流、订单回款或新业务利润质量恶化时减仓/重审。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+          "line_start": 289,
+          "line_end": 289,
+          "quote": "| 轻仓者 | 可持有跟踪，但不要把它当成“无脑长期复利股”；重点观察毛利率、经营现金流和新业务利润质量。 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪毛利率、经营现金流、订单质量和新业务利润。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "HIGH_VALUATION",
+    "ENTRY_REQUIRES_FUNDAMENTAL_CONFIRMATION"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/四方股份/四方股份投资研究报告-20260707.md",
+      "line_start": 21,
+      "line_end": 21,
+      "quote": "- **建议**：**空仓者观望，不追高；持仓者可继续持有但应把仓位上限和卖出纪律前置；只有当价格回落到 35-45 元区间且基本面未恶化时，才更接近有安全边际的研究买点。**"
+    }
+  ]
+}

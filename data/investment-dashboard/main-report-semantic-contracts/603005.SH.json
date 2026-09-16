@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "ticker": "603005.SH",
+  "company": "jingfang-keji",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+    "report_sha256": "dd7ebb4e653504c2c56f6dd76931345845ae8ec241190961618479a68aa3ec1d"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "49.60 元是当前参考价，34.7-134.7 元是三情景估值参考，不是当前买入价。",
+      "正文一处建议等待 23-29 元或后续季报，另一处给出 25-35 元建议买入区间；合同不替正文选择其一，两个区间都保留为 REVIEW_ZONE。",
+      "持仓者建议至少减持一半；卖出和加仓信号没有定义组合关系，保留人工复核。",
+      "当前 87x PE、ROE 约 8% 和历史周期波动使无条件买入不成立。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "晶方科技具备车载 CIS 和先进封装能力，但 87 倍 PE 已严重透支增长；空仓者观望，持仓者考虑减仓，具体价格带因正文冲突待复核。",
+    "evidence": [
+      {
+        "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+        "line_start": 403,
+        "line_end": 403,
+        "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 49.60 元观望；正文的 23-29 元等待区与 25-35 元建议买入区间冲突，均只作为人工复核区。",
+      "entry_semantic": "AMBIGUOUS",
+      "action_paths": [
+        {
+          "path_id": "review-23-29-or-followup-filing",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "PE 40-50 倍、约 23-29 元，或后续季报验证增长持续性时复核。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 23,
+                "price_max": 29,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+                    "line_start": 403,
+                    "line_end": 403,
+                    "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+                  }
+                ],
+                "node_id": "review-price-23-29",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "价格约处于 23-29 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+                    "line_start": 403,
+                    "line_end": 403,
+                    "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+                  }
+                ],
+                "node_id": "review-growth-followup",
+                "kind": "FILING",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "2026 年后续季报验证增长持续性。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+                "line_start": 403,
+                "line_end": 403,
+                "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+              }
+            ],
+            "node_id": "review-23-29-or-filing",
+            "kind": "ANY",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格回落至约 23-29 元，或后续季报验证增长持续性。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+              "line_start": 403,
+              "line_end": 403,
+              "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-25-35-conflicting-band",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "报告另列 25-35 元建议买入区间，但与 23-29 元等待表述冲突，只保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 25,
+            "price_max": 35,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+                "line_start": 416,
+                "line_end": 416,
+                "quote": "**建议买入区间：25-35元（2026E PE 30-43倍）**"
+              }
+            ],
+            "node_id": "review-price-25-35-conflicting",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于报告另列的 25-35 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+              "line_start": 416,
+              "line_end": 416,
+              "quote": "**建议买入区间：25-35元（2026E PE 30-43倍）**"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 403,
+          "line_end": 403,
+          "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "股价翻倍且超过券商目标价，考虑减仓锁定利润，至少减持一半。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-reduce-half",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "考虑减仓锁定利润，建议至少减持一半。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+              "line_start": 404,
+              "line_end": 404,
+              "quote": "| **持仓者** | **考虑减仓锁定利润。** 股价已翻倍且超过所有券商目标价，2026Q1净利润零增长是值得警惕的信号。建议至少减持一半仓位 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-sell-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "卖出信号的组合关系需人工确认。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+                "line_start": 405,
+                "line_end": 405,
+                "quote": "| **卖出信号** | （1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持 |"
+              }
+            ],
+            "node_id": "holder-sell-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认营收增速、毛利率、客户和管理层信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+              "line_start": 405,
+              "line_end": 405,
+              "quote": "| **卖出信号** | （1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "加仓信号的组合关系需人工确认，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+                "line_start": 406,
+                "line_end": 406,
+                "quote": "| **加仓信号** | （1）PE回落至40倍以下（股价约23元）；（2）车载CIS季度营收增速维持50%+；（3）CPO业务开始贡献可观营收（季度5000万+）；（4）管理层增持或推出有力的股权激励 |"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认 PE、车载 CIS、CPO 和管理层激励信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+              "line_start": 406,
+              "line_end": 406,
+              "quote": "| **加仓信号** | （1）PE回落至40倍以下（股价约23元）；（2）车载CIS季度营收增速维持50%+；（3）CPO业务开始贡献可观营收（季度5000万+）；（4）管理层增持或推出有力的股权激励 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 404,
+          "line_end": 404,
+          "quote": "| **持仓者** | **考虑减仓锁定利润。** 股价已翻倍且超过所有券商目标价，2026Q1净利润零增长是值得警惕的信号。建议至少减持一半仓位 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 403,
+          "line_end": 403,
+          "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+        }
+      ],
+      "node_id": "monitor-2026-followup-growth",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 2026 年后续季报增长、车载 CIS 和 CPO 兑现。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-06-25 当前股价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 49.6,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 35,
+          "line_end": 35,
+          "quote": "| 最新股价 | 49.60元（2026年6月25日）|"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 34.7,
+      "max": 134.7,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 350,
+          "line_end": 350,
+          "quote": "| **乐观** | 50% | 70x | 1.92元 | **134.7元** | +172% |"
+        },
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 352,
+          "line_end": 352,
+          "quote": "| **悲观** | 15% | 40x | 0.87元 | **34.7元** | -30% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文同时给出 23-29 元等待区和 25-35 元建议买入区间，无法确定唯一正式价格路径。",
+    "evidence": [
+      {
+        "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+        "line_start": 403,
+        "line_end": 403,
+        "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+      },
+      {
+        "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+        "line_start": 416,
+        "line_end": 416,
+        "quote": "**建议买入区间：25-35元（2026E PE 30-43倍）**"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "CONFLICTING_ACTION_PRICE_BANDS",
+    "SIGNAL_COMBINATION_UNSPECIFIED",
+    "EXTREME_VALUATION",
+    "CYCLICAL_EARNINGS_RISK"
+  ],
+  "ambiguities": [
+    {
+      "code": "CONFLICTING_ACTION_PRICE_BANDS",
+      "summary": "正文的空仓建议同时出现 23-29 元等待复核和 25-35 元建议买入区间。",
+      "required_clarification": "由人工或更强模型确认唯一有效价格带；在此之前两者都只能进入 REVIEW_ZONE。",
+      "evidence": [
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 403,
+          "line_end": 403,
+          "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |"
+        },
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 416,
+          "line_end": 416,
+          "quote": "**建议买入区间：25-35元（2026E PE 30-43倍）**"
+        }
+      ]
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出和加仓信号均列出四项，但未定义组合逻辑。",
+      "required_clarification": "确认 ANY、ALL 或最少满足数量后再生成自动减仓或加仓条件。",
+      "evidence": [
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 405,
+          "line_end": 405,
+          "quote": "| **卖出信号** | （1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持 |"
+        },
+        {
+          "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+          "line_start": 406,
+          "line_end": 406,
+          "quote": "| **加仓信号** | （1）PE回落至40倍以下（股价约23元）；（2）车载CIS季度营收增速维持50%+；（3）CPO业务开始贡献可观营收（季度5000万+）；（4）管理层增持或推出有力的股权激励 |"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/jingfang-keji/jingfang-keji-touzi-yanjiu-baogao-20260625.md",
+      "line_start": 403,
+      "line_end": 406,
+      "quote": "| **空仓者** | **观望，等待更好价格。** 当前87倍PE严重透支增长预期，建议等待PE回落至40-50倍区间（对应股价约23-29元），或等待2026年后续季报验证增长持续性后再做决策 |\n| **持仓者** | **考虑减仓锁定利润。** 股价已翻倍且超过所有券商目标价，2026Q1净利润零增长是值得警惕的信号。建议至少减持一半仓位 |\n| **卖出信号** | （1）连续2个季度营收增速低于20%；（2）毛利率跌破40%；（3）第一大客户发生重大变动；（4）管理层大规模减持 |\n| **加仓信号** | （1）PE回落至40倍以下（股价约23元）；（2）车载CIS季度营收增速维持50%+；（3）CPO业务开始贡献可观营收（季度5000万+）；（4）管理层增持或推出有力的股权激励 |"
+    }
+  ]
+}

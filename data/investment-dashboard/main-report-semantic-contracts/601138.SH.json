@@ -1,0 +1,645 @@
+{
+  "schema_version": 1,
+  "ticker": "601138.SH",
+  "company": "工业富联",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+    "report_sha256": "efd778fd21b467ba8793df12efecc9444e910b2964d360d589957b512b53f1fc"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "工业富联空仓价格带明确：55元以下才可小仓，50元以下观察，43元以下保守型等待；中性情景回报不足。",
+      "加仓信号明确要求同时出现3项以上，已保留AT_LEAST=3，未压平成全部条件。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "工业富联经营执行强但价值捕获和现金流仍受结构约束，当前观望，等待价格或中报兑现。",
+    "evidence": [
+      {
+        "report_path": "reports/工业富联/工业富联-research-20260726.md",
+        "line_start": 47,
+        "line_end": 47,
+        "quote": "> 工业富联是一家**\"执行力被数据证实、但价值捕获被结构限制\"**的 AI 基础设施代工平台。2026Q1 它以 +56.52% 的营收增速跑赢整个 ODM 阵营 54.42 个百分点，7.35% 的毛利率比广达的 4.78% 高出 1.54 倍——这些是真实且罕见的经营证据。但云计算分部 5.73% 的毛利率、62.01% 的客户集中度、1.24% 的研发费用率，共同说明它赚的是**工程与规模的钱，不是定价权的钱**。60.25 元对应上市以来 PE 分位 88.9%，中性情景三年回报仅 +10.6%，风险收益不对称。**结论：观望。空仓者 50 元以下才进入分批观察区，43 元以下才有制造业估值保护。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前60.25元不追；55元以下才可小仓试错，50元以下等待分批观察，43元以下更有估值保护。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "REVIEW",
+          "summary": "50元以下且中报确认FCF转正、短债回落时分批观察。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 50,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 835,
+                    "line_end": 835,
+                    "quote": "| **空仓·稳健型** | **等待，分批观察** | ≤ **50 元**（PE 21.08x，≈近3年中位数），且中报确认 FCF 转正、短债回落 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A股价格不高于50元。",
+                "node_id": "empty-review-below-50-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "EXISTS",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 835,
+                    "line_end": 835,
+                    "quote": "| **空仓·稳健型** | **等待，分批观察** | ≤ **50 元**（PE 21.08x，≈近3年中位数），且中报确认 FCF 转正、短债回落 |"
+                  }
+                ],
+                "kind": "FILING",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "中报确认FCF转正、短债回落。",
+                "node_id": "empty-review-below-50-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                "line_start": 835,
+                "line_end": 835,
+                "quote": "| **空仓·稳健型** | **等待，分批观察** | ≤ **50 元**（PE 21.08x，≈近3年中位数），且中报确认 FCF 转正、短债回落 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格不高于50元且中报确认FCF转正、短债回落。",
+            "node_id": "empty-review-below-50-condition"
+          },
+          "path_id": "empty-review-below-50",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/工业富联/工业富联-research-20260726.md",
+              "line_start": 835,
+              "line_end": 835,
+              "quote": "| **空仓·稳健型** | **等待，分批观察** | ≤ **50 元**（PE 21.08x，≈近3年中位数），且中报确认 FCF 转正、短债回落 |"
+            }
+          ]
+        },
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "55元以下且中报现金流未再恶化时小仓试错。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 55,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 836,
+                    "line_end": 836,
+                    "quote": "| **空仓·进取型** | **可小仓试错** | ≤ **55 元**（PE 23.19x），且 8/12 中报现金流未再恶化 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A股价格不高于55元。",
+                "node_id": "empty-trial-below-55-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "EXISTS",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 836,
+                    "line_end": 836,
+                    "quote": "| **空仓·进取型** | **可小仓试错** | ≤ **55 元**（PE 23.19x），且 8/12 中报现金流未再恶化 |"
+                  }
+                ],
+                "kind": "FILING",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "中报现金流未再恶化。",
+                "node_id": "empty-trial-below-55-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                "line_start": 836,
+                "line_end": 836,
+                "quote": "| **空仓·进取型** | **可小仓试错** | ≤ **55 元**（PE 23.19x），且 8/12 中报现金流未再恶化 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格不高于55元且中报现金流未再恶化。",
+            "node_id": "empty-trial-below-55-condition"
+          },
+          "path_id": "empty-trial-below-55",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/工业富联/工业富联-research-20260726.md",
+              "line_start": 836,
+              "line_end": 836,
+              "quote": "| **空仓·进取型** | **可小仓试错** | ≤ **55 元**（PE 23.19x），且 8/12 中报现金流未再恶化 |"
+            }
+          ]
+        },
+        {
+          "action": "REVIEW",
+          "summary": "43元以下是保守型更有保护的复核区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 43,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                "line_start": 834,
+                "line_end": 834,
+                "quote": "| **空仓·保守型** | **继续等待** | ≤ **43 元**（PE 18.13x，≈上市以来均值），或盈利确定性显著上修 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格不高于43元。",
+            "node_id": "empty-review-below-43-condition"
+          },
+          "path_id": "empty-review-below-43",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/工业富联/工业富联-research-20260726.md",
+              "line_start": 834,
+              "line_end": 834,
+              "quote": "| **空仓·保守型** | **继续等待** | ≤ **43 元**（PE 18.13x，≈上市以来均值），或盈利确定性显著上修 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/工业富联/工业富联-research-20260726.md",
+          "line_start": 834,
+          "line_end": 834,
+          "quote": "| **空仓·保守型** | **继续等待** | ≤ **43 元**（PE 18.13x，≈上市以来均值），或盈利确定性显著上修 |"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "低成本持仓者可持有但不加仓，超配者逢强降低集中度。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有但不加仓。",
+          "path_id": "holder-hold-no-add",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/工业富联/工业富联-research-20260726.md",
+              "line_start": 837,
+              "line_end": 837,
+              "quote": "| **已持仓·成本低** | **持有，但不加仓** | 紧盯毛利额、CFO/净利、存货、下一代平台份额四项 |"
+            }
+          ],
+          "condition": null
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "六项加仓信号需同时出现3项以上。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 842,
+                    "line_end": 842,
+                    "quote": "1. 正式中报/年报 **CFO/净利恢复至 80% 以上**，且 FCF 转正"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "CFO/净利恢复至80%以上且FCF转正。",
+                "node_id": "holder-add-at-least-3-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 843,
+                    "line_end": 843,
+                    "quote": "2. 存货增速低于收入增速，短期借款持续下降"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "存货增速低于收入增速且短期借款下降。",
+                "node_id": "holder-add-at-least-3-condition-2"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 844,
+                    "line_end": 844,
+                    "quote": "3. **云计算分部毛利额（绝对值）增速 ≥ 收入增速**，且能证明不是 consign 机械抬升"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "云计算分部毛利额增速不低于收入增速且非consign机械抬升。",
+                "node_id": "holder-add-at-least-3-condition-3"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 845,
+                    "line_end": 845,
+                    "quote": "4. 下一代 GPU/ASIC 平台按期量产，公司明确披露份额或客户份额提升"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "下一代GPU/ASIC按期量产并披露份额提升。",
+                "node_id": "holder-add-at-least-3-condition-4"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 846,
+                    "line_end": 846,
+                    "quote": "5. 800G/1.6T、液冷业务**首次披露绝对收入与毛利**，证明附加值兑现"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "800G/1.6T、液冷首次披露绝对收入与毛利。",
+                "node_id": "holder-add-at-least-3-condition-5"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                    "line_start": 847,
+                    "line_end": 847,
+                    "quote": "6. 工业互联网板块收入恢复增长（证明第二曲线存在）"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "工业互联网收入恢复增长。",
+                "node_id": "holder-add-at-least-3-condition-6"
+              }
+            ],
+            "minimum": 3,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/工业富联/工业富联-research-20260726.md",
+                "line_start": 840,
+                "line_end": 840,
+                "quote": "### 9.5 加仓信号（需同时出现 3 项以上）"
+              }
+            ],
+            "kind": "AT_LEAST",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "以下六项加仓信号需同时出现至少3项。",
+            "node_id": "holder-add-at-least-3-condition"
+          },
+          "path_id": "holder-add-at-least-3",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/工业富联/工业富联-research-20260726.md",
+              "line_start": 840,
+              "line_end": 840,
+              "quote": "### 9.5 加仓信号（需同时出现 3 项以上）"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/工业富联/工业富联-research-20260726.md",
+          "line_start": 837,
+          "line_end": 837,
+          "quote": "| **已持仓·成本低** | **持有，但不加仓** | 紧盯毛利额、CFO/净利、存货、下一代平台份额四项 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/工业富联/工业富联-research-20260726.md",
+              "line_start": 851,
+              "line_end": 851,
+              "quote": "1. 连续两个季度综合毛利率低于 6.5%（剔除 consign 影响后）"
+            }
+          ],
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "综合毛利率连续两个季度低于6.5%。",
+          "node_id": "redline-1-1"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/工业富联/工业富联-research-20260726.md",
+              "line_start": 852,
+              "line_end": 852,
+              "quote": "2. 全年 CFO/净利仍低于 80%，或 FCF 继续为负"
+            }
+          ],
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "全年CFO/净利低于80%或FCF继续为负。",
+          "node_id": "redline-1-2"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/工业富联/工业富联-research-20260726.md",
+              "line_start": 853,
+              "line_end": 853,
+              "quote": "3. 资产负债率回升超过 65%，或短期借款重新大幅增加"
+            }
+          ],
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "资产负债率上升、存货大幅超增或下一代平台延期。",
+          "node_id": "redline-1-3"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/工业富联/工业富联-research-20260726.md",
+          "line_start": 849,
+          "line_end": 849,
+          "quote": "### 9.6 减仓或重审信号（任一出现即重审）"
+        }
+      ],
+      "kind": "ANY",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "任一减仓或重审信号出现即复核。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/工业富联/工业富联-research-20260726.md",
+          "line_start": 837,
+          "line_end": 837,
+          "quote": "| **已持仓·成本低** | **持有，但不加仓** | 紧盯毛利额、CFO/净利、存货、下一代平台份额四项 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪毛利额、CFO/净利、存货和下一代平台份额。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "AT_LEAST_THREE_ADD_GATE",
+    "CUSTOMER_CONCENTRATION_AND_CONSIGN"
+  ],
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/工业富联/工业富联-research-20260726.md",
+      "line_start": 47,
+      "line_end": 47,
+      "quote": "> 工业富联是一家**\"执行力被数据证实、但价值捕获被结构限制\"**的 AI 基础设施代工平台。2026Q1 它以 +56.52% 的营收增速跑赢整个 ODM 阵营 54.42 个百分点，7.35% 的毛利率比广达的 4.78% 高出 1.54 倍——这些是真实且罕见的经营证据。但云计算分部 5.73% 的毛利率、62.01% 的客户集中度、1.24% 的研发费用率，共同说明它赚的是**工程与规模的钱，不是定价权的钱**。60.25 元对应上市以来 PE 分位 88.9%，中性情景三年回报仅 +10.6%，风险收益不对称。**结论：观望。空仓者 50 元以下才进入分批观察区，43 元以下才有制造业估值保护。**"
+    }
+  ]
+}

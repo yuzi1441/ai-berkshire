@@ -1,0 +1,879 @@
+{
+  "schema_version": 1,
+  "ticker": "600089.SH",
+  "company": "特变电工",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+    "report_sha256": "93282d9268561c7bdfabc8471605530bcce155730f7182bbd36307a48215c294"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v1",
+    "pass": 2,
+    "adversarial_findings": [
+      "正文明确 19.14 元不新建仓，但底部看板契约把基本面建议动作写成分批买入，构成正式契约冲突。",
+      "13.3-15.0 元、11.8-13.3 元和 10.7 元以下均需要不同程度的基本面复核，不能把任一价格单独视为无条件买入。",
+      "报告把 A 股行动框架、持仓者动作和多个论文失效信号混在同一节，信号组合与处置幅度需要人工确认。"
+    ]
+  },
+  "semantic_status": "ambiguous",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "特变电工的输变电主业有壁垒，但集团资本密集、周期与现金流风险真实；19.14 元适合观察或持有，不在当前价新建仓。",
+    "evidence": [
+      {
+        "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+        "line_start": 292,
+        "line_end": 292,
+        "quote": "**综合评分：2.9/5。最终建议：观察 / 持有，不在19.14元新建仓。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "18 元以上不买；13.3-15.0、11.8-13.3 和 10.7 元以下是需要结合论文状态人工复核的价格路径。",
+      "entry_semantic": "AMBIGUOUS",
+      "action_paths": [
+        {
+          "path_id": "avoid-above-18",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 18 元以上当前不买。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "GTE",
+            "value": null,
+            "unit": null,
+            "price_min": 18,
+            "price_max": null,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                "line_start": 325,
+                "line_end": 325,
+                "quote": "| 当前空仓 | **18元以上** | 不买；回报主要依赖乐观情景 |"
+              }
+            ],
+            "node_id": "tbe-price-above-18-block",
+            "kind": "PRICE_RANGE",
+            "effect": "BLOCK_ENTRY",
+            "scope": "empty_position",
+            "description": "当前空仓者在 18 元以上不买。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 325,
+              "line_end": 325,
+              "quote": "| 当前空仓 | **18元以上** | 不买；回报主要依赖乐观情景 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-aggressive-13-3-15",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "13.3-15.0 元仅在半年报确认设备毛利、扣非和现金流未恶化后复核研究仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 13.3,
+                "price_max": 15,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                    "line_start": 326,
+                    "line_end": 326,
+                    "quote": "| 激进型 | **13.3-15.0元** | 仅在半年报确认设备毛利、扣非和现金流未恶化时，建立不超过目标仓位1/4的研究仓 |"
+                  }
+                ],
+                "node_id": "tbe-price-13-3-15",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A 股价格处于 13.3-15.0 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                    "line_start": 326,
+                    "line_end": 326,
+                    "quote": "| 激进型 | **13.3-15.0元** | 仅在半年报确认设备毛利、扣非和现金流未恶化时，建立不超过目标仓位1/4的研究仓 |"
+                  }
+                ],
+                "node_id": "tbe-aggressive-fundamental-confirmation",
+                "kind": "FILING",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "半年报确认设备毛利、扣非利润和现金流未恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                "line_start": 326,
+                "line_end": 326,
+                "quote": "| 激进型 | **13.3-15.0元** | 仅在半年报确认设备毛利、扣非和现金流未恶化时，建立不超过目标仓位1/4的研究仓 |"
+              }
+            ],
+            "node_id": "tbe-aggressive-review-gate",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "13.3-15.0 元且半年报确认设备毛利、扣非利润和现金流未恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 326,
+              "line_end": 326,
+              "quote": "| 激进型 | **13.3-15.0元** | 仅在半年报确认设备毛利、扣非和现金流未恶化时，建立不超过目标仓位1/4的研究仓 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-steady-11-8-13-3",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "11.8-13.3 元是报告列示的分批买入区，但因正文与契约冲突先保留为人工复核区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 11.8,
+            "price_max": 13.3,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                "line_start": 327,
+                "line_end": 327,
+                "quote": "| 稳健型 | **11.8-13.3元** | 分批买入区，接近中性情景8%年化回报阈值 |"
+              }
+            ],
+            "node_id": "tbe-steady-review-zone",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 11.8-13.3 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 327,
+              "line_end": 327,
+              "quote": "| 稳健型 | **11.8-13.3元** | 分批买入区，接近中性情景8%年化回报阈值 |"
+            }
+          ]
+        },
+        {
+          "path_id": "review-below-10-7-thesis-check",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "10.7 元以下仍需确认下跌不是论文破坏，不能只按低价买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 10.7,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                "line_start": 328,
+                "line_end": 328,
+                "quote": "| 保守型 | **10.7元以下** | 接近10%中性回报阈值；仍要确认下跌不是论文破坏 |"
+              }
+            ],
+            "node_id": "tbe-conservative-review-zone",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格低于或等于 10.7 元，先确认下跌不是论文破坏。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 328,
+              "line_end": 328,
+              "quote": "| 保守型 | **10.7元以下** | 接近10%中性回报阈值；仍要确认下跌不是论文破坏 |"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 292,
+          "line_end": 292,
+          "quote": "**综合评分：2.9/5。最终建议：观察 / 持有，不在19.14元新建仓。**"
+        }
+      ]
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "低成本持仓且现金流、设备毛利未破坏时可持有观察；不因低 PB 加仓，接近现价且重仓者考虑降低集中度。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-low-cost-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "低成本持仓在现金流和设备毛利未破坏时可持有观察，不因低 PB 加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 329,
+              "line_end": 329,
+              "quote": "| 已持有、成本较低 | 现金流和设备毛利未破坏 | 可持有观察，不因“低PB”加仓 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-high-cost-reduce-19-21-5",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持仓成本接近现价且仓位重时，在 19-21.5 元且盈利假设未上调的情况下降低集中度。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 19,
+                "price_max": 21.5,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                    "line_start": 330,
+                    "line_end": 330,
+                    "quote": "| 已持有、成本接近现价且仓位重 | **19-21.5元**且盈利假设未上调 | 降低集中度；现价已接近三年乐观价值 |"
+                  }
+                ],
+                "node_id": "tbe-reduce-price-19-21-5",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格处于 19-21.5 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                    "line_start": 330,
+                    "line_end": 330,
+                    "quote": "| 已持有、成本接近现价且仓位重 | **19-21.5元**且盈利假设未上调 | 降低集中度；现价已接近三年乐观价值 |"
+                  }
+                ],
+                "node_id": "tbe-profit-assumption-not-raised",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "盈利假设未上调。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                "line_start": 330,
+                "line_end": 330,
+                "quote": "| 已持有、成本接近现价且仓位重 | **19-21.5元**且盈利假设未上调 | 降低集中度；现价已接近三年乐观价值 |"
+              }
+            ],
+            "node_id": "tbe-high-cost-reduction-gate",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "19-21.5 元且盈利假设未上调。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 330,
+              "line_end": 330,
+              "quote": "| 已持有、成本接近现价且仓位重 | **19-21.5元**且盈利假设未上调 | 降低集中度；现价已接近三年乐观价值 |"
+            }
+          ]
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "设备毛利、海外回款、现金流、硅料、煤制气和关联交易等加仓信号需人工确认组合关系。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+                "line_start": 336,
+                "line_end": 343,
+                "quote": "**上调/加仓信号：**\n\n- 电气设备毛利率稳定在20%左右或继续提升；\n- 海外收入增长同时带来境外毛利回升，应收和合同资产不快于收入；\n- 滚动OCF/归母净利保持大于1，Capex/OCF先降至1.5x以下并继续向1x收敛；\n- 纯硅料毛利转正、利用率恢复且连续报告期没有大额减值；\n- 煤制气不超预算，并披露可验证的现金回报和ROIC；\n- 关联交易透明度提高，重大项目给出第三方可比价格和事后回报复盘。"
+              }
+            ],
+            "node_id": "tbe-add-signals-review",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认多个加仓信号是否足以提高仓位。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 336,
+              "line_end": 343,
+              "quote": "**上调/加仓信号：**\n\n- 电气设备毛利率稳定在20%左右或继续提升；\n- 海外收入增长同时带来境外毛利回升，应收和合同资产不快于收入；\n- 滚动OCF/归母净利保持大于1，Capex/OCF先降至1.5x以下并继续向1x收敛；\n- 纯硅料毛利转正、利用率恢复且连续报告期没有大额减值；\n- 煤制气不超预算，并披露可验证的现金回报和ROIC；\n- 关联交易透明度提高，重大项目给出第三方可比价格和事后回报复盘。"
+            }
+          ]
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 329,
+          "line_end": 329,
+          "quote": "| 已持有、成本较低 | 现金流和设备毛利未破坏 | 可持有观察，不因“低PB”加仓 |"
+        }
+      ]
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "电气设备毛利率",
+          "operator": "LT",
+          "value": 18,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 347,
+              "line_end": 347,
+              "quote": "- 电气设备毛利率跌破18%且订单增速放缓；"
+            }
+          ],
+          "node_id": "tbe-equipment-margin-below-18",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "电气设备毛利率跌破 18%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 347,
+              "line_end": 347,
+              "quote": "- 电气设备毛利率跌破18%且订单增速放缓；"
+            }
+          ],
+          "node_id": "tbe-orders-slow",
+          "kind": "QUALITATIVE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "订单增速放缓。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 347,
+          "line_end": 347,
+          "quote": "- 电气设备毛利率跌破18%且订单增速放缓；"
+        }
+      ],
+      "node_id": "tbe-equipment-margin-and-orders",
+      "kind": "ALL",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "电气设备毛利率跌破 18% 且订单增速放缓。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 348,
+          "line_end": 348,
+          "quote": "- 订单增长但经营现金流、应收和合同资产继续恶化；"
+        }
+      ],
+      "node_id": "tbe-orders-cashflow-deterioration",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "订单增长但经营现金流、应收和合同资产继续恶化。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 349,
+          "line_end": 349,
+          "quote": "- 多晶硅新增大额减值或低利用率长期化；"
+        }
+      ],
+      "node_id": "tbe-polysilicon-impairment",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "多晶硅新增大额减值或低利用率长期化。"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 350,
+              "line_end": 350,
+              "quote": "- 煤制气超预算、延期、追加大额融资或IRR落入资本成本以下；"
+            }
+          ],
+          "node_id": "tbe-coal-gas-over-budget",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "煤制气超预算。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 350,
+              "line_end": 350,
+              "quote": "- 煤制气超预算、延期、追加大额融资或IRR落入资本成本以下；"
+            }
+          ],
+          "node_id": "tbe-coal-gas-delayed",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "煤制气延期。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 350,
+              "line_end": 350,
+              "quote": "- 煤制气超预算、延期、追加大额融资或IRR落入资本成本以下；"
+            }
+          ],
+          "node_id": "tbe-coal-gas-financing",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "煤制气追加大额融资。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+              "line_start": 350,
+              "line_end": 350,
+              "quote": "- 煤制气超预算、延期、追加大额融资或IRR落入资本成本以下；"
+            }
+          ],
+          "node_id": "tbe-coal-gas-irr-below-cost",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "煤制气 IRR 落入资本成本以下。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 350,
+          "line_end": 350,
+          "quote": "- 煤制气超预算、延期、追加大额融资或IRR落入资本成本以下；"
+        }
+      ],
+      "node_id": "tbe-coal-gas-project-risk",
+      "kind": "ANY",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "煤制气项目出现超预算、延期、追加大额融资或 IRR 落入资本成本以下的任一情形。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 351,
+          "line_end": 351,
+          "quote": "- 核心债务和财务费用持续快于经营利润增长；"
+        }
+      ],
+      "node_id": "tbe-debt-and-finance-cost",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "核心债务和财务费用持续快于经营利润增长。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 352,
+          "line_end": 352,
+          "quote": "- 关联交易扩大但缺少第三方定价与增量ROIC证据。"
+        }
+      ],
+      "node_id": "tbe-related-party-opacity",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "关联交易扩大但缺少第三方定价与增量 ROIC 证据。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 235,
+          "line_end": 235,
+          "quote": "- 最近的关键验证点是2026年半年报：扣非利润、设备毛利、应收和合同资产、经营现金流、资本开支以及硅料利用率。"
+        }
+      ],
+      "node_id": "monitor-tbe-half-year",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 2026 年半年报的扣非利润、设备毛利、应收和合同资产、经营现金流、资本开支及硅料利用率。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 19.14,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "**收盘价 / 市值：** 19.14元 / 967.10亿元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 8.4,
+      "max": 21.5,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "| 乐观 | +8% | 14x | **21.5元** | **+12.5%** | 输变电兑现，硅料不再减值，资本配置改善 |"
+        },
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 253,
+          "line_end": 253,
+          "quote": "| 悲观 | -5% | 8x | **8.4元** | **-56.3%** | 硅料/煤炭下行，项目ROIC不及预期 |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文最终建议观察/持有且不在 19.14 元新建仓，但底部看板契约把基本面建议动作写成分批买入。",
+    "evidence": [
+      {
+        "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+        "line_start": 292,
+        "line_end": 292,
+        "quote": "**综合评分：2.9/5。最终建议：观察 / 持有，不在19.14元新建仓。**"
+      },
+      {
+        "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+        "line_start": 414,
+        "line_end": 414,
+        "quote": "| 基本面建议动作 | 分批买入 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "risk_reasons": [
+    "REPORT_CONTRACT_CONFLICT",
+    "PRICE_BAND_ENTRY_STATUS_UNCLEAR",
+    "SIGNAL_COMBINATION_UNSPECIFIED"
+  ],
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_CONFLICT",
+      "summary": "正文与底部看板契约对当前基本面动作不一致。",
+      "required_clarification": "确认正文的观察/持有、不新建仓结论是否覆盖底部契约的分批买入字段；在确认前不生成买入动作。",
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 292,
+          "line_end": 292,
+          "quote": "**综合评分：2.9/5。最终建议：观察 / 持有，不在19.14元新建仓。**"
+        },
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 414,
+          "line_end": 414,
+          "quote": "| 基本面建议动作 | 分批买入 |"
+        }
+      ]
+    },
+    {
+      "code": "PRICE_BAND_ENTRY_STATUS_UNCLEAR",
+      "summary": "正文对不同价格带分别使用研究仓、分批买入和确认论文未破坏，但没有统一定义这些路径是否属于可执行建仓。",
+      "required_clarification": "确认 13.3-15.0、11.8-13.3 和 10.7 元以下分别对应研究、试仓还是正式建仓；当前全部保留为人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 325,
+          "line_end": 328,
+          "quote": "| 当前空仓 | **18元以上** | 不买；回报主要依赖乐观情景 |\n| 激进型 | **13.3-15.0元** | 仅在半年报确认设备毛利、扣非和现金流未恶化时，建立不超过目标仓位1/4的研究仓 |\n| 稳健型 | **11.8-13.3元** | 分批买入区，接近中性情景8%年化回报阈值 |\n| 保守型 | **10.7元以下** | 接近10%中性回报阈值；仍要确认下跌不是论文破坏 |"
+        }
+      ]
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓与减仓/论文失效信号并列列出多个条件，未定义全部、任一或最低满足数量，也未统一规定减仓与退出的处置幅度。",
+      "required_clarification": "由人工或更强模型确认信号组合与处置级别后，再生成自动化 ADD、REDUCE 或 EXIT 路径。",
+      "evidence": [
+        {
+          "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+          "line_start": 336,
+          "line_end": 352,
+          "quote": "**上调/加仓信号：**\n\n- 电气设备毛利率稳定在20%左右或继续提升；\n- 海外收入增长同时带来境外毛利回升，应收和合同资产不快于收入；\n- 滚动OCF/归母净利保持大于1，Capex/OCF先降至1.5x以下并继续向1x收敛；\n- 纯硅料毛利转正、利用率恢复且连续报告期没有大额减值；\n- 煤制气不超预算，并披露可验证的现金回报和ROIC；\n- 关联交易透明度提高，重大项目给出第三方可比价格和事后回报复盘。\n\n**减仓/论文失效信号：**\n\n- 电气设备毛利率跌破18%且订单增速放缓；\n- 订单增长但经营现金流、应收和合同资产继续恶化；\n- 多晶硅新增大额减值或低利用率长期化；\n- 煤制气超预算、延期、追加大额融资或IRR落入资本成本以下；\n- 核心债务和财务费用持续快于经营利润增长；\n- 关联交易扩大但缺少第三方定价与增量ROIC证据。"
+        }
+      ]
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/特变电工/特变电工研究报告-20260713.md",
+      "line_start": 281,
+      "line_end": 292,
+      "quote": "## 第八步：最终决策与行动清单\n\n### 8.1 四维评分\n\n| 维度 | 框架 | 评分 | 核心判断 |\n|---|---|---:|---|\n| 商业模式与护城河 | 段永平 | 3.0/5 | 输变电约4星，集团资本密集和周期资产拉低整体 |\n| 财务质量与估值 | 巴菲特 | 2.5/5 | 会计利润现金化尚可，自由现金流与现价不理想 |\n| 行业与竞争 | 芒格 | 3.5/5 | 电网长坡成立，海外和集团价值捕获仍需验证 |\n| 风险与管理层 | 李录 | 2.5/5 | 执行力强，资本配置、关联交易和接班需折价 |\n\n**综合评分：2.9/5。最终建议：观察 / 持有，不在19.14元新建仓。**"
+    }
+  ]
+}
