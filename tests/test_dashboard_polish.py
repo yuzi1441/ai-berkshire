@@ -14,6 +14,7 @@ class DashboardPolishTests(unittest.TestCase):
     def test_price_trigger_identifies_exact_zone_and_filters_by_state_or_rule(self):
         self.run_js(
             ["priceRuleExpression", "currentMatchedPriceZoneSummary", "priceTriggerDisplayLabel",
+             "priceTriggerPathLabel", "matchedPriceZoneGroups", "priceZoneGroupKey",
              "priceTriggerStateMatches", "priceTriggerZoneMatches", "formatNumber"],
             '''
 import assert from 'node:assert/strict';
@@ -23,11 +24,32 @@ const record={price_trigger_shadow:{price_state:'PRICE_ZONE_MATCHED',matched_rul
 ''',
             '''
 assert.equal(priceRuleExpression(zone),'1,100–1,300');
-assert.equal(currentMatchedPriceZoneSummary(record),'1,100–1,300 CNY · 空仓首次建仓');
+assert.equal(currentMatchedPriceZoneSummary(record),'1,100–1,300 CNY · 条件建仓价格参考（非买入资格）');
 assert.equal(priceTriggerStateMatches(record,'matched'),true);
 assert.equal(priceTriggerStateMatches(record,'OUTSIDE_PRICE_ZONE'),false);
 assert.equal(priceTriggerZoneMatches(record,'moutai-1100-1300'),true);
 assert.equal(priceTriggerZoneMatches(record,'another-zone'),false);
+''',
+        )
+
+    def test_same_price_review_and_entry_paths_are_grouped_without_buy_claim(self):
+        self.run_js(
+            ["priceRuleExpression", "currentMatchedPriceZoneSummary", "priceTriggerDisplayLabel",
+             "priceTriggerPathLabel", "matchedPriceZoneGroups", "priceZoneGroupKey",
+             "priceTriggerStateLabelForRecord", "formatNumber"],
+            '''
+import assert from 'node:assert/strict';
+const base={operator:'BETWEEN',price_min:43,price_max:46,currency:'CNY',scope:'empty_position'};
+const record={price_trigger_shadow:{price_state:'MULTIPLE_PRICE_ZONES_MATCHED',matched_price_zones:[
+ {...base,action:'OPEN_POSITION',price_role:'CONDITIONAL_ENTRY',path_semantic_status:'ready'},
+ {...base,action:'REVIEW',price_role:'REVIEW_ZONE',path_semantic_status:'ambiguous'},
+]}};
+''',
+            '''
+assert.equal(currentMatchedPriceZoneSummary(record),'43–46 CNY · 重新审视区 / 条件建仓价格参考（非买入资格） · 语义待澄清');
+assert.equal(matchedPriceZoneGroups(record).length,1);
+assert.equal(priceTriggerStateLabelForRecord(record),'已进入关注区间（含多条报告路径）');
+assert.ok(!currentMatchedPriceZoneSummary(record).includes('空仓首次建仓'));
 ''',
         )
 

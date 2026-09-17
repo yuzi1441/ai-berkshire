@@ -1656,10 +1656,74 @@ function priceRuleExpression(zone) {
   }[zone?.operator] || "价格规则未分类";
 }
 
+function priceTriggerPathLabel(zone) {
+  const action = String(zone?.action || "");
+  const role = String(zone?.price_role || "");
+  if (action === "OPEN_POSITION") {
+    return role === "CONDITIONAL_ENTRY"
+      ? "条件建仓价格参考（非买入资格）"
+      : "建仓价格参考（仅价格）";
+  }
+  return {
+    TRIAL_POSITION: "试仓价格参考（条件待核对）",
+    ADD_POSITION: "持仓加仓价格参考",
+    REDUCE: "减仓复核区",
+    EXIT: "退出复核区",
+    REVIEW: "重新审视区",
+    WATCH: "观察区",
+    HOLD: "持有观察区",
+    HOLD_NO_ADD: "持有但不加仓区",
+    AVOID: "回避价格区",
+  }[action] || priceTriggerDisplayLabel("action", action);
+}
+
+function priceTriggerActionCategoryLabel(action) {
+  return {
+    OPEN_POSITION: "建仓价格参考",
+    TRIAL_POSITION: "试仓价格参考",
+    ADD_POSITION: "持仓加仓价格参考",
+    REDUCE: "减仓复核区",
+    EXIT: "退出复核区",
+    REVIEW: "重新审视区",
+    WATCH: "观察区",
+    HOLD: "持有观察区",
+    HOLD_NO_ADD: "持有但不加仓区",
+    AVOID: "回避价格区",
+  }[String(action || "")] || priceTriggerDisplayLabel("action", action);
+}
+
+function priceZoneGroupKey(zone) {
+  return [zone?.operator, zone?.price_min, zone?.price_max, zone?.currency, zone?.scope].join("|");
+}
+
+function matchedPriceZoneGroups(record) {
+  const matched = record?.price_trigger_shadow?.matched_price_zones || [];
+  const groups = new Map();
+  for (const zone of matched) {
+    const key = priceZoneGroupKey(zone);
+    if (!groups.has(key)) groups.set(key, { key, zone, labels: [], needsClarification: false });
+    const group = groups.get(key);
+    const pathLabel = priceTriggerPathLabel(zone);
+    if (!group.labels.includes(pathLabel)) group.labels.push(pathLabel);
+    if (zone.path_semantic_status && zone.path_semantic_status !== "ready") group.needsClarification = true;
+  }
+  const priority = (value) => value === "重新审视区" ? 0 : value.includes("非买入资格") ? 1 : 2;
+  for (const group of groups.values()) group.labels.sort((a, b) => priority(a) - priority(b));
+  return [...groups.values()];
+}
+
 function currentMatchedPriceZoneSummary(record) {
+  return matchedPriceZoneGroups(record).map(({ zone, labels, needsClarification }) => (
+    `${priceRuleExpression(zone)} ${zone.currency || ""} · ${labels.join(" / ")}${needsClarification ? " · 语义待澄清" : ""}`
+  )).join("；");
+}
+
+function priceTriggerStateLabelForRecord(record) {
   const trigger = record?.price_trigger_shadow;
-  const matched = Array.isArray(trigger?.matched_price_zones) ? trigger.matched_price_zones : [];
-  return matched.map((zone) => `${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerDisplayLabel("action", zone.action)}`).join("；");
+  if (trigger?.price_state === "MULTIPLE_PRICE_ZONES_MATCHED" && matchedPriceZoneGroups(record).length === 1) {
+    return "已进入关注区间（含多条报告路径）";
+  }
+  return priceTriggerDisplayLabel("state", trigger?.price_state);
 }
 
 function renderPriceZone(zone, isMatched = false) {
@@ -1673,7 +1737,7 @@ function renderPriceZone(zone, isMatched = false) {
   const contextCopy = contextual.length
     ? `<div class="detail-copy">其他条件结构：${contextual.map((hint) => `${priceTriggerDisplayLabel("relationship", hint.relationship)}：${hint.description || "未说明"}`).map(escapeHtml).join("；")}</div>`
     : "";
-  return `<div class="rule-card" data-rule-id="${escapeHtml(zone.rule_id || "")}" data-path-id="${escapeHtml(zone.path_id || "")}" data-action="${escapeHtml(zone.action || "")}" data-price-role="${escapeHtml(zone.price_role || "")}" data-price-matched="${isMatched ? "true" : "false"}"><div class="rule-topline"><span class="rule-kind">${escapeHtml(priceTriggerDisplayLabel("priceRole", zone.price_role))}</span><span class="rule-status">${isMatched ? "当前已命中" : "当前未命中"}</span></div><div class="rule-condition">${escapeHtml(priceExpression)} ${escapeHtml(zone.currency || "")}</div><div class="detail-field-label">路径类型</div><div class="detail-copy">${escapeHtml(priceTriggerDisplayLabel("action", zone.action))}</div><div class="detail-field-label">主报告建议</div><div class="detail-copy" title="原始路径：${escapeHtml(zone.path_id || "")}">${escapeHtml(zone.path_summary || zone.price_description || "主报告价格路径")}</div><div class="detail-field-label">附加人工核对条件</div><ul class="compact-list">${hintList}</ul>${contextCopy}</div>`;
+  return `<div class="rule-card" data-rule-id="${escapeHtml(zone.rule_id || "")}" data-path-id="${escapeHtml(zone.path_id || "")}" data-action="${escapeHtml(zone.action || "")}" data-price-role="${escapeHtml(zone.price_role || "")}" data-price-matched="${isMatched ? "true" : "false"}"><div class="rule-topline"><span class="rule-kind">${escapeHtml(priceTriggerDisplayLabel("priceRole", zone.price_role))}</span><span class="rule-status">${isMatched ? "当前已命中价格" : "当前未命中"}</span></div><div class="rule-condition">${escapeHtml(priceExpression)} ${escapeHtml(zone.currency || "")}</div><div class="detail-field-label">路径性质</div><div class="detail-copy">${escapeHtml(priceTriggerPathLabel(zone))}${zone.path_semantic_status && zone.path_semantic_status !== "ready" ? " · 语义待澄清" : ""}</div><div class="detail-field-label">主报告建议</div><div class="detail-copy" title="原始路径：${escapeHtml(zone.path_id || "")}">${escapeHtml(zone.path_summary || zone.price_description || "主报告价格路径")}</div><div class="detail-field-label">附加人工核对条件</div><ul class="compact-list">${hintList}</ul>${contextCopy}</div>`;
 }
 
 function renderPriceTriggerShadow(record) {
@@ -1688,7 +1752,7 @@ function renderPriceTriggerShadow(record) {
   const available = Array.isArray(trigger.available_price_zones) ? trigger.available_price_zones : [];
   const matchedIds = new Set(Array.isArray(trigger.matched_rule_ids) ? trigger.matched_rule_ids : []);
   const fields = [
-    ["价格状态", priceTriggerDisplayLabel("state", trigger.price_state), trigger.price_state],
+    ["价格状态", priceTriggerStateLabelForRecord(record), trigger.price_state],
     ["当前价格", price, trigger.current_price],
     ["当前命中区间", matched.length ? currentMatchedPriceZoneSummary(record) : "无", trigger.matched_rule_ids],
     ["行情截止日", trigger.price_cutoff || "—", trigger.price_cutoff],
@@ -1710,7 +1774,7 @@ function priceStateIsMatched(value) {
 
 function allPriceZoneSummary(record) {
   const zones = record?.price_trigger_shadow?.available_price_zones || [];
-  return zones.map((zone) => `${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerDisplayLabel("action", zone.action)}`).join("；");
+  return zones.map((zone) => `${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerPathLabel(zone)}`).join("；");
 }
 
 function matchedManualChecks(record) {
@@ -1735,16 +1799,17 @@ function populatePriceZoneFilters() {
   for (const record of records) {
     const trigger = record.price_trigger_shadow;
     for (const zone of trigger.available_price_zones || []) if (zone.action) actions.add(zone.action);
-    for (const zone of trigger.matched_price_zones || []) {
+    for (const group of matchedPriceZoneGroups(record)) {
+      const zone = group.zone;
       exact.push({
-        value: zone.rule_id,
-        label: `${record.company} · ${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerDisplayLabel("action", zone.action)}`,
+        value: `${record.ticker}::${group.key}`,
+        label: `${record.company} · ${priceRuleExpression(zone)} ${zone.currency || ""} · ${group.labels.join(" / ")}${group.needsClarification ? " · 语义待澄清" : ""}`,
       });
     }
   }
   setSelectOptions(els.priceZoneAction, [
     { value: "all", label: "全部路径类型" },
-    ...[...actions].sort().map((value) => ({ value, label: priceTriggerDisplayLabel("action", value) })),
+    ...[...actions].sort().map((value) => ({ value, label: priceTriggerActionCategoryLabel(value) })),
   ], state.priceZoneAction);
   setSelectOptions(els.priceZoneExact, [
     { value: "all", label: "全部当前区间" },
@@ -1765,7 +1830,7 @@ function filteredPriceZoneRecords() {
     const matchesAction = state.priceZoneAction === "all"
       || (trigger.available_price_zones || []).some((zone) => zone.action === state.priceZoneAction);
     const matchesExact = state.priceZoneExact === "all"
-      || (trigger.matched_rule_ids || []).includes(state.priceZoneExact);
+      || matchedPriceZoneGroups(record).some((group) => `${record.ticker}::${group.key}` === state.priceZoneExact);
     return matchesSearch && matchesStatus && matchesAction && matchesExact;
   });
   const stateRank = {
@@ -1793,7 +1858,7 @@ function renderPriceZoneRow(record) {
   return `<tr data-ticker="${escapeHtml(record.ticker)}" tabindex="0">
     <td>${compactCompany(record)}</td>
     <td><span class="table-price">${escapeHtml(price)}</span><div class="table-secondary">截至 ${escapeHtml(trigger.price_cutoff || "未知")}</div></td>
-    <td><span class="price-zone-status" data-tone="${statusTone}" data-machine-value="${escapeHtml(trigger.price_state)}">${escapeHtml(priceTriggerDisplayLabel("state", trigger.price_state))}</span></td>
+    <td><span class="price-zone-status" data-tone="${statusTone}" data-machine-value="${escapeHtml(trigger.price_state)}">${escapeHtml(priceTriggerStateLabelForRecord(record))}</span></td>
     <td><div class="price-zone-current">${escapeHtml(matched || "无")}</div>${matched ? `<div class="table-secondary">命中 ${trigger.matched_price_zones.length} 条路径</div>` : ""}</td>
     <td><div class="price-zone-all-paths">${escapeHtml(allZones || "主报告无可匹配价格路径")}</div><div class="table-secondary">共 ${(trigger.available_price_zones || []).length} 条 · 点击查看报告建议</div></td>
     <td><div class="price-zone-manual">${escapeHtml(checks.length ? checks.join("；") : (matched ? "无附加必须条件" : "进入区间后再核对"))}</div></td>
