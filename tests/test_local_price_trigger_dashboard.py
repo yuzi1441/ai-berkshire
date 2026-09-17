@@ -149,12 +149,35 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
         self.assertEqual(sum("candidate_shadow" in item
                              for item in after["companyState"]["companies"]), 0)
 
+    def test_existing_full_candidate_snapshot_is_displayed_without_recalculation(self):
+        snapshot = {
+            "schema_version": 1, "authority": "candidate_shadow",
+            "production_consumable": False, "generated_at": "2026-09-16T19:50:00+08:00",
+            "companies": [
+                {
+                    "ticker": item["ticker"], "company": item["company"],
+                    "candidate_state": "NOT_EVALUATED", "production_eligible": False,
+                }
+                for item in self.layer["companies"]
+            ],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            site = price_trigger.build_local_site(ROOT, Path(directory), self.layer, snapshot)
+            core = json.loads((site / "data/dashboard_core.json").read_text())
+            copied = json.loads((site / "data/full_candidate_snapshot.json").read_text())
+        self.assertEqual(core["candidate_shadow"]["refresh_policy"], "manual_full_research_only")
+        self.assertEqual(sum("candidate_shadow" in item
+                             for item in core["companyState"]["companies"]), 20)
+        self.assertEqual(copied, snapshot)
+
     def test_frontend_warning_and_price_only_fields_are_explicit(self):
         app = (ROOT / "site/assets/app.js").read_text()
         self.assertIn("价格命中不代表买入条件已经满足，请人工核对报告条件", app)
         self.assertIn("renderPriceTriggerShadow(record)", app)
         self.assertIn("matched_price_zones", app)
         self.assertIn("附加人工核对条件", app)
+        self.assertIn("主报告全部价格路径与建议", app)
+        self.assertIn("完整候选判断（研究 / 审计）", app)
 
 
 if __name__ == "__main__":

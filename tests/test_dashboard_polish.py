@@ -29,7 +29,8 @@ const record={candidate_shadow:machine};
 ''',
             '''
 const before=JSON.stringify(machine), html=renderCandidateShadow(record);
-assert.ok(html.includes('候选决策影子'));
+assert.ok(html.includes('完整候选判断（研究 / 审计）'));
+assert.ok(html.includes('历史快照'));
 assert.ok(html.includes('满足候选买入条件'));
 assert.ok(html.includes('强复核已通过'));
 assert.ok(html.includes('当前价格'));

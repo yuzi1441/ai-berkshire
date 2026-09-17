@@ -1564,7 +1564,7 @@ function renderCandidateShadow(record) {
     ["行情截止日", candidate.price_cutoff || "—", candidate.price_cutoff],
     ["可进入正式决策", candidateDisplayLabel("boolean", candidate.production_eligible === true ? "YES" : "NO"), candidate.production_eligible],
   ];
-  return `<div class="detail-section candidate-shadow" data-candidate-state="${escapeHtml(candidate.candidate_state || "")}" data-publication-status="${escapeHtml(candidate.publication_status || "")}" data-semantic-review-status="${escapeHtml(candidate.semantic_review_status || "")}"><div class="detail-section-head"><h3>候选决策影子</h3><div class="candidate-shadow-badges"><span class="mini-badge">候选</span><span class="mini-badge">影子模式</span><span class="mini-badge">非正式</span></div></div><p class="detail-copy">本区仅展示语义合同与当前事实的候选求值，不是交易指令，也不会覆盖正式行动指引。</p><div class="detail-grid">${fields.map(([name, value, raw]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${candidateMachineValue(value ?? "—", raw)}</div></div>`).join("")}</div></div>`;
+  return `<div class="detail-section candidate-shadow" data-candidate-state="${escapeHtml(candidate.candidate_state || "")}" data-publication-status="${escapeHtml(candidate.publication_status || "")}" data-semantic-review-status="${escapeHtml(candidate.semantic_review_status || "")}"><div class="detail-section-head"><h3>完整候选判断（研究 / 审计）</h3><div class="candidate-shadow-badges"><span class="mini-badge">完整条件</span><span class="mini-badge">历史快照</span><span class="mini-badge">非正式</span></div></div><p class="detail-copy">本区保留此前已验证的完整条件判断快照（生成时间：${escapeHtml(candidate.generated_at || "未知")}）。日常行情刷新不会重新运行该判断；它不是交易指令，也不会覆盖正式行动指引。</p><div class="detail-grid">${fields.map(([name, value, raw]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${candidateMachineValue(value ?? "—", raw)}</div></div>`).join("")}</div></div>`;
 }
 
 function priceTriggerDisplayLabel(group, value) {
@@ -1608,7 +1608,7 @@ function priceTriggerDisplayLabel(group, value) {
   return mappings[group]?.[String(value)] || "未分类";
 }
 
-function renderPriceZone(zone) {
+function renderPriceZone(zone, isMatched = false) {
   const lower = formatNumber(zone.price_min, 2);
   const upper = formatNumber(zone.price_max, 2);
   const priceExpression = {
@@ -1627,7 +1627,7 @@ function renderPriceZone(zone) {
   const contextCopy = contextual.length
     ? `<div class="detail-copy">其他条件结构：${contextual.map((hint) => `${priceTriggerDisplayLabel("relationship", hint.relationship)}：${hint.description || "未说明"}`).map(escapeHtml).join("；")}</div>`
     : "";
-  return `<div class="rule-card" data-rule-id="${escapeHtml(zone.rule_id || "")}" data-path-id="${escapeHtml(zone.path_id || "")}" data-action="${escapeHtml(zone.action || "")}" data-price-role="${escapeHtml(zone.price_role || "")}"><div class="rule-topline"><span class="rule-kind">${escapeHtml(priceTriggerDisplayLabel("priceRole", zone.price_role))}</span><span class="rule-status">${escapeHtml(priceTriggerDisplayLabel("action", zone.action))}</span></div><div class="rule-condition">${escapeHtml(priceExpression)} ${escapeHtml(zone.currency || "")}</div><div class="detail-field-label">命中的决策路径</div><div class="detail-copy" title="原始路径：${escapeHtml(zone.path_id || "")}">${escapeHtml(zone.path_summary || zone.price_description || "主报告价格路径")}</div><div class="detail-field-label">附加人工核对条件</div><ul class="compact-list">${hintList}</ul>${contextCopy}</div>`;
+  return `<div class="rule-card" data-rule-id="${escapeHtml(zone.rule_id || "")}" data-path-id="${escapeHtml(zone.path_id || "")}" data-action="${escapeHtml(zone.action || "")}" data-price-role="${escapeHtml(zone.price_role || "")}" data-price-matched="${isMatched ? "true" : "false"}"><div class="rule-topline"><span class="rule-kind">${escapeHtml(priceTriggerDisplayLabel("priceRole", zone.price_role))}</span><span class="rule-status">${isMatched ? "当前已命中" : "当前未命中"}</span></div><div class="rule-condition">${escapeHtml(priceExpression)} ${escapeHtml(zone.currency || "")}</div><div class="detail-field-label">路径类型</div><div class="detail-copy">${escapeHtml(priceTriggerDisplayLabel("action", zone.action))}</div><div class="detail-field-label">主报告建议</div><div class="detail-copy" title="原始路径：${escapeHtml(zone.path_id || "")}">${escapeHtml(zone.path_summary || zone.price_description || "主报告价格路径")}</div><div class="detail-field-label">附加人工核对条件</div><ul class="compact-list">${hintList}</ul>${contextCopy}</div>`;
 }
 
 function renderPriceTriggerShadow(record) {
@@ -1639,6 +1639,8 @@ function renderPriceTriggerShadow(record) {
       ? `${formatNumber(trigger.current_price, 2)} 元`
       : `${formatNumber(trigger.current_price, 2)} ${trigger.currency || ""}`.trim();
   const matched = Array.isArray(trigger.matched_price_zones) ? trigger.matched_price_zones : [];
+  const available = Array.isArray(trigger.available_price_zones) ? trigger.available_price_zones : [];
+  const matchedIds = new Set(Array.isArray(trigger.matched_rule_ids) ? trigger.matched_rule_ids : []);
   const fields = [
     ["价格状态", priceTriggerDisplayLabel("state", trigger.price_state), trigger.price_state],
     ["当前价格", price, trigger.current_price],
@@ -1646,10 +1648,10 @@ function renderPriceTriggerShadow(record) {
     ["行情截止日", trigger.price_cutoff || "—", trigger.price_cutoff],
     ["可进入正式决策", "否", trigger.production_eligible],
   ];
-  const zones = matched.length
-    ? `<div class="rule-list">${matched.map(renderPriceZone).join("")}</div>`
-    : `<p class="detail-copy">${trigger.price_state === "NO_PRICE_PATH" ? "主报告没有可供日常匹配的 A 股价格路径。" : "当前没有命中的主报告价格区间。"}</p>`;
-  return `<div class="detail-section candidate-shadow price-trigger-shadow" data-price-state="${escapeHtml(trigger.price_state || "")}"><div class="detail-section-head"><h3>价格触发影子</h3><div class="candidate-shadow-badges"><span class="mini-badge">仅价格</span><span class="mini-badge">影子模式</span><span class="mini-badge">非正式</span></div></div><p class="detail-copy"><strong>价格命中不代表买入条件已经满足，请人工核对报告条件。</strong> 本区不会判断利润、现金流、事件或其他经营条件，也不会覆盖正式行动指引。</p><div class="detail-grid">${fields.map(([name, value, raw]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${candidateMachineValue(value, raw)}</div></div>`).join("")}</div>${zones}</div>`;
+  const zones = available.length
+    ? `<div class="detail-section-head"><h4>主报告全部价格路径与建议</h4><span class="section-count">${available.length} 条</span></div><div class="rule-list">${[...available].sort((left, right) => Number(matchedIds.has(right.rule_id)) - Number(matchedIds.has(left.rule_id))).map((zone) => renderPriceZone(zone, matchedIds.has(zone.rule_id))).join("")}</div>`
+    : `<p class="detail-copy">主报告没有可供日常匹配的 A 股价格路径。</p>`;
+  return `<div class="detail-section candidate-shadow price-trigger-shadow" data-price-state="${escapeHtml(trigger.price_state || "")}"><div class="detail-section-head"><h3>价格触发（日常）</h3><div class="candidate-shadow-badges"><span class="mini-badge">仅价格</span><span class="mini-badge">每日刷新</span><span class="mini-badge">非正式</span></div></div><p class="detail-copy"><strong>价格命中不代表买入条件已经满足，请人工核对报告条件。</strong> 本区不会判断利润、现金流、事件或其他经营条件，也不会覆盖正式行动指引。</p><div class="detail-grid">${fields.map(([name, value, raw]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${candidateMachineValue(value, raw)}</div></div>`).join("")}</div>${zones}</div>`;
 }
 
 function renderDetail(record) {

@@ -29,6 +29,7 @@ SCHEMA_VERSION = 1
 CONTRACT_DIRECTORY = Path("data/investment-dashboard/main-report-semantic-contracts")
 DEFAULT_QUOTES = Path("data/investment-dashboard/quotes/latest.json")
 DEFAULT_OUTPUT = Path(".runtime/local-price-trigger-dashboard")
+DEFAULT_CANDIDATE_SNAPSHOT = Path(".runtime/local-candidate-dashboard/candidate_decisions.json")
 PRIORITY_TICKERS = (
     "002027.SZ", "600519.SH", "601127.SH", "603129.SH",
     "000400.SZ", "002028.SZ", "002352.SZ", "300274.SZ",
@@ -314,7 +315,26 @@ def validate_price_trigger_layer(payload: Any, expected_tickers: set[str] | None
     return errors
 
 
-def build_local_site(repo_root: Path, output_directory: Path, layer: dict[str, Any]) -> Path:
+def _candidate_snapshot_records(payload: Any, expected_tickers: set[str]) -> dict[str, dict[str, Any]]:
+    if payload is None:
+        return {}
+    if not isinstance(payload, dict) or payload.get("authority") != "candidate_shadow":
+        raise ValueError("full candidate snapshot must have candidate_shadow authority")
+    if payload.get("production_consumable") is not False:
+        raise ValueError("full candidate snapshot must remain non-production")
+    records = {
+        str(item.get("ticker")): item for item in payload.get("companies", [])
+        if isinstance(item, dict) and item.get("ticker")
+    }
+    if set(records) != expected_tickers:
+        raise ValueError("full candidate snapshot ticker set does not match price trigger layer")
+    return records
+
+
+def build_local_site(
+    repo_root: Path, output_directory: Path, layer: dict[str, Any],
+    candidate_snapshot: dict[str, Any] | None = None,
+) -> Path:
     site_output = output_directory / "site"
     if site_output.exists():
         shutil.rmtree(site_output)
@@ -322,6 +342,7 @@ def build_local_site(repo_root: Path, output_directory: Path, layer: dict[str, A
     core_path = site_output / "data" / "dashboard_core.json"
     core = load_json(core_path)
     by_ticker = {item["ticker"]: item for item in layer["companies"]}
+    candidates = _candidate_snapshot_records(candidate_snapshot, set(by_ticker))
     rendered = 0
     for company in core.get("companyState", {}).get("companies", []):
         trigger = by_ticker.get(str(company.get("ticker") or ""))
@@ -330,6 +351,11 @@ def build_local_site(repo_root: Path, output_directory: Path, layer: dict[str, A
         if company.get("company") != trigger.get("company"):
             raise ValueError(f"dashboard company mismatch for {trigger['ticker']}")
         company["price_trigger_shadow"] = trigger
+        if trigger["ticker"] in candidates:
+            candidate = candidates[trigger["ticker"]]
+            if candidate.get("company") != company.get("company"):
+                raise ValueError(f"candidate snapshot company mismatch for {trigger['ticker']}")
+            company["candidate_shadow"] = candidate
         rendered += 1
     if rendered != len(by_ticker):
         raise ValueError(f"price trigger render population mismatch: {rendered}/{len(by_ticker)}")
@@ -337,8 +363,16 @@ def build_local_site(repo_root: Path, output_directory: Path, layer: dict[str, A
         "authority": "price_trigger_shadow", "production_consumable": False,
         "generated_at": layer["generated_at"], "company_count": rendered,
     }
+    if candidates:
+        core["candidate_shadow"] = {
+            "authority": "candidate_shadow", "production_consumable": False,
+            "generated_at": candidate_snapshot.get("generated_at"),
+            "company_count": len(candidates), "refresh_policy": "manual_full_research_only",
+        }
     _write_json(core_path, core)
     _write_json(site_output / "data" / "price_triggers.json", layer)
+    if candidate_snapshot is not None:
+        _write_json(site_output / "data" / "full_candidate_snapshot.json", candidate_snapshot)
     return site_output
 
 
@@ -348,6 +382,8 @@ def main() -> int:
     parser.add_argument("--output-directory", type=Path)
     parser.add_argument("--rules", type=Path)
     parser.add_argument("--quotes", type=Path)
+    parser.add_argument("--candidate-snapshot", type=Path)
+    parser.add_argument("--without-candidate-snapshot", action="store_true")
     parser.add_argument("--compile-rules", action="store_true")
     parser.add_argument("--as-of", help="ISO datetime in Asia/Shanghai")
     arguments = parser.parse_args()
@@ -355,6 +391,7 @@ def main() -> int:
     output = (arguments.output_directory or repo_root / DEFAULT_OUTPUT).resolve()
     rules_path = (arguments.rules or output / "price_trigger_rules.json").resolve()
     quote_path = (arguments.quotes or repo_root / DEFAULT_QUOTES).resolve()
+    candidate_path = (arguments.candidate_snapshot or repo_root / DEFAULT_CANDIDATE_SNAPSHOT).resolve()
     evaluated_at = datetime.fromisoformat(arguments.as_of) if arguments.as_of else datetime.now(SHANGHAI)
     if evaluated_at.tzinfo is None:
         evaluated_at = evaluated_at.replace(tzinfo=SHANGHAI)
@@ -364,13 +401,17 @@ def main() -> int:
         parser.error("price rules artifact missing; run once with --compile-rules after contract changes")
     rules = load_json(rules_path)
     layer = match_price_triggers(rules, load_json(quote_path), evaluated_at)
+    candidate_snapshot = None
+    if not arguments.without_candidate_snapshot and candidate_path.exists():
+        candidate_snapshot = load_json(candidate_path)
     output.mkdir(parents=True, exist_ok=True)
     _write_json(output / "price_triggers.json", layer)
-    site = build_local_site(repo_root, output, layer)
+    site = build_local_site(repo_root, output, layer, candidate_snapshot)
     print(json.dumps({
         "status": "ok", "site": str(site), "rules": str(rules_path),
         "price_trigger_artifact": str(output / "price_triggers.json"),
         "company_count": layer["company_count"], "state_counts": layer["state_counts"],
+        "full_candidate_snapshot_rendered": len(candidate_snapshot.get("companies", [])) if candidate_snapshot else 0,
         "production_eligible_true": sum(item["production_eligible"] is True for item in layer["companies"]),
     }, ensure_ascii=False, indent=2))
     return 0
