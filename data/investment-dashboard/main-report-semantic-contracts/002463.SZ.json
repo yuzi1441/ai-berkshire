@@ -1,0 +1,816 @@
+{
+  "schema_version": 2,
+  "ticker": "002463.SZ",
+  "company": "沪电股份",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+    "report_sha256": "9579ec98d30ac4a1ddc268f9a3a4c0b825c38f753b3005a30681a05c74de1b45"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "112.22 元是当前 A 股参考价；37.8-218.2 元三情景目标价是估值参考，不是买入价。",
+      "空仓者当前观望不买入，87-101 元只是关注区，70-87 元才是报告定义的分批建仓区。",
+      "持仓者可继续持有；成本低于 70 元且价格高于 120 元时才进入分批减持复核。",
+      "卖出信号明确写了任一触发即重新评估，但加仓信号只列出五项，没有定义 ANY、ALL 或最低满足数量，因此加仓保留人工复核。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "沪电股份是优秀但重资产、强周期的高阶 PCB 制造企业；利润率和估值都处于高位，当前无安全边际，空仓观望，持仓者按纪律跟踪。",
+    "evidence": [
+      {
+        "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+        "line_start": 63,
+        "line_end": 63,
+        "quote": "评级：观望（不买入，持仓者可继续持有但需设定纪律）"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 112.22 元观望不买入；87-101 元关注，70-87 元满足报告定义的分批建仓路径。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-101-125-no-margin",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "101-125 元为当前无安全边际区间，空仓者观望。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 101,
+            "price_max": 125,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                "line_start": 804,
+                "line_end": 804,
+                "quote": "101 – 125 元"
+              }
+            ],
+            "node_id": "watch-price-101-125",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 101-125 元当前区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+              "line_start": 836,
+              "line_end": 836,
+              "quote": "观望，不买入"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-87-101",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "87-101 元是历史中位关注区，不自动转为买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 87,
+            "price_max": 101,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                "line_start": 836,
+                "line_end": 836,
+                "quote": "87–101元"
+              }
+            ],
+            "node_id": "review-price-87-101",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 87-101 元历史中位关注区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+              "line_start": 836,
+              "line_end": 836,
+              "quote": "设为关注区"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-70-87",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "70-87 元是报告定义的有安全边际分批建仓区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 70,
+            "price_max": 87,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                "line_start": 836,
+                "line_end": 836,
+                "quote": "70–87元"
+              }
+            ],
+            "node_id": "entry-price-70-87",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 70-87 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+              "line_start": 836,
+              "line_end": 836,
+              "quote": "70–87元"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+          "line_start": 836,
+          "line_end": 836,
+          "quote": "空仓者"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者可继续持有，但需设定仓位与卖出纪律。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-with-discipline",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持仓者继续持有并执行仓位和卖出纪律。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+              "line_start": 837,
+              "line_end": 837,
+              "quote": "可继续持有，但必须设定纪律"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-above-120-if-low-cost",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "成本低于 70 元且价格高于 120 元时，考虑分批减持至舒适仓位。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 837,
+                    "line_end": 837,
+                    "quote": "成本在70元以下"
+                  }
+                ],
+                "node_id": "holder-cost-below-70",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "持仓成本在 70 元以下。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GTE",
+                "value": null,
+                "unit": null,
+                "price_min": 120,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 837,
+                    "line_end": 837,
+                    "quote": "120元以上"
+                  }
+                ],
+                "node_id": "holder-price-above-120",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格在 120 元以上。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                "line_start": 837,
+                "line_end": 837,
+                "quote": "若成本在70元以下，考虑在120元以上分批减持"
+              }
+            ],
+            "node_id": "holder-reduce-all-low-cost-high-price",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "持仓成本低于 70 元且 A 股价格高于 120 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+              "line_start": 837,
+              "line_end": 837,
+              "quote": "分批减持至舒适仓位"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-sell-signals-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "八项卖出信号任一触发即重新评估，不自动执行卖出。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "单季毛利率环比变化",
+                "operator": "GT",
+                "value": 2,
+                "unit": "percentage_points",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 838,
+                    "line_end": 838,
+                    "quote": "单季毛利率环比下降超过2个百分点"
+                  }
+                ],
+                "node_id": "sell-margin-drop-over-2pp",
+                "kind": "METRIC_COMPARE",
+                "effect": "REVIEW_ONLY",
+                "scope": "holder",
+                "description": "单季毛利率环比下降超过 2 个百分点。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 838,
+                    "line_end": 838,
+                    "quote": "单季营收环比负增长"
+                  }
+                ],
+                "node_id": "sell-revenue-qoq-negative",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "holder",
+                "description": "单季营收环比负增长。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                        "line_start": 838,
+                        "line_end": 838,
+                        "quote": "AI服务器及HPC分部继续零增长"
+                      }
+                    ],
+                    "node_id": "sell-ai-server-no-growth",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "holder",
+                    "description": "AI 服务器及 HPC 分部继续零增长。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "交换机分部增速",
+                    "operator": "LT",
+                    "value": 40,
+                    "unit": "%",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                        "line_start": 838,
+                        "line_end": 838,
+                        "quote": "交换机分部增速跌破+40%"
+                      }
+                    ],
+                    "node_id": "sell-switch-growth-below-40",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "holder",
+                    "description": "交换机分部增速跌破 40%。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 838,
+                    "line_end": 838,
+                    "quote": "AI服务器及HPC分部继续零增长，同时交换机分部增速跌破+40%"
+                  }
+                ],
+                "node_id": "sell-ai-server-and-switch-growth-all",
+                "kind": "ALL",
+                "effect": "REVIEW_ONLY",
+                "scope": "holder",
+                "description": "AI 服务器及 HPC 分部继续零增长，同时交换机分部增速跌破 40%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "经营现金流/净利润",
+                "operator": "LT",
+                "value": 60,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 838,
+                    "line_end": 838,
+                    "quote": "经营现金流连续两个季度低于净利润的60%"
+                  }
+                ],
+                "node_id": "sell-cashflow-below-60-two-quarters",
+                "kind": "METRIC_COMPARE",
+                "effect": "REVIEW_ONLY",
+                "scope": "holder",
+                "description": "经营现金流连续两个季度低于净利润的 60%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "有息负债/净资产",
+                "operator": "GT",
+                "value": 50,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 838,
+                    "line_end": 838,
+                    "quote": "有息负债超过净资产的50%"
+                  }
+                ],
+                "node_id": "sell-debt-above-50-equity",
+                "kind": "METRIC_COMPARE",
+                "effect": "REVIEW_ONLY",
+                "scope": "holder",
+                "description": "有息负债超过净资产的 50%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 838,
+                    "line_end": 838,
+                    "quote": "hyperscaler 2027年capex指引出现下修"
+                  }
+                ],
+                "node_id": "sell-hyperscaler-capex-cut",
+                "kind": "EVENT",
+                "effect": "REVIEW_ONLY",
+                "scope": "holder",
+                "description": "hyperscaler 2027 年 capex 指引出现下修。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                        "line_start": 838,
+                        "line_end": 838,
+                        "quote": "港股IPO发行价大幅折让"
+                      }
+                    ],
+                    "node_id": "sell-hk-ipo-price-discount",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "holder",
+                    "description": "港股 IPO 发行价大幅折让。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "港股 IPO 摊薄比例",
+                    "operator": "GT",
+                    "value": 15,
+                    "unit": "%",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                        "line_start": 838,
+                        "line_end": 838,
+                        "quote": "摊薄超过15%"
+                      }
+                    ],
+                    "node_id": "sell-hk-ipo-dilution-over-15",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "holder",
+                    "description": "港股 IPO 摊薄超过 15%。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 838,
+                    "line_end": 838,
+                    "quote": "发行价大幅折让或摊薄超过15%"
+                  }
+                ],
+                "node_id": "sell-hk-ipo-discount-or-dilution",
+                "kind": "ANY",
+                "effect": "REVIEW_ONLY",
+                "scope": "holder",
+                "description": "港股 IPO 发行价大幅折让或摊薄超过 15%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                    "line_start": 838,
+                    "line_end": 838,
+                    "quote": "实控人（碧景控股/合拍友联）开始减持"
+                  }
+                ],
+                "node_id": "sell-controller-starts-selling",
+                "kind": "EVENT",
+                "effect": "REVIEW_ONLY",
+                "scope": "holder",
+                "description": "实控人开始减持。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                "line_start": 838,
+                "line_end": 838,
+                "quote": "卖出信号"
+              }
+            ],
+            "node_id": "holder-sell-signals-any",
+            "kind": "ANY",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "八项卖出信号任一触发即重新评估。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+              "line_start": 838,
+              "line_end": 838,
+              "quote": "触发任一即重新评估"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "加仓信号列出价格、业务、FCF 和 hyperscaler 条件，但未定义组合逻辑，保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+                "line_start": 839,
+                "line_end": 839,
+                "quote": "加仓信号"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认五项加仓信号的组合关系，不自动执行加仓。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+              "line_start": 839,
+              "line_end": 839,
+              "quote": "加仓信号"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+          "line_start": 837,
+          "line_end": 837,
+          "quote": "可继续持有"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+          "line_start": 1060,
+          "line_end": 1060,
+          "quote": "2026年半年报披露"
+        }
+      ],
+      "node_id": "monitor-next-half-year-report",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待 2026 年半年报披露并复核利润、现金流、产能和竞争格局。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 112.22,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+          "line_start": 8,
+          "line_end": 8,
+          "quote": "2026-07-24 收盘 112.22 元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 37.8,
+      "max": 218.2,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+          "line_start": 756,
+          "line_end": 756,
+          "quote": "218.2元"
+        },
+        {
+          "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+          "line_start": 758,
+          "line_end": 758,
+          "quote": "37.8元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓信号列出五项，但正文没有说明任一、全部或最低满足数量。",
+      "required_clarification": "由人工或更强模型确认加仓信号组合；当前只保留 REVIEW_ONLY，不自动生成 ADD_POSITION。",
+      "evidence": [
+        {
+          "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+          "line_start": 839,
+          "line_end": 839,
+          "quote": "加仓信号"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-above-120-if-low-cost",
+        "holder-sell-signals-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+      "line_start": 832,
+      "line_end": 839,
+      "quote": "### 8.2 最终决策"
+    },
+    {
+      "report_path": "reports/沪电股份/沪电股份-research-20260726.md",
+      "line_start": 1065,
+      "line_end": 1086,
+      "quote": "## 看板决策契约"
+    }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_MARGIN_PEAK",
+    "FCF_AND_CAPEX_PRESSURE",
+    "MULTI_PRICE_BANDS"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

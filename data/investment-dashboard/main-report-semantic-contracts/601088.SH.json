@@ -1,0 +1,884 @@
+{
+  "schema_version": 2,
+  "ticker": "601088.SH",
+  "company": "中国神华",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+    "report_sha256": "ecffd6c110057370b92f8fdc49c64aa339de95907cc13332168be25c9d123caf"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "A 股与 H 股价格路径通过 instrument_scope 分离，港元阈值不会成为 A 股买入价",
+      "43.42 元 A 股更适合持有人继续持有，不是空仓买入信号",
+      "激进型价格路径与稳健型半年报验证路径独立保留",
+      "A 股持有人当前持有收息但不新增；46 元以上还需盈利未上修才触发机会成本控制",
+      "加仓信号列表没有明确 ALL/ANY，因此只作为监控条件，不擅自生成自动加仓路径"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "HOLD",
+    "scope": "both",
+    "summary": "好公司；A 股一般价格、H 股合理价格，适合长期跟踪和持有但不追价。",
+    "evidence": [
+      {
+        "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+        "line_start": 316,
+        "line_end": 316,
+        "quote": "| **综合** | 四维汇总 | **3.9/5** | **好公司；A 股一般价格，H 股合理价格** |"
+      },
+      {
+        "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+        "line_start": 383,
+        "line_end": 383,
+        "quote": "> 中国神华值得长期跟踪和持有，但不值得在任何价格追逐。新业绩预告提高了对一体化韧性的信心，却没有消除每股现金流和资本回报疑问；43.42 元的 A 股更适合现有股东持有而非空仓者追买，42.30 港元的 H 股赔率较好，但仍只是合理价。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 A 股不追；激进型等待 A 股 36 元以下或 H 股 39 港元以下，稳健型还需半年报验证并使用更低阈值。",
+      "entry_semantic": "UNCONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "aggressive-a-below-36",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "激进型空仓者在 A 股 36 元以下可分批。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 36,
+            "currency": "CNY",
+            "price_role": "UNCONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                "line_start": 358,
+                "line_end": 358,
+                "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |"
+              }
+            ],
+            "node_id": "aggressive-a-price",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格低于或等于 36 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 358,
+              "line_end": 358,
+              "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "aggressive-h-below-39",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "H_SHARE",
+          "summary": "激进型空仓者在 H 股 39 港元以下可分批。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 39,
+            "currency": "HKD",
+            "price_role": "UNCONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                "line_start": 358,
+                "line_end": 358,
+                "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |"
+              }
+            ],
+            "node_id": "aggressive-h-price",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "H 股价格低于或等于 39 港元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 358,
+              "line_end": 358,
+              "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "stable-a-below-33-after-h1",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "稳健型在半年报验证 OCF、ROIC 和分部利润后，A 股 33 元以下更合适。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 33,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                    "line_start": 359,
+                    "line_end": 359,
+                    "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
+                  }
+                ],
+                "node_id": "stable-a-price",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格低于或等于 33 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                    "line_start": 359,
+                    "line_end": 359,
+                    "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
+                  }
+                ],
+                "node_id": "h1-ocf-roic-segment-verified",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "正式半年报验证 OCF、ROIC 和分部利润。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                "line_start": 359,
+                "line_end": 359,
+                "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
+              }
+            ],
+            "node_id": "stable-a-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股不高于 33 元且正式半年报完成三项验证。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 359,
+              "line_end": 359,
+              "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "stable-h-below-36-after-h1",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "H_SHARE",
+          "summary": "稳健型在半年报验证 OCF、ROIC 和分部利润后，H 股 36 港元以下更合适。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 36,
+                "currency": "HKD",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                    "line_start": 359,
+                    "line_end": 359,
+                    "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
+                  }
+                ],
+                "node_id": "stable-h-price",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "H 股价格低于或等于 36 港元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                    "line_start": 359,
+                    "line_end": 359,
+                    "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
+                  }
+                ],
+                "node_id": "h1-ocf-roic-segment-verified-h",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "正式半年报验证 OCF、ROIC 和分部利润。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                "line_start": 359,
+                "line_end": 359,
+                "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
+              }
+            ],
+            "node_id": "stable-h-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "H 股不高于 36 港元且正式半年报完成三项验证。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 359,
+              "line_end": 359,
+              "quote": "| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-no-chase-40-46",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 40-46 元已充分定价，空仓者不追。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 40,
+            "price_max": 46,
+            "currency": "CNY",
+            "price_role": "NOT_ACTIONABLE",
+            "evidence": [
+              {
+                "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                "line_start": 294,
+                "line_end": 294,
+                "quote": "| 40-46 元 | 充分定价 | 当前区间，空仓者不追 |"
+              }
+            ],
+            "node_id": "a-price-40-46",
+            "kind": "PRICE_RANGE",
+            "effect": "BLOCK_ENTRY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 40-46 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 294,
+              "line_end": 294,
+              "quote": "| 40-46 元 | 充分定价 | 当前区间，空仓者不追 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "h-watch-39-44",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "H_SHARE",
+          "summary": "H 股 39-44 港元在合理价附近，持有优先，空仓不构成直接买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 39,
+            "price_max": 44,
+            "currency": "HKD",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                "line_start": 301,
+                "line_end": 301,
+                "quote": "| 39-44 港元 | 合理价附近 | 当前区间，持有优先 |"
+              }
+            ],
+            "node_id": "h-price-39-44",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "H 股价格处于 39-44 港元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 301,
+              "line_end": 301,
+              "quote": "| 39-44 港元 | 合理价附近 | 当前区间，持有优先 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "line_start": 358,
+          "line_end": 360,
+          "quote": "| 激进型空仓者 | A 股 36 元以下或 H 股 39 港元以下再分批，避免在预告后追价 |\n| 稳健型空仓者 | 等正式半年报验证 OCF、ROIC 和分部利润；A 股 33 元以下、H 股 36 港元以下更合适 |\n| 保守型空仓者 | 等短借去化和并购后完整年度数据；只有明显折价才参与 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "A 股持有收息但不新增，H 股可持有并核算股息税、汇率和流动性。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "a-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股现有持有人当前持有收息，不新增。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 361,
+              "line_end": 361,
+              "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "h-hold",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "H_SHARE",
+          "summary": "H 股现有持有人可持有，同时核算股息税、汇率和流动性。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 362,
+              "line_end": 362,
+              "quote": "| H 股现有持有人 | 可持有，折价改善了赔率；同时核算股息税、汇率和流动性 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-reduce-above-46-no-upgrade",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股超过 46 元且盈利未上修时控制机会成本。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 46,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                    "line_start": 361,
+                    "line_end": 361,
+                    "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |"
+                  }
+                ],
+                "node_id": "a-price-above-46",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格超过 46 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                    "line_start": 361,
+                    "line_end": 361,
+                    "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |"
+                  }
+                ],
+                "node_id": "earnings-not-upgraded",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "盈利未上修。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                "line_start": 361,
+                "line_end": 361,
+                "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |"
+              }
+            ],
+            "node_id": "a-reduce-all",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "A 股价格超过 46 元且盈利未上修。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 361,
+              "line_end": 361,
+              "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "line_start": 361,
+          "line_end": 362,
+          "quote": "| A 股现有持有人 | 当前以持有收息为主，不新增；46 元以上且盈利未上修时控制机会成本 |\n| H 股现有持有人 | 可持有，折价改善了赔率；同时核算股息税、汇率和流动性 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 375,
+              "line_end": 375,
+              "quote": "- 并购后每股经营现金流连续两个报告期下降。"
+            }
+          ],
+          "node_id": "per-share-ocf-down-two-periods",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "并购后每股经营现金流连续两个报告期下降。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 376,
+              "line_end": 376,
+              "quote": "- 资本开支持续接近或超过 OCF，需要举债维持股息。"
+            }
+          ],
+          "node_id": "capex-near-or-above-ocf-funded-by-debt",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "资本开支持续接近或超过 OCF，且需要举债维持股息。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 377,
+              "line_end": 377,
+              "quote": "- 分红率低于公司回报规划，或股息依赖一次性资产处置。"
+            }
+          ],
+          "node_id": "dividend-plan-breached-or-one-off",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "分红率低于回报规划或股息依赖一次性资产处置。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 378,
+              "line_end": 378,
+              "quote": "- 重大安全环保事故、关联交易定价异常或财务公司资金安全事件。"
+            }
+          ],
+          "node_id": "major-safety-related-party-or-fund-event",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "重大安全环保、关联交易定价或财务公司资金安全事件。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "自产煤毛利率（连续两个半年度）",
+              "operator": "LT",
+              "value": 30,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                  "line_start": 379,
+                  "line_end": 379,
+                  "quote": "- 自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨。"
+                }
+              ],
+              "node_id": "coal-margin-below-30-two-halves",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "自产煤毛利率连续两个半年度低于 30%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "单位生产成本",
+              "operator": "GT",
+              "value": 220,
+              "unit": "CNY/吨",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+                  "line_start": 379,
+                  "line_end": 379,
+                  "quote": "- 自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨。"
+                }
+              ],
+              "node_id": "unit-cost-above-220",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "单位生产成本持续高于 220 元/吨。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+              "line_start": 379,
+              "line_end": 379,
+              "quote": "- 自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨。"
+            }
+          ],
+          "node_id": "coal-margin-or-cost-redline",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "自产煤毛利率连续两个半年度低于 30%，或单位生产成本持续高于 220 元/吨。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "line_start": 373,
+          "line_end": 379,
+          "quote": "**减仓或论文失效信号**"
+        }
+      ],
+      "node_id": "reduce-or-invalidate-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "任一减仓或论文失效信号出现时触发复核。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "line_start": 366,
+          "line_end": 371,
+          "quote": "**加仓信号**"
+        }
+      ],
+      "node_id": "monitor-add-signal-set",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控半年报现金流与 ROIC、自营煤质量、短借资本开支，以及价格和基本面组合；报告未定义这些信号的组合逻辑。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 43.42,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "line_start": 383,
+          "line_end": 383,
+          "quote": "> 中国神华值得长期跟踪和持有，但不值得在任何价格追逐。新业绩预告提高了对一体化韧性的信心，却没有消除每股现金流和资本回报疑问；43.42 元的 A 股更适合现有股东持有而非空仓者追买，42.30 港元的 H 股赔率较好，但仍只是合理价。"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 42.3,
+      "min": null,
+      "max": null,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "line_start": 383,
+          "line_end": 383,
+          "quote": "> 中国神华值得长期跟踪和持有，但不值得在任何价格追逐。新业绩预告提高了对一体化韧性的信心，却没有消除每股现金流和资本回报疑问；43.42 元的 A 股更适合现有股东持有而非空仓者追买，42.30 港元的 H 股赔率较好，但仍只是合理价。"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 22.5,
+      "max": 44.3,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "line_start": 280,
+          "line_end": 283,
+          "quote": "|---|---:|---:|---:|---:|---:|---:|---:|\n| 乐观 | +2% | 17x | 44.3 元 | 51.1 港元 | 2.05 元 | 约 +5.2% | 约 +11.2% |\n| 中性 | -2% | 14x | 32.4 元 | 37.3 港元 | 1.75 元 | 约 -4.7% | 约 +0.9% |\n| 悲观 | -6% | 11x | 22.5 元 | 25.9 港元 | 1.40 元 | 约 -15.0% | 约 -10.1% |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 25.9,
+      "max": 51.1,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+          "line_start": 280,
+          "line_end": 283,
+          "quote": "|---|---:|---:|---:|---:|---:|---:|---:|\n| 乐观 | +2% | 17x | 44.3 元 | 51.1 港元 | 2.05 元 | 约 +5.2% | 约 +11.2% |\n| 中性 | -2% | 14x | 32.4 元 | 37.3 港元 | 1.75 元 | 约 -4.7% | 约 +0.9% |\n| 悲观 | -6% | 11x | 22.5 元 | 25.9 港元 | 1.40 元 | 约 -15.0% | 约 -10.1% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+      "line_start": 287,
+      "line_end": 302,
+      "quote": "### 7.5 行动价格带"
+    },
+    {
+      "report_path": "reports/中国神华/中国神华-investment-team-20260714.md",
+      "line_start": 354,
+      "line_end": 383,
+      "quote": "### 8.4 分投资者行动"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "UNCONDITIONAL_ENTRY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "MULTI_MARKET"
+  ]
+}

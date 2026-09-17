@@ -1,0 +1,490 @@
+{
+  "schema_version": 2,
+  "ticker": "600549.SH",
+  "company": "厦门钨业",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+    "report_sha256": "78dc84e85c811e278b44d1f3477b69b22a70eec21f975381abbf2707a1c901cf"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "报告明确当前48.39元回避/观察；空仓者只有价格跌至33.5元以下，或半年报同时证明现金流、库存/短债和钨价条件后才考虑建仓。",
+      "保留了‘二选一’的ANY逻辑，未把目标价或估值参考当作行动价。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "厦门钨业创纪录利润建立在已回落的钨价上，存货和短债尚未检验；当前回避并继续观察。",
+    "evidence": [
+      {
+        "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+        "line_start": 6,
+        "line_end": 6,
+        "quote": "> **一句话结论**：**回避 / 继续观察。** 钨价已自 2026 年 3 月峰值回落约 60% 并跌破年初水平，公司创纪录的半年报利润建立在已经消失的价格之上；197 亿元高价存货 + 106 亿元短期借款构成的资产负债表尚未经历这轮价格下跌的检验。当前 48.39 元仍高于三种独立估值方法的中枢（32–42 元）。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "当前回避；价格低于33.5元，或半年报证明现金流、库存/短债和钨价条件后才进入建仓路径。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "AVOID",
+          "summary": "42—55元为观察区，现价不新建仓。",
+          "path_id": "empty-avoid-current",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+              "line_start": 714,
+              "line_end": 714,
+              "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "价格不高于33.5元，或半年报验证经营条件后才可建仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 33.5,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                    "line_start": 714,
+                    "line_end": 714,
+                    "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格不高于33.5元。",
+                "node_id": "empty-entry-conditions-condition-1"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "EXISTS",
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                        "line_start": 714,
+                        "line_end": 714,
+                        "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+                      }
+                    ],
+                    "kind": "FILING",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "半年报证明经营现金流显著改善。",
+                    "node_id": "empty-entry-conditions-condition-2-1"
+                  },
+                  {
+                    "children": [
+                      {
+                        "children": [],
+                        "minimum": null,
+                        "metric": null,
+                        "operator": null,
+                        "value": null,
+                        "unit": null,
+                        "price_min": null,
+                        "price_max": null,
+                        "currency": null,
+                        "price_role": null,
+                        "evidence": [
+                          {
+                            "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                            "line_start": 714,
+                            "line_end": 714,
+                            "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+                          }
+                        ],
+                        "kind": "QUALITATIVE",
+                        "effect": "ENTRY_GATE",
+                        "scope": "empty_position",
+                        "description": "存货下降。",
+                        "node_id": "empty-entry-conditions-condition-2-2-1"
+                      },
+                      {
+                        "children": [],
+                        "minimum": null,
+                        "metric": null,
+                        "operator": null,
+                        "value": null,
+                        "unit": null,
+                        "price_min": null,
+                        "price_max": null,
+                        "currency": null,
+                        "price_role": null,
+                        "evidence": [
+                          {
+                            "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                            "line_start": 714,
+                            "line_end": 714,
+                            "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+                          }
+                        ],
+                        "kind": "QUALITATIVE",
+                        "effect": "ENTRY_GATE",
+                        "scope": "empty_position",
+                        "description": "短期借款下降。",
+                        "node_id": "empty-entry-conditions-condition-2-2-2"
+                      }
+                    ],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                        "line_start": 714,
+                        "line_end": 714,
+                        "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+                      }
+                    ],
+                    "kind": "ANY",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "库存或短债至少一项下降。",
+                    "node_id": "empty-entry-conditions-condition-2-2"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "钨价",
+                    "operator": "GTE",
+                    "value": 45,
+                    "unit": "万元/吨",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                        "line_start": 714,
+                        "line_end": 714,
+                        "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+                      }
+                    ],
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "钨价企稳于45万以上。",
+                    "node_id": "empty-entry-conditions-condition-2-3"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                    "line_start": 714,
+                    "line_end": 714,
+                    "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+                  }
+                ],
+                "kind": "ALL",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "半年报证明经营现金流显著改善、库存或短债至少一项下降且钨价企稳于45万以上。",
+                "node_id": "empty-entry-conditions-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                "line_start": 714,
+                "line_end": 714,
+                "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+              }
+            ],
+            "kind": "ANY",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格不高于33.5元，或半年报证明经营现金流改善、库存/短债至少一项下降且钨价企稳于45万以上。",
+            "node_id": "empty-entry-conditions-condition"
+          },
+          "path_id": "empty-entry-conditions",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+              "line_start": 714,
+              "line_end": 714,
+              "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+          "line_start": 714,
+          "line_end": 714,
+          "quote": "| **空仓者** | **回避。** 不因股价从 96.85 跌到 48.39（−50%）就认为便宜。等两个条件之一：**(a) 价格跌至 33.5 元以下**；或 **(b) 半年报证明经营现金流显著改善、存货和短债至少一项下降、且钨价企稳于 45 万以上**。两者都不满足前，不建仓。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "持仓者可持有但不加仓，并主动降低不可承受的仓位。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有但不加仓，仓位过高时主动降低。",
+          "path_id": "holder-hold-reduce-risk",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+              "line_start": 715,
+              "line_end": 715,
+              "quote": "| **持仓者** | **持有但不加仓，并主动降低仓位至可承受水平。** 悲观情景下行至 15.8 元（−67%），需确认自己能承受。若仓位超过组合 10%，建议在半年报前减至 5% 以内。 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "只有价格、库存、现金流、母体估值或钨钼分部等加仓信号成立时再评估。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 33.5,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                    "line_start": 717,
+                    "line_end": 717,
+                    "quote": "| **加仓信号** | ① 价格 ≤ 33.5 元且论文未受损；② 存货降至 150 亿以下且钨价企稳 45 万以上；③ 连续两个季度 OCF 覆盖归母净利；④ 母体隐含 PE（剔除厦钨新能）降至 20x 以下；⑤ 钨钼分部毛利率在价格下跌中保持稳定（证明是加工利润而非库存收益）。 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "价格不高于33.5元且论文未受损。",
+                "node_id": "holder-add-signals-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                    "line_start": 717,
+                    "line_end": 717,
+                    "quote": "| **加仓信号** | ① 价格 ≤ 33.5 元且论文未受损；② 存货降至 150 亿以下且钨价企稳 45 万以上；③ 连续两个季度 OCF 覆盖归母净利；④ 母体隐含 PE（剔除厦钨新能）降至 20x 以下；⑤ 钨钼分部毛利率在价格下跌中保持稳定（证明是加工利润而非库存收益）。 |"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "存货下降、钨价企稳且现金流覆盖利润等经营信号改善。",
+                "node_id": "holder-add-signals-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+                "line_start": 717,
+                "line_end": 717,
+                "quote": "| **加仓信号** | ① 价格 ≤ 33.5 元且论文未受损；② 存货降至 150 亿以下且钨价企稳 45 万以上；③ 连续两个季度 OCF 覆盖归母净利；④ 母体隐含 PE（剔除厦钨新能）降至 20x 以下；⑤ 钨钼分部毛利率在价格下跌中保持稳定（证明是加工利润而非库存收益）。 |"
+              }
+            ],
+            "kind": "ANY",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "报告列示的加仓信号至少一条成立，仍需人工核验论文未受损。",
+            "node_id": "holder-add-signals-condition"
+          },
+          "path_id": "holder-add-signals",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+              "line_start": 717,
+              "line_end": 717,
+              "quote": "| **加仓信号** | ① 价格 ≤ 33.5 元且论文未受损；② 存货降至 150 亿以下且钨价企稳 45 万以上；③ 连续两个季度 OCF 覆盖归母净利；④ 母体隐含 PE（剔除厦钨新能）降至 20x 以下；⑤ 钨钼分部毛利率在价格下跌中保持稳定（证明是加工利润而非库存收益）。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+          "line_start": 715,
+          "line_end": 715,
+          "quote": "| **持仓者** | **持有但不加仓，并主动降低仓位至可承受水平。** 悲观情景下行至 15.8 元（−67%），需确认自己能承受。若仓位超过组合 10%，建议在半年报前减至 5% 以内。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+          "line_start": 716,
+          "line_end": 716,
+          "quote": "| **卖出信号** | ① 半年报资产减值损失 > 10 亿元；② 2026Q3 单季归母净利 < 6 亿元（H1 单季约 11 亿）；③ 滚动 OCF/归母净利连续两期 < 0.7 且存货、短债同时上升；④ 钨价跌破 35 万/标吨；⑤ 洛阳豫鹭停产超 180 天且影响年度归母净利 > 5%；⑥ 关联交易或资产注入明显损害少数股东；⑦ **券商 2026E 一致预期下修至 35 亿元以下且股价未同步调整**。 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "半年报减值、利润/现金流恶化、钨价跌破35万或重大关联交易风险触发卖出或重审。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+          "line_start": 785,
+          "line_end": 785,
+          "quote": "2. **经营活动现金流**——是否较 Q1 的 −25.70 亿显著收窄？"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待半年报验证存货、短债、经营现金流和钨钼分部毛利率。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/厦门钨业/厦门钨业-research-20260726.md",
+      "line_start": 6,
+      "line_end": 6,
+      "quote": "> **一句话结论**：**回避 / 继续观察。** 钨价已自 2026 年 3 月峰值回落约 60% 并跌破年初水平，公司创纪录的半年报利润建立在已经消失的价格之上；197 亿元高价存货 + 106 亿元短期借款构成的资产负债表尚未经历这轮价格下跌的检验。当前 48.39 元仍高于三种独立估值方法的中枢（32–42 元）。"
+    }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_COMMODITY_AND_BALANCE_SHEET"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC"
+  ]
+}

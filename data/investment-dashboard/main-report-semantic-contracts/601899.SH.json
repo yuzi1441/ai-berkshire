@@ -1,0 +1,323 @@
+{
+  "schema_version": 2,
+  "ticker": "601899.SH",
+  "company": "紫金矿业",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+    "report_sha256": "3a0287c5c618e42a46e79884fc4f6b8706b21fe448491ba6405e61a6ed21b39b"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "紫金矿业对A股明确为观察不追价，26—30元可小仓分批、25元以下安全边际改善；H股路径未混入A股。",
+      "正式半年报、Kamoa产量成本和巨龙二期作为加仓前提，价格条件与经营条件保持分开。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "紫金矿业资源和工程能力强，但A股32.55元安全边际薄，观察不追价。",
+    "evidence": [
+      {
+        "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+        "line_start": 8,
+        "line_end": 8,
+        "quote": "**明确结论：观察。** 紫金矿业是中国最强的全球化金铜矿企之一，资源、低品位矿工程化和跨国项目复制构成中强护城河；但当前利润受高金铜价格显著抬升，A 股 32.55 元基本透支了偏保守中性情景，适合持有或观察、不追价。H 股相对 A 股折价 12.95%，已进入小仓分批观察区，但折价可能长期存在。  "
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "A股30—36元观察；26—30元可小仓分批，25元以下安全边际更明显。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "REVIEW",
+          "summary": "30—36元观察，不建大仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 30,
+            "price_max": 36,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+                "line_start": 289,
+                "line_end": 289,
+                "quote": "| 30-36 元 | 约 34.9-41.8 港元 | 观察，不建大仓 | 持有观察；A 股当前 32.55 元在此区间 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于30—36元观察区。",
+            "node_id": "empty-review-30-36-condition"
+          },
+          "path_id": "empty-review-30-36",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+              "line_start": 289,
+              "line_end": 289,
+              "quote": "| 30-36 元 | 约 34.9-41.8 港元 | 观察，不建大仓 | 持有观察；A 股当前 32.55 元在此区间 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "26—30元可小仓分批。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 26,
+            "price_max": 30,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+                "line_start": 290,
+                "line_end": 290,
+                "quote": "| 26-30 元 | 约 30.2-34.9 港元 | 可小仓分批 | 论文未受损时才考虑加仓；H 股当前 32.92 港元在此区间 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于26—30元小仓分批区。",
+            "node_id": "empty-trial-26-30-condition"
+          },
+          "path_id": "empty-trial-26-30",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+              "line_start": 290,
+              "line_end": 290,
+              "quote": "| 26-30 元 | 约 30.2-34.9 港元 | 可小仓分批 | 论文未受损时才考虑加仓；H 股当前 32.92 港元在此区间 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "不高于25元安全边际明显改善，仍需分批。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 25,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+                "line_start": 291,
+                "line_end": 291,
+                "quote": "| 不高于 25 元 | 不高于约 29.0 港元 | 安全边际明显改善，仍需分批 | 结合商品价格和项目状态评估增持 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A股价格不高于25元。",
+            "node_id": "empty-entry-below-25-condition"
+          },
+          "path_id": "empty-entry-below-25",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+              "line_start": 291,
+              "line_end": 291,
+              "quote": "| 不高于 25 元 | 不高于约 29.0 港元 | 安全边际明显改善，仍需分批 | 结合商品价格和项目状态评估增持 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "| 高于 40 元 | 高于约 46.5 港元 | 不追价 | 若基本面未同步上修，可检查仓位与减仓条件 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者可持有观察，A股不因H1预增追高，等待正式半年报和Kamoa修复证据。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD",
+          "summary": "持有观察，等待正式半年报。",
+          "path_id": "holder-hold-observe",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+              "line_start": 315,
+              "line_end": 315,
+              "quote": "| 持仓者 | 未提供成本。当前可持有观察，A 股不宜因 H1 预增继续追高；优先等待正式半年报和 Kamoa 修复证据 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "正式H1、CFO/利润、Kamoa、巨龙二期和价格条件同时核验后再评估。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+                "line_start": 316,
+                "line_end": 316,
+                "quote": "| 加仓信号 | 正式 H1 兑现预告且 CFO/利润保持良好；Kamoa 产量与成本稳定；巨龙二期达产；价格进入上述安全边际区 |"
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验正式H1、CFO/利润、Kamoa产量成本、巨龙二期和价格区间。",
+            "node_id": "holder-add-project-confirmation-condition"
+          },
+          "path_id": "holder-add-project-confirmation",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+              "line_start": 316,
+              "line_end": 316,
+              "quote": "| 加仓信号 | 正式 H1 兑现预告且 CFO/利润保持良好；Kamoa 产量与成本稳定；巨龙二期达产；价格进入上述安全边际区 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+          "line_start": 315,
+          "line_end": 315,
+          "quote": "| 持仓者 | 未提供成本。当前可持有观察，A 股不宜因 H1 预增继续追高；优先等待正式半年报和 Kamoa 修复证据 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+          "line_start": 317,
+          "line_end": 317,
+          "quote": "| 减仓/卖出信号 | 2026 Kamoa 低于 29 万吨或 C1 超 3 美元/磅；矿产品毛利率持续低于 50%；重大收购减值；商品下跌时杠杆重新恶化 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "Kamoa产量或成本恶化、矿产品毛利率持续低于50%、重大收购减值或商品下跌时杠杆恶化时退出。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+          "line_start": 315,
+          "line_end": 315,
+          "quote": "| 持仓者 | 未提供成本。当前可持有观察，A 股不宜因 H1 预增继续追高；优先等待正式半年报和 Kamoa 修复证据 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪A股价格、正式半年报、Kamoa和巨龙二期。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": false,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/紫金矿业/紫金矿业-investment-research-20260803.md",
+      "line_start": 8,
+      "line_end": 8,
+      "quote": "**明确结论：观察。** 紫金矿业是中国最强的全球化金铜矿企之一，资源、低品位矿工程化和跨国项目复制构成中强护城河；但当前利润受高金铜价格显著抬升，A 股 32.55 元基本透支了偏保守中性情景，适合持有或观察、不追价。H 股相对 A 股折价 12.95%，已进入小仓分批观察区，但折价可能长期存在。  "
+    }
+  ],
+  "business_risk_reasons": [
+    "COMMODITY_PRICE_AND_PROJECT_RISK"
+  ],
+  "semantic_review_reasons": []
+}

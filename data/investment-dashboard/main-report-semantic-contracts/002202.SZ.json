@@ -1,0 +1,378 @@
+{
+  "schema_version": 2,
+  "ticker": "002202.SZ",
+  "company": "Goldwind",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+    "report_sha256": "81e97fcac2b77b442e6cf237e708928c9296442bdb24b5dfd314fb1001e46f2c"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "本合同只编译 A 股；报告含 H 股，但 H 股目标价和路径不进入 A 股动作。",
+      "21.75 元当前价和 34 倍 PE 缺乏安全边际，未把 2025/2026Q1 盈利恢复直接视为结构性趋势。",
+      "15-17 元是报告明确的 A 股分批建仓区，若 Q2-Q3 持续超预期才可提高区间；三情景 6.4-43.9 元是估值参考。",
+      "持仓者是持有但不加仓，337 亿应收和价格战风险保留；加仓/卖出信号通过人工复核门，不自动变成无条件动作。",
+      "风电场资产和海外高毛利是利润引擎，但没有把风机制造的行业叙事当成稳定高 ROE。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "金风科技方向正确、地位领先但风机制造生意辛苦；当前 21.75 元和 34 倍 PE 缺乏安全边际，空仓者观望等待更好买点。",
+    "evidence": [
+      {
+        "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+        "line_start": 368,
+        "line_end": 368,
+        "quote": "**总结**：金风科技是一家 **\"方向正确、地位领先、但生意辛苦\"** 的制造业公司。投资它本质上是赌两件事：(1) 风机价格和毛利率能持续回升；(2) 海外高毛利业务能继续放量。当前34x PE/7% ROE的组合缺乏安全边际——不是坏公司，但价格偏贵。耐心等待15-17元的更好买点。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "21.75 元当前观察；15-17 元才进入报告建议的 A 股分批建仓区，Q2-Q3 业绩持续超预期可再人工提高买入区间。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-21-75",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前 21.75 元/PE 34x 缺乏安全边际，观望为主。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+                "line_start": 322,
+                "line_end": 322,
+                "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+              }
+            ],
+            "node_id": "watch-current-price",
+            "kind": "QUALITATIVE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "当前价格缺乏足够安全边际。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+              "line_start": 322,
+              "line_end": 322,
+              "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conditional-entry-15-17",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "15-17 元区间分批建仓，当前价格不执行；若业绩持续超预期，买入区间才可另行提高。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 15,
+            "price_max": 17,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+                "line_start": 322,
+                "line_end": 322,
+                "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+              }
+            ],
+            "node_id": "entry-price-15-17",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 15-17 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+              "line_start": 322,
+              "line_end": 322,
+              "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+          "line_start": 322,
+          "line_end": 322,
+          "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者持有但不加仓，等待海外放量和盈利修复，同时设置 15 元止损线。加仓/卖出信号需人工复核。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持有但不加仓，关注在手订单、海外放量、应收账款和价格战风险，设 15 元止损线。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+              "line_start": 323,
+              "line_end": 323,
+              "quote": "| **持仓者** | **持有但不加仓**。盈利拐点已确认，在手订单50.49GW充裕，海外放量是核心看点。但应收账款337亿和价格战反复风险限制了上行空间。设15元止损线 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "股价 15-17 元且基本面未恶化，或海外收入、风机毛利率、分红等出现改善时，人工确认后才考虑加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+                "line_start": 325,
+                "line_end": 325,
+                "quote": "| **加仓信号** | 股价跌至15-17元区间且基本面未恶化；海外收入占比突破30%；风机毛利率恢复至15%+；宣布大幅提高分红比例 |"
+              }
+            ],
+            "node_id": "holder-add-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "人工核对 15-17 元且基本面未恶化、海外收入占比突破 30%、风机毛利率恢复 15% 以上或大幅提高分红等信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+              "line_start": 325,
+              "line_end": 325,
+              "quote": "| **加仓信号** | 股价跌至15-17元区间且基本面未恶化；海外收入占比突破30%；风机毛利率恢复至15%+；宣布大幅提高分红比例 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-signals-manual-review",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "风机价格、应收坏账、欧盟投标限制或海外毛利率恶化时人工复核减仓/退出。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+                "line_start": 324,
+                "line_end": 324,
+                "quote": "| **卖出信号** | 风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元；欧盟正式限制金风在欧洲投标；海外毛利率跌破15% |"
+              }
+            ],
+            "node_id": "holder-reduce-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工核对风机均价跌破 1500 元/kW、单季坏账计提超过 5 亿元、欧盟正式限制投标或海外毛利率跌破 15% 等信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+              "line_start": 324,
+              "line_end": 324,
+              "quote": "| **卖出信号** | 风机含塔筒均价重新跌破1,500元/kW；单季度应收坏账计提超5亿元；欧盟正式限制金风在欧洲投标；海外毛利率跌破15% |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "| **持仓者** | **持有但不加仓**。盈利拐点已确认，在手订单50.49GW充裕，海外放量是核心看点。但应收账款337亿和价格战反复风险限制了上行空间。设15元止损线 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+          "line_start": 322,
+          "line_end": 322,
+          "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+        }
+      ],
+      "node_id": "q2-q3-profit-monitor",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 Q2-Q3 业绩是否持续超预期，尤其海外毛利率是否维持 24% 以上。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "| **持仓者** | **持有但不加仓**。盈利拐点已确认，在手订单50.49GW充裕，海外放量是核心看点。但应收账款337亿和价格战反复风险限制了上行空间。设15元止损线 |"
+        }
+      ],
+      "node_id": "receivables-and-price-war-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 337 亿应收账款、风机价格战和海外高毛利业务是否持续。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-06-23 A 股价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 21.75,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "**当前股价**：A股 21.75元（6/23收盘）/ H股 ~17.40港元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 6.4,
+      "max": 43.9,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+          "line_start": 271,
+          "line_end": 271,
+          "quote": "| **乐观** | 40% | 1.76元 | 25x | **43.9元** | **+102%** |"
+        },
+        {
+          "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+          "line_start": 273,
+          "line_end": 273,
+          "quote": "| **悲观** | 0% | 0.64元 | 10x | **6.4元** | **-71%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约只保留观察摘要，未同步正文的 A 股价格区间、持仓止损和加减仓信号。",
+    "evidence": [
+      {
+        "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+        "line_start": 389,
+        "line_end": 389,
+        "quote": "| 基本面建议动作 | 观察 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/Goldwind/Goldwind-research-20260623.md",
+      "line_start": 322,
+      "line_end": 322,
+      "quote": "| **空仓者** | **观望为主，等待更好买点**。当前21.75元/PE 34x缺乏足够安全边际。建议在15-17元区间（PE 23-27x基于2025年EPS，或PE 13-15x基于2026E EPS）分批建仓。如果Q2-Q3业绩持续超预期（尤其海外毛利率维持24%+），可提高买入价格区间 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_MANUFACTURING",
+    "RECEIVABLES_RISK"
+  ],
+  "semantic_review_reasons": [
+    "REPORT_CONTRACT_CONFLICT"
+  ]
+}

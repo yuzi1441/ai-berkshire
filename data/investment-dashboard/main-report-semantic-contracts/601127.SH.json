@@ -1,0 +1,320 @@
+{
+  "schema_version": 2,
+  "ticker": "601127.SH",
+  "company": "赛力斯",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+    "report_sha256": "6280c6e51d82380f05b36fd27f98986ae94ba2f26d6294aee6cc695be6f150f7"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "赛力斯空仓者当前观望，只有中报/现金流、赛豆车型反馈或45—50元价格三条路径之一成立才考虑建仓。",
+      "持仓者明确不宜加仓，连续两季扣非净利低于5亿元和跌破45元的处置路径被保留。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "赛力斯处于华为合作和盈利质量验证期，空仓不在现价大举买入。",
+    "evidence": [
+      {
+        "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+        "line_start": 414,
+        "line_end": 414,
+        "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "等待中报、赛豆车型反馈或45—50元价格三条路径之一成立。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "OPEN_POSITION",
+          "summary": "中报盈利现金流改善、赛豆反馈良好或价格45—50元时再考虑建仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "EXISTS",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+                    "line_start": 414,
+                    "line_end": 414,
+                    "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
+                  }
+                ],
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "2026年中报扣非净利改善且经营现金流转正。",
+                "node_id": "empty-entry-catalysts-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+                    "line_start": 414,
+                    "line_end": 414,
+                    "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
+                  }
+                ],
+                "kind": "EVENT",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "赛豆品牌首款车型上市反馈良好。",
+                "node_id": "empty-entry-catalysts-condition-2"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 45,
+                "price_max": 50,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+                    "line_start": 414,
+                    "line_end": 414,
+                    "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A股价格回调至45—50元。",
+                "node_id": "empty-entry-catalysts-condition-3"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+                "line_start": 414,
+                "line_end": 414,
+                "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
+              }
+            ],
+            "kind": "ANY",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "三条建仓路径任一成立。",
+            "node_id": "empty-entry-catalysts-condition"
+          },
+          "path_id": "empty-entry-catalysts",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+              "line_start": 414,
+              "line_end": 414,
+              "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+          "line_start": 414,
+          "line_end": 414,
+          "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "持仓者可继续持有但不宜加仓，重点看Q2-Q3盈利质量。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有但不宜加仓。",
+          "path_id": "holder-hold-no-add",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+              "line_start": 415,
+              "line_end": 415,
+              "quote": "| **持仓者** | **可继续持有，但不宜加仓。** 密切关注2026年Q2-Q3的盈利质量——特别是扣非净利润和经营现金流。如果连续两个季度扣非净利低于5亿元，考虑减仓。设置止损位：跌破45元（较当前再跌27%）则减半仓 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "中报、赛豆销量、华为合作确认或45元以下价格等信号成立时再评估。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+                "line_start": 417,
+                "line_end": 417,
+                "quote": "| **加仓信号** | （1）2026年中报扣非净利大幅改善（>20亿元）；（2）赛豆品牌首款车型月销量破万；（3）华为公开确认问界\"首席合作伙伴\"地位不变；（4）股价跌至45元以下（PE ~13x） |"
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验报告列示的加仓信号，不将单一信号自动升级为重仓。",
+            "node_id": "holder-add-signals-condition"
+          },
+          "path_id": "holder-add-signals",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+              "line_start": 417,
+              "line_end": 417,
+              "quote": "| **加仓信号** | （1）2026年中报扣非净利大幅改善（>20亿元）；（2）赛豆品牌首款车型月销量破万；（3）华为公开确认问界\"首席合作伙伴\"地位不变；（4）股价跌至45元以下（PE ~13x） |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+          "line_start": 415,
+          "line_end": 415,
+          "quote": "| **持仓者** | **可继续持有，但不宜加仓。** 密切关注2026年Q2-Q3的盈利质量——特别是扣非净利润和经营现金流。如果连续两个季度扣非净利低于5亿元，考虑减仓。设置止损位：跌破45元（较当前再跌27%）则减半仓 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+          "line_start": 416,
+          "line_end": 416,
+          "quote": "| **卖出信号** | （1）华为宣布其他\"界\"获得ADS最新版本的首发权；（2）连续2个季度扣非净利为负；（3）管理层大额减持；（4）问界月销量持续低于3万辆 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "华为合作弱化、连续两季度扣非净利为负、管理层大额减持或问界销量持续低于3万辆时退出或减仓。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+          "line_start": 415,
+          "line_end": 415,
+          "quote": "| **持仓者** | **可继续持有，但不宜加仓。** 密切关注2026年Q2-Q3的盈利质量——特别是扣非净利润和经营现金流。如果连续两个季度扣非净利低于5亿元，考虑减仓。设置止损位：跌破45元（较当前再跌27%）则减半仓 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪扣非净利、经营现金流、赛豆销量和华为合作地位。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/赛力斯/sailis-touzi-yanjiu-baogao.md",
+      "line_start": 414,
+      "line_end": 414,
+      "quote": "| **空仓者** | **观望为主，不建议现价大举买入。** 等待以下催化剂之一出现再考虑建仓：（1）2026年中报显示扣非净利改善、经营现金流转正；（2）赛豆品牌首款车型上市反馈良好；（3）股价进一步回调至45-50元区间（对应PE 13-15x），安全边际更充分 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "HUAWEI_DEPENDENCY",
+    "MULTI_CATALYST_ANY_OF"
+  ],
+  "semantic_review_reasons": [
+    "ANY_LOGIC"
+  ]
+}

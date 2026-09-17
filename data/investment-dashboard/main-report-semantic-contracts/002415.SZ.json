@@ -1,0 +1,693 @@
+{
+  "schema_version": 2,
+  "ticker": "002415.SZ",
+  "company": "海康威视",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+    "report_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "37.95 元是当前 A 股参考价，不是买入价；63.0、42.7、23.8 元三情景目标价是估值参考。",
+      "空仓者当前不追高；30-34 元是等待现金转换验证的观察仓路径，30 元以下仍需论文、现金流、库存和应收条件确认。",
+      "持仓者持有并跟踪；加仓条件明确为价格与基本面条件的 OR/ALL 结构，已保留 AST。",
+      "报告把 ≤30 元同时写成‘分批研究或买入’和‘提高关注度’，并把信号称为‘减仓/卖出’但未拆分动作，因此不自动生成正式建仓、减仓或卖出。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "海康威视主业和创新业务修复，但库存与经营现金流构成反证；37.95 元处于近期中枢，空仓不追高，等待价格与现金转换验证。",
+    "evidence": [
+      {
+        "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+        "line_start": 7,
+        "line_end": 7,
+        "quote": "37.95 元对应近期历史中枢附近，属于“好公司、合理偏贵”，空仓不追高，等待 30-34 元或现金转换进一步验证。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 37.95 元观察、不追高；30-34 元只进入观察仓路径，30 元以下仍需现金流、库存和论文条件确认。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-no-chase",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前价格属于合理偏贵区间，空仓不追高。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+              "line_start": 7,
+              "line_end": 7,
+              "quote": "空仓不追高"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-30-34-with-cashflow-validation",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "30-34 元可建立观察仓，但要求经营现金流不再连续弱于利润。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 30,
+                "price_max": 34,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                    "line_start": 243,
+                    "line_end": 243,
+                    "quote": "30-34 元"
+                  }
+                ],
+                "node_id": "trial-price-30-34",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 30-34 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                    "line_start": 243,
+                    "line_end": 243,
+                    "quote": "经营现金流不再连续弱于利润"
+                  }
+                ],
+                "node_id": "trial-cashflow-not-weaker",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "经营现金流不再连续弱于利润。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                "line_start": 243,
+                "line_end": 243,
+                "quote": "适合建立观察仓，要求经营现金流不再连续弱于利润"
+              }
+            ],
+            "node_id": "trial-all-30-34-cashflow",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 30-34 元且经营现金流不再连续弱于利润。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+              "line_start": 243,
+              "line_end": 243,
+              "quote": "适合建立观察仓，要求经营现金流不再连续弱于利润"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-below-30-without-deterioration",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "不高于 30 元且论文未恶化、存货和应收可控时进入人工复核；报告未明确这是正式建仓还是继续研究。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 30,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                    "line_start": 242,
+                    "line_end": 242,
+                    "quote": "≤30 元"
+                  }
+                ],
+                "node_id": "review-price-below-30",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A 股价格不高于 30 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                    "line_start": 242,
+                    "line_end": 242,
+                    "quote": "论文未恶化"
+                  }
+                ],
+                "node_id": "review-thesis-not-deteriorated",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "论文未恶化。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                    "line_start": 242,
+                    "line_end": 242,
+                    "quote": "存货/应收可控"
+                  }
+                ],
+                "node_id": "review-inventory-receivables-controlled",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "存货和应收可控。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                "line_start": 242,
+                "line_end": 242,
+                "quote": "论文未恶化、存货/应收可控时，空仓者可分批研究或买入"
+              }
+            ],
+            "node_id": "review-all-below-30",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格不高于 30 元、论文未恶化且存货和应收可控。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+              "line_start": 242,
+              "line_end": 242,
+              "quote": "空仓者可分批研究或买入"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "观望，不追 37.95 元"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者持有并跟踪现金流、库存、应收、国内主业和创新业务利润，不因单季利润增长盲目加仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-and-monitor",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持仓者继续持有并跟踪核心质量指标。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+              "line_start": 270,
+              "line_end": 270,
+              "quote": "持有并跟踪"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-add-on-price-or-fundamentals",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格进入 30-34 元，或现金流、库存和主业毛利率同时达到报告条件后，进入加仓复核路径。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 30,
+                "price_max": 34,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                    "line_start": 271,
+                    "line_end": 271,
+                    "quote": "股价进入 30-34 元"
+                  }
+                ],
+                "node_id": "holder-add-price-30-34",
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "A 股价格进入 30-34 元。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "经营现金流/净利润",
+                    "operator": "GTE",
+                    "value": 1,
+                    "unit": "ratio",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                        "line_start": 271,
+                        "line_end": 271,
+                        "quote": "经营现金流/净利润 ≥1"
+                      }
+                    ],
+                    "node_id": "holder-add-cashflow-ratio-gte-1",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "连续两个季度经营现金流/净利润不低于 1。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                        "line_start": 271,
+                        "line_end": 271,
+                        "quote": "存货增速低于收入增速"
+                      }
+                    ],
+                    "node_id": "holder-add-inventory-growth-below-revenue",
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "存货增速低于收入增速。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                        "line_start": 271,
+                        "line_end": 271,
+                        "quote": "主业毛利率稳定"
+                      }
+                    ],
+                    "node_id": "holder-add-core-margin-stable",
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "主业毛利率稳定。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                    "line_start": 271,
+                    "line_end": 271,
+                    "quote": "连续两个季度经营现金流/净利润 ≥1、存货增速低于收入增速、主业毛利率稳定"
+                  }
+                ],
+                "node_id": "holder-add-fundamentals-all",
+                "kind": "ALL",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "连续两个季度经营现金流/净利润不低于 1、存货增速低于收入增速且主业毛利率稳定。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                "line_start": 271,
+                "line_end": 271,
+                "quote": "股价进入 30-34 元；或连续两个季度经营现金流/净利润 ≥1、存货增速低于收入增速、主业毛利率稳定"
+              }
+            ],
+            "node_id": "holder-add-any-price-or-fundamentals",
+            "kind": "ANY",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格进入 30-34 元，或三项基本面条件同时满足。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+              "line_start": 271,
+              "line_end": 271,
+              "quote": "加仓信号"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-reduce-or-sell-signal-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "减仓/卖出信号出现时重新人工评估；报告没有把减仓和卖出拆成可自动执行的动作。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+                "line_start": 272,
+                "line_end": 272,
+                "quote": "减仓/卖出信号"
+              }
+            ],
+            "node_id": "holder-reduce-or-sell-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工判断八项减仓/卖出信号及其实际处置，不自动执行。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+              "line_start": 272,
+              "line_end": 272,
+              "quote": "减仓/卖出信号"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 270,
+          "line_end": 270,
+          "quote": "持有并跟踪"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 270,
+          "line_end": 270,
+          "quote": "重点看 H2 经营现金流、存货、应收账款、国内主业和创新业务利润"
+        }
+      ],
+      "node_id": "monitor-cash-inventory-and-core-business",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "持续跟踪经营现金流、存货、应收账款、国内主业和创新业务利润。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 37.95,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "**股价与市值：** 37.95 元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 23.8,
+      "max": 63.0,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 232,
+          "line_end": 232,
+          "quote": "63.0 元"
+        },
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 234,
+          "line_end": 234,
+          "quote": "23.8 元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文价格表允许≤30元时‘分批研究或买入’，底部契约只写‘提高关注度’，买入动作边界未完全一致。",
+    "evidence": [
+      {
+        "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+        "line_start": 242,
+        "line_end": 242,
+        "quote": "空仓者可分批研究或买入"
+      },
+      {
+        "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+        "line_start": 269,
+        "line_end": 269,
+        "quote": "可提高关注度"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "ENTRY_ACTION_BOUNDARY",
+      "summary": "≤30元路径同时出现‘可分批研究或买入’与‘可提高关注度’，没有明确从研究、观察仓到正式建仓的动作边界。",
+      "required_clarification": "由人工或更强模型确认≤30元路径的实际动作、仓位和现金流/库存门槛；当前保留 REVIEW，不自动生成 OPEN_POSITION。",
+      "evidence": [
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 242,
+          "line_end": 242,
+          "quote": "空仓者可分批研究或买入"
+        },
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 269,
+          "line_end": 269,
+          "quote": "可提高关注度"
+        }
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-below-30-without-deterioration"
+      ],
+      "affects_entry": true
+    },
+    {
+      "code": "REDUCE_EXIT_ACTION_UNSPECIFIED",
+      "summary": "持仓者信号被命名为‘减仓/卖出信号’，但没有说明哪些条件对应减仓、哪些条件对应卖出。",
+      "required_clarification": "由人工或更强模型拆分 REDUCE 与 EXIT 的动作边界；当前只生成 REVIEW_ONLY。",
+      "evidence": [
+        {
+          "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "line_start": 272,
+          "line_end": 272,
+          "quote": "减仓/卖出信号"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-on-price-or-fundamentals",
+        "holder-reduce-or-sell-signal-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+      "line_start": 265,
+      "line_end": 272,
+      "quote": "### 条件化建议"
+    },
+    {
+      "report_path": "reports/海康威视/海康威视研究报告-20260803.md",
+      "line_start": 317,
+      "line_end": 336,
+      "quote": "## 看板决策契约"
+    }
+  ],
+  "business_risk_reasons": [
+    "CASHFLOW_INVENTORY_QUALITY",
+    "MULTI_PRICE_BANDS",
+    "REDUCE_EXIT_ACTION_UNSPECIFIED"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

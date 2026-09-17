@@ -1,0 +1,878 @@
+{
+  "schema_version": 2,
+  "ticker": "688825.SH",
+  "company": "长鑫存储",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+    "report_sha256": "2aae6a345ff05291d4fda4584cf839ca8f07d8d16a3408d436b5e37fbc5c240d"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "当前 45 元以上区间明确为回避，不能把国产替代确定性或 HBM 期权转换为当前买入",
+      "16-24 元只允许在未列入实体清单且 HBM 未证伪时建立不超过 2% 的观察仓",
+      "15 元下方的系统性建仓仍要求基本面未坏且下跌仅由周期估值导致",
+      "85.2、23.3、5.3 元是三情景目标价，不是买入价格",
+      "报告没有给出现有持仓者的当前动作；加仓信号只在任一出现时触发重估上调"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "公司值得长期跟踪，但当前价格没有安全边际，投资动作是等待。",
+    "evidence": [
+      {
+        "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+        "line_start": 374,
+        "line_end": 374,
+        "quote": "**投资确定性：低**。这是一家上市 3 天、处于史上最强行业周期顶部、头顶悬置制裁、核心期权（HBM）尚未证实的公司，任何方向的重仓都缺乏依据。确定性较高的只有三件事：公司会活下去；份额会继续上升；当前价格没有安全边际。投资动作上，这三件事共同指向同一个词——等待。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "现价区回避；24-45 元继续观察，16-24 元满足两项前提才可试仓，15 元下方满足基本面条件才可系统建仓。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "avoid-above-45",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "summary": "45 元以上属于现价回避区，任何理由都不追。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "GTE",
+            "value": null,
+            "unit": null,
+            "price_min": 45,
+            "price_max": null,
+            "currency": "CNY",
+            "price_role": "NOT_ACTIONABLE",
+            "evidence": [
+              {
+                "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                "line_start": 337,
+                "line_end": 337,
+                "quote": "| 3 万亿以上（45 元+，现价区） | 回避。任何理由都不追 |"
+              }
+            ],
+            "node_id": "price-above-45",
+            "kind": "PRICE_RANGE",
+            "effect": "BLOCK_ENTRY",
+            "scope": "empty_position",
+            "description": "价格为 45 元以上。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 337,
+              "line_end": 337,
+              "quote": "| 3 万亿以上（45 元+，现价区） | 回避。任何理由都不追 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "watch-24-45",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "summary": "24-45 元只做功课并等待信号。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 24,
+            "price_max": 45,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                "line_start": 338,
+                "line_end": 338,
+                "quote": "| 1.6-3 万亿（24-45 元） | 观望，做功课等待，跟踪信号清单 |"
+              }
+            ],
+            "node_id": "price-24-45",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 24-45 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 338,
+              "line_end": 338,
+              "quote": "| 1.6-3 万亿（24-45 元） | 观望，做功课等待，跟踪信号清单 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-16-24-with-risk-gates",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "summary": "16-24 元且未列入实体清单、HBM 未证伪时，可建不超过 2% 的观察仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 16,
+                "price_max": 24,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 339,
+                    "line_end": 339,
+                    "quote": "| 1.1-1.6 万亿（16-24 元） | 若无实体清单落地且 HBM 未证伪，可建观察仓（组合 2% 内） |"
+                  }
+                ],
+                "node_id": "trial-price-16-24",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "价格处于 16-24 元。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "OCCURS",
+                    "value": true,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                        "line_start": 339,
+                        "line_end": 339,
+                        "quote": "| 1.1-1.6 万亿（16-24 元） | 若无实体清单落地且 HBM 未证伪，可建观察仓（组合 2% 内） |"
+                      }
+                    ],
+                    "node_id": "entity-listed",
+                    "kind": "EVENT",
+                    "effect": "BLOCK_ENTRY",
+                    "scope": "empty_position",
+                    "description": "公司被列入实体清单。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 339,
+                    "line_end": 339,
+                    "quote": "| 1.1-1.6 万亿（16-24 元） | 若无实体清单落地且 HBM 未证伪，可建观察仓（组合 2% 内） |"
+                  }
+                ],
+                "node_id": "not-entity-listed",
+                "kind": "NOT",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "没有列入实体清单。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 339,
+                    "line_end": 339,
+                    "quote": "| 1.1-1.6 万亿（16-24 元） | 若无实体清单落地且 HBM 未证伪，可建观察仓（组合 2% 内） |"
+                  }
+                ],
+                "node_id": "hbm-not-falsified",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "HBM 逻辑未被证伪。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                "line_start": 339,
+                "line_end": 339,
+                "quote": "| 1.1-1.6 万亿（16-24 元） | 若无实体清单落地且 HBM 未证伪，可建观察仓（组合 2% 内） |"
+              }
+            ],
+            "node_id": "trial-all",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 16-24 元、未列入实体清单且 HBM 未证伪。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 339,
+              "line_end": 339,
+              "quote": "| 1.1-1.6 万亿（16-24 元） | 若无实体清单落地且 HBM 未证伪，可建观察仓（组合 2% 内） |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "systematic-entry-below-15-with-intact-thesis",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "summary": "15 元下方且基本面未坏、下跌仅为周期杀估值时进入价值区并可系统建仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LT",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 15,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 340,
+                    "line_end": 340,
+                    "quote": "| 1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓 |"
+                  }
+                ],
+                "node_id": "entry-below-15",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格低于 15 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 340,
+                    "line_end": 340,
+                    "quote": "| 1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓 |"
+                  }
+                ],
+                "node_id": "fundamentals-intact",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "公司基本面未坏。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 340,
+                    "line_end": 340,
+                    "quote": "| 1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓 |"
+                  }
+                ],
+                "node_id": "decline-only-cyclical-valuation",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "下跌仅由周期杀估值造成。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                "line_start": 340,
+                "line_end": 340,
+                "quote": "| 1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓 |"
+              }
+            ],
+            "node_id": "systematic-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格低于 15 元，基本面未坏且下跌仅为周期杀估值。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 340,
+              "line_end": 340,
+              "quote": "| 1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+          "line_start": 337,
+          "line_end": 340,
+          "quote": "| 3 万亿以上（45 元+，现价区） | 回避。任何理由都不追 |\n| 1.6-3 万亿（24-45 元） | 观望，做功课等待，跟踪信号清单 |\n| 1.1-1.6 万亿（16-24 元） | 若无实体清单落地且 HBM 未证伪，可建观察仓（组合 2% 内） |\n| 1 万亿以下（15 元下方） | 若公司基本面未坏（仅周期杀估值），进入价值区，可系统性建仓 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "UNKNOWN",
+      "summary": "报告没有给出现有持仓者的独立当前动作；仅列出任一出现即触发重估上调的加仓信号。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "add-on-any-positive-signal",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "summary": "任一明确加仓信号出现时触发重估上调。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "HBM3/3E 综合良率",
+                "operator": "GT",
+                "value": 60,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 342,
+                    "line_end": 342,
+                    "quote": "**加仓信号**（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除（如中美达成长期协议）；G5 按期量产且 TechInsights 拆解确认；周期下行段公司仍保持正毛利（证明成本差距收窄）。"
+                  }
+                ],
+                "node_id": "hbm-yield-above-60",
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "HBM3/3E 综合良率突破 60%，且有第三方证据。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 342,
+                    "line_end": 342,
+                    "quote": "**加仓信号**（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除（如中美达成长期协议）；G5 按期量产且 TechInsights 拆解确认；周期下行段公司仍保持正毛利（证明成本差距收窄）。"
+                  }
+                ],
+                "node_id": "huawei-hbm-scale-shipment",
+                "kind": "EVENT",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "华为昇腾采用长鑫 HBM 并规模出货。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 342,
+                    "line_end": 342,
+                    "quote": "**加仓信号**（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除（如中美达成长期协议）；G5 按期量产且 TechInsights 拆解确认；周期下行段公司仍保持正毛利（证明成本差距收窄）。"
+                  }
+                ],
+                "node_id": "entity-list-risk-removed",
+                "kind": "EVENT",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "实体清单风险实质解除。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 342,
+                    "line_end": 342,
+                    "quote": "**加仓信号**（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除（如中美达成长期协议）；G5 按期量产且 TechInsights 拆解确认；周期下行段公司仍保持正毛利（证明成本差距收窄）。"
+                  }
+                ],
+                "node_id": "g5-on-time-confirmed",
+                "kind": "EVENT",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "G5 按期量产并经 TechInsights 拆解确认。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                    "line_start": 342,
+                    "line_end": 342,
+                    "quote": "**加仓信号**（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除（如中美达成长期协议）；G5 按期量产且 TechInsights 拆解确认；周期下行段公司仍保持正毛利（证明成本差距收窄）。"
+                  }
+                ],
+                "node_id": "positive-margin-through-downturn",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "周期下行段仍保持正毛利。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                "line_start": 342,
+                "line_end": 342,
+                "quote": "**加仓信号**（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除（如中美达成长期协议）；G5 按期量产且 TechInsights 拆解确认；周期下行段公司仍保持正毛利（证明成本差距收窄）。"
+              }
+            ],
+            "node_id": "positive-signal-any",
+            "kind": "ANY",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "五项加仓信号中任一出现。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 342,
+              "line_end": 342,
+              "quote": "**加仓信号**（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除（如中美达成长期协议）；G5 按期量产且 TechInsights 拆解确认；周期下行段公司仍保持正毛利（证明成本差距收窄）。"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "**加仓信号**（任一出现即重估上调）：HBM3/3E 综合良率突破 60% 的第三方证据；华为昇腾采用长鑫 HBM 规模出货；实体清单风险实质解除（如中美达成长期协议）；G5 按期量产且 TechInsights 拆解确认；周期下行段公司仍保持正毛利（证明成本差距收窄）。"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 344,
+              "line_end": 344,
+              "quote": "**回避/清仓信号**：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。"
+            }
+          ],
+          "node_id": "entity-list-triggered",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "公司被列入实体清单。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                  "line_start": 344,
+                  "line_end": 344,
+                  "quote": "**回避/清仓信号**：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。"
+                }
+              ],
+              "node_id": "dram-contract-price-negative",
+              "kind": "EVENT",
+              "effect": "EXIT_TRIGGER",
+              "scope": "both",
+              "description": "DRAM 合约价环比转负。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+                  "line_start": 344,
+                  "line_end": 344,
+                  "quote": "**回避/清仓信号**：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。"
+                }
+              ],
+              "node_id": "big-three-capex-raised",
+              "kind": "EVENT",
+              "effect": "EXIT_TRIGGER",
+              "scope": "both",
+              "description": "三巨头资本开支上修。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 344,
+              "line_end": 344,
+              "quote": "**回避/清仓信号**：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。"
+            }
+          ],
+          "node_id": "dram-price-down-and-big-three-capex-up",
+          "kind": "ALL",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "DRAM 合约价环比转负且三巨头资本开支上修。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 344,
+              "line_end": 344,
+              "quote": "**回避/清仓信号**：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。"
+            }
+          ],
+          "node_id": "g5-delayed-over-two-quarters",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "G5 延期超过两个季度。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 344,
+              "line_end": 344,
+              "quote": "**回避/清仓信号**：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。"
+            }
+          ],
+          "node_id": "gigadevice-related-pricing-abnormal",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "兆易关联交易出现定价异常。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+              "line_start": 344,
+              "line_end": 344,
+              "quote": "**回避/清仓信号**：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。"
+            }
+          ],
+          "node_id": "valuation-above-two-trillion-before-unlock",
+          "kind": "QUALITATIVE",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "2027 年起解禁高峰前估值仍在 2 万亿元以上。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+          "line_start": 344,
+          "line_end": 344,
+          "quote": "**回避/清仓信号**：列入实体清单（先减后评估，杀伤在扩产而非存量）；DRAM 合约价环比转负 + 三巨头资本开支上修共振；G5 延期超过两个季度；兆易关联交易出现定价异常；2027 年起解禁高峰前的估值仍在 2 万亿以上。"
+        }
+      ],
+      "node_id": "avoid-or-exit-on-any-redline",
+      "kind": "ANY",
+      "effect": "EXIT_TRIGGER",
+      "scope": "both",
+      "description": "任一回避或清仓信号出现时触发退出复核。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+          "line_start": 355,
+          "line_end": 366,
+          "quote": "## 十三、需要一手验证的问题清单"
+        }
+      ],
+      "node_id": "monitor-first-party-verification",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "继续核验招股书口径、半年报、HBM、G5、实体清单、国产设备、关联交易、新厂、解禁和全球供给。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 49,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+          "line_start": 300,
+          "line_end": 300,
+          "quote": "基准输入：当前价 49 元、2026 年化每股收益约 1.60 元（1070 亿 ÷ 668.81 亿股）。"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 5.3,
+      "max": 85.2,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+          "line_start": 302,
+          "line_end": 306,
+          "quote": "| 情景 | 假设 | 年化利润增速 | 目标市盈率 | 3 年目标价 | 空间 |\n|---|---|---|---|---|---|\n| 乐观（概率约 25%） | HBM3/3E 良率爬坡成功并对华为规模出货，周期高位钝化，未列实体清单，G5 顺利量产 | +15% | 35 倍 | 85.2 元 | +74% |\n| 中性（概率约 45%） | 2027-2028 周期回落，价格跌三到四成但份额升至 12% 对冲，HBM 小规模出货，制裁维持现状 | -10% | 20 倍 | 23.3 元 | -52% |\n| 悲观（概率约 30%） | 列入实体清单 + 周期深度下行共振，HBM 爬坡失败，回到微利 | -35% | 12 倍 | 5.3 元 | -89% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约仅给出泛化观察且结论摘要被错误截取，遗漏正文的分层价格与条件路径。",
+    "evidence": [
+      {
+        "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+        "line_start": 392,
+        "line_end": 400,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 代际差重新拉大 G5 之后无 EUV、国产光刻/量测不达预期，三巨头 EUV 节点 + HBM4 拉开身位 5 年维度 40% 中高：退化为\"中国的南亚科\"，估值逻辑崩塌 G5 量产时间、国产设备验证进度 |\n| 激进型动作 | 未给出 |\n| 激进型价格区间 | 未给出 |\n| 稳健型动作 | 未给出 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 未给出 |\n| 保守型价格区间 | 未给出 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/长鑫存储/长鑫存储-投资研究报告-20260730.md",
+      "line_start": 333,
+      "line_end": 344,
+      "quote": "### 12.2 决策表：上市后什么价位值得买、什么信号加仓/回避"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "NOT_LOGIC"
+  ]
+}

@@ -1,0 +1,291 @@
+{
+  "schema_version": 2,
+  "ticker": "603298.SH",
+  "company": "杭叉集团",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+    "report_sha256": "c3a73f5c325c21740c504bb420a8174fa51a0d1eb526decf84da4ea9203c04f9"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "杭叉集团正文明确当前观察，24—26元轻仓观察、20—23元等待、18元以下回避；底部契约摘要字段不完整。",
+      "报告没有形成明确持仓者动作，因此不从空仓价格带推断holder结论。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "empty_position",
+    "summary": "杭叉集团业务扎实但应收、关联交易和管理层隐忧要求更厚安全边际，当前观察。",
+    "evidence": [
+      {
+        "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+        "line_start": 10,
+        "line_end": 10,
+        "quote": "> 杭叉集团是一家ROE 20%+、PE 15.5x的制造业龙头，生意扎实但非顶级——双寡头格局提供稳定性，电动化+全球化提供成长性，但应收账款4年翻倍（周转天数23→55天）、实际控制人仇建平\"巨星系\"关联交易复杂、管理层老龄化三大隐忧要求更大的安全边际。当前价格可放入观察名单，但建议等待PE跌至12-13倍（约20-23元）再考虑建仓。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "24—26元轻仓观察，20—23元等待，18元以下回避或再评估。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "REVIEW",
+          "summary": "24—26元轻仓观察。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 24,
+            "price_max": 26,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+                "line_start": 158,
+                "line_end": 158,
+                "quote": "| **激进型** | **轻仓观察** | 24-26元 | ≤5% |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于24—26元轻仓观察区。",
+            "node_id": "empty-review-24-26-condition"
+          },
+          "path_id": "empty-review-24-26",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+              "line_start": 158,
+              "line_end": 158,
+              "quote": "| **激进型** | **轻仓观察** | 24-26元 | ≤5% |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "REVIEW",
+          "summary": "20—23元等待建仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 20,
+            "price_max": 23,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+                "line_start": 159,
+                "line_end": 159,
+                "quote": "| **稳健型** | **等待** | 20-23元（PE 12-13x） | ≤10% |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于20—23元等待区。",
+            "node_id": "empty-review-20-23-condition"
+          },
+          "path_id": "empty-review-20-23",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+              "line_start": 159,
+              "line_end": 159,
+              "quote": "| **稳健型** | **等待** | 20-23元（PE 12-13x） | ≤10% |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "AVOID",
+          "summary": "18元以下回避，除非重新核验基本面。",
+          "path_id": "empty-avoid-below-18",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+              "line_start": 160,
+              "line_end": 160,
+              "quote": "| **保守型** | **回避** | 18元以下（PE <11x） | ≤10% |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+          "line_start": 10,
+          "line_end": 10,
+          "quote": "> 杭叉集团是一家ROE 20%+、PE 15.5x的制造业龙头，生意扎实但非顶级——双寡头格局提供稳定性，电动化+全球化提供成长性，但应收账款4年翻倍（周转天数23→55天）、实际控制人仇建平\"巨星系\"关联交易复杂、管理层老龄化三大隐忧要求更大的安全边际。当前价格可放入观察名单，但建议等待PE跌至12-13倍（约20-23元）再考虑建仓。"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "UNKNOWN",
+      "summary": "报告未形成独立、可执行的持仓者动作，不能由空仓价格带推断。",
+      "entry_semantic": "AMBIGUOUS",
+      "action_paths": [
+        {
+          "action": "UNKNOWN",
+          "summary": "持仓策略待人工确认。",
+          "path_id": "holder-scope-unknown",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+              "line_start": 10,
+              "line_end": 10,
+              "quote": "> 杭叉集团是一家ROE 20%+、PE 15.5x的制造业龙头，生意扎实但非顶级——双寡头格局提供稳定性，电动化+全球化提供成长性，但应收账款4年翻倍（周转天数23→55天）、实际控制人仇建平\"巨星系\"关联交易复杂、管理层老龄化三大隐忧要求更大的安全边际。当前价格可放入观察名单，但建议等待PE跌至12-13倍（约20-23元）再考虑建仓。"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+          "line_start": 10,
+          "line_end": 10,
+          "quote": "> 杭叉集团是一家ROE 20%+、PE 15.5x的制造业龙头，生意扎实但非顶级——双寡头格局提供稳定性，电动化+全球化提供成长性，但应收账款4年翻倍（周转天数23→55天）、实际控制人仇建平\"巨星系\"关联交易复杂、管理层老龄化三大隐忧要求更大的安全边际。当前价格可放入观察名单，但建议等待PE跌至12-13倍（约20-23元）再考虑建仓。"
+        }
+      ],
+      "semantic_status": "ambiguous"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+          "line_start": 120,
+          "line_end": 120,
+          "quote": "7. **安全边际不够厚**：中性情景上行19%，悲观下行17%。当前价格赔率不优"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "应收继续恶化、关联交易风险扩大或资本回报不达标时重新审视论文。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+          "line_start": 10,
+          "line_end": 10,
+          "quote": "> 杭叉集团是一家ROE 20%+、PE 15.5x的制造业龙头，生意扎实但非顶级——双寡头格局提供稳定性，电动化+全球化提供成长性，但应收账款4年翻倍（周转天数23→55天）、实际控制人仇建平\"巨星系\"关联交易复杂、管理层老龄化三大隐忧要求更大的安全边际。当前价格可放入观察名单，但建议等待PE跌至12-13倍（约20-23元）再考虑建仓。"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪应收账款、周转天数、关联交易和利润增长。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": "底部契约摘要不完整，但未直接与正文动作相反。",
+    "evidence": [
+      {
+        "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+        "line_start": 217,
+        "line_end": 217,
+        "quote": "| 结论摘要 | 投资者类型 建议 建仓价格区间 仓位上限 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_INCOMPLETE",
+      "summary": "底部看板契约的结论摘要只保留表头，且没有持仓者动作。",
+      "required_clarification": "补充正式摘要及持仓者路径后再决定是否发布为ready。",
+      "evidence": [
+        {
+          "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+          "line_start": 217,
+          "line_end": 217,
+          "quote": "| 结论摘要 | 投资者类型 建议 建仓价格区间 仓位上限 |"
+        }
+      ],
+      "classification": "HOLDER",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-scope-unknown"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/杭叉集团-deepseek分析/最终报告.md",
+      "line_start": 10,
+      "line_end": 10,
+      "quote": "> 杭叉集团是一家ROE 20%+、PE 15.5x的制造业龙头，生意扎实但非顶级——双寡头格局提供稳定性，电动化+全球化提供成长性，但应收账款4年翻倍（周转天数23→55天）、实际控制人仇建平\"巨星系\"关联交易复杂、管理层老龄化三大隐忧要求更大的安全边际。当前价格可放入观察名单，但建议等待PE跌至12-13倍（约20-23元）再考虑建仓。"
+    }
+  ],
+  "business_risk_reasons": [
+    "GOVERNANCE_RISK"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

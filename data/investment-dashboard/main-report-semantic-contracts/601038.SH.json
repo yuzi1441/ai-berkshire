@@ -1,0 +1,586 @@
+{
+  "schema_version": 2,
+  "ticker": "601038.SH",
+  "company": "一拖股份",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+    "report_sha256": "c508d7eaaaba872e6cd2ed04f373880a60bf25ffa8757e7b07e4b353c9448364"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "报告同时包含 A 股和 H 股，但本合同只保留 A 股价格与动作路径。",
+      "11.69 元当前价属于 10.5-13.8 元空仓等待/持仓观察区，不因底部契约的‘买入’字段自动转为买入。",
+      "9.5-10.5 元试错路径明确要求继续验证，9.0-9.5 元及不高于 9.0 元是不同层级的条件性买入区。",
+      "加仓和减仓/论文重审各列五项，未定义组合逻辑，保留人工复核。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "一拖是有真实复合优势的周期制造龙头，但当前 11.69 元赔率普通；空仓等待，持仓者继续观察并控制机会成本。",
+    "evidence": [
+      {
+        "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+        "line_start": 347,
+        "line_end": 347,
+        "quote": "一拖值得进入长期观察池，但当前还不是高赔率买点。公司在品牌、服务、渠道和核心部件上有真实复合优势，且资产负债表强、现金流和分红纪律合格；问题在于行业利润率低、客户可替换、雷沃竞争强，高端与出海尚未证明能持续抬升 ROIC。11.69 元对应 15.55x TTM PE，看似不贵，但中性五年资本利得年化仅约 2.8%。空仓者优先等待 9.5 元附近或更强的利润上修证据；持仓者可继续观察，不应把单季改善当成重仓理由。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 11.69 元处于 10.5-13.8 元空仓等待区；9.5-10.5 元可小仓试错，9.0-9.5 元及不高于 9.0 元才是更明确的条件性买入层级。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-10.5-13.8",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "10.5-13.8 元空仓等待，当前 11.69 元位于此区间。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 10.5,
+            "price_max": 13.8,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                "line_start": 281,
+                "line_end": 281,
+                "quote": "| **10.5-13.8 元** | 空仓等待；持仓观察 | 当前 11.69 元位于此区，质量尚可但赔率普通 |"
+              }
+            ],
+            "node_id": "watch-price-10.5-13.8",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 10.5-13.8 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 281,
+              "line_end": 281,
+              "quote": "| **10.5-13.8 元** | 空仓等待；持仓观察 | 当前 11.69 元位于此区，质量尚可但赔率普通 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-9.5-10.5-with-validation",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "9.5-10.5 元可小仓试错，但需继续验证内需、回款和毛利。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 9.5,
+                "price_max": 10.5,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                    "line_start": 280,
+                    "line_end": 280,
+                    "quote": "| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |"
+                  }
+                ],
+                "node_id": "trial-price-9.5-10.5",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 9.5-10.5 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                    "line_start": 280,
+                    "line_end": 280,
+                    "quote": "| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |"
+                  }
+                ],
+                "node_id": "trial-quality-validation",
+                "kind": "FILING",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "2026H1/Q3 继续验证内需、回款和毛利。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                "line_start": 280,
+                "line_end": 280,
+                "quote": "| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |"
+              }
+            ],
+            "node_id": "trial-price-and-quality-9.5-10.5",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 9.5-10.5 元且 2026H1/Q3 继续验证内需、回款和毛利。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 280,
+              "line_end": 280,
+              "quote": "| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-9.0-9.5",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "9.0-9.5 元为稳健型重点买入区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 9.0,
+            "price_max": 9.5,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                "line_start": 279,
+                "line_end": 279,
+                "quote": "| **9.0-9.5 元** | 稳健型重点买入区 | 接近中性情景 10% 要求回报折现锚 |"
+              }
+            ],
+            "node_id": "entry-price-9.0-9.5",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 9.0-9.5 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 279,
+              "line_end": 279,
+              "quote": "| **9.0-9.5 元** | 稳健型重点买入区 | 接近中性情景 10% 要求回报折现锚 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-below-9.0",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "不高于 9.0 元进入保守型分批买入区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 9.0,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                "line_start": 278,
+                "line_end": 278,
+                "quote": "| **不高于 9.0 元** | 保守型可分批买入 | 约 12x TTM PE、1.23x PB，进入强安全边际区 |"
+              }
+            ],
+            "node_id": "entry-price-below-9",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 9.0 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 278,
+              "line_end": 278,
+              "quote": "| **不高于 9.0 元** | 保守型可分批买入 | 约 12x TTM PE、1.23x PB，进入强安全边际区 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+          "line_start": 278,
+          "line_end": 281,
+          "quote": "| **不高于 9.0 元** | 保守型可分批买入 | 约 12x TTM PE、1.23x PB，进入强安全边际区 |\n| **9.0-9.5 元** | 稳健型重点买入区 | 接近中性情景 10% 要求回报折现锚 |\n| **9.5-10.5 元** | 激进型可小仓试错 | 需 2026H1/Q3 继续验证内需、回款和毛利 |\n| **10.5-13.8 元** | 空仓等待；持仓观察 | 当前 11.69 元位于此区，质量尚可但赔率普通 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "小仓持有者继续观察；较重持仓者审视机会成本，价格升至高位时不追价并考虑减仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-small-hold-observe",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "小仓持有者继续观察，跟踪 2026H1 回款、海外毛利、高端产品销量和渠道库存。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 323,
+              "line_end": 323,
+              "quote": "| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-heavy-review-opportunity-cost",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "较重持仓者审视机会成本；成本接近现价时与更高 ROIC 公司比较。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 324,
+              "line_end": 324,
+              "quote": "| 较重持仓 | **审视机会成本** | 若成本显著低于 9.5 元可持有；若成本接近现价，需与更高 ROIC 公司比较 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-reduce-above-16.5",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "不低于 16.5 元且基本面未上修时考虑减仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "GTE",
+            "value": null,
+            "unit": null,
+            "price_min": 16.5,
+            "price_max": null,
+            "currency": "CNY",
+            "price_role": "REDUCE_POSITION",
+            "evidence": [
+              {
+                "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                "line_start": 283,
+                "line_end": 283,
+                "quote": "| **不低于 16.5 元** | 若基本面未上修，考虑减仓 | 接近 22x TTM PE，需高端和出口利润兑现支撑 |"
+              }
+            ],
+            "node_id": "reduce-price-above-16.5",
+            "kind": "PRICE_RANGE",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "A 股价格不低于 16.5 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 283,
+              "line_end": 283,
+              "quote": "| **不低于 16.5 元** | 若基本面未上修，考虑减仓 | 接近 22x TTM PE，需高端和出口利润兑现支撑 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "五项加仓信号的组合逻辑未定义，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                "line_start": 329,
+                "line_end": 335,
+                "quote": "**加仓信号**\n\n1. 2026H1/全年国内销量、终端补贴公示和经营现金流同时改善，而不是只见产量。\n2. 农业机械毛利率在促销未加码的情况下持续高于 15%。\n3. 动力换挡/CVT/混动披露批量销量、复购或较高毛利。\n4. 海外收入继续增长，海外毛利率向国内靠拢，应收周转不恶化。\n5. 价格回落到 9.5 元或以下，基本面未恶化。"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认销量、毛利率、高端商业化、海外质量和价格信号的组合关系。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 329,
+              "line_end": 335,
+              "quote": "**加仓信号**\n\n1. 2026H1/全年国内销量、终端补贴公示和经营现金流同时改善，而不是只见产量。\n2. 农业机械毛利率在促销未加码的情况下持续高于 15%。\n3. 动力换挡/CVT/混动披露批量销量、复购或较高毛利。\n4. 海外收入继续增长，海外毛利率向国内靠拢，应收周转不恶化。\n5. 价格回落到 9.5 元或以下，基本面未恶化。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-reduce-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "五项减仓或论文重审信号的组合逻辑未定义，保留人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+                "line_start": 337,
+                "line_end": 343,
+                "quote": "**减仓或论文重审信号**\n\n1. 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱。\n2. 雷沃份额和高端商业化持续领先，一拖只能靠降价守份额。\n3. 海外收入增长但毛利率、回款或保修成本持续恶化。\n4. 在建工程与折旧明显上升，产能利用率未改善。\n5. 再次发生重大会计差错、监管警示或关联资金风险。"
+              }
+            ],
+            "node_id": "holder-reduce-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认收入、竞争、海外质量、资本开支和治理信号的组合关系。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+              "line_start": 337,
+              "line_end": 343,
+              "quote": "**减仓或论文重审信号**\n\n1. 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱。\n2. 雷沃份额和高端商业化持续领先，一拖只能靠降价守份额。\n3. 海外收入增长但毛利率、回款或保修成本持续恶化。\n4. 在建工程与折旧明显上升，产能利用率未改善。\n5. 再次发生重大会计差错、监管警示或关联资金风险。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+          "line_start": 323,
+          "line_end": 324,
+          "quote": "| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |\n| 较重持仓 | **审视机会成本** | 若成本显著低于 9.5 元可持有；若成本接近现价，需与更高 ROIC 公司比较 |"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |"
+        }
+      ],
+      "node_id": "monitor-h1-quality-and-cycle",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 2026H1 回款、海外毛利、高端产品销量、渠道库存以及周期复苏是否持续。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 11.69,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "> **A 股价格锚**：11.69 元；**H 股价格锚**：7.35 港元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "五年三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 6.8,
+      "max": 20.6,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+          "line_start": 268,
+          "line_end": 270,
+          "quote": "| 乐观 | +10% | 17x | 1.21 元 | **20.6 元** | +12.0% | 内需复苏、出口增利、高端产品规模化 |\n| 中性 | +5% | 14x | 0.96 元 | **13.4 元** | +2.8% | 弱复苏，出口对冲国内，利润率基本稳定 |\n| 悲观 | -2% | 10x | 0.68 元 | **6.8 元** | -10.3% | 周期低迷、价格战、海外低毛利和估值收缩 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "中性情景价格锚",
+      "price_role": "FAIR_VALUE",
+      "value": 9.15,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+          "line_start": 272,
+          "line_end": 272,
+          "quote": "三情景均由 `financial_rigor.py three-scenario` 计算。资本利得年化不含股息。若粗略假设未来五年每年股息维持 0.2659 元，并以 10% 要求回报折现，中性情景价格锚约 9.15 元；该数值只是决策辅助，不是精确内在价值。"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约将基本面建议动作写成买入，并列出价格带，但正文明确当前 11.69 元空仓等待、持仓观察，且正文把买入条件与周期验证写得更细。",
+    "evidence": [
+      {
+        "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+        "line_start": 407,
+        "line_end": 414,
+        "quote": "| 基本面建议动作 | 买入 |\n| 结论摘要 | 一拖值得进入长期观察池，但当前还不是高赔率买点。公司在品牌、服务、渠道和核心部件上有真实复合优势，且资产负债表强、现金流和分红纪律合格；问题在于行业利润率低、客户可替换、雷沃竞争强，高端与出海尚未证明能持续抬升 ROIC。11.69 元对应 15.55x TTM PE，看似不贵，但中性五年资本利得年化仅约 2.8%。空仓者优先等待 9.5 元附近或更强的利润上修证据；持仓者可继续观察，不应把单季改善当成重仓理由。 |\n| 激进型动作 | 激进型可小仓试错 |\n| 激进型价格区间 | 9.5-10.5 元 |\n| 稳健型动作 | 稳健型重点买入区 |\n| 稳健型价格区间 | 9.0-9.5 元 |\n| 保守型动作 | 保守型可分批买入 |\n| 保守型价格区间 | 不高于 9.0 元 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓与减仓/论文重审各列五项信号，但没有说明是任一、全部还是最少满足数量。",
+      "required_clarification": "由人工或更强模型确认信号组合逻辑后再生成自动加仓、减仓或退出规则；当前保留人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+          "line_start": 329,
+          "line_end": 343,
+          "quote": "**加仓信号**\n\n1. 2026H1/全年国内销量、终端补贴公示和经营现金流同时改善，而不是只见产量。\n2. 农业机械毛利率在促销未加码的情况下持续高于 15%。\n3. 动力换挡/CVT/混动披露批量销量、复购或较高毛利。\n4. 海外收入继续增长，海外毛利率向国内靠拢，应收周转不恶化。\n5. 价格回落到 9.5 元或以下，基本面未恶化。\n\n**减仓或论文重审信号**\n\n1. 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱。\n2. 雷沃份额和高端商业化持续领先，一拖只能靠降价守份额。\n3. 海外收入增长但毛利率、回款或保修成本持续恶化。\n4. 在建工程与折旧明显上升，产能利用率未改善。\n5. 再次发生重大会计差错、监管警示或关联资金风险。"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-heavy-review-opportunity-cost",
+        "holder-reduce-above-16.5",
+        "holder-add-signals-manual-review",
+        "holder-reduce-signals-manual-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+      "line_start": 318,
+      "line_end": 325,
+      "quote": "### 8.3 空仓与持仓建议\n\n| 投资者状态 | 当前建议 | 下一步触发条件 |\n|---|---|---|\n| 空仓 | **等待，不在 11.69 元追价** | 价格进入 9.5 元附近，或正式财报证明利润中枢显著上修 |\n| 小仓持有 | **继续观察** | 看 2026H1 回款、海外毛利、高端产品销量和渠道库存 |\n| 较重持仓 | **审视机会成本** | 若成本显著低于 9.5 元可持有；若成本接近现价，需与更高 ROIC 公司比较 |\n| 价格升至 13.8 元以上 | **不追价并审视估值** | 若升至 16.5 元且基本面未上修，考虑减仓 |"
+    },
+    {
+      "report_path": "reports/一拖股份/一拖股份-investment-team-20260714.md",
+      "line_start": 327,
+      "line_end": 343,
+      "quote": "### 8.4 加仓与减仓信号\n\n**加仓信号**\n\n1. 2026H1/全年国内销量、终端补贴公示和经营现金流同时改善，而不是只见产量。\n2. 农业机械毛利率在促销未加码的情况下持续高于 15%。\n3. 动力换挡/CVT/混动披露批量销量、复购或较高毛利。\n4. 海外收入继续增长，海外毛利率向国内靠拢，应收周转不恶化。\n5. 价格回落到 9.5 元或以下，基本面未恶化。\n\n**减仓或论文重审信号**\n\n1. 收入增长但应收、贴息或销售费用更快上升，经营现金流转弱。\n2. 雷沃份额和高端商业化持续领先，一拖只能靠降价守份额。\n3. 海外收入增长但毛利率、回款或保修成本持续恶化。\n4. 在建工程与折旧明显上升，产能利用率未改善。\n5. 再次发生重大会计差错、监管警示或关联资金风险。"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

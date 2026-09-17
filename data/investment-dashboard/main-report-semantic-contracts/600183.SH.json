@@ -1,0 +1,781 @@
+{
+  "schema_version": 2,
+  "ticker": "600183.SH",
+  "company": "生益科技",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+    "report_sha256": "27e4474ccf532d27bd0f68772a7bc81363da357f2de584ee4be60869662d7180"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "正文结论是观察/持有纪律跟踪、空仓不追高；157.40 元不是买入信号。",
+      "90—110 元与 TTM PE 40—50 倍是重新评估条件，不是正文明确的无条件买入区。",
+      "底部看板契约的结论摘要误填为表头，稳健/保守动作、价格和失效条件均未给出，不能覆盖正文。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "生益科技是质量较高的高端电子材料龙头，但 157.40 元已要求未来利润继续大幅跃迁；空仓不宜追高，持仓者纪律观察。",
+    "evidence": [
+      {
+        "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+        "line_start": 22,
+        "line_end": 22,
+        "quote": "**一句话结论：** 生益科技是 A 股高端电子材料链中质量较高的龙头，2025—2026Q1 已把 AI 算力、高速通信和高端 PCB 景气转化为收入、利润和现金流；但以 157.40 元、约 3823 亿元总市值看，当前价格已要求未来几年利润继续大幅跃迁，适合重点跟踪和持有者纪律观察，空仓不宜情绪化追高。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓不追高；若 2026Q2/Q3 继续高增长且毛利率维持 27% 以上，仅可小仓试错；TTM PE 回落至 40—50 倍或股价 90—110 元且业绩未坏时再重估，保守者还需至少两个季度现金流与利润匹配。",
+      "entry_semantic": "AMBIGUOUS",
+      "action_paths": [
+        {
+          "path_id": "empty-watch-current",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前估值偏高，空仓不追高。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+              "line_start": 270,
+              "line_end": 270,
+              "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "empty-trial-q2q3-growth-margin",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "只有 2026Q2/Q3 继续高增长且毛利率维持 27% 以上时，空仓激进型可小仓试错。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                    "line_start": 276,
+                    "line_end": 276,
+                    "quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 |"
+                  }
+                ],
+                "node_id": "shengyi-q2q3-growth",
+                "kind": "FILING",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "2026Q2/Q3 继续高增长。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "毛利率",
+                "operator": "GTE",
+                "value": 27,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                    "line_start": 276,
+                    "line_end": 276,
+                    "quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 |"
+                  }
+                ],
+                "node_id": "shengyi-gross-margin-above-27",
+                "kind": "METRIC_COMPARE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "毛利率维持 27% 以上。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                "line_start": 276,
+                "line_end": 276,
+                "quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 |"
+              }
+            ],
+            "node_id": "shengyi-trial-gate",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "2026Q2/Q3 继续高增长且毛利率维持 27% 以上。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+              "line_start": 276,
+              "line_end": 276,
+              "quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "empty-revalue-pe-40-50-or-price-90-110",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "TTM PE 回落到 40—50 倍，或股价回落到 90—110 元且业绩未坏时重新评估，不直接编为买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "TTM PE",
+                    "operator": "GTE",
+                    "value": 40,
+                    "unit": "x",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                        "line_start": 277,
+                        "line_end": 277,
+                        "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+                      }
+                    ],
+                    "node_id": "shengyi-pe-gte-40",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "TTM PE 不低于 40 倍。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "TTM PE",
+                    "operator": "LTE",
+                    "value": 50,
+                    "unit": "x",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                        "line_start": 277,
+                        "line_end": 277,
+                        "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+                      }
+                    ],
+                    "node_id": "shengyi-pe-lte-50",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "TTM PE 不高于 50 倍。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                    "line_start": 277,
+                    "line_end": 277,
+                    "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+                  }
+                ],
+                "node_id": "shengyi-pe-40-50",
+                "kind": "ALL",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "TTM PE 回落到 40—50 倍。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "BETWEEN",
+                    "value": null,
+                    "unit": null,
+                    "price_min": 90,
+                    "price_max": 110,
+                    "currency": "CNY",
+                    "price_role": "REVIEW_ZONE",
+                    "evidence": [
+                      {
+                        "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                        "line_start": 277,
+                        "line_end": 277,
+                        "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+                      }
+                    ],
+                    "node_id": "shengyi-price-90-110",
+                    "kind": "PRICE_RANGE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "A 股股价处于 90—110 元。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                        "line_start": 277,
+                        "line_end": 277,
+                        "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+                      }
+                    ],
+                    "node_id": "shengyi-business-not-deteriorated",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "业绩未坏。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                    "line_start": 277,
+                    "line_end": 277,
+                    "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+                  }
+                ],
+                "node_id": "shengyi-price-90-110-and-business-intact",
+                "kind": "ALL",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "股价回落到 90—110 元且业绩未坏。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                "line_start": 277,
+                "line_end": 277,
+                "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+              }
+            ],
+            "node_id": "shengyi-revaluation-review",
+            "kind": "ANY",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "估值或价格达到报告所述重估条件。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+              "line_start": 277,
+              "line_end": 277,
+              "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "empty-conservative-wait",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "保守型暂不买，等待至少两个季度现金流与利润匹配且估值明显下修。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+              "line_start": 278,
+              "line_end": 278,
+              "quote": "| 空仓保守型 | 暂不买 | 需要看到至少两个季度现金流/利润匹配，且估值明显下修 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 270,
+          "line_end": 270,
+          "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** |"
+        },
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 276,
+          "line_end": 278,
+          "quote": "| 空仓激进型 | 只允许小仓试错，不能把它当低估资产 | 若 2026Q2/Q3 继续高增长且毛利率维持 27%+，可小仓跟踪；否则等待 |"
+        },
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+        },
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 278,
+          "line_end": 278,
+          "quote": "| 空仓保守型 | 暂不买 | 需要看到至少两个季度现金流/利润匹配，且估值明显下修 |"
+        }
+      ],
+      "semantic_status": "ambiguous"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "已持仓可持有但要设置基本面止损；高仓位且 PE 仍高、增速放缓时考虑降低风险暴露。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持有但设置基本面止损，持续观察毛利率、现金流、库存应收、订单和扩产回报。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+              "line_start": 279,
+              "line_end": 279,
+              "quote": "| 已持仓投资者 | 可持有但设置基本面止损 | 盯毛利率、CFO/净利、库存应收、AI PCB 订单与扩产回报 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-high-pe-slow-growth",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "高仓位持有者若 PE 仍高于 80 倍且增速放缓，应考虑降低风险暴露。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "PE",
+                "operator": "GT",
+                "value": 80,
+                "unit": "x",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                    "line_start": 280,
+                    "line_end": 280,
+                    "quote": "| 高仓位持有者 | 不建议继续加仓 | 若 PE 仍 >80x 且增速放缓，应考虑降低风险暴露 |"
+                  }
+                ],
+                "node_id": "shengyi-pe-above-80",
+                "kind": "METRIC_COMPARE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "PE 仍高于 80 倍。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                    "line_start": 280,
+                    "line_end": 280,
+                    "quote": "| 高仓位持有者 | 不建议继续加仓 | 若 PE 仍 >80x 且增速放缓，应考虑降低风险暴露 |"
+                  }
+                ],
+                "node_id": "shengyi-growth-slow",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "增速放缓。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+                "line_start": 280,
+                "line_end": 280,
+                "quote": "| 高仓位持有者 | 不建议继续加仓 | 若 PE 仍 >80x 且增速放缓，应考虑降低风险暴露 |"
+              }
+            ],
+            "node_id": "shengyi-high-position-reduce",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "PE 仍高于 80 倍且增速放缓。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+              "line_start": 280,
+              "line_end": 280,
+              "quote": "| 高仓位持有者 | 不建议继续加仓 | 若 PE 仍 >80x 且增速放缓，应考虑降低风险暴露 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 279,
+          "line_end": 279,
+          "quote": "| 已持仓投资者 | 可持有但设置基本面止损 | 盯毛利率、CFO/净利、库存应收、AI PCB 订单与扩产回报 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": "毛利率",
+      "operator": "LT",
+      "value": 24,
+      "unit": "%",
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 292,
+          "line_end": 292,
+          "quote": "- 毛利率连续两个季度回落到 24% 以下；"
+        }
+      ],
+      "node_id": "shengyi-margin-below-24-two-quarters",
+      "kind": "METRIC_COMPARE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "毛利率连续两个季度回落到 24% 以下。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 293,
+          "line_end": 293,
+          "quote": "- 经营现金流持续低于净利润，应收和库存快速上升；"
+        }
+      ],
+      "node_id": "shengyi-cashflow-below-profit",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "经营现金流持续低于净利润，应收和库存快速上升。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 294,
+          "line_end": 297,
+          "quote": "- AI 服务器/交换机订单增速放缓，下游 PCB 龙头率先预警；\n- 铜箔、玻纤布、树脂涨价无法传导；\n- 重大关联交易、治理争议或高管持续高位减持；\n- 技术路线迁移导致公司高端材料认证落后。"
+        }
+      ],
+      "node_id": "shengyi-demand-raw-material-governance-review",
+      "kind": "MANUAL_REVIEW",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "AI 服务器/交换机订单增速放缓、原材料涨价无法传导、重大关联交易/治理争议/高管高位减持或技术路线迁移导致高端材料认证落后等信号需要人工重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 279,
+          "line_end": 279,
+          "quote": "| 已持仓投资者 | 可持有但设置基本面止损 | 盯毛利率、CFO/净利、库存应收、AI PCB 订单与扩产回报 |"
+        }
+      ],
+      "node_id": "shengyi-operating-monitoring",
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪毛利率、CFO/净利、库存应收、AI PCB 订单、高端材料批量认证、产能爬坡和扩产回报。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 157.4,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 46,
+          "line_end": 46,
+          "quote": "| 收盘价 | 157.40 元 | 腾讯行情接口，2026-07-09 16:14:49 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "SCENARIO_VALUE",
+      "value": null,
+      "min": 44.5,
+      "max": 232,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 170,
+          "line_end": 174,
+          "quote": "| 情景 | 年增速 | 目标 PE | 3 年后目标 EPS | 目标价 | 相对 157.40 元 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | +30% | 55x | 4.22 元 | 232.0 元 | +47.4% |\n| 基准 | +18% | 35x | 3.15 元 | 110.4 元 | -29.9% |\n| 悲观 | +5% | 20x | 2.22 元 | 44.5 元 | -71.8% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "报告底部看板决策契约不完整：结论摘要被误填为‘投资者类型 建议 价格/条件区间’，稳健/保守动作、价格和失效条件均未给出；正文第十一部分才是完整行动语义。",
+    "evidence": [
+      {
+        "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+        "line_start": 351,
+        "line_end": 351,
+        "quote": "| 结论摘要 | 投资者类型 建议 价格/条件区间 |"
+      },
+      {
+        "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+        "line_start": 354,
+        "line_end": 359,
+        "quote": "| 稳健型动作 | 未给出 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 未给出 |\n| 保守型价格区间 | 未给出 |\n| 买入失效条件 | 未给出 |\n| 下次复核日期 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_CONFLICT",
+      "summary": "底部看板契约内容不完整且摘要污染，不能作为正文结论的替代。",
+      "required_clarification": "修复或人工确认底部契约字段后，才能决定是否允许结构化结果发布；当前以正文为证据并保持候选状态。",
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 351,
+          "line_end": 351,
+          "quote": "| 结论摘要 | 投资者类型 建议 价格/条件区间 |"
+        }
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-watch-current",
+        "empty-trial-q2q3-growth-margin",
+        "empty-revalue-pe-40-50-or-price-90-110",
+        "empty-conservative-wait"
+      ],
+      "affects_entry": true
+    },
+    {
+      "code": "REVIEW_NOT_ENTRY",
+      "summary": "90—110 元或 TTM PE 40—50 倍的正文措辞是‘再重估’，不是明确建仓指令；因此当前合同保留 REVIEW，不生成 OPEN_POSITION。",
+      "required_clarification": "确认重估完成后的动作与必要基本面门槛；在此之前不得把这些区间当作正式买入区。",
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 277,
+          "line_end": 277,
+          "quote": "| 空仓稳健型 | 等估值消化 | TTM PE 回落到 40-50x，或股价回落到 90-110 元且业绩未坏，再重估 |"
+        }
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-watch-current",
+        "empty-trial-q2q3-growth-margin",
+        "empty-revalue-pe-40-50-or-price-90-110",
+        "empty-conservative-wait"
+      ],
+      "affects_entry": true
+    },
+    {
+      "code": "REDUCE_SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "减仓或论文重审信号是并列清单，未明确任一信号是否足以触发、以及量化处置幅度。",
+      "required_clarification": "确认信号组合、时间窗口和减仓/重审动作；当前保留为人工重审信号。",
+      "evidence": [
+        {
+          "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+          "line_start": 290,
+          "line_end": 297,
+          "quote": "### 4. 减仓或论文重审信号"
+        }
+      ],
+      "classification": "ENTRY",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-watch-current",
+        "empty-trial-q2q3-growth-margin",
+        "empty-revalue-pe-40-50-or-price-90-110",
+        "empty-conservative-wait"
+      ],
+      "affects_entry": true
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+      "line_start": 22,
+      "line_end": 22,
+      "quote": "**一句话结论：** 生益科技是 A 股高端电子材料链中质量较高的龙头，2025—2026Q1 已把 AI 算力、高速通信和高端 PCB 景气转化为收入、利润和现金流；但以 157.40 元、约 3823 亿元总市值看，当前价格已要求未来几年利润继续大幅跃迁，适合重点跟踪和持有者纪律观察，空仓不宜情绪化追高。"
+    },
+    {
+      "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+      "line_start": 270,
+      "line_end": 280,
+      "quote": "| 综合建议 | **观察/持有纪律跟踪；空仓不追高** |"
+    },
+    {
+      "report_path": "reports/生益科技/生益科技研究报告-20260709.md",
+      "line_start": 339,
+      "line_end": 359,
+      "quote": "## 看板决策契约"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

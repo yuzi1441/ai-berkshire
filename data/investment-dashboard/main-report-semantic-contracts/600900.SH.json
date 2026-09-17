@@ -1,0 +1,409 @@
+{
+  "schema_version": 2,
+  "ticker": "600900.SH",
+  "company": "长江电力",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+    "report_sha256": "036182377c4c75494f4cedcfd89600630aa58cc04d0e99c6a6915ce3b5930a99"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "正文写明28.42元空仓等待、23—25元更接近安全边际，但底部契约把基本面建议动作写成分批买入。",
+      "水文、电价、分红、治理和项目回报是价格带成立的前提，且加仓清单未给出全部/任一组合。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "长江电力是优秀存量水电资产，但28.42元空仓不追，等待23—25元和基本面验证；底部契约存在动作冲突。",
+    "evidence": [
+      {
+        "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+        "line_start": 269,
+        "line_end": 269,
+        "quote": "| 当前时机 | 持仓可持有；空仓不追价 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前28.42元空仓等待；25—26元小仓、23—25元分批，22.5元以下需先排除永久性损伤。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "25—26元小仓试建。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 25,
+            "price_max": 26,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+                "line_start": 277,
+                "line_end": 277,
+                "quote": "| 激进型 | 25-26 元 | PE 16.95-17.63x；股息率 3.85%-4.00% | 小仓试建，保留回撤加仓空间 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于25—26元小仓试建区。",
+            "node_id": "empty-trial-25-26-condition"
+          },
+          "path_id": "empty-trial-25-26",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+              "line_start": 277,
+              "line_end": 277,
+              "quote": "| 激进型 | 25-26 元 | PE 16.95-17.63x；股息率 3.85%-4.00% | 小仓试建，保留回撤加仓空间 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "23—25元在基本面未坏时分批建仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 23,
+                "price_max": 25,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+                    "line_start": 278,
+                    "line_end": 278,
+                    "quote": "| 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于23—25元。",
+                "node_id": "empty-entry-23-25-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+                    "line_start": 278,
+                    "line_end": 278,
+                    "quote": "| 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "基本面未坏。",
+                "node_id": "empty-entry-23-25-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+                "line_start": 278,
+                "line_end": 278,
+                "quote": "| 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于23—25元且基本面未坏。",
+            "node_id": "empty-entry-23-25-condition"
+          },
+          "path_id": "empty-entry-23-25",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+              "line_start": 278,
+              "line_end": 278,
+              "quote": "| 稳健型 | 23-25 元 | PE 15.60-16.95x；股息率 4.00%-4.35% | 分批建仓，要求基本面未坏 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "REVIEW",
+          "summary": "22.5元以下先排除永久性损伤，再考虑较高仓位。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 22.5,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+                "line_start": 279,
+                "line_end": 279,
+                "quote": "| 保守型 | 22.5 元以下 | 约 15.3x PE 以下；股息率约 4.44%以上 | 先排除永久性损伤，再考虑较高仓位 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格不高于22.5元，先做永久性损伤复核。",
+            "node_id": "empty-review-below-22-5-condition"
+          },
+          "path_id": "empty-review-below-22-5",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+              "line_start": 279,
+              "line_end": 279,
+              "quote": "| 保守型 | 22.5 元以下 | 约 15.3x PE 以下；股息率约 4.44%以上 | 先排除永久性损伤，再考虑较高仓位 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "| 当前 28.42 元 | PE 19.27x；股息率 3.52% | 中性情景安全垫薄 | 空仓等待；持仓可继续收息并复核 |"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者可继续收息并复核，但加仓需等水文、现金流、分红和项目回报条件。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD",
+          "summary": "继续收息并按季度复核。",
+          "path_id": "holder-hold-income",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+              "line_start": 280,
+              "line_end": 280,
+              "quote": "| 当前 28.42 元 | PE 19.27x；股息率 3.52% | 中性情景安全垫薄 | 空仓等待；持仓可继续收息并复核 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "进入23—25元且水文、电量、结算价等未结构性恶化时再评估加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+                "line_start": 286,
+                "line_end": 286,
+                "quote": "1. 进入 23-25 元区间，而六站来水、电量、综合结算价没有结构性恶化。"
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验23—25元价格与六站来水、电量、综合结算价等条件。",
+            "node_id": "holder-add-review-condition"
+          },
+          "path_id": "holder-add-review",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+              "line_start": 286,
+              "line_end": 286,
+              "quote": "1. 进入 23-25 元区间，而六站来水、电量、综合结算价没有结构性恶化。"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+          "line_start": 280,
+          "line_end": 280,
+          "quote": "| 当前 28.42 元 | PE 19.27x；股息率 3.52% | 中性情景安全垫薄 | 空仓等待；持仓可继续收息并复核 |"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+          "line_start": 294,
+          "line_end": 294,
+          "quote": "1. 估值升至 21 倍以上而盈利、现金流和分红没有同步改善。"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "估值过高而盈利现金流未改善、单位电量现金贡献下降、重大项目减值延期或事故时减仓/重审。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+          "line_start": 273,
+          "line_end": 273,
+          "quote": "以下价格带以 TTM EPS 1.4747 元、简化 FCF/股 1.77035 元和 2025 全年分红 1.00 元为观察锚，不是精确内在价值；只有在水文、电价、分红、治理和项目回报未恶化时才成立。"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪水文、电价、分红、债务、抽蓄及海外项目回报。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文空仓不追价，但底部看板契约将基本面建议动作写为分批买入。",
+    "evidence": [
+      {
+        "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+        "line_start": 269,
+        "line_end": 269,
+        "quote": "| 当前时机 | 持仓可持有；空仓不追价 |"
+      },
+      {
+        "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+        "line_start": 365,
+        "line_end": 365,
+        "quote": "| 基本面建议动作 | 分批买入 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_CONFLICT",
+      "summary": "正文当前时机判断与底部看板基本面建议动作不一致。",
+      "required_clarification": "明确底部契约是否应改为观察，并重新确认价格带动作。",
+      "evidence": [
+        {
+          "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "| 基本面建议动作 | 分批买入 |"
+        }
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/长江电力/长江电力-investment-team-20260713.md",
+      "line_start": 269,
+      "line_end": 269,
+      "quote": "| 当前时机 | 持仓可持有；空仓不追价 |"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT"
+  ]
+}

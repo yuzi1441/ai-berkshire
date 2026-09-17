@@ -1,0 +1,425 @@
+{
+  "schema_version": 2,
+  "ticker": "601318.SH",
+  "company": "中国平安",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+    "report_sha256": "6d71d1bf7817d28ee1e618c66f7fa8ad8d598f7bc420fbe573e1a38708251a73"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "中国平安明确A股53.32元观察、不追，47—50元需半年报确认投资收益与NBV质量后才小额分批。",
+      "A/H价格被严格区分；偿付能力、NBV、COR和银行资产质量作为失效条件保留。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "平安质量和估值有吸引力，但一季度投资收益与NBV质量需半年报确认，A股当前观察。",
+    "evidence": [
+      {
+        "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+        "line_start": 347,
+        "line_end": 347,
+        "quote": "**明确结论：观察。** 公司质量和赔率都足以进入高优先级研究名单，但 2026Q1 投资收益率和 NBV 利润率是必须等待半年报验证的反向信号。当前 A 股不追买；H 股虽已进入激进型等值区间，也应先核对个人税费与汇率影响，并把 2026-08-21 半年报作为动作前检查点。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "A股53.32元继续观察；47—50元且半年报确认经营信号后小额分批。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "47—50元且半年报确认投资收益和NBV质量后小额分批。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 47,
+                "price_max": 50,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+                    "line_start": 324,
+                    "line_end": 324,
+                    "quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于47—50元。",
+                "node_id": "empty-trial-47-50-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "EXISTS",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+                    "line_start": 324,
+                    "line_end": 324,
+                    "quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
+                  }
+                ],
+                "kind": "FILING",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "半年报确认投资收益与NBV质量。",
+                "node_id": "empty-trial-47-50-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+                "line_start": 324,
+                "line_end": 324,
+                "quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于47—50元且半年报确认投资收益与NBV质量。",
+            "node_id": "empty-trial-47-50-condition"
+          },
+          "path_id": "empty-trial-47-50",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+              "line_start": 324,
+              "line_end": 324,
+              "quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "REVIEW",
+          "summary": "43—47元进入分批研究价格带，仍要求偿付能力和分红无恶化。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 43,
+            "price_max": 47,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+                "line_start": 325,
+                "line_end": 325,
+                "quote": "| 稳健型 | 43-47 元 | 约 50.03-54.69 港元 | 分批研究，要求偿付能力和分红无恶化 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于43—47元研究区。",
+            "node_id": "empty-review-43-47-condition"
+          },
+          "path_id": "empty-review-43-47",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+              "line_start": 325,
+              "line_end": 325,
+              "quote": "| 稳健型 | 43-47 元 | 约 50.03-54.69 港元 | 分批研究，要求偿付能力和分红无恶化 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "REVIEW",
+          "summary": "40元以下提供更高资产与假设折价后再评估。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 40,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+                "line_start": 326,
+                "line_end": 326,
+                "quote": "| 保守型 | 40 元以下 | 约 46.54 港元以下 | 提供更高资产与假设折价，再评估集中风险 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格不高于40元。",
+            "node_id": "empty-review-below-40-condition"
+          },
+          "path_id": "empty-review-below-40",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+              "line_start": 326,
+              "line_end": 326,
+              "quote": "| 保守型 | 40 元以下 | 约 46.54 港元以下 | 提供更高资产与假设折价，再评估集中风险 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+          "line_start": 353,
+          "line_end": 353,
+          "quote": "| 空仓者 | A 股 53.32 元继续观察，优先等待半年报；47-50 元且经营信号未恶化时再谈小额分批 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "已持有A股默认继续持有观察，53.32元不机械加仓，半年报后复核。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有观察，不机械加仓。",
+          "path_id": "holder-hold-review",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+              "line_start": 354,
+              "line_end": 354,
+              "quote": "| 已持有 A 股 | 若成本与仓位未知，默认继续持有观察，不在 53.32 元机械加仓；半年报后复核投资收益、NBV 利润率和偿付能力 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "价格进入安全带且半年报确认NBV、投资收益和资本缓冲没有恶化时再加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 47,
+                "price_max": 50,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+                    "line_start": 324,
+                    "line_end": 324,
+                    "quote": "| 激进型 | 47-50 元 | 约 54.69-58.18 港元 | 半年报确认投资收益与 NBV 质量后，才考虑小额分批 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "A股价格处于47—50元安全带。",
+                "node_id": "holder-add-safety-band-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "EXISTS",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+                    "line_start": 357,
+                    "line_end": 357,
+                    "quote": "| 加仓信号 | 价格进入对应安全带，同时半年报确认 NBV 质量、投资收益和资本缓冲没有恶化 |"
+                  }
+                ],
+                "kind": "FILING",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "半年报确认NBV质量、投资收益和资本缓冲没有恶化。",
+                "node_id": "holder-add-safety-band-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+                "line_start": 357,
+                "line_end": 357,
+                "quote": "| 加仓信号 | 价格进入对应安全带，同时半年报确认 NBV 质量、投资收益和资本缓冲没有恶化 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格进入安全带且半年报确认NBV、投资收益和资本缓冲未恶化。",
+            "node_id": "holder-add-safety-band-condition"
+          },
+          "path_id": "holder-add-safety-band",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+              "line_start": 357,
+              "line_end": 357,
+              "quote": "| 加仓信号 | 价格进入对应安全带，同时半年报确认 NBV 质量、投资收益和资本缓冲没有恶化 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "| 已持有 A 股 | 若成本与仓位未知，默认继续持有观察，不在 53.32 元机械加仓；半年报后复核投资收益、NBV 利润率和偿付能力 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+          "line_start": 438,
+          "line_end": 438,
+          "quote": "| 买入失效条件 | 偿付能力低于150%；NBV连续负增长；COR连续高于100%；银行资产质量恶化；投资回报长期低于EV假设并造成减值 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "偿付能力低于150%、NBV连续负增长、COR连续高于100%、银行资产质量恶化或投资回报长期造成减值时失效。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+          "line_start": 347,
+          "line_end": 347,
+          "quote": "**明确结论：观察。** 公司质量和赔率都足以进入高优先级研究名单，但 2026Q1 投资收益率和 NBV 利润率是必须等待半年报验证的反向信号。当前 A 股不追买；H 股虽已进入激进型等值区间，也应先核对个人税费与汇率影响，并把 2026-08-21 半年报作为动作前检查点。"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪偿付能力、NBV利润率、投资收益、COR和银行资产质量。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": false,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/平安集团/中国平安-investment-research-20260810.md",
+      "line_start": 347,
+      "line_end": 347,
+      "quote": "**明确结论：观察。** 公司质量和赔率都足以进入高优先级研究名单，但 2026Q1 投资收益率和 NBV 利润率是必须等待半年报验证的反向信号。当前 A 股不追买；H 股虽已进入激进型等值区间，也应先核对个人税费与汇率影响，并把 2026-08-21 半年报作为动作前检查点。"
+    }
+  ],
+  "business_risk_reasons": [
+    "INSURANCE_ASSET_SIDE_AND_NBV"
+  ],
+  "semantic_review_reasons": []
+}

@@ -1,0 +1,566 @@
+{
+  "schema_version": 2,
+  "ticker": "002837.SZ",
+  "company": "英维克",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+    "report_sha256": "e6639b100225bae114c61460f6a6c8605c59f0c92d327e4f737eedfb22786bd9"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "74.06 元是当前 A 股参考价；76.2、31.5、10.9 元三情景目标价是估值参考，不是买入价。",
+      "空仓者当前回避，30-50 元只能观察不可重仓，30 元以下也只是重新谈安全边际，不自动转为 OPEN_POSITION。",
+      "持仓者建议减仓；加仓逻辑明确为先跌到 30 元下方，再满足四项中任一验证条件，已保留 ALL/ANY AST。",
+      "卖出信号列出五项但没有定义任一、全部或最低数量，保留人工复核；海外订单是否兑现仍是报告的关键不确定性。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "英维克处于液冷长期趋势，但项目制、垫资、现金流恶化和极高估值使当前赔率不对称；空仓者回避，持仓者降低暴露。",
+    "evidence": [
+      {
+        "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+        "line_start": 266,
+        "line_end": 266,
+        "quote": "**回避。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "当前 74.06 元显著高估，空仓者回避；30-50 元只观察，30 元以下才重新评估安全边际。",
+      "entry_semantic": "REVIEW_ONLY",
+      "action_paths": [
+        {
+          "path_id": "avoid-current-high-valuation",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前价格已透支乐观情景，空仓者回避。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+              "line_start": 266,
+              "line_end": 266,
+              "quote": "空仓者"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "watch-30-50",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "30-50 元区间只可观察，不可重仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 30,
+            "price_max": 50,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                "line_start": 242,
+                "line_end": 242,
+                "quote": "观望区：30-50元"
+              }
+            ],
+            "node_id": "watch-price-30-50",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 30-50 元观察区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+              "line_start": 266,
+              "line_end": 266,
+              "quote": "30-50元区间只可观察不可重仓"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-below-30-safety-margin",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "30 元以下才重新讨论安全边际，仍需结合海外订单、现金流和毛利率验证。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 30,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                "line_start": 241,
+                "line_end": 241,
+                "quote": "具备安全边际的买点：30元以下"
+              }
+            ],
+            "node_id": "review-price-below-30",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格低于或等于 30 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+              "line_start": 266,
+              "line_end": 266,
+              "quote": "等30元以下"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "line_start": 266,
+          "line_end": 266,
+          "quote": "回避"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "持仓者建议减仓至可承受较大回撤的比例；低成本小仓可等待半年报验证海外收入。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-reduce-exposure",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持仓者减仓至可完全承受约 60% 回撤的比例。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+              "line_start": 267,
+              "line_end": 267,
+              "quote": "建议减仓至可完全承受-60%回撤的比例"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-add-below-30-and-any-proof",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "只有价格跌至 30 元下方且四项验证条件任一兑现，才进入加仓复核路径。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LT",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 30,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                    "line_start": 269,
+                    "line_end": 269,
+                    "quote": "股价跌至30元下方"
+                  }
+                ],
+                "node_id": "holder-add-price-below-30",
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "A 股价格低于 30 元。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "OCCURS",
+                    "value": true,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                        "line_start": 269,
+                        "line_end": 269,
+                        "quote": "公司公告形式披露海外大客户批量订单"
+                      }
+                    ],
+                    "node_id": "holder-add-overseas-batch-order",
+                    "kind": "EVENT",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "公司公告形式披露海外大客户批量订单。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "海外收入占比",
+                    "operator": "GTE",
+                    "value": 25,
+                    "unit": "%",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                        "line_start": 269,
+                        "line_end": 269,
+                        "quote": "海外收入占比升至25%+"
+                      }
+                    ],
+                    "node_id": "holder-add-overseas-revenue-gte-25",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "海外收入占比升至 25% 以上。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "净现比",
+                    "operator": "GTE",
+                    "value": 0.7,
+                    "unit": "ratio",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                        "line_start": 269,
+                        "line_end": 269,
+                        "quote": "净现比回到0.7以上"
+                      }
+                    ],
+                    "node_id": "holder-add-net-cash-ratio-gte-0-7",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "净现比回到 0.7 以上。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                        "line_start": 269,
+                        "line_end": 269,
+                        "quote": "毛利率连续两季回升"
+                      }
+                    ],
+                    "node_id": "holder-add-margin-recovers",
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "毛利率连续两季回升。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                    "line_start": 269,
+                    "line_end": 269,
+                    "quote": "以下任一兑现"
+                  }
+                ],
+                "node_id": "holder-add-any-proof",
+                "kind": "ANY",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "以下四项中任一项兑现。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                "line_start": 269,
+                "line_end": 269,
+                "quote": "股价跌至30元下方且②以下任一兑现"
+              }
+            ],
+            "node_id": "holder-add-all-price-and-proof",
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格跌至 30 元下方且海外订单、海外收入、净现比或毛利率条件任一兑现。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+              "line_start": 269,
+              "line_end": 269,
+              "quote": "加仓信号（需先跌入安全区）"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-sell-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "五项卖出信号需要结合半年报、海外收入、毛利率、减持和现金流人工判断，不自动执行。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+                "line_start": 268,
+                "line_end": 268,
+                "quote": "卖出信号"
+              }
+            ],
+            "node_id": "holder-sell-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认卖出信号的组合关系和 REDUCE/EXIT 动作。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+              "line_start": 268,
+              "line_end": 268,
+              "quote": "卖出信号"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "line_start": 267,
+          "line_end": 267,
+          "quote": "持仓者"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "line_start": 267,
+          "line_end": 267,
+          "quote": "等半年报验证海外收入"
+        }
+      ],
+      "node_id": "monitor-half-year-overseas-revenue",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待半年报验证海外收入和液冷收入，并跟踪现金流、毛利率与订单公告。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 74.06,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "当前股价**：74.06元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 10.9,
+      "max": 76.2,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "line_start": 221,
+          "line_end": 221,
+          "quote": "76.2元"
+        },
+        {
+          "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "line_start": 223,
+          "line_end": 223,
+          "quote": "10.9元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "内在价值参考区间",
+      "price_role": "FAIR_VALUE",
+      "value": null,
+      "min": 24,
+      "max": 32,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "line_start": 240,
+          "line_end": 240,
+          "quote": "内在价值参考区间：24-32元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出信号列出五项但没有定义任一、全部或最低满足数量。",
+      "required_clarification": "由人工或更强模型确认卖出信号组合及 REDUCE/EXIT 动作；当前保留 REVIEW_ONLY。",
+      "evidence": [
+        {
+          "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "卖出信号"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-exposure",
+        "holder-add-below-30-and-any-proof",
+        "holder-sell-signals-manual-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+      "line_start": 262,
+      "line_end": 269,
+      "quote": "### 最终决策"
+    },
+    {
+      "report_path": "reports/英维克/英维克投资研究报告-20260706.md",
+      "line_start": 322,
+      "line_end": 343,
+      "quote": "## 看板决策契约"
+    }
+  ],
+  "business_risk_reasons": [
+    "FCF_AND_RECEIVABLES_PRESSURE",
+    "UNVERIFIED_OVERSEAS_ORDER"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

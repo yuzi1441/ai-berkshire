@@ -11,6 +11,91 @@ APP = ROOT / "site/assets/app.js"
 
 @unittest.skipUnless(shutil.which("node"), "Node required")
 class DashboardPolishTests(unittest.TestCase):
+    def test_price_trigger_identifies_exact_zone_and_filters_by_state_or_rule(self):
+        self.run_js(
+            ["priceRuleExpression", "currentMatchedPriceZoneSummary", "priceTriggerDisplayLabel",
+             "priceTriggerPathLabel", "matchedPriceZoneGroups", "priceZoneGroupKey",
+             "priceTriggerStateMatches", "priceTriggerZoneMatches", "formatNumber"],
+            '''
+import assert from 'node:assert/strict';
+const zone={rule_id:'moutai-1100-1300',operator:'BETWEEN',price_min:1100,price_max:1300,
+ currency:'CNY',action:'OPEN_POSITION',price_role:'CONDITIONAL_ENTRY'};
+const record={price_trigger_shadow:{price_state:'PRICE_ZONE_MATCHED',matched_rule_ids:[zone.rule_id],matched_price_zones:[zone]}};
+''',
+            '''
+assert.equal(priceRuleExpression(zone),'1,100–1,300');
+assert.equal(currentMatchedPriceZoneSummary(record),'1,100–1,300 CNY · 条件建仓价格参考（非买入资格）');
+assert.equal(priceTriggerStateMatches(record,'matched'),true);
+assert.equal(priceTriggerStateMatches(record,'OUTSIDE_PRICE_ZONE'),false);
+assert.equal(priceTriggerZoneMatches(record,'moutai-1100-1300'),true);
+assert.equal(priceTriggerZoneMatches(record,'another-zone'),false);
+''',
+        )
+
+    def test_same_price_review_and_entry_paths_are_grouped_without_buy_claim(self):
+        self.run_js(
+            ["priceRuleExpression", "currentMatchedPriceZoneSummary", "priceTriggerDisplayLabel",
+             "priceTriggerPathLabel", "matchedPriceZoneGroups", "priceZoneGroupKey",
+             "priceTriggerStateLabelForRecord", "formatNumber"],
+            '''
+import assert from 'node:assert/strict';
+const base={operator:'BETWEEN',price_min:43,price_max:46,currency:'CNY',scope:'empty_position'};
+const record={price_trigger_shadow:{price_state:'MULTIPLE_PRICE_ZONES_MATCHED',matched_price_zones:[
+ {...base,action:'OPEN_POSITION',price_role:'CONDITIONAL_ENTRY',path_semantic_status:'ready'},
+ {...base,action:'REVIEW',price_role:'REVIEW_ZONE',path_semantic_status:'ambiguous'},
+]}};
+''',
+            '''
+assert.equal(currentMatchedPriceZoneSummary(record),'43–46 CNY · 重新审视区 / 条件建仓价格参考（非买入资格） · 语义待澄清');
+assert.equal(matchedPriceZoneGroups(record).length,1);
+assert.equal(priceTriggerStateLabelForRecord(record),'已进入关注区间（含多条报告路径）');
+assert.ok(!currentMatchedPriceZoneSummary(record).includes('空仓首次建仓'));
+''',
+        )
+
+    def test_candidate_shadow_localizes_display_without_mutating_machine_values(self):
+        self.run_js(
+            ["renderCandidateShadow", "candidateDisplayLabel", "candidateMachineValue",
+             "candidateListValue", "formatNumber", "escapeHtml"],
+            '''
+import assert from 'node:assert/strict';
+const machine = {
+ candidate_state:'BUY_READY', publication_status:'STRONG_REVIEW_PASSED',
+ current_price:4.68, currency:'CNY', matched_path_ids:['conditional-4.3-4.8'],
+ mandatory_gate_count:1, mandatory_gate_ids:['price-gate'],
+ unknown_mandatory_gate_ids:[], alternative_unknown_gate_ids:['catalyst-a','catalyst-b'],
+ hard_block_state:'not_applicable', semantic_review_status:'PASS',
+ price_cutoff:'2026-09-16', production_eligible:false,
+};
+const record={candidate_shadow:machine};
+''',
+            '''
+const before=JSON.stringify(machine), html=renderCandidateShadow(record);
+assert.ok(html.includes('完整候选判断（研究 / 审计）'));
+assert.ok(html.includes('历史快照'));
+assert.ok(html.includes('满足候选买入条件'));
+assert.ok(html.includes('强复核已通过'));
+assert.ok(html.includes('当前价格'));
+assert.ok(html.includes('4.68 元'));
+assert.ok(html.includes('已命中 1 条路径'));
+assert.ok(html.includes('必须条件待确认'));
+assert.ok(html.includes('>无<'));
+assert.ok(html.includes('2 项待确认'));
+assert.ok(html.includes('不适用'));
+assert.ok(html.includes('通过'));
+assert.ok(html.includes('>否<'));
+assert.ok(html.includes('data-machine-value="BUY_READY"'));
+assert.ok(html.includes('title="原始值：conditional-4.3-4.8"'));
+for (const visibleEnglish of ['Candidate Shadow','Candidate State','Publication','Current Price','NOT PRODUCTION']) {
+ assert.ok(!html.includes(visibleEnglish));
+}
+assert.equal(JSON.stringify(machine),before);
+const empty=renderCandidateShadow({candidate_shadow:{...machine,matched_path_ids:[],alternative_unknown_gate_ids:[]}});
+assert.ok(!empty.includes('>0<'));
+assert.equal(renderCandidateShadow({}), '');
+''',
+        )
+
     def test_quote_expiry_repaints_without_network_and_waits_for_confirmation(self):
         self.run_js(["scheduleQuoteExpiry", "quoteIsCurrent"], '''
 import assert from 'node:assert/strict';

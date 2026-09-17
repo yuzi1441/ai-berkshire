@@ -1,0 +1,501 @@
+{
+  "schema_version": 2,
+  "ticker": "000682.SZ",
+  "company": "东方电子",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+    "report_sha256": "852e08604406864fe543bb2261c2271a7a474996a9b99f887f6910bacd1030dd"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "12 元附近的观察仓被保留为试仓路径，没有把 10-11 元的更好性价比描述偷换成无条件买入",
+      "10-11 元且基本面未恶化仅被编译为复核/分批研究区，不把安全边际表述升级为确定买入",
+      "已持仓者继续持有并以扣非利润、现金流、毛利率和订单回款验证，没有泄漏为空仓动作",
+      "18 元以上、现金流低于净利润 70% 两年及低毛利业务扩张被保留为任一减仓/卖出触发",
+      "底部看板契约没有表达持仓、加仓和减仓语义，因此标记为契约冲突"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "偏积极观察，行业趋势和公司质量尚可，但客户强势、现金流波动及非经常损益扰动要求价格约束。",
+    "evidence": [
+      {
+        "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+        "line_start": 395,
+        "line_end": 395,
+        "quote": "**最终结论：偏积极观察，等待更好安全边际。** 东方电子是一家值得持续跟踪的电网数智化公司，当前估值不算贵，但还不是无需价格约束的顶级垄断生意。若未来扣非利润和经营现金流同步改善，它有望从“二线优质电网自动化公司”提升为“新型电力系统数智化平台型公司”；若利润主要靠非经常收益、收入靠低毛利业务扩张，则应按普通项目型电力设备公司估值。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "12 元附近可建立观察仓；10-11 元且基本面未恶化时进入更值得研究/分批的区域，不追逐 AI+电网叙事。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "trial-around-12",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "股价约在 12 元附近时可建立观察仓。报告未给出更窄的上下限，因此保留‘附近’原语义。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+                "line_start": 365,
+                "line_end": 365,
+                "quote": "| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |"
+              }
+            ],
+            "node_id": "price-around-12-trial",
+            "kind": "QUALITATIVE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "股价处于报告所称的 12 元附近。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+              "line_start": 365,
+              "line_end": 365,
+              "quote": "| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-10-11-fundamentals-intact",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "10-11 元且基本面未恶化时重点研究/分批，不直接视为无条件买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 10,
+                "price_max": 11,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+                    "line_start": 339,
+                    "line_end": 339,
+                    "quote": "| 10 元以下 | PE TTM 约 13x 以下，接近悲观情景目标价 | 若基本面未恶化，安全边际较好，可重点研究/分批 |"
+                  },
+                  {
+                    "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+                    "line_start": 340,
+                    "line_end": 340,
+                    "quote": "| 10-13 元 | 当前区间，估值不贵但要看现金流与扣非利润 | 适合观察或小仓位分批，不能用热门叙事重仓追入 |"
+                  },
+                  {
+                    "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+                    "line_start": 367,
+                    "line_end": 367,
+                    "quote": "| 加仓信号 | 股价回落至 10-11 元；或连续 2-3 个季度扣非利润增速 >15%、经营现金流改善、毛利率稳定在 32% 以上。 |"
+                  }
+                ],
+                "node_id": "review-price-10-11",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "价格处于 10-11 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+                    "line_start": 339,
+                    "line_end": 339,
+                    "quote": "| 10 元以下 | PE TTM 约 13x 以下，接近悲观情景目标价 | 若基本面未恶化，安全边际较好，可重点研究/分批 |"
+                  }
+                ],
+                "node_id": "review-fundamentals-not-worse",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "基本面未恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+                "line_start": 339,
+                "line_end": 340,
+                "quote": "| 10 元以下 | PE TTM 约 13x 以下，接近悲观情景目标价 | 若基本面未恶化，安全边际较好，可重点研究/分批 |\n| 10-13 元 | 当前区间，估值不贵但要看现金流与扣非利润 | 适合观察或小仓位分批，不能用热门叙事重仓追入 |"
+              }
+            ],
+            "node_id": "review-10-11-all",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 10-11 元且基本面未恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+              "line_start": 339,
+              "line_end": 340,
+              "quote": "| 10 元以下 | PE TTM 约 13x 以下，接近悲观情景目标价 | 若基本面未恶化，安全边际较好，可重点研究/分批 |\n| 10-13 元 | 当前区间，估值不贵但要看现金流与扣非利润 | 适合观察或小仓位分批，不能用热门叙事重仓追入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |"
+        },
+        {
+          "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+          "line_start": 339,
+          "line_end": 340,
+          "quote": "| 10 元以下 | PE TTM 约 13x 以下，接近悲观情景目标价 | 若基本面未恶化，安全边际较好，可重点研究/分批 |\n| 10-13 元 | 当前区间，估值不贵但要看现金流与扣非利润 | 适合观察或小仓位分批，不能用热门叙事重仓追入 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "已持仓者可继续持有，但必须用扣非利润、经营现金流、毛利率及订单/回款验证，而不是只看归母利润。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-with-operating-verification",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "继续持有并跟踪经营质量验证项。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+              "line_start": 366,
+              "line_end": 366,
+              "quote": "| 已持仓者 | 可继续持有，但用扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证，而不是只看归母利润。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+          "line_start": 366,
+          "line_end": 366,
+          "quote": "| 已持仓者 | 可继续持有，但用扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证，而不是只看归母利润。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "GT",
+              "value": null,
+              "unit": null,
+              "price_min": 18,
+              "price_max": null,
+              "currency": "CNY",
+              "price_role": "REDUCE_POSITION",
+              "evidence": [
+                {
+                  "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+                  "line_start": 368,
+                  "line_end": 368,
+                  "quote": "| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |"
+                }
+              ],
+              "node_id": "price-above-18",
+              "kind": "PRICE_RANGE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "股价涨到 18 元以上。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+                  "line_start": 368,
+                  "line_end": 368,
+                  "quote": "| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |"
+                }
+              ],
+              "node_id": "nonrecurring-profit-not-improved",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "扣非增速没有提升。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+              "line_start": 368,
+              "line_end": 368,
+              "quote": "| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |"
+            }
+          ],
+          "node_id": "price-high-and-no-profit-improvement",
+          "kind": "ALL",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "股价涨到 18 元以上且扣非增速没有提升。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "经营现金流/净利润",
+          "operator": "LT",
+          "value": 0.7,
+          "unit": "ratio",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+              "line_start": 368,
+              "line_end": 368,
+              "quote": "| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |"
+            }
+          ],
+          "node_id": "cashflow-below-70-percent",
+          "kind": "METRIC_COMPARE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "经营现金流连续两年低于净利润的 70%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+              "line_start": 368,
+              "line_end": 368,
+              "quote": "| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |"
+            }
+          ],
+          "node_id": "low-margin-business-share-rises",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "储能/工程低毛利业务占比快速上升。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+          "line_start": 368,
+          "line_end": 368,
+          "quote": "| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |"
+        }
+      ],
+      "node_id": "reduce-or-sell-any",
+      "kind": "ANY",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "任一减仓/卖出信号出现时降低风险或退出复核。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+          "line_start": 367,
+          "line_end": 369,
+          "quote": "| 加仓信号 | 股价回落至 10-11 元；或连续 2-3 个季度扣非利润增速 >15%、经营现金流改善、毛利率稳定在 32% 以上。 |\n| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |\n| 核心跟踪指标 | 扣非归母净利润、经营现金流/净利润、毛利率、应收+合同资产周转、国网/南网中标份额、国外收入回款、虚拟电厂项目利润率。 |"
+        }
+      ],
+      "node_id": "operating-quality-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控扣非净利润、经营现金流/净利润、毛利率、应收与合同资产周转、国网/南网中标份额、海外回款及虚拟电厂项目利润率。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "报告股价基准",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 12.37,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+          "line_start": 11,
+          "line_end": 11,
+          "quote": "| 最新股价 | 12.37 元/股（新浪/腾讯 2026-07-06 收盘后快照） |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 10.0,
+      "max": 26.3,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+          "line_start": 323,
+          "line_end": 327,
+          "quote": "| 情景 | EPS 年增速 | 目标 PE | 3 年后 EPS | 目标价 | 相对当前 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 16% | 22x | 1.20 | 26.3 元 | +112.6% |\n| 中性 | 10% | 17x | 1.02 | 17.3 元 | +40.1% |\n| 悲观 | 3% | 12x | 0.84 | 10.0 元 | -18.8% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约只保留观察和空仓摘要，未表达正文中的持仓、试仓、10-11 元复核、加仓条件及减仓/卖出信号。",
+    "evidence": [
+      {
+        "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+        "line_start": 415,
+        "line_end": 415,
+        "quote": "| 基本面建议动作 | 观察 |"
+      },
+      {
+        "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+        "line_start": 416,
+        "line_end": 416,
+        "quote": "| 结论摘要 | 空仓者 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |"
+      },
+      {
+        "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+        "line_start": 417,
+        "line_end": 423,
+        "quote": "| 激进型动作 | 未给出 |\n| 激进型价格区间 | 未给出 |\n| 稳健型动作 | 未给出 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 未给出 |\n| 保守型价格区间 | 未给出 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/东方电子/东方电子投资研究报告-20260707.md",
+      "line_start": 361,
+      "line_end": 369,
+      "quote": "### 8.2 投资建议表\n\n| 策略 | 建议 |\n|---|---|\n| 空仓者 | 不建议追逐“AI+电网”情绪买入。12 元附近可建观察仓；10-11 元若基本面未坏，性价比更好。 |\n| 已持仓者 | 可继续持有，但用扣非利润、经营现金流、毛利率和海外/虚拟电厂订单验证，而不是只看归母利润。 |\n| 加仓信号 | 股价回落至 10-11 元；或连续 2-3 个季度扣非利润增速 >15%、经营现金流改善、毛利率稳定在 32% 以上。 |\n| 减仓/卖出信号 | 股价涨到 18 元以上但扣非增速没有提升；经营现金流连续两年低于净利润 70%；储能/工程低毛利业务占比快速上升。 |\n| 核心跟踪指标 | 扣非归母净利润、经营现金流/净利润、毛利率、应收+合同资产周转、国网/南网中标份额、国外收入回款、虚拟电厂项目利润率。 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "MULTIPLE_ACTION_GATES",
+    "TRIAL_PRICE_AROUND_NO_FIXED_BOUNDARY"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
+  ]
+}

@@ -1,0 +1,1016 @@
+{
+  "schema_version": 2,
+  "ticker": "600036.SH",
+  "company": "招商银行",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+    "report_sha256": "7adf5cc4f43993ca9ad43068482213c5647be934a4ea9f7a23489cce8e066a51"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "报告把价格与基本面定义为同时满足后进入下一步研究，不应编译成当前无条件买入。",
+      "A 股是主要行动标的，H 股只作为交叉参考；只保留 A 股价格与人民币分配语义。",
+      "减仓/卖出条件逐项列示，但未统一说明是任一触发、组合触发还是需要人工判断。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "招商银行具备长期收益候选的盈利与资本基础，但 38.80 元等待 34-36 元或半年报确认信用风险见顶。",
+    "evidence": [
+      {
+        "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+        "line_start": 241,
+        "line_end": 241,
+        "quote": "招商银行具备成为长期收益核心候选的盈利与资本基础，但在 38.80 元、5.20%税前股息率下，等待 34-36 元或半年报确认信用风险见顶，比为下一次分红提前买入更符合收益投资纪律。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓者当前观察；34-36 元等价格区间只有在息差、信用、资本和治理条件共同满足时进入下一步研究。",
+      "entry_semantic": "REVIEW_ONLY",
+      "action_paths": [
+        {
+          "path_id": "research-34-36-with-fundamentals",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "34-36 元且基本面条件同时得到确认时进入下一步研究，不直接视为买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 34,
+                "price_max": 36,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                    "line_start": 202,
+                    "line_end": 202,
+                    "quote": "- 价格条件：DPS 2.016 元不变时，36.65 元对应 5.50%税前收益率；35.06 元对应 5.75%；33.60 元对应 6.00%。优先研究 34-36 元，而不是只因除息日临近买入。"
+                  }
+                ],
+                "node_id": "cmb-price-34-36",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A 股价格优先处于 34-36 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                    "line_start": 203,
+                    "line_end": 203,
+                    "quote": "- 盈利条件：半年报或后续两个季度确认净息差止跌，财富管理手续费增长不是单季波动。"
+                  }
+                ],
+                "node_id": "cmb-nim-stable",
+                "kind": "FILING",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "半年报或后续两个季度确认净息差止跌，财富管理手续费增长不是单季波动。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "信用卡不良率",
+                "operator": "LTE",
+                "value": 2.2,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                    "line_start": 204,
+                    "line_end": 204,
+                    "quote": "- 信用条件：信用卡不良率不超过 2.20%，关注率不超过 6%，新生成不良增速回落。"
+                  }
+                ],
+                "node_id": "cmb-credit-card-npl-limit",
+                "kind": "METRIC_COMPARE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "信用卡不良率不超过 2.20%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "信用卡关注率",
+                "operator": "LTE",
+                "value": 6,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                    "line_start": 204,
+                    "line_end": 204,
+                    "quote": "- 信用条件：信用卡不良率不超过 2.20%，关注率不超过 6%，新生成不良增速回落。"
+                  }
+                ],
+                "node_id": "cmb-attention-rate-limit",
+                "kind": "METRIC_COMPARE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "信用卡关注率不超过 6%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "高级法 CET1 监管缓冲",
+                "operator": "GTE",
+                "value": 4,
+                "unit": "pct",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                    "line_start": 205,
+                    "line_end": 205,
+                    "quote": "- 资本条件：高级法 CET1 缓冲保持在监管要求之上至少 4pct，拨备覆盖率不因冲利润而快速消耗。"
+                  }
+                ],
+                "node_id": "cmb-cet1-buffer",
+                "kind": "METRIC_COMPARE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "高级法 CET1 缓冲保持在监管要求之上至少 4 个百分点。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                    "line_start": 206,
+                    "line_end": 206,
+                    "quote": "- 治理条件：新行长延续审慎风险偏好，没有以规模换价格和资产质量。"
+                  }
+                ],
+                "node_id": "cmb-governance-prudent",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "新行长延续审慎风险偏好，没有以规模换价格和资产质量。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                "line_start": 200,
+                "line_end": 200,
+                "quote": "同时满足价格和基本面条件才进入下一步研究："
+              }
+            ],
+            "node_id": "cmb-research-gate-34-36",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格与盈利、信用、资本、治理条件同时满足后进入下一步研究。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 200,
+              "line_end": 200,
+              "quote": "同时满足价格和基本面条件才进入下一步研究："
+            },
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 202,
+              "line_end": 202,
+              "quote": "- 价格条件：DPS 2.016 元不变时，36.65 元对应 5.50%税前收益率；35.06 元对应 5.75%；33.60 元对应 6.00%。优先研究 34-36 元，而不是只因除息日临近买入。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "research-below-33-60-with-higher-yield-review",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "33.60 元以下属于更高收益率与更厚安全边际的人工复核区，仍不自动买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 33.6,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                "line_start": 278,
+                "line_end": 278,
+                "quote": "| 保守型动作 | 等待更高收益率与更厚安全边际 |"
+              },
+              {
+                "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                "line_start": 202,
+                "line_end": 202,
+                "quote": "- 价格条件：DPS 2.016 元不变时，36.65 元对应 5.50%税前收益率；35.06 元对应 5.75%；33.60 元对应 6.00%。优先研究 34-36 元，而不是只因除息日临近买入。"
+              }
+            ],
+            "node_id": "cmb-conservative-review-zone",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格低于或等于 33.60 元，等待更高收益率与更厚安全边际。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 278,
+              "line_end": 278,
+              "quote": "| 保守型动作 | 等待更高收益率与更厚安全边际 |"
+            },
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 202,
+              "line_end": 202,
+              "quote": "- 价格条件：DPS 2.016 元不变时，36.65 元对应 5.50%税前收益率；35.06 元对应 5.75%；33.60 元对应 6.00%。优先研究 34-36 元，而不是只因除息日临近买入。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "research-below-36-65-credit-stable",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "36.65 元以下只有在信用指标不恶化时进行小仓研究，不能自动视为买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 36.65,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                    "line_start": 275,
+                    "line_end": 275,
+                    "quote": "| 激进型价格区间 | 36.65元以下 |"
+                  }
+                ],
+                "node_id": "cmb-price-below-36-65",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A 股价格低于或等于 36.65 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                    "line_start": 274,
+                    "line_end": 274,
+                    "quote": "| 激进型动作 | 仅在信用指标不恶化时小仓研究 |"
+                  }
+                ],
+                "node_id": "cmb-credit-not-worse",
+                "kind": "MANUAL_REVIEW",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "确认信用指标没有恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                "line_start": 274,
+                "line_end": 274,
+                "quote": "| 激进型动作 | 仅在信用指标不恶化时小仓研究 |"
+              },
+              {
+                "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                "line_start": 275,
+                "line_end": 275,
+                "quote": "| 激进型价格区间 | 36.65元以下 |"
+              }
+            ],
+            "node_id": "cmb-aggressive-research-review",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格低于 36.65 元且信用指标不恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 274,
+              "line_end": 274,
+              "quote": "| 激进型动作 | 仅在信用指标不恶化时小仓研究 |"
+            },
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 275,
+              "line_end": 275,
+              "quote": "| 激进型价格区间 | 36.65元以下 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 241,
+          "line_end": 241,
+          "quote": "招商银行具备成为长期收益核心候选的盈利与资本基础，但在 38.80 元、5.20%税前股息率下，等待 34-36 元或半年报确认信用风险见顶，比为下一次分红提前买入更符合收益投资纪律。"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "REVIEW",
+      "summary": "已有持仓不能仅凭历史成本或收益成本率继续持有，应按未来股息、资本损失风险和替代回报复核。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-review-risk-and-alternatives",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "按未来可得股息、资本损失风险与替代资产回报人工复核持仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+                "line_start": 219,
+                "line_end": 219,
+                "quote": "已有持仓的成本和收益成本率不能成为继续持有理由；决策应比较未来可得股息、资本损失风险与替代资产回报。"
+              }
+            ],
+            "node_id": "cmb-holder-review-basis",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "不能用持仓成本和收益成本率单独决定继续持有。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 219,
+              "line_end": 219,
+              "quote": "已有持仓的成本和收益成本率不能成为继续持有理由；决策应比较未来可得股息、资本损失风险与替代资产回报。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 219,
+          "line_end": 219,
+          "quote": "已有持仓的成本和收益成本率不能成为继续持有理由；决策应比较未来可得股息、资本损失风险与替代资产回报。"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": "高级法 CET1 监管缓冲",
+      "operator": "LT",
+      "value": 2,
+      "unit": "pct",
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 212,
+          "line_end": 212,
+          "quote": "- 高级法 CET1 与监管要求的缓冲降至 2pct 以下，或监管明确限制分红。"
+        }
+      ],
+      "node_id": "cmb-cet1-buffer-redline",
+      "kind": "METRIC_COMPARE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "高级法 CET1 与监管要求的缓冲降至 2 个百分点以下。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": "普通股派息率",
+      "operator": "GT",
+      "value": 60,
+      "unit": "%",
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 213,
+          "line_end": 213,
+          "quote": "- 普通股派息率因利润下滑被动升至 60%以上，且没有明确的一次性原因。"
+        }
+      ],
+      "node_id": "cmb-payout-ratio-redline",
+      "kind": "METRIC_COMPARE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "普通股派息率因利润下滑被动升至 60% 以上，且没有明确的一次性原因。"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "信用卡不良率",
+          "operator": "GT",
+          "value": 2.2,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 214,
+              "line_end": 214,
+              "quote": "- 信用卡不良率超过 2.20%、关注率超过 6%，并向消费贷、按揭或小微贷款扩散。"
+            }
+          ],
+          "node_id": "cmb-credit-card-npl-redline",
+          "kind": "METRIC_COMPARE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "信用卡不良率超过 2.20%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "信用卡关注率",
+          "operator": "GT",
+          "value": 6,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 214,
+              "line_end": 214,
+              "quote": "- 信用卡不良率超过 2.20%、关注率超过 6%，并向消费贷、按揭或小微贷款扩散。"
+            }
+          ],
+          "node_id": "cmb-attention-rate-redline",
+          "kind": "METRIC_COMPARE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "信用卡关注率超过 6%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 214,
+              "line_end": 214,
+              "quote": "- 信用卡不良率超过 2.20%、关注率超过 6%，并向消费贷、按揭或小微贷款扩散。"
+            }
+          ],
+          "node_id": "cmb-retail-credit-spread",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "信用风险向消费贷、按揭或小微贷款扩散。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 214,
+          "line_end": 214,
+          "quote": "- 信用卡不良率超过 2.20%、关注率超过 6%，并向消费贷、按揭或小微贷款扩散。"
+        }
+      ],
+      "node_id": "cmb-credit-risk-spread",
+      "kind": "ALL",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "信用卡不良率和关注率越过阈值，并向其他零售贷款扩散。"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "净息差",
+          "operator": "LT",
+          "value": 1.6,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 215,
+              "line_end": 215,
+              "quote": "- 净息差跌破 1.60%且连续两个季度无企稳，手续费收入无法补位。"
+            }
+          ],
+          "node_id": "cmb-nim-below-1-60",
+          "kind": "METRIC_COMPARE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "净息差跌破 1.60%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 215,
+              "line_end": 215,
+              "quote": "- 净息差跌破 1.60%且连续两个季度无企稳，手续费收入无法补位。"
+            }
+          ],
+          "node_id": "cmb-nim-no-stabilization",
+          "kind": "FILING",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "净息差连续两个季度没有企稳。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 215,
+              "line_end": 215,
+              "quote": "- 净息差跌破 1.60%且连续两个季度无企稳，手续费收入无法补位。"
+            }
+          ],
+          "node_id": "cmb-fee-income-no-offset",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "手续费收入无法补位。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 215,
+          "line_end": 215,
+          "quote": "- 净息差跌破 1.60%且连续两个季度无企稳，手续费收入无法补位。"
+        }
+      ],
+      "node_id": "cmb-nim-collapse",
+      "kind": "ALL",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "净息差跌破 1.60% 且连续两个季度无企稳，手续费收入无法补位。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 216,
+          "line_end": 216,
+          "quote": "- 出现重大治理、销售误导、关联交易或内部控制事件，损害零售银行信任资产。"
+        }
+      ],
+      "node_id": "cmb-governance-redline",
+      "kind": "EVENT",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "出现重大治理、销售误导、关联交易或内部控制事件，损害零售银行信任资产。"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "GT",
+          "value": null,
+          "unit": null,
+          "price_min": 50,
+          "price_max": null,
+          "currency": "CNY",
+          "price_role": "REDUCE_POSITION",
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 217,
+              "line_end": 217,
+              "quote": "- 在基本面没有同步改善时，股价高于约 50 元、静态股息率低于约 4%，收益赔率明显下降。"
+            }
+          ],
+          "node_id": "cmb-price-above-50",
+          "kind": "PRICE_RANGE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "股价高于约 50 元。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "静态股息率",
+          "operator": "LT",
+          "value": 4,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 217,
+              "line_end": 217,
+              "quote": "- 在基本面没有同步改善时，股价高于约 50 元、静态股息率低于约 4%，收益赔率明显下降。"
+            }
+          ],
+          "node_id": "cmb-yield-below-4",
+          "kind": "METRIC_COMPARE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "静态股息率低于约 4%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+              "line_start": 217,
+              "line_end": 217,
+              "quote": "- 在基本面没有同步改善时，股价高于约 50 元、静态股息率低于约 4%，收益赔率明显下降。"
+            }
+          ],
+          "node_id": "cmb-fundamentals-not-improved",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "基本面没有同步改善。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 217,
+          "line_end": 217,
+          "quote": "- 在基本面没有同步改善时，股价高于约 50 元、静态股息率低于约 4%，收益赔率明显下降。"
+        }
+      ],
+      "node_id": "cmb-high-price-low-yield",
+      "kind": "ALL",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "基本面没有同步改善时，股价高于约 50 元且静态股息率低于约 4%。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "下次关键复核点是 2026 年半年报及其业绩交流会；重点不是净利润是否微增，而是息差、信用卡风险迁徙、信用成本和 CET1 能否同时稳定。"
+        }
+      ],
+      "node_id": "monitor-cmb-half-year",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 2026 年半年报及业绩交流会，重点核验息差、信用卡风险迁徙、信用成本和 CET1 是否同时稳定。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 38.8,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 7,
+          "line_end": 7,
+          "quote": "**行情与估值：** A 股 38.80 元，普通股 TTM PE 6.80 倍，静态调整 PB 0.88 倍，按 2025 年 DPS 计算税前股息率 5.20%"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "情景估值范围",
+      "price_role": "SCENARIO_VALUE",
+      "value": null,
+      "min": 22,
+      "max": 44,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 179,
+          "line_end": 179,
+          "quote": "| Base | 净息差约 1.75%-1.85%企稳；信用卡不良不超过 2.2%；手续费温和增长 | 约 1,439-1,470 亿元 | 派息率约 35%，CET1 缓冲保持在 5pct 以上 | DPS 约 2.00-2.10 元；当前价税前收益率约 5.2%-5.4% | 0.85-1.00 倍 PB，约 37-44 元 |"
+        },
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 181,
+          "line_end": 181,
+          "quote": "| Severe | 息差接近 1.55%-1.60%；信用卡风险向消费贷/按揭扩散；利润下降 40% | 863.24 亿元 | 为保资本将派息率降至 20%，分红总额 172.65 亿元；不排除更低分配 | DPS 0.685 元，削减约 66.0%；当前价收益率 1.76% | 0.50-0.65 倍压力 PB，约 22-29 元 |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "REVIEW_NOT_BUY_SEMANTICS",
+      "summary": "正文明确说价格与基本面同时满足后进入下一步研究，底部动作也使用“研究”而非明确买入。",
+      "required_clarification": "确认是否只生成研究复核任务，还是在人工审批后允许生成实际建仓动作。",
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 200,
+          "line_end": 200,
+          "quote": "同时满足价格和基本面条件才进入下一步研究："
+        },
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 208,
+          "line_end": 208,
+          "quote": "强化条件是利润和 DPS 同时恢复可持续增长，而不是单纯股价下跌。研究仓位上限还必须由组合层面的银行股总暴露决定。"
+        }
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "research-34-36-with-fundamentals",
+        "research-below-33-60-with-higher-yield-review",
+        "research-below-36-65-credit-stable"
+      ],
+      "affects_entry": true
+    },
+    {
+      "code": "MULTI_MARKET_REPORT_A_SHARE_SCOPE",
+      "summary": "报告同时讨论 A 股和 H 股，但当前合同只编译 A 股人民币行动路径。",
+      "required_clarification": "由人工确认 H 股交叉参考不会改变 A 股价格和分红条件。",
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "**主要分析标的：** A 股 600036.SH，人民币计价与分配；H 股 03968.HK 作为同股权交叉参考，股息以人民币宣派、可用港币或人民币支付"
+        }
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
+    },
+    {
+      "code": "REDUCTION_TRIGGER_COMBINATION_UNSPECIFIED",
+      "summary": "减仓/卖出部分逐项列出多个风险条件，但没有统一说明任一、全部或达到何种处置级别。",
+      "required_clarification": "确认各条件是独立减仓、组合触发，还是需要人工按风险严重程度决定减仓或卖出。",
+      "evidence": [
+        {
+          "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+          "line_start": 212,
+          "line_end": 217,
+          "quote": "- 高级法 CET1 与监管要求的缓冲降至 2pct 以下，或监管明确限制分红。\n- 普通股派息率因利润下滑被动升至 60%以上，且没有明确的一次性原因。\n- 信用卡不良率超过 2.20%、关注率超过 6%，并向消费贷、按揭或小微贷款扩散。\n- 净息差跌破 1.60%且连续两个季度无企稳，手续费收入无法补位。\n- 出现重大治理、销售误导、关联交易或内部控制事件，损害零售银行信任资产。\n- 在基本面没有同步改善时，股价高于约 50 元、静态股息率低于约 4%，收益赔率明显下降。"
+        }
+      ],
+      "classification": "HOLDER",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-review-risk-and-alternatives"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+      "line_start": 200,
+      "line_end": 206,
+      "quote": "同时满足价格和基本面条件才进入下一步研究："
+    },
+    {
+      "report_path": "reports/招商银行/招商银行-income-investment-20260807.md",
+      "line_start": 239,
+      "line_end": 241,
+      "quote": "## 17. One-sentence conclusion\n\n招商银行具备成为长期收益核心候选的盈利与资本基础，但在 38.80 元、5.20%税前股息率下，等待 34-36 元或半年报确认信用风险见顶，比为下一次分红提前买入更符合收益投资纪律。"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

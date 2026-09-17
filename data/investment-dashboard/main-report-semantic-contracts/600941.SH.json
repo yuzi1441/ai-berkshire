@@ -1,0 +1,333 @@
+{
+  "schema_version": 2,
+  "ticker": "600941.SH",
+  "company": "中国移动有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+    "report_sha256": "adb852f557201f740913583c2635e3db27f97d074fd7275236b8482a92e7633b"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "报告明确行动价格专指A股，并将A/H估值差作为机会成本；A股当前观察，不追价。",
+      "88—92元为小额试仓区、78—84元为稳健分批区，价格带没有被当作技术支撑。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "中国移动质量高但A股当前接近中性价值且较H股溢价，等待半年报和更好价格。",
+    "evidence": [
+      {
+        "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+        "line_start": 16,
+        "line_end": 16,
+        "quote": "| 一句话研究结论 | 高质量、强现金创造的通信基础设施龙头，但 A 股当前价已反映温和增长，建议观察而非追价。 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "A股96.70元观察；88—92元可小额试仓，78—84元进入稳健分批区。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "88—92元小额试仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 88,
+            "price_max": 92,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+                "line_start": 328,
+                "line_end": 328,
+                "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于88—92元小额试仓区。",
+            "node_id": "empty-trial-88-92-condition"
+          },
+          "path_id": "empty-trial-88-92",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+              "line_start": 328,
+              "line_end": 328,
+              "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "78—84元进入稳健分批区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 78,
+            "price_max": 84,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+                "line_start": 328,
+                "line_end": 328,
+                "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于78—84元稳健分批区。",
+            "node_id": "empty-entry-78-84-condition"
+          },
+          "path_id": "empty-entry-78-84",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+              "line_start": 328,
+              "line_end": 328,
+              "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+          "line_start": 328,
+          "line_end": 328,
+          "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "A股持仓者若仓位合理可持有，当前不加仓；114元以上且基本面无上修可降低仓位。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD",
+          "summary": "合理仓位持有收息，当前不加仓。",
+          "path_id": "holder-hold-dividend",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+              "line_start": 329,
+              "line_end": 329,
+              "quote": "| A 股持仓者 | 若以股息为主且仓位合理，可持有；当前不加仓，114 元以上且基本面无上修可考虑降低仓位 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "价格进入安全带且半年报确认盈利、现金回报和EBITDA改善时再加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 78,
+                "price_max": 84,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+                    "line_start": 328,
+                    "line_end": 328,
+                    "quote": "| 空仓者 | 观察；96.70 元不追，88-92 元才考虑小额试仓，78-84 元进入稳健分批区 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "A股价格进入78—84元等安全带。",
+                "node_id": "holder-add-price-and-fundamentals-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+                    "line_start": 331,
+                    "line_end": 331,
+                    "quote": "| 加仓信号 | 半年报主营恢复正增长、EBITDA 率回到 30%以上、算力增速与现金回报同时改善，且股价进入价格带 |"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "半年报主营、EBITDA率、算力增速与现金回报改善。",
+                "node_id": "holder-add-price-and-fundamentals-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+                "line_start": 331,
+                "line_end": 331,
+                "quote": "| 加仓信号 | 半年报主营恢复正增长、EBITDA 率回到 30%以上、算力增速与现金回报同时改善，且股价进入价格带 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格进入安全带且主营、EBITDA、算力和现金回报同时改善。",
+            "node_id": "holder-add-price-and-fundamentals-condition"
+          },
+          "path_id": "holder-add-price-and-fundamentals",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+              "line_start": 331,
+              "line_end": 331,
+              "quote": "| 加仓信号 | 半年报主营恢复正增长、EBITDA 率回到 30%以上、算力增速与现金回报同时改善，且股价进入价格带 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+          "line_start": 329,
+          "line_end": 329,
+          "quote": "| A 股持仓者 | 若以股息为主且仓位合理，可持有；当前不加仓，114 元以上且基本面无上修可考虑降低仓位 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+          "line_start": 332,
+          "line_end": 332,
+          "quote": "| 卖出 / 失效信号 | 移动 ARPU 跌破 45 元并伴随客户下降，或 FCF/股利连续两年低于 1 倍，或算力重投入却持续不披露回报 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "移动ARPU跌破45元并伴随客户下降、FCF连续两年不足覆盖现金股利或算力重投入无回报时论文失效。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+          "line_start": 354,
+          "line_end": 354,
+          "quote": "1. 2026H1 主营收入能否转正，EBITDA 率能否回到 30% 以上。"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪A股半年报主营、EBITDA率、算力回报和FCF/股利覆盖。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": false,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/中国移动/中国移动-investment-research-20260810.md",
+      "line_start": 16,
+      "line_end": 16,
+      "quote": "| 一句话研究结论 | 高质量、强现金创造的通信基础设施龙头，但 A 股当前价已反映温和增长，建议观察而非追价。 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "DIVIDEND_CASH_COVERAGE"
+  ],
+  "semantic_review_reasons": []
+}

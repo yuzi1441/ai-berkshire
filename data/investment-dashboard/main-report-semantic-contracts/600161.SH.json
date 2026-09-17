@@ -1,0 +1,885 @@
+{
+  "schema_version": 2,
+  "ticker": "600161.SH",
+  "company": "天坛生物",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+    "report_sha256": "aa5e456e2329af04ba10ed5a7a7180b62970acd1818e440418898780db58a844"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "报告当前建议观察、不追买；空仓行动必须同时满足价格与盈利/现金证据。",
+      "8.5-9.0 元是计划仓位三分之一的观察仓，7.0-8.0 元和 6.3 元以下才是更强条件下的建仓路径。",
+      "正式中报尚未披露，H1 预告未经审计；加减仓信号是并列清单，组合关系与处置幅度需人工确认。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "天坛生物拥有稀缺浆站和长期医学需求，但盈利、库存、应收和现金回收尚未确认拐点；当前 12.42 元观察、不追买。",
+    "evidence": [
+      {
+        "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+        "line_start": 389,
+        "line_end": 389,
+        "quote": "当前建议为 **观察，不追买**。不要因为 25.25 倍 TTM PE 低于历史均值就买入，因为 H1 备考和年化 PE 分别约 32.17 倍和 40.23 倍。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "价格与证据必须同时满足；8.5-9.0 元是观察仓路径，7.0-8.0 元和 6.3 元以下是更强安全边际路径。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "trial-observation-8-5-9",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "8.5-9.0 元且毛利率不再创新低、应收/收入开始下降时，最多建立计划仓位三分之一的观察仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 8.5,
+                "price_max": 9,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 393,
+                    "line_end": 393,
+                    "quote": "| 激进型 | 8.5-9.0 元，且毛利率不再创新低、应收/收入开始下降 | 可用计划仓位的 1/3 建观察仓 |"
+                  }
+                ],
+                "node_id": "tian-tan-price-8-5-9",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 8.5-9.0 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 393,
+                    "line_end": 393,
+                    "quote": "| 激进型 | 8.5-9.0 元，且毛利率不再创新低、应收/收入开始下降 | 可用计划仓位的 1/3 建观察仓 |"
+                  }
+                ],
+                "node_id": "tian-tan-margin-not-low",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "毛利率不再创新低。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 393,
+                    "line_end": 393,
+                    "quote": "| 激进型 | 8.5-9.0 元，且毛利率不再创新低、应收/收入开始下降 | 可用计划仓位的 1/3 建观察仓 |"
+                  }
+                ],
+                "node_id": "tian-tan-receivables-ratio-falls",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "应收/收入开始下降。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                "line_start": 397,
+                "line_end": 397,
+                "quote": "价格到位而证据未到位，只是“更便宜的下行趋势”；证据到位而价格仍高，则可能是“好转已被市场计价”。两者需要同时满足。"
+              }
+            ],
+            "node_id": "tian-tan-trial-gate",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "8.5-9.0 元且毛利率不再创新低、应收/收入开始下降。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+              "line_start": 393,
+              "line_end": 393,
+              "quote": "| 激进型 | 8.5-9.0 元，且毛利率不再创新低、应收/收入开始下降 | 可用计划仓位的 1/3 建观察仓 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conditional-entry-7-8-with-cash-recovery",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "7.0-8.0 元且连续两个报告期滚动 OCF/净利回到 70% 以上、成品库存不再增长时分批建立仓位。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 7,
+                "price_max": 8,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 394,
+                    "line_end": 394,
+                    "quote": "| 稳健型 | 7.0-8.0 元，且连续两个报告期的滚动十二个月 OCF/净利回到 70%以上、成品库存不再增长 | 分两至三次建立仓位 |"
+                  }
+                ],
+                "node_id": "tian-tan-price-7-8",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 7.0-8.0 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "滚动十二个月 OCF/归母净利",
+                "operator": "GTE",
+                "value": 0.7,
+                "unit": "ratio",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 394,
+                    "line_end": 394,
+                    "quote": "| 稳健型 | 7.0-8.0 元，且连续两个报告期的滚动十二个月 OCF/净利回到 70%以上、成品库存不再增长 | 分两至三次建立仓位 |"
+                  }
+                ],
+                "node_id": "tian-tan-ocf-profit-ratio-70",
+                "kind": "METRIC_COMPARE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "滚动十二个月 OCF/净利回到 70% 以上。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 394,
+                    "line_end": 394,
+                    "quote": "| 稳健型 | 7.0-8.0 元，且连续两个报告期的滚动十二个月 OCF/净利回到 70%以上、成品库存不再增长 | 分两至三次建立仓位 |"
+                  }
+                ],
+                "node_id": "tian-tan-inventory-not-growing",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "成品库存不再增长。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                "line_start": 397,
+                "line_end": 397,
+                "quote": "价格到位而证据未到位，只是“更便宜的下行趋势”；证据到位而价格仍高，则可能是“好转已被市场计价”。两者需要同时满足。"
+              }
+            ],
+            "node_id": "tian-tan-steady-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "7.0-8.0 元且现金回收和库存条件同时改善。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+              "line_start": 394,
+              "line_end": 394,
+              "quote": "| 稳健型 | 7.0-8.0 元，且连续两个报告期的滚动十二个月 OCF/净利回到 70%以上、成品库存不再增长 | 分两至三次建立仓位 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conditional-entry-below-6-3-with-no-break",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "6.3 元以下且没有质量事故、浆站制度恶化或控股股东利益侵占时，才具备较厚安全边际。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 6.3,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 395,
+                    "line_end": 395,
+                    "quote": "| 保守型 | 6.3 元以下，且没有质量事故、浆站制度恶化或控股股东利益侵占 | 相对 Base 折现现值才具备约 25%安全边际 |"
+                  }
+                ],
+                "node_id": "tian-tan-price-below-6-3",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格低于或等于 6.3 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 395,
+                    "line_end": 395,
+                    "quote": "| 保守型 | 6.3 元以下，且没有质量事故、浆站制度恶化或控股股东利益侵占 | 相对 Base 折现现值才具备约 25%安全边际 |"
+                  }
+                ],
+                "node_id": "tian-tan-no-quality-or-governance-break",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "没有质量事故、浆站制度恶化或控股股东利益侵占。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                "line_start": 397,
+                "line_end": 397,
+                "quote": "价格到位而证据未到位，只是“更便宜的下行趋势”；证据到位而价格仍高，则可能是“好转已被市场计价”。两者需要同时满足。"
+              }
+            ],
+            "node_id": "tian-tan-conservative-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "6.3 元以下且关键质量、制度与治理前提未破坏。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+              "line_start": 395,
+              "line_end": 395,
+              "quote": "| 保守型 | 6.3 元以下，且没有质量事故、浆站制度恶化或控股股东利益侵占 | 相对 Base 折现现值才具备约 25%安全边际 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 389,
+          "line_end": 389,
+          "quote": "当前建议为 **观察，不追买**。不要因为 25.25 倍 TTM PE 低于历史均值就买入，因为 H1 备考和年化 PE 分别约 32.17 倍和 40.23 倍。"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "小比例观察仓可持有到正式中报和随后两个季度验证，但在应收与库存未修复前不机械补仓；14 元以上盈利未上修时考虑减仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-observation-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "小比例观察仓持有等待正式中报和随后两个季度验证，不机械补仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "OCCURS",
+            "value": true,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                "line_start": 401,
+                "line_end": 401,
+                "quote": "- 当前若只是小比例观察仓，可持有到正式中报和随后两个季度验证，不宜在应收与库存尚未修复前机械补仓。这里的“观察仓”指不超过个人计划仓位的三分之一。"
+              }
+            ],
+            "node_id": "tian-tan-holder-observation-period",
+            "kind": "FILING",
+            "effect": "MONITOR",
+            "scope": "holder",
+            "description": "持有到正式中报和随后两个季度验证。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+              "line_start": 401,
+              "line_end": 401,
+              "quote": "- 当前若只是小比例观察仓，可持有到正式中报和随后两个季度验证，不宜在应收与库存尚未修复前机械补仓。这里的“观察仓”指不超过个人计划仓位的三分之一。"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-above-14-without-profit-revision",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "14 元以上而 2026E/2027E 盈利没有同步上修时，可分批减仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 14,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 403,
+                    "line_end": 403,
+                    "quote": "- 14 元以上而 2026E/2027E 盈利没有同步上修，可分批减仓；17 元附近已接近 Bull 终值，应要求更高盈利或现金流证据。"
+                  }
+                ],
+                "node_id": "tian-tan-price-above-14",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格高于 14 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                    "line_start": 403,
+                    "line_end": 403,
+                    "quote": "- 14 元以上而 2026E/2027E 盈利没有同步上修，可分批减仓；17 元附近已接近 Bull 终值，应要求更高盈利或现金流证据。"
+                  }
+                ],
+                "node_id": "tian-tan-profit-not-revised",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "2026E/2027E 盈利没有同步上修。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                "line_start": 403,
+                "line_end": 403,
+                "quote": "- 14 元以上而 2026E/2027E 盈利没有同步上修，可分批减仓；17 元附近已接近 Bull 终值，应要求更高盈利或现金流证据。"
+              }
+            ],
+            "node_id": "tian-tan-reduce-gate",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "价格高于 14 元且盈利预测没有同步上修。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+              "line_start": 403,
+              "line_end": 403,
+              "quote": "- 14 元以上而 2026E/2027E 盈利没有同步上修，可分批减仓；17 元附近已接近 Bull 终值，应要求更高盈利或现金流证据。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-add-signals-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "毛利率、现金回收、库存、新品和浆站效率信号需人工确认组合关系，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+                "line_start": 408,
+                "line_end": 415,
+                "quote": "| 加仓 / 重审信号 | 减仓 / 论文失效信号 |\n|---|---|\n| 连续两个季度毛利率企稳回升 | 产品价格继续下降且毛利率跌破 30% |\n| 滚动十二个月 OCF/归母净利恢复到 70%-80%以上 | 应收/收入继续上升、坏账准备明显增加 |\n| 成品库存量或库存/销量连续下降 | 生产继续快于销售、库存减值出现 |\n| 10% 静丙、SCIG、CIDP 或重组因子形成可披露收入 | 两大传统品种占比两三年后仍接近 90% |\n| 单站采浆与同店采浆恢复行业领先 | 采浆连续两年低于行业增速且单站产出不升 |\n| 母公司若再次收购同行，事前给出低成本且清晰的回避同业竞争安排 | 以高价或不透明方式向上市公司注入竞争资产 |"
+              }
+            ],
+            "node_id": "tian-tan-add-signals-review",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认加仓/重审信号组合与仓位影响。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+              "line_start": 408,
+              "line_end": 415,
+              "quote": "| 加仓 / 重审信号 | 减仓 / 论文失效信号 |\n|---|---|\n| 连续两个季度毛利率企稳回升 | 产品价格继续下降且毛利率跌破 30% |\n| 滚动十二个月 OCF/归母净利恢复到 70%-80%以上 | 应收/收入继续上升、坏账准备明显增加 |\n| 成品库存量或库存/销量连续下降 | 生产继续快于销售、库存减值出现 |\n| 10% 静丙、SCIG、CIDP 或重组因子形成可披露收入 | 两大传统品种占比两三年后仍接近 90% |\n| 单站采浆与同店采浆恢复行业领先 | 采浆连续两年低于行业增速且单站产出不升 |\n| 母公司若再次收购同行，事前给出低成本且清晰的回避同业竞争安排 | 以高价或不透明方式向上市公司注入竞争资产 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 401,
+          "line_end": 401,
+          "quote": "- 当前若只是小比例观察仓，可持有到正式中报和随后两个季度验证，不宜在应收与库存尚未修复前机械补仓。这里的“观察仓”指不超过个人计划仓位的三分之一。"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": "毛利率",
+      "operator": "LT",
+      "value": 30,
+      "unit": "%",
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 410,
+          "line_end": 410,
+          "quote": "| 连续两个季度毛利率企稳回升 | 产品价格继续下降且毛利率跌破 30% |"
+        }
+      ],
+      "node_id": "tian-tan-margin-below-30",
+      "kind": "METRIC_COMPARE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "产品价格继续下降且毛利率跌破 30%。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 411,
+          "line_end": 411,
+          "quote": "| 滚动十二个月 OCF/归母净利恢复到 70%-80%以上 | 应收/收入继续上升、坏账准备明显增加 |"
+        }
+      ],
+      "node_id": "tian-tan-receivables-bad-debt",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "应收/收入继续上升、坏账准备明显增加。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 412,
+          "line_end": 412,
+          "quote": "| 成品库存量或库存/销量连续下降 | 生产继续快于销售、库存减值出现 |"
+        }
+      ],
+      "node_id": "tian-tan-inventory-impairment",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "生产继续快于销售、库存减值出现。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 413,
+          "line_end": 413,
+          "quote": "| 10% 静丙、SCIG、CIDP 或重组因子形成可披露收入 | 两大传统品种占比两三年后仍接近 90% |"
+        }
+      ],
+      "node_id": "tian-tan-traditional-mix",
+      "kind": "QUALITATIVE",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "两大传统品种占比两三年后仍接近 90%。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 414,
+          "line_end": 414,
+          "quote": "| 单站采浆与同店采浆恢复行业领先 | 采浆连续两年低于行业增速且单站产出不升 |"
+        }
+      ],
+      "node_id": "tian-tan-plasma-efficiency",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "采浆连续两年低于行业增速且单站产出不升。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 415,
+          "line_end": 415,
+          "quote": "| 母公司若再次收购同行，事前给出低成本且清晰的回避同业竞争安排 | 以高价或不透明方式向上市公司注入竞争资产 |"
+        }
+      ],
+      "node_id": "tian-tan-related-asset-injection",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "以高价或不透明方式向上市公司注入竞争资产。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 421,
+          "line_end": 421,
+          "quote": "在此之前，最有价值的动作是等待正式中报、应收和库存拐点，以及新品真正贡献收入。"
+        }
+      ],
+      "node_id": "monitor-tian-tan-h1-and-cash",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待正式中报、应收和库存拐点，以及新品真正贡献收入。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 12.42,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "| 股价 / 总股本 / 市值 | 12.42 元 / 19.7737 亿股 / 245.59 亿元 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2028 年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 5.29,
+      "max": 17.14,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 340,
+          "line_end": 340,
+          "quote": "| Bull | 价格企稳，新品放量，现金回收恢复 | +38% | 0.686 元 / 13.56 亿元 | 25 倍 | **17.14 元** | 0.45 元 | **+15.3%** |"
+        },
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "| Bear | 低价、税负和库存压力持续 | -1% | 0.353 元 / 6.98 亿元 | 15 倍 | **5.29 元** | 0.15 元 | **-28.7%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "CONDITIONAL_PRICE_AND_FACTS",
+      "summary": "报告明确价格到位与证据到位必须同时满足，但没有统一说明不同价格层级对应的最终仓位权限。",
+      "required_clarification": "确认观察仓、分批建仓和保守买入的审批边界；在此之前保留条件门槛。",
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 397,
+          "line_end": 397,
+          "quote": "价格到位而证据未到位，只是“更便宜的下行趋势”；证据到位而价格仍高，则可能是“好转已被市场计价”。两者需要同时满足。"
+        }
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": true
+    },
+    {
+      "code": "UNREPORTED_H1_DATA",
+      "summary": "H1 业绩仍是未经审计预告，正式中报和现金/库存拐点尚未完成验证。",
+      "required_clarification": "正式中报披露后重新核验价格路径与 OCF、应收、库存和毛利条件。",
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "| 研究日期 / 数据截止 | 2026-07-23；最新经营数据为 2026H1 业绩预告，尚未经审计 |"
+        }
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓/重审和减仓/失效信号为并列清单，未定义任一、全部或最低满足数量。",
+      "required_clarification": "确认信号组合及其对应的研究、加仓、减仓或退出动作。",
+      "evidence": [
+        {
+          "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+          "line_start": 408,
+          "line_end": 415,
+          "quote": "| 加仓 / 重审信号 | 减仓 / 论文失效信号 |\n|---|---|\n| 连续两个季度毛利率企稳回升 | 产品价格继续下降且毛利率跌破 30% |\n| 滚动十二个月 OCF/归母净利恢复到 70%-80%以上 | 应收/收入继续上升、坏账准备明显增加 |\n| 成品库存量或库存/销量连续下降 | 生产继续快于销售、库存减值出现 |\n| 10% 静丙、SCIG、CIDP 或重组因子形成可披露收入 | 两大传统品种占比两三年后仍接近 90% |\n| 单站采浆与同店采浆恢复行业领先 | 采浆连续两年低于行业增速且单站产出不升 |\n| 母公司若再次收购同行，事前给出低成本且清晰的回避同业竞争安排 | 以高价或不透明方式向上市公司注入竞争资产 |"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-above-14-without-profit-revision",
+        "holder-add-signals-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+      "line_start": 387,
+      "line_end": 397,
+      "quote": "### 给空仓投资者\n\n当前建议为 **观察，不追买**。不要因为 25.25 倍 TTM PE 低于历史均值就买入，因为 H1 备考和年化 PE 分别约 32.17 倍和 40.23 倍。"
+    },
+    {
+      "report_path": "reports/天坛生物/天坛生物研究报告-20260723.md",
+      "line_start": 464,
+      "line_end": 485,
+      "quote": "## 看板决策契约"
+    }
+  ],
+  "business_risk_reasons": [
+    "UNREPORTED_H1_DATA"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

@@ -1,0 +1,495 @@
+{
+  "schema_version": 2,
+  "ticker": "002594.SZ",
+  "company": "BYD",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/BYD/BYD-research-20260624.md",
+    "report_sha256": "65ffcbefa6da3babc0a975365dcadf6805960e707936deb0db4cb3342d28a136"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "A 股 85 元是当前参考价，75 元以下只是更好的安全边际条件；136.1-209.8 元是三年目标价参考，不是买入价。",
+      "空仓者必须等待‘利润拐点、A 股跌至 75 元以下、欧盟关税政策明朗化’三者之一，正文明确使用‘之一’，编译为 ANY 而不是 ALL。",
+      "持仓者继续持有，但超过组合 20% 时建议降至 15% 以下；卖出和加仓四项信号没有定义组合关系，保留人工复核。",
+      "报告同时讨论 H 股，但本合同只保留 A 股路径，防止港元价格混入 A 股动作。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "比亚迪是优秀但面临价格战、海外关税和现金流压力的制造业公司；A 股空仓者观望偏积极，持仓者继续持有并控制仓位。",
+    "evidence": [
+      {
+        "report_path": "reports/BYD/BYD-research-20260624.md",
+        "line_start": 395,
+        "line_end": 395,
+        "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 A 股观望偏积极；等待利润拐点、A 股不高于 75 元或欧盟关税政策明朗化之一后再建仓。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "entry-any-of-three-confirmations",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "以下三项中任一项发生后才进入建仓路径：利润拐点、A 股不高于 75 元、欧盟关税政策明朗化。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/BYD/BYD-research-20260624.md",
+                    "line_start": 395,
+                    "line_end": 395,
+                    "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+                  }
+                ],
+                "node_id": "profit-inflection-q2-q3",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "2026Q2/Q3 财报确认利润拐点。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 75,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/BYD/BYD-research-20260624.md",
+                    "line_start": 395,
+                    "line_end": 395,
+                    "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+                  }
+                ],
+                "node_id": "a-share-price-below-75",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格不高于 75 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/BYD/BYD-research-20260624.md",
+                    "line_start": 395,
+                    "line_end": 395,
+                    "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+                  }
+                ],
+                "node_id": "eu-tariff-policy-clear",
+                "kind": "EVENT",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "欧盟关税政策明朗化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/BYD/BYD-research-20260624.md",
+                "line_start": 395,
+                "line_end": 395,
+                "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+              }
+            ],
+            "node_id": "entry-any-of-three",
+            "kind": "ANY",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "利润拐点、价格安全边际或关税政策明朗化三项中任一项满足。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/BYD/BYD-research-20260624.md",
+              "line_start": 395,
+              "line_end": 395,
+              "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "watch-a-share-85-110",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "85-110 元区间以持有/观察为主，不把合理区间当成自动买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 85,
+            "price_max": 110,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/BYD/BYD-research-20260624.md",
+                "line_start": 407,
+                "line_end": 407,
+                "quote": "| 合理 | 85-110元 | 24-31倍 | 持有 |"
+              }
+            ],
+            "node_id": "watch-a-share-85-110",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 85-110 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/BYD/BYD-research-20260624.md",
+              "line_start": 407,
+              "line_end": 407,
+              "quote": "| 合理 | 85-110元 | 24-31倍 | 持有 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/BYD/BYD-research-20260624.md",
+          "line_start": 395,
+          "line_end": 395,
+          "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "长期逻辑未破坏，持仓者继续持有；若仓位超过组合 20%，建议降至 15% 以下。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-with-position-limit",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "继续持有，但控制组合仓位。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/BYD/BYD-research-20260624.md",
+              "line_start": 396,
+              "line_end": 396,
+              "quote": "| **持仓者** | **继续持有。** 长期逻辑（电动化趋势+垂直整合优势+全球化潜力）未被破坏。2026年是\"黎明前的黑暗\"——补贴退坡+透支效应消化中，下半年有望回暖。但如果仓位超过投资组合的20%，建议适度减至15%以下 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-overweight-manual",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "仓位超过组合 20% 时适度降至 15% 以下。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/BYD/BYD-research-20260624.md",
+                "line_start": 396,
+                "line_end": 396,
+                "quote": "| **持仓者** | **继续持有。** 长期逻辑（电动化趋势+垂直整合优势+全球化潜力）未被破坏。2026年是\"黎明前的黑暗\"——补贴退坡+透支效应消化中，下半年有望回暖。但如果仓位超过投资组合的20%，建议适度减至15%以下 |"
+              }
+            ],
+            "node_id": "holder-overweight-reduce",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工确认组合仓位是否超过 20% 并执行降至 15% 以下的风险控制。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/BYD/BYD-research-20260624.md",
+              "line_start": 396,
+              "line_end": 396,
+              "quote": "| **持仓者** | **继续持有。** 长期逻辑（电动化趋势+垂直整合优势+全球化潜力）未被破坏。2026年是\"黎明前的黑暗\"——补贴退坡+透支效应消化中，下半年有望回暖。但如果仓位超过投资组合的20%，建议适度减至15%以下 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-sell-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四项卖出信号的组合关系和处置幅度需人工复核。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/BYD/BYD-research-20260624.md",
+                "line_start": 397,
+                "line_end": 397,
+                "quote": "| **卖出信号** | （1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象；（3）王传福因健康或其他原因卸任且无合格接班人；（4）固态电池大规模量产且比亚迪在该路线上明显落后 |"
+              }
+            ],
+            "node_id": "holder-sell-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认海外销量、毛利率、接班人和固态电池路线风险。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/BYD/BYD-research-20260624.md",
+              "line_start": 397,
+              "line_end": 397,
+              "quote": "| **卖出信号** | （1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象；（3）王传福因健康或其他原因卸任且无合格接班人；（4）固态电池大规模量产且比亚迪在该路线上明显落后 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四项加仓信号的组合关系需人工复核，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/BYD/BYD-research-20260624.md",
+                "line_start": 398,
+                "line_end": 398,
+                "quote": "| **加仓信号** | （1）A股跌至70元以下（PE~20倍），提供充足安全边际；（2）2026Q2/Q3净利润同比转正且海外毛利率维持19%+；（3）储能业务独立披露且增速超50%；（4）欧盟关税政策出现缓和 |"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认价格、利润、储能披露和欧盟关税信号是否需要同时满足。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/BYD/BYD-research-20260624.md",
+              "line_start": 398,
+              "line_end": 398,
+              "quote": "| **加仓信号** | （1）A股跌至70元以下（PE~20倍），提供充足安全边际；（2）2026Q2/Q3净利润同比转正且海外毛利率维持19%+；（3）储能业务独立披露且增速超50%；（4）欧盟关税政策出现缓和 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/BYD/BYD-research-20260624.md",
+          "line_start": 396,
+          "line_end": 396,
+          "quote": "| **持仓者** | **继续持有。** 长期逻辑（电动化趋势+垂直整合优势+全球化潜力）未被破坏。2026年是\"黎明前的黑暗\"——补贴退坡+透支效应消化中，下半年有望回暖。但如果仓位超过投资组合的20%，建议适度减至15%以下 |"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/BYD/BYD-research-20260624.md",
+          "line_start": 395,
+          "line_end": 395,
+          "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+        }
+      ],
+      "node_id": "monitor-q2-q3-profit-and-policy",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待 2026Q2/Q3 财报利润拐点和欧盟关税政策明朗化。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前参考价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 85,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/BYD/BYD-research-20260624.md",
+          "line_start": 395,
+          "line_end": 395,
+          "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 74.6,
+      "max": 209.8,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/BYD/BYD-research-20260624.md",
+          "line_start": 339,
+          "line_end": 339,
+          "quote": "| **乐观** | 25% | 30倍 | 6.99元 | **209.8元** | **+147%** |"
+        },
+        {
+          "report_path": "reports/BYD/BYD-research-20260624.md",
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "| **悲观** | 5% | 18倍 | 4.14元 | **74.6元** | **-12%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出与加仓信号列出多个项目，但未定义是任一、全部还是最少满足数量。",
+      "required_clarification": "由人工或更强模型确认持仓信号的组合逻辑；在此之前仅保留人工复核，不生成自动减仓或加仓。",
+      "evidence": [
+        {
+          "report_path": "reports/BYD/BYD-research-20260624.md",
+          "line_start": 397,
+          "line_end": 397,
+          "quote": "| **卖出信号** | （1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象；（3）王传福因健康或其他原因卸任且无合格接班人；（4）固态电池大规模量产且比亚迪在该路线上明显落后 |"
+        },
+        {
+          "report_path": "reports/BYD/BYD-research-20260624.md",
+          "line_start": 398,
+          "line_end": 398,
+          "quote": "| **加仓信号** | （1）A股跌至70元以下（PE~20倍），提供充足安全边际；（2）2026Q2/Q3净利润同比转正且海外毛利率维持19%+；（3）储能业务独立披露且增速超50%；（4）欧盟关税政策出现缓和 |"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-overweight-manual",
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/BYD/BYD-research-20260624.md",
+      "line_start": 395,
+      "line_end": 398,
+      "quote": "| **空仓者** | **观望偏积极。** 当前A股85元处于中性偏低位置。建议等待以下信号之一出现再建仓：（1）2026Q2/Q3财报确认利润拐点；（2）A股跌至75元以下（对应PE~21倍）提供更好的安全边际；（3）欧盟关税政策明朗化。H股75.85港元因估值更低（PE~22倍），相对A股更有吸引力 |\n| **持仓者** | **继续持有。** 长期逻辑（电动化趋势+垂直整合优势+全球化潜力）未被破坏。2026年是\"黎明前的黑暗\"——补贴退坡+透支效应消化中，下半年有望回暖。但如果仓位超过投资组合的20%，建议适度减至15%以下 |\n| **卖出信号** | （1）连续两个季度海外销量同比负增长；（2）毛利率跌破15%且无改善迹象；（3）王传福因健康或其他原因卸任且无合格接班人；（4）固态电池大规模量产且比亚迪在该路线上明显落后 |\n| **加仓信号** | （1）A股跌至70元以下（PE~20倍），提供充足安全边际；（2）2026Q2/Q3净利润同比转正且海外毛利率维持19%+；（3）储能业务独立披露且增速超50%；（4）欧盟关税政策出现缓和 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "FCF_AND_MARGIN_PRESSURE",
+    "SUCCESSION_RISK"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "ANY_LOGIC",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

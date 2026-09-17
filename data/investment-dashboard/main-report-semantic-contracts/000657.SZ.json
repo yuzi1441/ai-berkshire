@@ -1,0 +1,738 @@
+{
+  "schema_version": 2,
+  "ticker": "000657.SZ",
+  "company": "中钨高新",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+    "report_sha256": "82855705d80a135a8e442c228cf45fba779cdd4282c5483d6f7f97666a9fd8b6"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "当前约 75.99 元明显不是买入安全边际；55-60、35-45、25-35 元均保留为研究/重估区或条件路径",
+      "58.5、32.7、15.6 元是三情景目标价，未转译为买入价",
+      "已持仓者在价格继续高于 75 元且现金流未改善时降低暴露，未泄漏为空仓建仓",
+      "减仓/回避信号保留了钨价与库存、现金流、关联交易、高端产品以及资产注入的风险关系",
+      "底部契约把分层表头误作结论摘要，正文与底部字段存在冲突"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "战略资源与高端工具平台值得跟踪，但周期高景气和现金流风险使当前估值缺少安全边际。",
+    "evidence": [
+      {
+        "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+        "line_start": 106,
+        "line_end": 106,
+        "quote": "**巴菲特式结论**：财务趋势很强，但估值更强；如果不能证明 30-50 亿元级别归母利润具备长期可持续性且现金流同步兑现，当前价格很难提供安全边际。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "现价不追；55-60 元结合现金流可研究，35-45 元或 25-35 元再重估，均不是自动买入。",
+      "entry_semantic": "REVIEW_ONLY",
+      "action_paths": [
+        {
+          "path_id": "research-55-60-with-cashflow",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "55-60 元且 2026H1 现金流修复时考虑研究性仓位。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 55,
+                "price_max": 60,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                    "line_start": 222,
+                    "line_end": 222,
+                    "quote": "| 激进型 | 只适合小仓位观察，不建议追高 | 若跌至 55-60 元且 2026H1 现金流修复，可考虑研究性仓位 | 即便乐观情景目标价约 58.5 元，现价仍高于保守估值上沿。 |"
+                  }
+                ],
+                "node_id": "review-price-55-60",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "价格处于 55-60 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                    "line_start": 222,
+                    "line_end": 222,
+                    "quote": "| 激进型 | 只适合小仓位观察，不建议追高 | 若跌至 55-60 元且 2026H1 现金流修复，可考虑研究性仓位 | 即便乐观情景目标价约 58.5 元，现价仍高于保守估值上沿。 |"
+                  }
+                ],
+                "node_id": "h1-cashflow-repairs",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "2026H1 经营现金流修复。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                "line_start": 222,
+                "line_end": 222,
+                "quote": "| 激进型 | 只适合小仓位观察，不建议追高 | 若跌至 55-60 元且 2026H1 现金流修复，可考虑研究性仓位 | 即便乐观情景目标价约 58.5 元，现价仍高于保守估值上沿。 |"
+              }
+            ],
+            "node_id": "review-55-60-all",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 55-60 元且 2026H1 现金流修复。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 222,
+              "line_end": 222,
+              "quote": "| 激进型 | 只适合小仓位观察，不建议追高 | 若跌至 55-60 元且 2026H1 现金流修复，可考虑研究性仓位 | 即便乐观情景目标价约 58.5 元，现价仍高于保守估值上沿。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "research-35-45",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "35-45 元区间再重估，需确认利润不是一次性钨价景气。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 35,
+            "price_max": 45,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                "line_start": 223,
+                "line_end": 223,
+                "quote": "| 稳健型 | 等待 | 35-45 元区间再重估 | 需看到利润不是一次性钨价景气，并且高端刀具/微钻利润持续放量。 |"
+              }
+            ],
+            "node_id": "review-35-45",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 35-45 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 223,
+              "line_end": 223,
+              "quote": "| 稳健型 | 等待 | 35-45 元区间再重估 | 需看到利润不是一次性钨价景气，并且高端刀具/微钻利润持续放量。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "research-25-35",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "25-35 元且钨价下行后现金流仍稳时重新评估。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 25,
+            "price_max": 35,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                "line_start": 224,
+                "line_end": 224,
+                "quote": "| 保守型 | 暂不买入 | 25-35 元且钨价下行后现金流仍稳，再重新评估 | 保守投资者应要求周期调整后的利润和治理折价。 |"
+              }
+            ],
+            "node_id": "review-25-35",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 25-35 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 224,
+              "line_end": 224,
+              "quote": "| 保守型 | 暂不买入 | 25-35 元且钨价下行后现金流仍稳，再重新评估 | 保守投资者应要求周期调整后的利润和治理折价。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+          "line_start": 222,
+          "line_end": 224,
+          "quote": "| 激进型 | 只适合小仓位观察，不建议追高 | 若跌至 55-60 元且 2026H1 现金流修复，可考虑研究性仓位 | 即便乐观情景目标价约 58.5 元，现价仍高于保守估值上沿。 |\n| 稳健型 | 等待 | 35-45 元区间再重估 | 需看到利润不是一次性钨价景气，并且高端刀具/微钻利润持续放量。 |\n| 保守型 | 暂不买入 | 25-35 元且钨价下行后现金流仍稳，再重新评估 | 保守投资者应要求周期调整后的利润和治理折价。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "持仓者在价格继续高于 75 元且现金流未改善时降低仓位暴露。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-reduce-above-75-cashflow-weak",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格继续高于 75 元但现金流未改善时分批降风险。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 75,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                    "line_start": 225,
+                    "line_end": 225,
+                    "quote": "| 已持有者 | 分批降风险 / 设观察线 | 若价格继续高于 75 元但现金流未改善，应降低仓位暴露 | 当前价格已包含非常乐观预期，风险收益不对称。 |"
+                  }
+                ],
+                "node_id": "price-above-75",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "价格继续高于 75 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                    "line_start": 225,
+                    "line_end": 225,
+                    "quote": "| 已持有者 | 分批降风险 / 设观察线 | 若价格继续高于 75 元但现金流未改善，应降低仓位暴露 | 当前价格已包含非常乐观预期，风险收益不对称。 |"
+                  }
+                ],
+                "node_id": "cashflow-not-improved",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "现金流未改善。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                "line_start": 225,
+                "line_end": 225,
+                "quote": "| 已持有者 | 分批降风险 / 设观察线 | 若价格继续高于 75 元但现金流未改善，应降低仓位暴露 | 当前价格已包含非常乐观预期，风险收益不对称。 |"
+              }
+            ],
+            "node_id": "holder-reduce-all",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "价格高于 75 元且现金流未改善。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 225,
+              "line_end": 225,
+              "quote": "| 已持有者 | 分批降风险 / 设观察线 | 若价格继续高于 75 元但现金流未改善，应降低仓位暴露 | 当前价格已包含非常乐观预期，风险收益不对称。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+          "line_start": 225,
+          "line_end": 225,
+          "quote": "| 已持有者 | 分批降风险 / 设观察线 | 若价格继续高于 75 元但现金流未改善，应降低仓位暴露 | 当前价格已包含非常乐观预期，风险收益不对称。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                  "line_start": 235,
+                  "line_end": 235,
+                  "quote": "1. 钨价高位回落，同时存货和预付款仍大幅增加。"
+                }
+              ],
+              "node_id": "tungsten-price-falls",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "钨价高位回落。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                  "line_start": 235,
+                  "line_end": 235,
+                  "quote": "1. 钨价高位回落，同时存货和预付款仍大幅增加。"
+                }
+              ],
+              "node_id": "inventory-prepayment-rise",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "存货和预付款仍大幅增加。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 235,
+              "line_end": 235,
+              "quote": "1. 钨价高位回落，同时存货和预付款仍大幅增加。"
+            }
+          ],
+          "node_id": "tungsten-down-inventory-up",
+          "kind": "ALL",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "钨价高位回落且存货、预付款仍大幅增加。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 236,
+              "line_end": 236,
+              "quote": "2. 经营现金流持续显著低于净利润。"
+            }
+          ],
+          "node_id": "cashflow-profit-gap",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "经营现金流持续显著低于净利润。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 237,
+              "line_end": 237,
+              "quote": "3. 关联交易继续大幅调增且价格公允性缺乏透明解释。"
+            }
+          ],
+          "node_id": "related-transaction-opacity",
+          "kind": "EVENT",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "关联交易继续大幅调增且价格公允性缺乏透明解释。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                  "line_start": 238,
+                  "line_end": 238,
+                  "quote": "4. 高端刀具/微钻毛利率下滑或客户订单低于预期。"
+                }
+              ],
+              "node_id": "tool-margin-down",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "高端刀具/微钻毛利率下滑。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                  "line_start": 238,
+                  "line_end": 238,
+                  "quote": "4. 高端刀具/微钻毛利率下滑或客户订单低于预期。"
+                }
+              ],
+              "node_id": "tool-orders-weak",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "客户订单低于预期。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 238,
+              "line_end": 238,
+              "quote": "4. 高端刀具/微钻毛利率下滑或客户订单低于预期。"
+            }
+          ],
+          "node_id": "tool-margin-or-orders",
+          "kind": "ANY",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "高端刀具/微钻毛利率下滑或客户订单低于预期。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                  "line_start": 239,
+                  "line_end": 239,
+                  "quote": "5. 资产注入发生在高景气高估值位置，交易条件对少数股东不友好。"
+                }
+              ],
+              "node_id": "injection-high-cycle",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "资产注入发生在高景气高估值位置。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+                  "line_start": 239,
+                  "line_end": 239,
+                  "quote": "5. 资产注入发生在高景气高估值位置，交易条件对少数股东不友好。"
+                }
+              ],
+              "node_id": "injection-unfair",
+              "kind": "QUALITATIVE",
+              "effect": "REDUCE_TRIGGER",
+              "scope": "both",
+              "description": "交易条件对少数股东不友好。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+              "line_start": 239,
+              "line_end": 239,
+              "quote": "5. 资产注入发生在高景气高估值位置，交易条件对少数股东不友好。"
+            }
+          ],
+          "node_id": "injection-unfriendly",
+          "kind": "ALL",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "资产注入发生在高景气高估值位置且交易条件对少数股东不友好。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+          "line_start": 234,
+          "line_end": 239,
+          "quote": "**减仓/回避信号**：\n1. 钨价高位回落，同时存货和预付款仍大幅增加。  \n2. 经营现金流持续显著低于净利润。  \n3. 关联交易继续大幅调增且价格公允性缺乏透明解释。  \n4. 高端刀具/微钻毛利率下滑或客户订单低于预期。  \n5. 资产注入发生在高景气高估值位置，交易条件对少数股东不友好。"
+        }
+      ],
+      "node_id": "reduce-or-avoid-any",
+      "kind": "ANY",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "五项减仓/回避信号任一出现时降低风险。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+          "line_start": 227,
+          "line_end": 232,
+          "quote": "**加仓信号**：\n1. 2026H1/H2 利润继续高增且经营现金流同步转正、覆盖利润。  \n2. 高端刀具/PCB 微钻收入占比、毛利率、客户认证明显提升。  \n3. 集团资产注入价格合理、盈利承诺充分，且不明显摊薄少数股东。  \n4. 存货周转改善、资产减值没有放大。  \n5. 估值回落至可由 25-35 亿元可持续利润解释的区间。"
+        }
+      ],
+      "node_id": "add-signals-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控现金流、刀具/微钻、资产注入、存货减值和估值回落等加仓信号，组合逻辑需人工复核。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 75.99,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+          "line_start": 208,
+          "line_end": 208,
+          "quote": "以 TTM EPS 约 0.8553 元、总股本约 22.786 亿股、现价 75.99 元为基础，工具输出如下："
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 15.6,
+      "max": 58.5,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+          "line_start": 210,
+          "line_end": 214,
+          "quote": "| 情景 | 年增速 | 目标 PE | 3 年目标 EPS | 目标股价 | 相对现价 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 15% | 45x | 1.30 元 | 58.5 元 | -23.0% |\n| 中性 | 3% | 35x | 0.93 元 | 32.7 元 | -57.0% |\n| 悲观 | -10% | 25x | 0.62 元 | 15.6 元 | -79.5% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约未表达正文三层研究/重估路径、持仓者降风险、加仓/减仓信号，且结论摘要退化为表头。",
+    "evidence": [
+      {
+        "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+        "line_start": 303,
+        "line_end": 311,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 投资者类型 当前建议 价格/触发区间 解释 |\n| 激进型动作 | 只适合小仓位观察，不建议追高 |\n| 激进型价格区间 | 约 58.5 元 |\n| 稳健型动作 | 等待 |\n| 稳健型价格区间 | 35-45 元 |\n| 保守型动作 | 暂不买入 |\n| 保守型价格区间 | 25-35 元 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/中钨高新/中钨高新-investment-team-20260709.md",
+      "line_start": 218,
+      "line_end": 239,
+      "quote": "### 7.3 分层操作建议\n\n| 投资者类型 | 当前建议 | 价格/触发区间 | 解释 |\n|---|---|---|---|\n| 激进型 | 只适合小仓位观察，不建议追高 | 若跌至 55-60 元且 2026H1 现金流修复，可考虑研究性仓位 | 即便乐观情景目标价约 58.5 元，现价仍高于保守估值上沿。 |\n| 稳健型 | 等待 | 35-45 元区间再重估 | 需看到利润不是一次性钨价景气，并且高端刀具/微钻利润持续放量。 |\n| 保守型 | 暂不买入 | 25-35 元且钨价下行后现金流仍稳，再重新评估 | 保守投资者应要求周期调整后的利润和治理折价。 |\n| 已持有者 | 分批降风险 / 设观察线 | 若价格继续高于 75 元但现金流未改善，应降低仓位暴露 | 当前价格已包含非常乐观预期，风险收益不对称。 |\n\n**加仓信号**：\n1. 2026H1/H2 利润继续高增且经营现金流同步转正、覆盖利润。  \n2. 高端刀具/PCB 微钻收入占比、毛利率、客户认证明显提升。  \n3. 集团资产注入价格合理、盈利承诺充分，且不明显摊薄少数股东。  \n4. 存货周转改善、资产减值没有放大。  \n5. 估值回落至可由 25-35 亿元可持续利润解释的区间。\n\n**减仓/回避信号**：\n1. 钨价高位回落，同时存货和预付款仍大幅增加。  \n2. 经营现金流持续显著低于净利润。  \n3. 关联交易继续大幅调增且价格公允性缺乏透明解释。  \n4. 高端刀具/微钻毛利率下滑或客户订单低于预期。  \n5. 资产注入发生在高景气高估值位置，交易条件对少数股东不友好。"
+    }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_VALUATION"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
+  ]
+}

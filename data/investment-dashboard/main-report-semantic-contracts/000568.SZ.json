@@ -1,0 +1,497 @@
+{
+  "schema_version": 2,
+  "ticker": "000568.SZ",
+  "company": "泸州老窖",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+    "report_sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "80-85 元是激进型小仓路径，不能概括成无条件买入；稳健路径还要求两个确认信号",
+      "75 元以下的加仓和 80-85 元的建底仓没有被混成同一个空仓动作",
+      "54-70 元是悲观情景锚，未作为自动买入价；90 元以内也只有在确认信号后才可介入",
+      "卖出/离场五项信号保留为任一触发的退出风险",
+      "报告正文没有独立写出持仓者策略，不能从激进/稳健/保守分层建议推断 holder action"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "公司底子与估值有吸引力，但经营拐点尚未确认；激进者可小仓，稳健者等待合同负债和利润确认。",
+    "evidence": [
+      {
+        "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+        "line_start": 153,
+        "line_end": 153,
+        "quote": "泸州老窖当下的投资问题不是\"这是不是好公司\"（毛利86%、净利率42%、净现金263亿的公司质地毋庸置疑），而是\"生意质量的缺陷与价格的便宜哪个占上风\"。四个维度的研究共同指向一个结论：它的\"高端定价权\"和\"窖池稀缺\"叙事经不起反面检验，竞争位置在结构性恶化，但12倍市盈率、7%股息率、接近清算价值的定价已经补偿了大部分缺陷。这是一笔\"赔率不错、胜率待确认\"的左侧交易：激进者可用底仓+股息换时间，稳健者应等合同负债和批价给出确认信号——在白酒这个九年缩量的行业里，晚买的风险远小于买错的风险。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "激进者可在 80-85 元小仓建底仓，稳健者等确认信号；当前不是无条件重仓。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "aggressive-trial-80-85",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "激进型可在 80-85 元建立约三分之一底仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 80,
+            "price_max": 85,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+                "line_start": 131,
+                "line_end": 131,
+                "quote": "| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |"
+              }
+            ],
+            "node_id": "trial-price-80-85",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 80-85 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+              "line_start": 131,
+              "line_end": 131,
+              "quote": "| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "stable-entry-after-confirmations",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "合同负债连续两季回升且季度利润降幅收窄至个位数后，90 元以内才可介入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 90,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+                    "line_start": 132,
+                    "line_end": 132,
+                    "quote": "| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |"
+                  }
+                ],
+                "node_id": "stable-price-lte-90",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格不高于 90 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+                    "line_start": 138,
+                    "line_end": 138,
+                    "quote": "1. 合同负债连续两个季度环比回升（渠道信心最硬的先行指标）"
+                  }
+                ],
+                "node_id": "contract-liability-recovery",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "合同负债连续两个季度环比回升。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+                    "line_start": 140,
+                    "line_end": 140,
+                    "quote": "3. 季度利润降幅收窄至个位数或转正"
+                  }
+                ],
+                "node_id": "profit-decline-narrows",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "季度利润降幅收窄至个位数。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+                "line_start": 132,
+                "line_end": 132,
+                "quote": "| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |"
+              }
+            ],
+            "node_id": "stable-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格不高于 90 元，并且两个经营确认信号同时满足。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+              "line_start": 132,
+              "line_end": 132,
+              "quote": "| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+          "line_start": 131,
+          "line_end": 132,
+          "quote": "| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |\n| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "UNKNOWN",
+      "summary": "正文分层建议没有独立给出持仓者动作，需人工确认。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [],
+      "evidence": [
+        {
+          "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+          "line_start": 153,
+          "line_end": 153,
+          "quote": "泸州老窖当下的投资问题不是\"这是不是好公司\"（毛利86%、净利率42%、净现金263亿的公司质地毋庸置疑），而是\"生意质量的缺陷与价格的便宜哪个占上风\"。四个维度的研究共同指向一个结论：它的\"高端定价权\"和\"窖池稀缺\"叙事经不起反面检验，竞争位置在结构性恶化，但12倍市盈率、7%股息率、接近清算价值的定价已经补偿了大部分缺陷。这是一笔\"赔率不错、胜率待确认\"的左侧交易：激进者可用底仓+股息换时间，稳健者应等合同负债和批价给出确认信号——在白酒这个九年缩量的行业里，晚买的风险远小于买错的风险。"
+        }
+      ],
+      "semantic_status": "ambiguous"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+              "line_start": 145,
+              "line_end": 145,
+              "quote": "1. 国窖出厂价被迫下调（挺价失败，商业模式核心假设破坏，管理层与确定性评分同步下调）"
+            }
+          ],
+          "node_id": "factory-price-cut",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "国窖出厂价被迫下调。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "国窖批价",
+          "operator": "LT",
+          "value": 700,
+          "unit": "CNY",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+              "line_start": 146,
+              "line_end": 146,
+              "quote": "2. 批价跌破700元（渠道信心崩塌阈值）"
+            }
+          ],
+          "node_id": "批价跌破700",
+          "kind": "METRIC_COMPARE",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "批价跌破 700 元。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+              "line_start": 147,
+              "line_end": 147,
+              "quote": "3. 消费税以恶性方式落地（批发/零售环节征收+短过渡期）"
+            }
+          ],
+          "node_id": "悪性消费税",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "消费税以恶性方式落地。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+              "line_start": 148,
+              "line_end": 148,
+              "quote": "4. 分红率下调或85亿分红承诺不兑现"
+            }
+          ],
+          "node_id": "dividend-promise-fails",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "分红率下调或 85 亿分红承诺不兑现。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+              "line_start": 149,
+              "line_end": 149,
+              "quote": "5. 经销商出现成规模退网潮"
+            }
+          ],
+          "node_id": "dealer-exit",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "both",
+          "description": "经销商出现成规模退网潮。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+          "line_start": 144,
+          "line_end": 149,
+          "quote": "**减仓/离场信号**：\n1. 国窖出厂价被迫下调（挺价失败，商业模式核心假设破坏，管理层与确定性评分同步下调）\n2. 批价跌破700元（渠道信心崩塌阈值）\n3. 消费税以恶性方式落地（批发/零售环节征收+短过渡期）\n4. 分红率下调或85亿分红承诺不兑现\n5. 经销商出现成规模退网潮"
+        }
+      ],
+      "node_id": "exit-signals-any",
+      "kind": "ANY",
+      "effect": "EXIT_TRIGGER",
+      "scope": "both",
+      "description": "五项减仓/离场信号任一出现时触发退出或重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+          "line_start": 137,
+          "line_end": 142,
+          "quote": "**加仓信号**：\n1. 合同负债连续两个季度环比回升（渠道信心最硬的先行指标）\n2. 国窖1573批价站稳900元以上、向980元出厂线收敛\n3. 季度利润降幅收窄至个位数或转正\n4. 行业去库存确认收尾（经销商库存从7个月回到4个月以内）\n5. 28度/38度低度产品线放量，形成国窖之外的第二曲线雏形"
+        }
+      ],
+      "node_id": "add-signals-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控合同负债、批价、季度利润、库存去化和低度产品放量等加仓信号，组合判断需人工复核。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "股价基准",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 82.46,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "**报告日期**：2026-07-19 ｜ **股价基准**：82.46元（2026-07-17收盘），总市值约1214亿元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "五年三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 54.0,
+      "max": 216.3,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+          "line_start": 59,
+          "line_end": 59,
+          "quote": "5. **三情景估值（5年期，工具实算）**：乐观216.3元（+162%）/ 中性121.9元（+48%）/ 悲观54.0元（-34.5%）；悲观情景下7%股息率5年可回收约25-30%成本。"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约保留了分层价格，但遗漏正文的确认信号、减仓/离场信号及持仓者策略，不能作为完整语义权威。",
+    "evidence": [
+      {
+        "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+        "line_start": 181,
+        "line_end": 189,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 激进型 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 80-85元建仓；75元以下加仓 |\n| 激进型动作 | 80-85元建仓 |\n| 激进型价格区间 | 80-85元 |\n| 稳健型动作 | 确认后90元以内仍可介入 |\n| 稳健型价格区间 | 90元 |\n| 保守型动作 | 回避或仅以\"类债券\"心态小仓位吃息 |\n| 保守型价格区间 | 54-70元 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "MISSING_HOLDER_ACTION",
+      "summary": "正文没有明确持仓者应持有、加仓或减仓的独立动作。",
+      "required_clarification": "由高级模型/人工确认持仓者策略，不能从投资者类型分层建议推断。",
+      "evidence": [
+        {
+          "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+          "line_start": 127,
+          "line_end": 133,
+          "quote": "| 类型 | 建议 | 价格区间 |\n|------|------|----------|\n| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |\n| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |\n| 保守型 | 回避或仅以\"类债券\"心态小仓位吃息；白酒行业结构性逆风未消，同样的钱茅台确定性更高（19.7倍PE的茅台 vs 12.2倍的老窖，价差已反映质地差距） | 悲观情景锚54-70元区间才具备\"错到极致\"的赔率 |"
+        }
+      ],
+      "classification": "HOLDER",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/泸州老窖/泸州老窖投资研究报告_20260719.md",
+      "line_start": 116,
+      "line_end": 149,
+      "quote": "## 7. 最终投资建议\n\n### 定性判断\n\n| 项目 | 判断 |\n|------|------|\n| 生意质量 | 一流生意的底子、二流的品牌位阶（\"用一流组织能力经营二流品牌位阶\"） |\n| 管理层 | 良好（4星），本轮周期应对成熟，诚信记录近十年干净 |\n| 估值 | 极端便宜（十年5%分位），错杀概率大于合理定价概率，但需确认信号 |\n| 时机 | 左侧。报表最坏时点大概率已过，但先行指标（合同负债/批价）尚未转正 |\n\n### 分层操作建议\n\n| 类型 | 建议 | 价格区间 |\n|------|------|----------|\n| 激进型 | 现价建1/3底仓，7%股息率支付等待成本；确认信号出现后加至半仓以上 | 80-85元建仓；75元以下加仓 |\n| 稳健型 | 观望为主，等两个确认信号（合同负债连续两季环比回升+季度利润降幅收窄至个位数）再介入，宁可买贵10%买确定 | 确认后90元以内仍可介入 |\n| 保守型 | 回避或仅以\"类债券\"心态小仓位吃息；白酒行业结构性逆风未消，同样的钱茅台确定性更高（19.7倍PE的茅台 vs 12.2倍的老窖，价差已反映质地差距） | 悲观情景锚54-70元区间才具备\"错到极致\"的赔率 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "MISSING_HOLDER_ACTION"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING"
+  ]
+}

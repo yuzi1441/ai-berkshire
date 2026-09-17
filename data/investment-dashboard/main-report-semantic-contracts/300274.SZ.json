@@ -1,0 +1,720 @@
+{
+  "schema_version": 2,
+  "ticker": "300274.SZ",
+  "company": "阳光电源",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+    "report_sha256": "10fcc12e7847e890b9e42869c8ea2a4a76814b83d3cebbdd3a444f848095c056"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "113.42 元是当前 A 股参考价，103.55、92.04、80.54 元是行动价格带；53.8-197.5 元三情景目标价只作估值参考，不是买入价。",
+      "正文明确等待‘价格跌到 92 元以下’或‘美国 FCC 规则出台且影响可控’中的任意一件，但政策明朗本身只说明风险收益比改善，未明确等同于立即买入；因此保留为复核路径，不把政策事件擅自变成买入条件。",
+      "空仓者 103.55 元以下可建立不超过目标仓位三分之一的观察仓，92.04 元以下且基本面未进一步恶化才建立有意义仓位，80.54 元以下是深度价值区；三种价格角色未被压平。",
+      "持仓者的 92.04/80.54 元加仓和 138.06 元减仓均与持仓者 scope 绑定，未泄漏为空仓者建仓。",
+      "加仓和卖出/否决信号列出多个项目但没有声明组合逻辑，保留人工复核，不自动推进。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "阳光电源是高质量全球光储龙头，但美国/欧洲政策与电芯成本风险使当前 113.42 元只适合观望；等待更低价格或政策风险明确后再复核。",
+    "evidence": [
+      {
+        "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+        "line_start": 593,
+        "line_end": 595,
+        "quote": "结论：好公司，当前价格观望。不是回避，也不是买入——是等。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 113.42 元处于 103.55-115.05 元观望区；103.55 元以下可小仓观察，92.04 元以下且基本面未恶化才进入有意义建仓，80.54 元以下是深度价值区。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-103.55-115.05",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "103.55-115.05 元区间观望、不追价；当前 113.42 元处于该区间。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 103.55,
+            "price_max": 115.05,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                "line_start": 600,
+                "line_end": 600,
+                "quote": "103.55–115.05 元区间"
+              }
+            ],
+            "node_id": "watch-current-band",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 103.55-115.05 元观望区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 568,
+              "line_end": 568,
+              "quote": "观望，不追价。当前 113.42 元处此区间上沿"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-below-103.55",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股不高于 103.55 元可建立不超过目标仓位三分之一的观察仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 103.55,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                "line_start": 599,
+                "line_end": 599,
+                "quote": "103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓"
+              }
+            ],
+            "node_id": "trial-observation-below-103.55",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 103.55 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 599,
+              "line_end": 599,
+              "quote": "103.55 元（18x）以下可建立不超过目标仓位 1/3 的观察仓"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-below-92.04-with-fundamentals",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股不高于 92.04 元且基本面未进一步恶化时，分批建立有意义仓位。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 92.04,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                    "line_start": 599,
+                    "line_end": 599,
+                    "quote": "**92.04 元（16x）以下**"
+                  }
+                ],
+                "node_id": "entry-price-below-92.04",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格不高于 92.04 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                    "line_start": 599,
+                    "line_end": 599,
+                    "quote": "且基本面未进一步恶化"
+                  }
+                ],
+                "node_id": "entry-fundamentals-not-worse",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "基本面未进一步恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                "line_start": 599,
+                "line_end": 599,
+                "quote": "**92.04 元（16x）以下**、且基本面未进一步恶化时，分批建立有意义仓位"
+              }
+            ],
+            "node_id": "entry-below-92.04-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 92.04 元且基本面未进一步恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 599,
+              "line_end": 599,
+              "quote": "**92.04 元（16x）以下**、且基本面未进一步恶化时，分批建立有意义仓位"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-deep-value-below-80.54",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股不高于 80.54 元进入深度价值区，可分批建立有意义仓位；仍不把它标为无条件买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 80.54,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                "line_start": 599,
+                "line_end": 599,
+                "quote": "80.54 元（14x）以下为深度价值区"
+              }
+            ],
+            "node_id": "entry-deep-value-below-80.54",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 80.54 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 599,
+              "line_end": 599,
+              "quote": "80.54 元（14x）以下为深度价值区"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-price-or-policy-improvement",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格跌到 92 元以下或美国 FCC 规则出台且影响可控时重新评估；政策事件本身不自动等于买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 92.04,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                    "line_start": 599,
+                    "line_end": 599,
+                    "quote": "**92.04 元（16x）以下**"
+                  }
+                ],
+                "node_id": "review-price-below-92",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A 股价格不高于 92.04 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                    "line_start": 595,
+                    "line_end": 595,
+                    "quote": "美国 FCC 规则的实际文本出台并证明影响可控"
+                  }
+                ],
+                "node_id": "review-fcc-policy-clear",
+                "kind": "EVENT",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "美国 FCC 规则的实际文本出台并证明影响可控。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                "line_start": 595,
+                "line_end": 595,
+                "quote": "等两件事中的任意一件"
+              }
+            ],
+            "node_id": "review-any-price-or-policy",
+            "kind": "ANY",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格跌到 92 元以下，或美国 FCC 规则出台并证明影响可控，任一事件触发复核。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 595,
+              "line_end": 595,
+              "quote": "二者出现其一，风险收益比就会改善"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 593,
+          "line_end": 593,
+          "quote": "好公司，当前价格观望。不是回避，也不是买入——是等。"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持仓者在 103.55-115.05 元区间可持有并等待半年报验证；加仓和减仓按持仓者条件处理，不套用空仓者动作。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-await-h1",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "103.55-115.05 元区间持有，等待半年报验证储能毛利率、汇兑和美国订单。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 600,
+              "line_end": 600,
+              "quote": "103.55–115.05 元区间可持有，重点等 8 月半年报验证三件事"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-add-below-92.04",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持仓者 A 股不高于 92.04 元可小幅加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 92.04,
+            "currency": "CNY",
+            "price_role": "ADD_POSITION",
+            "evidence": [
+              {
+                "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                "line_start": 566,
+                "line_end": 566,
+                "quote": "**92.04 元**"
+              }
+            ],
+            "node_id": "holder-add-below-92.04",
+            "kind": "PRICE_RANGE",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "A 股价格不高于 92.04 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 566,
+              "line_end": 566,
+              "quote": "可小幅加仓"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-add-below-80.54",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持仓者 A 股不高于 80.54 元可加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 80.54,
+            "currency": "CNY",
+            "price_role": "ADD_POSITION",
+            "evidence": [
+              {
+                "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                "line_start": 565,
+                "line_end": 565,
+                "quote": "**80.54 元**"
+              }
+            ],
+            "node_id": "holder-add-below-80.54",
+            "kind": "PRICE_RANGE",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "A 股价格不高于 80.54 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 565,
+              "line_end": 565,
+              "quote": "可加仓"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-reduce-above-138.06",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股不低于 138.06 元且盈利未上修时考虑减仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "GTE",
+            "value": null,
+            "unit": null,
+            "price_min": 138.06,
+            "price_max": null,
+            "currency": "CNY",
+            "price_role": "REDUCE_POSITION",
+            "evidence": [
+              {
+                "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+                "line_start": 570,
+                "line_end": 570,
+                "quote": "**138.06 元**"
+              }
+            ],
+            "node_id": "holder-reduce-above-138.06",
+            "kind": "PRICE_RANGE",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "A 股价格不低于 138.06 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+              "line_start": 602,
+              "line_end": 602,
+              "quote": "138.06 元（24x）以上而盈利未上修"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 600,
+          "line_end": 600,
+          "quote": "持仓者"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 603,
+          "line_end": 603,
+          "quote": "卖出/否决信号"
+        }
+      ],
+      "node_id": "sungrow-sell-veto-manual",
+      "kind": "MANUAL_REVIEW",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "美国禁令覆盖存量项目、重大储能安全事故、欧盟限制扩展到市场准入、连续两个报告期利润与经营现金流同步恶化或治理底线被突破时进入卖出/否决人工复核；报告未定义这些条件的组合逻辑。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "AFTER",
+      "value": "2026-08",
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 600,
+          "line_end": 600,
+          "quote": "重点等 8 月半年报验证三件事"
+        }
+      ],
+      "node_id": "monitor-h1-and-policy",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待 8 月半年报验证储能毛利率、汇兑和美国订单，并跟踪美国 FCC 规则实际文本。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 601,
+          "line_end": 601,
+          "quote": "加仓信号"
+        }
+      ],
+      "node_id": "monitor-add-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "holder",
+      "description": "跟踪美国政策、储能毛利率、TTM 净利、境外毛利率、储能出货和电芯价格等加仓信号；组合逻辑未定义。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 113.42,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 45,
+          "line_end": 45,
+          "quote": "2026-07-24 收盘价 | 113.42 元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 53.8,
+      "max": 197.5,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 551,
+          "line_end": 551,
+          "quote": "**197.5 元**"
+        },
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 553,
+          "line_end": 553,
+          "quote": "**53.8 元**"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约只保留空仓者的三档价格摘要，遗漏正文的政策/价格复核边界、持仓者加仓减仓和卖出否决条件。",
+    "evidence": [
+      {
+        "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+        "line_start": 813,
+        "line_end": 813,
+        "quote": "结论摘要"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "POLICY_OR_PRICE_REVIEW_BOUNDARY",
+      "summary": "正文明确价格跌到 92 元以下或美国 FCC 规则出台且影响可控任一出现时风险收益比改善，但没有明确政策事件单独出现是否直接允许建仓。",
+      "required_clarification": "由人工或更强模型确认政策事件的后续动作；在确认前只生成 REVIEW，不把政策明朗自动升级为 OPEN_POSITION。",
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 595,
+          "line_end": 595,
+          "quote": "等两件事中的任意一件"
+        }
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-price-or-policy-improvement"
+      ],
+      "affects_entry": true
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓与卖出/否决信号均列出多个项目，但未定义任一、全部或最少满足数量。",
+      "required_clarification": "明确组合逻辑后再允许自动 ADD、REDUCE 或 EXIT；当前仅保留人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+          "line_start": 601,
+          "line_end": 603,
+          "quote": "加仓信号"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-below-92.04",
+        "holder-add-below-80.54",
+        "holder-reduce-above-138.06"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/阳光电源/阳光电源-research-20260726.md",
+      "line_start": 591,
+      "line_end": 604,
+      "quote": "结论：好公司，当前价格观望。不是回避，也不是买入——是等。"
+    }
+  ],
+  "business_risk_reasons": [
+    "POLICY_OR_PRICE_REVIEW_BOUNDARY"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

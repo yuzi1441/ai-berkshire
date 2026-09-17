@@ -1,0 +1,1034 @@
+{
+  "schema_version": 2,
+  "ticker": "600276.SH",
+  "company": "恒瑞医疗",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+    "report_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "本轮只编译 A 股路径；报告同时包含 H 股价格和跨市场估值，不能把 H 股价格或换算值带入 A 股行动路径。",
+      "正文当前结论是等待/持有验证、空仓不追；43—46 元和 37—40 元均附带基本面未恶化前提。",
+      "空仓者‘半年报、CRL 整改路径、43—46 元三者至少满足其二’与分层价格表的关系没有完全明确，需强复核。",
+      "底部看板契约把基本面建议写成分批买入且没有失效条件，和正文的等待/不追结论存在冲突。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "恒瑞医药的平台和研发能力值得长期跟踪，但 55.75 元的安全边际不足；现价更适合持有验证或等待，不适合空仓追价。",
+    "evidence": [
+      {
+        "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+        "line_start": 7,
+        "line_end": 7,
+        "quote": "> **简短投资判断**：恒瑞已形成国内少见的研发、临床、生产、准入、商业化和全球 BD 闭环，但 2025 年许可收入对利润的贡献、海外 CMC 执行风险和当前 45 倍以上 PE 共同压低了安全边际。现价更适合持有验证或等待，不适合空仓者追价。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "只保留 A 股路径；55.75 元不追，47—50 元可小仓试探，43—46 元可在基本面未恶化时分批建仓，37—40 元才接近保守安全区；正式动作仍受半年报与 CRL 整改等条件影响。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "empty-watch-current-55-75",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "55.75 元不追价，等待研究条件或更安全价格。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 337,
+              "line_end": 337,
+              "quote": "| 当前时机 | 等待/持有 | 空仓不追，持仓看半年报与 CRL 整改 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "empty-trial-47-50",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "47—50 元仅使用计划仓位约三分之一小仓试探，并等待半年报和 CRL 整改。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 47,
+                "price_max": 50,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 345,
+                    "line_end": 345,
+                    "quote": "| 激进型 | 小仓试探 | 47-50 元 | 只使用计划仓位约三分之一，等待半年报和 CRL 整改 |"
+                  }
+                ],
+                "node_id": "hengrui-trial-price",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 47—50 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 345,
+                    "line_end": 345,
+                    "quote": "| 激进型 | 小仓试探 | 47-50 元 | 只使用计划仓位约三分之一，等待半年报和 CRL 整改 |"
+                  }
+                ],
+                "node_id": "hengrui-half-year-and-crl",
+                "kind": "MANUAL_REVIEW",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "等待并人工核对半年报和 CRL 整改。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                "line_start": 345,
+                "line_end": 345,
+                "quote": "| 激进型 | 小仓试探 | 47-50 元 | 只使用计划仓位约三分之一，等待半年报和 CRL 整改 |"
+              }
+            ],
+            "node_id": "hengrui-trial-gate",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 47—50 元，并等待半年报和 CRL 整改。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 345,
+              "line_end": 345,
+              "quote": "| 激进型 | 小仓试探 | 47-50 元 | 只使用计划仓位约三分之一，等待半年报和 CRL 整改 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "empty-steady-43-46",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "43—46 元在核心基本面没有恶化时分批建仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 43,
+                "price_max": 46,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 346,
+                    "line_end": 346,
+                    "quote": "| 稳健型 | 分批建仓 | 43-46 元 | 对应中性情景约 10%-12%要求回报，分三次执行 |"
+                  }
+                ],
+                "node_id": "hengrui-steady-price",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 43—46 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 341,
+                    "line_end": 341,
+                    "quote": "以下均指 A 股人民币价格，前提是核心基本面没有恶化。"
+                  }
+                ],
+                "node_id": "hengrui-core-fundamentals-intact",
+                "kind": "MANUAL_REVIEW",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "核心基本面没有恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                "line_start": 341,
+                "line_end": 341,
+                "quote": "以下均指 A 股人民币价格，前提是核心基本面没有恶化。"
+              },
+              {
+                "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                "line_start": 346,
+                "line_end": 346,
+                "quote": "| 稳健型 | 分批建仓 | 43-46 元 | 对应中性情景约 10%-12%要求回报，分三次执行 |"
+              }
+            ],
+            "node_id": "hengrui-steady-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 43—46 元且核心基本面没有恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 341,
+              "line_end": 341,
+              "quote": "以下均指 A 股人民币价格，前提是核心基本面没有恶化。"
+            },
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 346,
+              "line_end": 346,
+              "quote": "| 稳健型 | 分批建仓 | 43-46 元 | 对应中性情景约 10%-12%要求回报，分三次执行 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "empty-conservative-37-40",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "37—40 元只有在基本面未坏时才构成较强安全边际。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 37,
+                "price_max": 40,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 347,
+                    "line_end": 347,
+                    "quote": "| 保守型 | 重点建仓研究 | 37-40 元 | 只有基本面未坏时才构成较强安全边际 |"
+                  }
+                ],
+                "node_id": "hengrui-conservative-price",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 37—40 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 347,
+                    "line_end": 347,
+                    "quote": "| 保守型 | 重点建仓研究 | 37-40 元 | 只有基本面未坏时才构成较强安全边际 |"
+                  }
+                ],
+                "node_id": "hengrui-conservative-fundamentals-intact",
+                "kind": "MANUAL_REVIEW",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "基本面未坏。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                "line_start": 347,
+                "line_end": 347,
+                "quote": "| 保守型 | 重点建仓研究 | 37-40 元 | 只有基本面未坏时才构成较强安全边际 |"
+              }
+            ],
+            "node_id": "hengrui-conservative-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 37—40 元且基本面未坏。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 347,
+              "line_end": 347,
+              "quote": "| 保守型 | 重点建仓研究 | 37-40 元 | 只有基本面未坏时才构成较强安全边际 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "empty-review-two-of-three",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "空仓者需等待半年报、CRL 整改路径和 43—46 元价格三者至少满足其二；由于与分层价格表的关系不完全明确，先作为人工复核路径。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 355,
+                    "line_end": 355,
+                    "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。"
+                  }
+                ],
+                "node_id": "hengrui-half-year-report-review",
+                "kind": "FILING",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "2026 半年报可核对。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "EXISTS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 355,
+                    "line_end": 355,
+                    "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。"
+                  }
+                ],
+                "node_id": "hengrui-crl-remediation-review",
+                "kind": "EVENT",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "CRL 整改路径可核对。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 43,
+                "price_max": 46,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 355,
+                    "line_end": 355,
+                    "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。"
+                  }
+                ],
+                "node_id": "hengrui-price-43-46-review",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A 股价格进入 43—46 元区间。"
+              }
+            ],
+            "minimum": 2,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                "line_start": 355,
+                "line_end": 355,
+                "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。"
+              }
+            ],
+            "node_id": "hengrui-empty-two-of-three-review",
+            "kind": "AT_LEAST",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "半年报、CRL 整改路径和 A 股价格进入 43—46 元三者至少满足其二。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 355,
+              "line_end": 355,
+              "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 337,
+          "line_end": 337,
+          "quote": "| 当前时机 | 等待/持有 | 空仓不追，持仓看半年报与 CRL 整改 |"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "低成本持仓者可持有验证；高成本或重仓者不能以龙头信仰替代风险预算，并需在升价不伴随盈利预期上修时控制集中度。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-validation",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "低成本持仓者可持有，核对创新药增长、现金流、许可收入和 FDA 整改。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 356,
+              "line_end": 356,
+              "quote": "- **低成本持仓者**：可持有，重点核对创新药销售是否向全年 +30%目标加速、OCF 转化、GSK 等收入确认及 FDA 整改。"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-review-add-signals",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "半年报、现金流、CRL 整改、许可里程碑和后期管线等加仓信号需人工核对，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                "line_start": 364,
+                "line_end": 364,
+                "quote": "| 半年报创新药收入增速接近或超过 +30% | 创新药增速明显低于 +20%，仿制药继续下滑 |"
+              }
+            ],
+            "node_id": "hengrui-holder-add-signal-review",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工核对加仓信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 364,
+              "line_end": 364,
+              "quote": "| 半年报创新药收入增速接近或超过 +30% | 创新药增速明显低于 +20%，仿制药继续下滑 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-above-61-no-upgrade",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格高于 61 元且盈利预期未上修时降低仓位。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 61,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 349,
+                    "line_end": 349,
+                    "quote": "| 偏热区 | 降低仓位 | >61 元且盈利预期未上修 | >67 元约对应 55x TTM PE，减仓纪律更明确 |"
+                  }
+                ],
+                "node_id": "hengrui-price-above-61",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格高于 61 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                    "line_start": 349,
+                    "line_end": 349,
+                    "quote": "| 偏热区 | 降低仓位 | >61 元且盈利预期未上修 | >67 元约对应 55x TTM PE，减仓纪律更明确 |"
+                  }
+                ],
+                "node_id": "hengrui-profit-expectation-not-upgraded",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "盈利预期未上修。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+                "line_start": 349,
+                "line_end": 349,
+                "quote": "| 偏热区 | 降低仓位 | >61 元且盈利预期未上修 | >67 元约对应 55x TTM PE，减仓纪律更明确 |"
+              }
+            ],
+            "node_id": "hengrui-hot-zone-reduce",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "A 股价格高于 61 元且盈利预期未上修。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 349,
+              "line_end": 349,
+              "quote": "| 偏热区 | 降低仓位 | >61 元且盈利预期未上修 | >67 元约对应 55x TTM PE，减仓纪律更明确 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 356,
+          "line_end": 356,
+          "quote": "- **低成本持仓者**：可持有，重点核对创新药销售是否向全年 +30%目标加速、OCF 转化、GSK 等收入确认及 FDA 整改。"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": "创新药收入增速",
+      "operator": "LT",
+      "value": 20,
+      "unit": "%",
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 364,
+          "line_end": 364,
+          "quote": "| 半年报创新药收入增速接近或超过 +30% | 创新药增速明显低于 +20%，仿制药继续下滑 |"
+        }
+      ],
+      "node_id": "hengrui-innovation-growth-below-20",
+      "kind": "METRIC_COMPARE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "创新药增速明显低于 20%。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 365,
+          "line_end": 365,
+          "quote": "| 经营现金流/净利润显著修复 | OCF 长期低于净利润且应收、合同资产恶化 |"
+        }
+      ],
+      "node_id": "hengrui-cashflow-and-receivables-deterioration",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "经营现金流长期低于净利润且应收、合同资产恶化。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 366,
+          "line_end": 366,
+          "quote": "| 卡瑞利珠单抗完成整改、重报或获批 | 再次因 CMC、数据完整性或安全性收到重大反馈 |"
+        }
+      ],
+      "node_id": "hengrui-crl-or-global-quality-failure",
+      "kind": "EVENT",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "再次因 CMC、数据完整性或安全性收到重大反馈。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 367,
+          "line_end": 367,
+          "quote": "| GSK/MSD 等项目出现真实里程碑或销售分成 | 许可收入断档，多个合作方终止核心项目 |"
+        }
+      ],
+      "node_id": "hengrui-license-income-or-partner-failure",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "许可收入断档或多个合作方终止核心项目。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 368,
+          "line_end": 368,
+          "quote": "| 后期 ADC、KRAS、Lp(a) 等显示全球差异化 | 核心 III 期失败或数据明显弱于竞品 |"
+        }
+      ],
+      "node_id": "hengrui-clinical-failure",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "核心 III 期失败或数据明显弱于竞品。"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "PE",
+          "operator": "GT",
+          "value": 55,
+          "unit": "x",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 369,
+              "line_end": 369,
+              "quote": "| 股价进入安全区且基本面未坏 | PE 扩张至 55x 以上但增长预期不升 |"
+            }
+          ],
+          "node_id": "hengrui-pe-gt-55",
+          "kind": "METRIC_COMPARE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "PE 高于 55 倍。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+              "line_start": 369,
+              "line_end": 369,
+              "quote": "| 股价进入安全区且基本面未坏 | PE 扩张至 55x 以上但增长预期不升 |"
+            }
+          ],
+          "node_id": "hengrui-growth-expectation-not-up",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "holder",
+          "description": "增长预期不升。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 369,
+          "line_end": 369,
+          "quote": "| 股价进入安全区且基本面未坏 | PE 扩张至 55x 以上但增长预期不升 |"
+        }
+      ],
+      "node_id": "hengrui-pe-above-55-without-growth",
+      "kind": "ALL",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "PE 扩张至 55 倍以上但增长预期不升。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 356,
+          "line_end": 356,
+          "quote": "- **低成本持仓者**：可持有，重点核对创新药销售是否向全年 +30%目标加速、OCF 转化、GSK 等收入确认及 FDA 整改。"
+        }
+      ],
+      "node_id": "hengrui-holder-monitoring",
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪创新药销售增速、OCF 转化、许可收入、FDA 整改、临床数据及全球商业化验证。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 55.75,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "> **A 股收盘价**：55.75 元；**H 股收盘价**：59.05 港元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三情景目标价范围",
+      "price_role": "SCENARIO_VALUE",
+      "value": null,
+      "min": 32.5,
+      "max": 90.4,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 284,
+          "line_end": 284,
+          "quote": "| 情景 | EPS 年增速 | 目标 PE | 三年后 EPS | 目标价 | 对 55.75 元涨跌 |"
+        },
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 286,
+          "line_end": 286,
+          "quote": "| 乐观 | +18% | 45x | 2.01 元 | **90.4 元** | +62.2% |"
+        },
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 288,
+          "line_end": 288,
+          "quote": "| 悲观 | +2% | 25x | 1.30 元 | **32.5 元** | -41.8% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约把基本面建议动作写成分批买入，并且没有回填买入失效条件和下次复核日期；正文则明确现价适合持有验证/等待、空仓不追。",
+    "evidence": [
+      {
+        "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+        "line_start": 441,
+        "line_end": 441,
+        "quote": "| 基本面建议动作 | 分批买入 |"
+      },
+      {
+        "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+        "line_start": 449,
+        "line_end": 449,
+        "quote": "| 买入失效条件 | 未给出 |"
+      },
+      {
+        "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+        "line_start": 450,
+        "line_end": 450,
+        "quote": "| 下次复核日期 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_CONFLICT",
+      "summary": "底部契约的‘分批买入’与正文‘现价等待/持有验证、空仓不追’不一致，且契约缺少失效条件。",
+      "required_clarification": "修复或人工确认底部契约字段；生产消费必须以完整正文语义和 A 股范围为准。",
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 337,
+          "line_end": 337,
+          "quote": "| 当前时机 | 等待/持有 | 空仓不追，持仓看半年报与 CRL 整改 |"
+        },
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 441,
+          "line_end": 441,
+          "quote": "| 基本面建议动作 | 分批买入 |"
+        }
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
+    },
+    {
+      "code": "AT_LEAST_TWO_OF_THREE_RELATION_UNCLEAR",
+      "summary": "空仓者至少满足三项中的两项与分层价格表之间的逻辑未完全明确，不能自动推导为正式买入资格。",
+      "required_clarification": "确认‘半年报、CRL 整改路径、43—46 元’三者的核验定义，以及满足两项后是复核还是可建仓。",
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 355,
+          "line_end": 355,
+          "quote": "- **空仓者**：现价不急于买。优先等待 2026 半年报、CRL 整改路径和股价进入 43-46 元区间三者至少满足其二。"
+        }
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "empty-review-two-of-three"
+      ],
+      "affects_entry": true
+    },
+    {
+      "code": "MULTI_MARKET_A_SHARE_SCOPE",
+      "summary": "报告同时给出 A 股人民币与 H 股港元价格及跨市场估值；本候选合同只保留 A 股行动路径，H 股不参与动作判断。",
+      "required_clarification": "如未来要编译 H 股，必须单独定义市场、币种、股本和动作路径；当前不把 H 股换算价当成 A 股价格。",
+      "evidence": [
+        {
+          "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+          "line_start": 3,
+          "line_end": 5,
+          "quote": "> **研究日期 / 数据截止**：2026-07-13（Asia/Shanghai；A/H 股均为当日收盘数据）  \n> **A 股收盘价**：55.75 元；**H 股收盘价**：59.05 港元  \n> **A+H 分市场合并市值**：约 3,688.04 亿元人民币（含库存股；H 股按 2026-07-10 ECB 参考汇率换算）"
+        }
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/恒瑞医疗/恒瑞医药-investment-team-20260713.md",
+      "line_start": 329,
+      "line_end": 329,
+      "quote": "### 定性判断"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "AT_LEAST_N",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

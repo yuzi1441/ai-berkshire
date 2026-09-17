@@ -1,0 +1,355 @@
+{
+  "schema_version": 2,
+  "ticker": "000988.SZ",
+  "company": "hgtech",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+    "report_sha256": "c31e4d6697dcba9308ecd54a4fc881a16b638e0ad9a571c1ab1d2b42d5ee0a07"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "当前空仓动作是回避，不是底部契约所写的泛化观察",
+      "70-80 元只作为未来条件建仓区，当前 163.66 元不具备投资价值",
+      "持仓者当前动作是减仓至 5% 以下甚至清仓，未与空仓者混淆",
+      "48-284 元三情景目标价未被当作买入价格",
+      "加仓信号列表未擅自推断为 ALL 或 ANY，仅保留为复核条件"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "empty_position",
+    "summary": "当前估值严重偏高，空仓者回避；持仓者应显著减仓。",
+    "evidence": [
+      {
+        "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+        "line_start": 293,
+        "line_end": 300,
+        "quote": "### 最终决策"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "当前价格不具备投资价值；若仍考虑，只等待回调至 70-80 元以下。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "future-entry-70-80",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "summary": "价格回调至 70-80 元区间以下后才出现未来建仓路径。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 70,
+            "price_max": 80,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+                "line_start": 297,
+                "line_end": 297,
+                "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |"
+              }
+            ],
+            "node_id": "entry-price-70-80",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格回调到 70-80 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+              "line_start": 297,
+              "line_end": 297,
+              "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+          "line_start": 297,
+          "line_end": 297,
+          "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "强烈建议减仓至 5% 以下，必要时清仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "reduce-now",
+          "action": "REDUCE",
+          "scope": "holder",
+          "summary": "当前即显著减仓，必要时清仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+              "line_start": 298,
+              "line_end": 298,
+              "quote": "| **持仓者** | **强烈建议减仓至5%以下甚至清仓**。1年涨269%后获利了结是理性选择。当前估值需要\"一切完美\"才能维持——任何低于预期的季度业绩或AI投资放缓的信号都可能导致30%+回调 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+          "line_start": 298,
+          "line_end": 298,
+          "quote": "| **持仓者** | **强烈建议减仓至5%以下甚至清仓**。1年涨269%后获利了结是理性选择。当前估值需要\"一切完美\"才能维持——任何低于预期的季度业绩或AI投资放缓的信号都可能导致30%+回调 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+              "line_start": 299,
+              "line_end": 299,
+              "quote": "| **卖出信号** | （1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调；（3）中际旭创/新易盛大幅降价挤压份额；（4）PE回到60x以上时如无新催化剂支撑 |"
+            }
+          ],
+          "node_id": "shipment-growth-slows",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "2026Q2-Q3 光模块出货量环比增速放缓。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+              "line_start": 299,
+              "line_end": 299,
+              "quote": "| **卖出信号** | （1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调；（3）中际旭创/新易盛大幅降价挤压份额；（4）PE回到60x以上时如无新催化剂支撑 |"
+            }
+          ],
+          "node_id": "cloud-capex-guidance-cut",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "北美云厂商资本开支指引下调。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+              "line_start": 299,
+              "line_end": 299,
+              "quote": "| **卖出信号** | （1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调；（3）中际旭创/新易盛大幅降价挤压份额；（4）PE回到60x以上时如无新催化剂支撑 |"
+            }
+          ],
+          "node_id": "competitors-cut-price",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "主要竞争对手大幅降价挤压份额。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "PE",
+          "operator": "GT",
+          "value": 60,
+          "unit": "x",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+              "line_start": 299,
+              "line_end": 299,
+              "quote": "| **卖出信号** | （1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调；（3）中际旭创/新易盛大幅降价挤压份额；（4）PE回到60x以上时如无新催化剂支撑 |"
+            }
+          ],
+          "node_id": "pe-above-60-no-catalyst",
+          "kind": "METRIC_COMPARE",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "无新催化剂时 PE 回到 60 倍以上。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "| **卖出信号** | （1）2026Q2-Q3光模块出货量环比增速放缓；（2）北美云厂商资本开支指引下调；（3）中际旭创/新易盛大幅降价挤压份额；（4）PE回到60x以上时如无新催化剂支撑 |"
+        }
+      ],
+      "node_id": "sell-signals-any",
+      "kind": "ANY",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "任一列示的卖出信号出现时触发卖出复核。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+          "line_start": 300,
+          "line_end": 300,
+          "quote": "| **加仓信号** | （1）股价回调至CNY 70-80（2026E PE 30-35x）；（2）1.6T光模块获得北美OTT正式大批量订单；（3）全球光模块市占率从6-8%提升至12%+；（4）CPO产品开始贡献收入 |"
+        }
+      ],
+      "node_id": "monitor-add-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "复核价格、1.6T 订单、全球份额和 CPO 收入四项加仓信号。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 163.66,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "> **股价**：CNY 163.66 | **市值**：CNY 1,630亿"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 48,
+      "max": 284,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+          "line_start": 248,
+          "line_end": 252,
+          "quote": "| 情景 | 年增速 | 目标PE | 2029年EPS | 目标股价 | 较现价涨跌 |\n|------|--------|--------|-----------|---------|-----------|\n| **乐观**（AI持续爆发+份额提升+1.6T/CPO放量） | 40% | 45x | CNY 6.31 | **CNY 284** | +74% |\n| **中性**（AI增速放缓+份额稳定+激光感知温和增长） | 20% | 30x | CNY 3.97 | **CNY 119** | -27% |\n| **悲观**（AI投资周期下行+份额萎缩+估值回归） | 5% | 18x | CNY 2.66 | **CNY 48** | -71% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约写基本面动作‘观察’，但正文明确要求空仓回避、持仓强烈减仓。",
+    "evidence": [
+      {
+        "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+        "line_start": 297,
+        "line_end": 298,
+        "quote": "| **空仓者** | **回避。当前价格不具备投资价值。** PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |\n| **持仓者** | **强烈建议减仓至5%以下甚至清仓**。1年涨269%后获利了结是理性选择。当前估值需要\"一切完美\"才能维持——任何低于预期的季度业绩或AI投资放缓的信号都可能导致30%+回调 |"
+      },
+      {
+        "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+        "line_start": 348,
+        "line_end": 349,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 空仓者 回避。当前价格不具备投资价值。 PE 100x、PB 14x、股息率0.15%——这是一个极度拥挤的交易。如果看好AI光模块，中际旭创（PE 35x、份额30%）的性价比远优于华工科技。如果非要买华工科技，等待回调至CNY 70-80（2026E PE ~30-35x）以下 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/hgtech/hgtech-investment-research-20260623.md",
+      "line_start": 293,
+      "line_end": 300,
+      "quote": "### 最终决策"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
+  ]
+}

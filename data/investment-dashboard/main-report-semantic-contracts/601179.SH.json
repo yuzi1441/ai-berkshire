@@ -1,0 +1,351 @@
+{
+  "schema_version": 2,
+  "ticker": "601179.SH",
+  "company": "中国西电",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+    "report_sha256": "f4a8a7711464b1e9a4d17915b47995fe802a24e1b20a581c0a68685e09422dba"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "中国西电明确好行业但价格不便宜；8—9元是安全边际复核区，9—10.5元需ROE、毛利率和订单质量改善，当前12.93元仅主题小仓。",
+      "已区分持仓持有与空仓试探，没有将行业趋势直接转成无条件买入。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "中国西电资质和行业需求真实，但低ROE与高PE使当前更适合观察/小仓跟踪。",
+    "evidence": [
+      {
+        "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+        "line_start": 333,
+        "line_end": 333,
+        "quote": "| 综合建议 | 观望 / 小仓跟踪；不建议主题热度下追高。 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前12.93元主题交易只能小仓；9—10.5元需基本面条件，8—9元先等待并复核。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "当前价仅可作为承认估值风险的主题小仓，需设置退出。",
+          "path_id": "empty-theme-trial-current",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+              "line_start": 341,
+              "line_end": 341,
+              "quote": "| 空仓、激进型 | 主题交易可小仓，但要设退出 | 当前 12.93 元更像景气预期交易，需接受估值压缩风险。 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "9—10.5元且ROE、毛利率和订单质量改善时试探。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 9,
+                "price_max": 10.5,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+                    "line_start": 340,
+                    "line_end": 340,
+                    "quote": "| 空仓、稳健型 | 小仓观察 | 只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 **9.0-10.5 元**区间试探。 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于9—10.5元。",
+                "node_id": "empty-trial-9-10-5-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+                    "line_start": 340,
+                    "line_end": 340,
+                    "quote": "| 空仓、稳健型 | 小仓观察 | 只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 **9.0-10.5 元**区间试探。 |"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "ROE连续提升、毛利率不降、订单质量改善。",
+                "node_id": "empty-trial-9-10-5-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+                "line_start": 340,
+                "line_end": 340,
+                "quote": "| 空仓、稳健型 | 小仓观察 | 只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 **9.0-10.5 元**区间试探。 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于9—10.5元且ROE连续提升、毛利率不降、订单质量改善。",
+            "node_id": "empty-trial-9-10-5-condition"
+          },
+          "path_id": "empty-trial-9-10-5",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+              "line_start": 340,
+              "line_end": 340,
+              "quote": "| 空仓、稳健型 | 小仓观察 | 只有当 ROE 连续提升、毛利率不降、订单质量改善时，才考虑在 **9.0-10.5 元**区间试探。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "REVIEW",
+          "summary": "8—9元且行业逻辑未破坏才开始具备较好安全边际。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 8,
+            "price_max": 9,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+                "line_start": 339,
+                "line_end": 339,
+                "quote": "| 空仓、保守型 | 等待 | 若价格回到 **8.0-9.0 元**且行业逻辑未破坏，才开始具备较好安全边际。 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于8—9元安全边际复核区。",
+            "node_id": "empty-review-8-9-condition"
+          },
+          "path_id": "empty-review-8-9",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+              "line_start": 339,
+              "line_end": 339,
+              "quote": "| 空仓、保守型 | 等待 | 若价格回到 **8.0-9.0 元**且行业逻辑未破坏，才开始具备较好安全边际。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+          "line_start": 341,
+          "line_end": 341,
+          "quote": "| 空仓、激进型 | 主题交易可小仓，但要设退出 | 当前 12.93 元更像景气预期交易，需接受估值压缩风险。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "低成本持仓者可持有但不盲目加仓，继续跟踪ROE、毛利率和现金流。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有但不盲目加仓。",
+          "path_id": "holder-hold-discipline",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+              "line_start": 342,
+              "line_end": 342,
+              "quote": "| 已持有且成本低 | 可持有但不盲目加仓 | 持续跟踪 ROE、毛利率、现金流；若估值继续上行但基本面未同步，考虑分批降仓。 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "ROE、毛利率、现金流和订单等信号改善且价格回落后再评估。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+                "line_start": 347,
+                "line_end": 347,
+                "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。  "
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验ROE、毛利率、经营现金流、订单质量和价格条件。",
+            "node_id": "holder-add-quality-condition"
+          },
+          "path_id": "holder-add-quality",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+              "line_start": 347,
+              "line_end": 347,
+              "quote": "1. 加权 ROE 连续提升并接近或超过 8%-10%。  "
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "| 已持有且成本低 | 可持有但不盲目加仓 | 持续跟踪 ROE、毛利率、现金流；若估值继续上行但基本面未同步，考虑分批降仓。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+          "line_start": 356,
+          "line_end": 356,
+          "quote": "1. 中标增长但毛利率下降。  "
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "中标增长但毛利率下降、应收合同资产存货上升、海外扩张低毛利或ROE长期低位时减仓/回避。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+          "line_start": 342,
+          "line_end": 342,
+          "quote": "| 已持有且成本低 | 可持有但不盲目加仓 | 持续跟踪 ROE、毛利率、现金流；若估值继续上行但基本面未同步，考虑分批降仓。 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪ROE、毛利率、现金流、海外业务和订单利润兑现。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": false,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/中国西电/中国西电研究报告-20260709.md",
+      "line_start": 333,
+      "line_end": 333,
+      "quote": "| 综合建议 | 观望 / 小仓跟踪；不建议主题热度下追高。 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "LOW_ROE_HIGH_PE",
+    "THEME_PRICE_RISK"
+  ],
+  "semantic_review_reasons": []
+}

@@ -1,0 +1,517 @@
+{
+  "schema_version": 2,
+  "ticker": "300124.SZ",
+  "company": "汇川技术",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+    "report_sha256": "c761605116fe301f9f5201dd40f14d8465876008c13a9d597a9e32f78c2b118f"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "当前 64.34 元是观察参考价，不因机器人、AI 或历史估值分位自动判为买入。",
+      "56-62 元是小仓分批且要求基本面未进一步恶化；48-55 元是分批买入区，已保留两者不同的仓位语义。",
+      "不高于 45 元写成‘才考虑’并要求更充分安全边际，未把它强行编译为无条件买入，保留为人工复核区。",
+      "持仓者路径是持有、不追涨加仓；降低风险信号与加仓信号未定义组合关系，未自动生成执行动作。",
+      "底部契约给出买入失效条件，已作为买入阻断条件保留；没有把它当作研究者可以自行放宽的风险提示。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "汇川技术自动化主业质量较高但汽车低毛利、客户集中和现金流压力仍待验证；当前观察，等待价格和盈利质量改善。",
+    "evidence": [
+      {
+        "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+        "line_start": 225,
+        "line_end": 225,
+        "quote": "基本面建议动作：观察"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前观察；56-62 元可小仓分批但要求基本面未恶化，48-55 元为分批买入区，不高于 45 元仅进入更充分安全边际的人工复核。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-64.34",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前价格观察，不因机器人或 AI 叙事追高。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+              "line_start": 229,
+              "line_end": 229,
+              "quote": "当前观察，不因机器人或 AI 叙事追高"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-56-62-with-fundamentals",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "56-62 元可小仓分批，前提是基本面未进一步恶化。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 56,
+                "price_max": 62,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+                    "line_start": 230,
+                    "line_end": 230,
+                    "quote": "56-62 元"
+                  }
+                ],
+                "node_id": "trial-price-56-62",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格处于 56-62 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+                    "line_start": 230,
+                    "line_end": 230,
+                    "quote": "前提是基本面未进一步恶化"
+                  }
+                ],
+                "node_id": "trial-fundamentals-not-worse",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "基本面未进一步恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+                "line_start": 230,
+                "line_end": 230,
+                "quote": "56-62 元可小仓分批，前提是基本面未进一步恶化"
+              }
+            ],
+            "node_id": "trial-price-and-fundamentals",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 56-62 元且基本面未进一步恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+              "line_start": 230,
+              "line_end": 230,
+              "quote": "56-62 元可小仓分批，前提是基本面未进一步恶化"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-48-55",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "48-55 元进入分批买入路径；这是报告明确的价格动作，不把更高价格的观察仓升级为普通买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 48,
+            "price_max": 55,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+                "line_start": 231,
+                "line_end": 231,
+                "quote": "48-55 元分批买入"
+              }
+            ],
+            "node_id": "entry-price-48-55",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 48-55 元分批买入区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+              "line_start": 231,
+              "line_end": 231,
+              "quote": "48-55 元分批买入"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-below-45-boundary",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "不高于 45 元才考虑，但报告没有把‘考虑’定义为实际建仓，需人工确认。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 45,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+                "line_start": 232,
+                "line_end": 232,
+                "quote": "不高于 45 元才考虑"
+              }
+            ],
+            "node_id": "review-price-below-45",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 45 元，进入更充分安全边际的人工复核。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+              "line_start": 232,
+              "line_end": 232,
+              "quote": "不高于 45 元才考虑，要求更充分的汽车与周期安全边际"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 225,
+          "line_end": 225,
+          "quote": "不是在当前盈利压力下可以忽略价格的公司"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "持仓者在自动化增长和汽车利润率未恶化时持有，不追涨加仓；风险和加仓信号均需按未定义组合逻辑人工判断。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "自动化增长和汽车利润率未恶化时持有，不追涨加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+              "line_start": 233,
+              "line_end": 233,
+              "quote": "持有，不追涨加仓"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-risk-signal-manual-review",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "股价高于 85-90 元但盈利未上修，或汽车毛利/现金流继续恶化时进入降低风险人工处置；组合关系和精确阈值未完全定义。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+                "line_start": 234,
+                "line_end": 234,
+                "quote": "降低风险信号"
+              }
+            ],
+            "node_id": "holder-risk-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "复核股价高于 85-90 元但盈利未上修，或汽车毛利、现金流继续恶化的降低风险信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+              "line_start": 234,
+              "line_end": 234,
+              "quote": "股价高于 85-90 元但盈利预期未上修，或汽车毛利、现金流继续恶化"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 233,
+          "line_end": 233,
+          "quote": "持仓者"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 291,
+          "line_end": 291,
+          "quote": "自动化份额下降、汽车毛利率持续低于15%、客户集中度上升且经营现金流恶化"
+        }
+      ],
+      "node_id": "buy-invalidation-manual",
+      "kind": "MANUAL_REVIEW",
+      "effect": "BLOCK_ENTRY",
+      "scope": "empty_position",
+      "description": "买入失效条件包括自动化份额下降、汽车毛利率持续低于 15%、客户集中度上升且经营现金流恶化；组合关系需按报告原文人工核验。"
+    }
+  ],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 235,
+          "line_end": 235,
+          "quote": "加仓信号"
+        }
+      ],
+      "node_id": "monitor-add-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "holder",
+      "description": "跟踪自动化增长、汽车毛利率改善、客户集中度下降和经营现金流恢复；报告未定义这些加仓信号的组合逻辑。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "UNTIL",
+      "value": "2026-09-05",
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "下次复核日期为 2026-09-05"
+        }
+      ],
+      "node_id": "monitor-next-review",
+      "kind": "DATE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "按 2026-09-05 复核 2026H1 自动化订单、汽车毛利率、客户集中度、应收存货、经营现金流、机器人订单与海外利润。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "当前市场价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 64.34,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 10,
+          "line_end": 10,
+          "quote": "收盘价 | 64.34 元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 44.6,
+      "max": 127.2,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 204,
+          "line_end": 204,
+          "quote": "127.20 元"
+        },
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 206,
+          "line_end": 206,
+          "quote": "44.60 元"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约明确买入失效条件和价格带，但未呈现正文的持仓者动作及信号组合边界，需以完整正文语义为准。",
+    "evidence": [
+      {
+        "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+        "line_start": 283,
+        "line_end": 291,
+        "quote": "买入失效条件"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "CONSERVATIVE_ACTION_BOUNDARY",
+      "summary": "不高于 45 元写成‘才考虑’和‘要求更充分安全边际’，未明确是建仓、试仓还是仅复核。",
+      "required_clarification": "明确不高于 45 元的实际动作和仓位边界；在确认前仅生成 REVIEW，不生成自动买入。",
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 232,
+          "line_end": 232,
+          "quote": "不高于 45 元才考虑"
+        }
+      ],
+      "classification": "PATH_LOCAL",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [
+        "review-below-45-boundary"
+      ],
+      "affects_entry": true
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "降低风险信号和加仓信号均列出多个项目，但未定义任一、全部或最少满足数量。",
+      "required_clarification": "由人工或更强模型确定信号组合逻辑，再决定是否生成 REDUCE 或 ADD 的可执行条件。",
+      "evidence": [
+        {
+          "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+          "line_start": 234,
+          "line_end": 235,
+          "quote": "降低风险信号"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-risk-signal-manual-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/汇川技术/汇川技术-investment-research-20260810.md",
+      "line_start": 225,
+      "line_end": 237,
+      "quote": "基本面建议动作：观察。"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

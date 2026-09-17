@@ -1,0 +1,353 @@
+{
+  "schema_version": 2,
+  "ticker": "688017.SH",
+  "company": "leaderdrive",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+    "report_sha256": "5ec44501e6cd5def7c3ea4fbecace86053db110dd0a6a1e9f8e227694d679ee1"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "330 元当前价和 485x PE 不是买入价；36.2-278.5 元三情景目标价及 82-109 元合理区间均是估值参考。",
+      "空仓者当前明确回避，100-120 元只是未来重新考虑的区间，不能编译成当前建仓。",
+      "持仓者减仓至半仓、组合 3-5% 以内；卖出和加仓信号未定义组合逻辑，保留人工复核。",
+      "底部契约写观察，与正文回避结论冲突。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "绿的谐波技术和赛道有吸引力，但 485 倍 PE 属概念泡沫；空仓者回避，持仓者减仓并将仓位降到较低水平。",
+    "evidence": [
+      {
+        "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+        "line_start": 321,
+        "line_end": 321,
+        "quote": "| **空仓者** | **回避。** 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "当前 330 元回避；100-120 元只作为未来重新评估区。",
+      "entry_semantic": "EXPLICIT_NO_BUY",
+      "action_paths": [
+        {
+          "path_id": "avoid-current-330",
+          "action": "AVOID",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前估值为概念泡沫，回避。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+              "line_start": 321,
+              "line_end": 321,
+              "quote": "| **空仓者** | **回避。** 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-100-120",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "100-120 元到达后再考虑，不自动建仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 100,
+            "price_max": 120,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+                "line_start": 321,
+                "line_end": 321,
+                "quote": "| **空仓者** | **回避。** 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |"
+              }
+            ],
+            "node_id": "review-price-100-120",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 100-120 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+              "line_start": 321,
+              "line_end": 321,
+              "quote": "| **空仓者** | **回避。** 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "line_start": 321,
+          "line_end": 321,
+          "quote": "| **空仓者** | **回避。** 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "REDUCE",
+      "summary": "至少减至半仓，底仓参与但组合仓位不宜超过 3-5%。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-reduce-half",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "至少减至半仓，锁定部分利润。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+              "line_start": 322,
+              "line_end": 322,
+              "quote": "| **持仓者** | **减仓。** 股价已远超7家券商均价目标238元。至少减至半仓，锁定部分利润。底仓可保留参与长期赛道，但仓位不宜超过组合的3-5%。 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-sell-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "四项卖出信号需人工确认组合关系。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+                "line_start": 323,
+                "line_end": 323,
+                "quote": "| **卖出信号** | 人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升 |"
+              }
+            ],
+            "node_id": "holder-sell-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认量产时间、毛利率、实控人和杠杆资金信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+              "line_start": 323,
+              "line_end": 323,
+              "quote": "| **卖出信号** | 人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "三项加仓信号需人工确认组合关系，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+                "line_start": 324,
+                "line_end": 324,
+                "quote": "| **加仓信号** | 股价回落至100元以下（PE <150x基于2025利润）；特斯拉Optimus确认大规模量产订单并指定绿的为供应商；季度毛利率企稳回升至40%以上 |"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认价格、特斯拉订单和毛利率信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+              "line_start": 324,
+              "line_end": 324,
+              "quote": "| **加仓信号** | 股价回落至100元以下（PE <150x基于2025利润）；特斯拉Optimus确认大规模量产订单并指定绿的为供应商；季度毛利率企稳回升至40%以上 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "line_start": 322,
+          "line_end": 322,
+          "quote": "| **持仓者** | **减仓。** 股价已远超7家券商均价目标238元。至少减至半仓，锁定部分利润。底仓可保留参与长期赛道，但仓位不宜超过组合的3-5%。 |"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-06-23 当前股价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 330,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "**股价**：~330元 | **市值**：~605亿元 | **总股本**：1.8333亿股"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 36.2,
+      "max": 278.5,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "line_start": 261,
+          "line_end": 261,
+          "quote": "| 乐观 | 60% | 100x | 2.79元 | 278.5元 | **-15.6%** |"
+        },
+        {
+          "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "line_start": 263,
+          "line_end": 263,
+          "quote": "| 悲观 | 15% | 35x | 1.03元 | 36.2元 | **-89.0%** |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "综合合理股价区间",
+      "price_role": "FAIR_VALUE",
+      "value": null,
+      "min": 82,
+      "max": 109,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "line_start": 290,
+          "line_end": 290,
+          "quote": "| **综合合理区间** | | **150-200亿** | **82-109元** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "正文空仓结论为回避，底部看板契约却把基本面建议动作写成观察。",
+    "evidence": [
+      {
+        "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+        "line_start": 395,
+        "line_end": 396,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 空仓者 回避。 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出和加仓信号列出多个项目，但未定义是 ANY、ALL 还是最少满足数量。",
+      "required_clarification": "确认信号组合关系后再生成自动减仓、退出或加仓条件；当前只保留人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "line_start": 323,
+          "line_end": 323,
+          "quote": "| **卖出信号** | 人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升 |"
+        },
+        {
+          "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+          "line_start": 324,
+          "line_end": 324,
+          "quote": "| **加仓信号** | 股价回落至100元以下（PE <150x基于2025利润）；特斯拉Optimus确认大规模量产订单并指定绿的为供应商；季度毛利率企稳回升至40%以上 |"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-half",
+        "holder-sell-signals-manual-review",
+        "holder-add-signals-manual-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/leaderdrive/leaderdrive-research-20260623.md",
+      "line_start": 321,
+      "line_end": 324,
+      "quote": "| **空仓者** | **回避。** 当前估值处于\"概念泡沫\"状态，三情景估值即使最乐观也显示高估。如果真心看好人形机器人赛道，等待股价回落至100-120元区间（PE 60-80倍）再考虑建仓。 |\n| **持仓者** | **减仓。** 股价已远超7家券商均价目标238元。至少减至半仓，锁定部分利润。底仓可保留参与长期赛道，但仓位不宜超过组合的3-5%。 |\n| **卖出信号** | 人形机器人量产时间表再次推迟；季度毛利率跌破30%；实控人继续减持；融资余额/杠杆资金异常攀升 |\n| **加仓信号** | 股价回落至100元以下（PE <150x基于2025利润）；特斯拉Optimus确认大规模量产订单并指定绿的为供应商；季度毛利率企稳回升至40%以上 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "EXTREME_VALUATION",
+    "ROE_AND_COMMERCIAL_MODEL_RISK"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

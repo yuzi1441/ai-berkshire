@@ -686,6 +686,8 @@ class DashboardActionClassifierTests(unittest.TestCase):
                 "formalDriftMatches",
                 "actionStatusMatches",
                 "skillMatches",
+                "priceTriggerStateMatches",
+                "priceTriggerZoneMatches",
                 "matchesUnifiedFilters",
             )
         )
@@ -695,7 +697,8 @@ class DashboardActionClassifierTests(unittest.TestCase):
           const base = {{
             search: "", market: "all", lifecycle: "all", actionStatus: "all",
             skill: "all", lightThesis: "all", formalDrift: "all", blocker: "all",
-            checklist: "all", opportunity: "all", priceNear: false
+            checklist: "all", opportunity: "all", priceNear: false,
+            priceTriggerState: "all", priceTriggerZone: "all"
           }};
           const filtered = (patch) => records.filter((record) => matchesUnifiedFilters(record, {{...base, ...patch}}));
           const result = {{

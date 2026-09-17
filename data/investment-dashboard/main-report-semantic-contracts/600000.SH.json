@@ -1,0 +1,348 @@
+{
+  "schema_version": 2,
+  "ticker": "600000.SH",
+  "company": "浦发银行",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+    "report_sha256": "eae8276b529f5127144dad9c61d306d1850815dcdefd4d45abfb130e811cae39"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "9.63 元是当前参考价，处于中性价值与悲观价值之间，报告明确观望不追。",
+      "8.4 元以下才转为高股息债券替代级别买点；已保留为条件性 A 股建仓，不把 11.3/14.6 元目标价当买入价。",
+      "持仓者动作依赖成本区间：8 元以下可持有收息，11 元以上反弹至 11-12 元建议减仓，未将持仓者条件泄漏为空仓者。",
+      "卖出与加仓信号分别列出多项条件，但未说明任一、全部或最少满足数量，保留人工复核。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "浦发银行是改善中的低 ROE 银行，但改善斜率已放缓且相对估值不便宜；当前观望，8.4 元以下才进入高股息债券替代路径。",
+    "evidence": [
+      {
+        "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+        "line_start": 249,
+        "line_end": 249,
+        "quote": "观望，不追"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "9.63 元当前观望不追；不高于 8.4 元才进入高股息债券替代级别的条件性买入路径。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-9.63",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前 9.63 元赔率不足，观望不追。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+              "line_start": 249,
+              "line_end": 249,
+              "quote": "观望，不追"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-below-8.4-bond-substitute",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股不高于 8.4 元且按高股息债券替代管理时，进入条件性买入路径。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LTE",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 8.4,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+                "line_start": 249,
+                "line_end": 249,
+                "quote": "**8.4 元以下**"
+              }
+            ],
+            "node_id": "entry-price-below-8.4",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 8.4 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+              "line_start": 249,
+              "line_end": 249,
+              "quote": "把买点设在 **8.4 元以下**"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 249,
+          "line_end": 249,
+          "quote": "空仓者"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "成本在 8 元以下可持有收息；成本在 11 元以上且反弹至 11-12 元时建议减仓换入更优标的。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-income-hold",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "成本在 8 元以下的持仓可持有收息，但定位为类债资产而非反转成长股。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+              "line_start": 250,
+              "line_end": 250,
+              "quote": "成本在 8 元以下的，股息逻辑仍成立，可持有收息"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-11-12",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "成本在 11 元以上的持仓，反弹至 11-12 元时建议减仓换入更优标的。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 11,
+            "price_max": 12,
+            "currency": "CNY",
+            "price_role": "REDUCE_POSITION",
+            "evidence": [
+              {
+                "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+                "line_start": 250,
+                "line_end": 250,
+                "quote": "反弹至 11-12 元（中性估值区）建议减仓"
+              }
+            ],
+            "node_id": "holder-reduce-price-11-12",
+            "kind": "PRICE_RANGE",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "A 股价格处于 11-12 元反弹区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+              "line_start": 250,
+              "line_end": 250,
+              "quote": "反弹至 11-12 元（中性估值区）建议减仓"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 250,
+          "line_end": 250,
+          "quote": "持仓者"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 251,
+          "line_end": 251,
+          "quote": "卖出信号"
+        }
+      ],
+      "node_id": "pudong-sell-signals-manual",
+      "kind": "MANUAL_REVIEW",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "连续两个季度净利负增长、分红率跌破 30%、重大罚单/造假、董事长调离且业绩未脱离个人，或股价升破 12.2 元且 ROE 未回升至 8% 以上时进入卖出人工复核；列表组合逻辑未定义。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 252,
+          "line_end": 252,
+          "quote": "加仓信号"
+        }
+      ],
+      "node_id": "pudong-add-signals-manual",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 8.4 元价格、分红维持 30%、营收增速回升至 5%、ROE 站上 8% 和息差企稳；列表组合逻辑未定义。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 9.63,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 190,
+          "line_end": 190,
+          "quote": "股价（2026-08-03） | 9.63"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 7.5,
+      "max": 14.6,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 209,
+          "line_end": 209,
+          "quote": "**14.6 元**"
+        },
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 211,
+          "line_end": 211,
+          "quote": "**7.5 元**"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "卖出和加仓信号均为多项列表，未定义任一、全部或最少满足数量。",
+      "required_clarification": "明确银行持仓信号组合逻辑后再生成自动 ADD、REDUCE 或 EXIT；当前只保留人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 251,
+          "line_end": 252,
+          "quote": "卖出信号"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-11-12"
+      ],
+      "affects_entry": false
+    },
+    {
+      "code": "HOLDER_COST_SCOPE",
+      "summary": "持仓动作依赖持仓成本 8 元/11 元，但系统尚未把成本事实与研究合同绑定；不能对所有持仓者统一套用。",
+      "required_clarification": "将成本条件绑定到具体 position_id 后再派生持仓动作。",
+      "evidence": [
+        {
+          "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+          "line_start": 250,
+          "line_end": 250,
+          "quote": "成本在 8 元以下的"
+        }
+      ],
+      "classification": "HOLDER",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-11-12"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/浦发银行/浦发银行投资研究报告-20260805.md",
+      "line_start": 245,
+      "line_end": 264,
+      "quote": "最终决策"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

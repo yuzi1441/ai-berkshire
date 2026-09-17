@@ -1,0 +1,749 @@
+{
+  "schema_version": 2,
+  "ticker": "600309.SH",
+  "company": "万华化学",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+    "report_sha256": "c61c654becb571e1a35f36a79009cb6728c0714a5f55837d98833bfbad752037"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "75.72 元是当前 A 股参考价，49.70-125.90 元三情景目标价是估值参考，不是当前买入价。",
+      "空仓者观察、持仓者持有；70-75 元只允许小仓试买，63-69 元和 55-60 元才是分层条件性买入区。",
+      "报告把 2026H1 业绩预告明确标为未经审计，没有把预告直接当作正式事实。",
+      "五项论文失效条件内部保留明确的且/或关系；其余动作边界与底部契约一致。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "万华核心 MDI 护城河强，但周期利润、高杠杆和重资本扩张削弱确定性；空仓观察，已有合理仓位持有，不追涨。",
+    "evidence": [
+      {
+        "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+        "line_start": 200,
+        "line_end": 200,
+        "quote": "- **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。"
+      },
+      {
+        "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+        "line_start": 201,
+        "line_end": 201,
+        "quote": "- **已有合理仓位者：持有。** 不因短期预告追高，重点看聚氨酯毛利率和自由现金流；若基本面兑现而估值未显著扩张，可继续持有。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前 75.72 元观察；70-75 元只适合小仓试买，63-69 元为主要分批区，55-60 元才具备较充分周期安全边际。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-no-chase",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前价格观察，不因未经审计的半年预告追涨。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 200,
+              "line_end": 200,
+              "quote": "- **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-70-75",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "70-75 元只适合小仓试买，承受周期波动。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 70,
+            "price_max": 75,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                "line_start": 188,
+                "line_end": 188,
+                "quote": "| 进取型 | 70—75 元 | 13.3—14.2 倍 | 只适合小仓试买，承受周期波动 |"
+              }
+            ],
+            "node_id": "trial-price-70-75",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 70-75 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 188,
+              "line_end": 188,
+              "quote": "| 进取型 | 70—75 元 | 13.3—14.2 倍 | 只适合小仓试买，承受周期波动 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-63-69",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "63-69 元是稳健型分批买入的主要观察区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 63,
+            "price_max": 69,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                "line_start": 189,
+                "line_end": 189,
+                "quote": "| 稳健型 | 63—69 元 | 12.0—13.1 倍 | 分批买入的主要观察区 |"
+              }
+            ],
+            "node_id": "entry-price-63-69",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 63-69 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 189,
+              "line_end": 189,
+              "quote": "| 稳健型 | 63—69 元 | 12.0—13.1 倍 | 分批买入的主要观察区 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "entry-55-60",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "55-60 元才具备较充分的周期安全边际。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 55,
+            "price_max": 60,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                "line_start": 190,
+                "line_end": 190,
+                "quote": "| 保守型 | 55—60 元 | 10.4—11.4 倍 | 才具备较充分周期安全边际 |"
+              }
+            ],
+            "node_id": "entry-price-55-60",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 55-60 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 190,
+              "line_end": 190,
+              "quote": "| 保守型 | 55—60 元 | 10.4—11.4 倍 | 才具备较充分周期安全边际 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+          "line_start": 200,
+          "line_end": 200,
+          "quote": "- **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "已有合理仓位者持有，不因短期业绩预告追高；重仓者控制集中度。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-reasonable-position",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "已有合理仓位者继续持有，重点跟踪聚氨酯毛利率和自由现金流。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 201,
+              "line_end": 201,
+              "quote": "- **已有合理仓位者：持有。** 不因短期预告追高，重点看聚氨酯毛利率和自由现金流；若基本面兑现而估值未显著扩张，可继续持有。"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-heavy-concentration-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "重仓者控制集中度，仓位应能承受悲观情景约 34% 的价格回撤。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 202,
+              "line_end": 202,
+              "quote": "- **重仓者：控制集中度。** 万华是强周期重资产公司，单一公司仓位应能承受悲观情景约 34% 的价格回撤。"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+          "line_start": 201,
+          "line_end": 202,
+          "quote": "- **已有合理仓位者：持有。** 不因短期预告追高，重点看聚氨酯毛利率和自由现金流；若基本面兑现而估值未显著扩张，可继续持有。\n- **重仓者：控制集中度。** 万华是强周期重资产公司，单一公司仓位应能承受悲观情景约 34% 的价格回撤。"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "聚氨酯板块毛利率",
+              "operator": "LT",
+              "value": 20,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                  "line_start": 206,
+                  "line_end": 206,
+                  "quote": "1. 聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+                }
+              ],
+              "node_id": "polyurethane-margin-below-20",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "聚氨酯板块毛利率连续两个报告期低于 20%。"
+            },
+            {
+              "children": [
+                {
+                  "children": [],
+                  "minimum": null,
+                  "metric": null,
+                  "operator": null,
+                  "value": null,
+                  "unit": null,
+                  "price_min": null,
+                  "price_max": null,
+                  "currency": null,
+                  "price_role": null,
+                  "evidence": [
+                    {
+                      "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                      "line_start": 206,
+                      "line_end": 206,
+                      "quote": "1. 聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+                    }
+                  ],
+                  "node_id": "temporary-margin-cause",
+                  "kind": "QUALITATIVE",
+                  "effect": "INVALIDATION",
+                  "scope": "both",
+                  "description": "短期检修或原料错配。"
+                }
+              ],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                  "line_start": 206,
+                  "line_end": 206,
+                  "quote": "1. 聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+                }
+              ],
+              "node_id": "not-temporary-margin-cause",
+              "kind": "NOT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "并非短期检修或原料错配。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 206,
+              "line_end": 206,
+              "quote": "1. 聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；"
+            }
+          ],
+          "node_id": "polyurethane-margin-invalidation",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "广义净债务/EBITDA",
+              "operator": "GT",
+              "value": 4.5,
+              "unit": "x",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                  "line_start": 207,
+                  "line_end": 207,
+                  "quote": "2. 广义净债务/EBITDA 持续高于 4.5 倍，或在建设高峰过后自由现金流连续两个完整年度为负；"
+                }
+              ],
+              "node_id": "net-debt-ebitda-above-4.5",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "广义净债务/EBITDA 持续高于 4.5 倍。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                  "line_start": 207,
+                  "line_end": 207,
+                  "quote": "2. 广义净债务/EBITDA 持续高于 4.5 倍，或在建设高峰过后自由现金流连续两个完整年度为负；"
+                }
+              ],
+              "node_id": "post-peak-fcf-negative-two-years",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "建设高峰后自由现金流连续两个完整年度为负。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 207,
+              "line_end": 207,
+              "quote": "2. 广义净债务/EBITDA 持续高于 4.5 倍，或在建设高峰过后自由现金流连续两个完整年度为负；"
+            }
+          ],
+          "node_id": "net-debt-or-fcf-invalidation",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "广义净债务/EBITDA 持续高于 4.5 倍，或建设高峰后自由现金流连续两个完整年度为负。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                  "line_start": 208,
+                  "line_end": 208,
+                  "quote": "3. 新材料和石化项目长期低利用率、低 ROIC，管理层仍继续大规模扩张；"
+                }
+              ],
+              "node_id": "new-projects-low-return",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "新材料和石化项目长期低利用率、低 ROIC。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                  "line_start": 208,
+                  "line_end": 208,
+                  "quote": "3. 新材料和石化项目长期低利用率、低 ROIC，管理层仍继续大规模扩张；"
+                }
+              ],
+              "node_id": "large-expansion-continues",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "管理层仍继续大规模扩张。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 208,
+              "line_end": 208,
+              "quote": "3. 新材料和石化项目长期低利用率、低 ROIC，管理层仍继续大规模扩张；"
+            }
+          ],
+          "node_id": "low-return-expansion-invalidation",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "新材料和石化项目长期低利用率、低 ROIC，管理层仍继续大规模扩张。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                  "line_start": 209,
+                  "line_end": 209,
+                  "quote": "4. 贸易限制或区域运营问题实质性损害海外现金流；"
+                }
+              ],
+              "node_id": "trade-restriction-damages-cashflow",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "贸易限制实质性损害海外现金流。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+                  "line_start": 209,
+                  "line_end": 209,
+                  "quote": "4. 贸易限制或区域运营问题实质性损害海外现金流；"
+                }
+              ],
+              "node_id": "regional-operation-damages-cashflow",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "区域运营问题实质性损害海外现金流。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 209,
+              "line_end": 209,
+              "quote": "4. 贸易限制或区域运营问题实质性损害海外现金流；"
+            }
+          ],
+          "node_id": "trade-or-regional-cashflow-invalidation",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "贸易限制或区域运营问题实质性损害海外现金流。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+              "line_start": 210,
+              "line_end": 210,
+              "quote": "5. 发生重大安全环保事故，破坏成本、牌照或社会信任基础。"
+            }
+          ],
+          "node_id": "major-safety-environment-incident",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "发生重大安全环保事故，破坏成本、牌照或社会信任基础。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+          "line_start": 204,
+          "line_end": 210,
+          "quote": "### 论文失效条件\n\n1. 聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；\n2. 广义净债务/EBITDA 持续高于 4.5 倍，或在建设高峰过后自由现金流连续两个完整年度为负；\n3. 新材料和石化项目长期低利用率、低 ROIC，管理层仍继续大规模扩张；\n4. 贸易限制或区域运营问题实质性损害海外现金流；\n5. 发生重大安全环保事故，破坏成本、牌照或社会信任基础。"
+        }
+      ],
+      "node_id": "thesis-invalidation-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "任一列示的论文失效条件出现时，停止沿用原结论并系统性重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+          "line_start": 212,
+          "line_end": 212,
+          "quote": "下一次重点复核：正式 2026H1 报告、福建 MDI 项目公开投产进度、聚氨酯毛利率、广义净债务、经营现金流与新增项目资本回报。建议复核日：2026-09-05。"
+        }
+      ],
+      "node_id": "monitor-formal-h1-and-capital-return",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "等待正式 2026H1 报告，复核福建 MDI 项目进度、聚氨酯毛利率、广义净债务、经营现金流和新增项目资本回报。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+          "line_start": 204,
+          "line_end": 210,
+          "quote": "### 论文失效条件\n\n1. 聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；\n2. 广义净债务/EBITDA 持续高于 4.5 倍，或在建设高峰过后自由现金流连续两个完整年度为负；\n3. 新材料和石化项目长期低利用率、低 ROIC，管理层仍继续大规模扩张；\n4. 贸易限制或区域运营问题实质性损害海外现金流；\n5. 发生重大安全环保事故，破坏成本、牌照或社会信任基础。"
+        }
+      ],
+      "node_id": "monitor-trade-and-safety",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "持续跟踪贸易壁垒、海外现金流、安全环保和重资产项目回报。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 75.72,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> 市场快照：75.72 元/股，总股本 31.3047 亿股，市值 2,370.39 亿元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 49.7,
+      "max": 125.9,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+          "line_start": 176,
+          "line_end": 180,
+          "quote": "| 情景 | EPS 年增长 | 三年后 PE | 三年后 EPS | 目标价 | 相对 75.72 元 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 12% | 17 倍 | 7.41 元 | 125.90 元 | +66.3% |\n| 基准 | 6% | 15 倍 | 6.28 元 | 94.20 元 | +24.4% |\n| 悲观 | -5% | 11 倍 | 4.52 元 | 49.70 元 | -34.3% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/万华化学/万华化学-投资研究-20260808.md",
+      "line_start": 196,
+      "line_end": 212,
+      "quote": "## 九、行动结论与持续验证\n\n### 对不同投资者\n\n- **空仓者：观察。** 优先等待 63—69 元，或等待正式半年报验证利润、现金流和债务；70—75 元只做小仓试错。\n- **已有合理仓位者：持有。** 不因短期预告追高，重点看聚氨酯毛利率和自由现金流；若基本面兑现而估值未显著扩张，可继续持有。\n- **重仓者：控制集中度。** 万华是强周期重资产公司，单一公司仓位应能承受悲观情景约 34% 的价格回撤。\n\n### 论文失效条件\n\n1. 聚氨酯板块毛利率连续两个报告期低于 20%，且并非短期检修或原料错配；\n2. 广义净债务/EBITDA 持续高于 4.5 倍，或在建设高峰过后自由现金流连续两个完整年度为负；\n3. 新材料和石化项目长期低利用率、低 ROIC，管理层仍继续大规模扩张；\n4. 贸易限制或区域运营问题实质性损害海外现金流；\n5. 发生重大安全环保事故，破坏成本、牌照或社会信任基础。\n\n下一次重点复核：正式 2026H1 报告、福建 MDI 项目公开投产进度、聚氨酯毛利率、广义净债务、经营现金流与新增项目资本回报。建议复核日：2026-09-05。"
+    }
+  ],
+  "business_risk_reasons": [
+    "CYCLICAL_MANUFACTURING",
+    "LEVERAGE_AND_CAPEX_RISK",
+    "TRADE_BARRIER_RISK",
+    "UNAUDITED_H1_EARNINGS"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "NOT_LOGIC"
+  ]
+}

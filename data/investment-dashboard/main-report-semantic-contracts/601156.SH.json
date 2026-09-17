@@ -1,0 +1,451 @@
+{
+  "schema_version": 2,
+  "ticker": "601156.SH",
+  "company": "东方航空物流股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+    "report_sha256": "58d88ad28f4be14ab3d67d47a1314767b3101795bb610ff254e19d068f21a22b"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "东航物流当前观察；14.5—16元开始小额分批，12.5—14.5元稳健分批，10—12.5元重点买入但仍需盈利未崩塌。",
+      "加仓路径保留租赁调整后FCF和EPS条件，未把当前17.35元直接转成买入。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "东航物流资产和网络质量较好，但17.35元安全边际不足，等待半年报验证运力、油价传导和租赁现金流。",
+    "evidence": [
+      {
+        "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+        "line_start": 298,
+        "line_end": 298,
+        "quote": "**基本面建议：观察。** 东航物流是航空物流里资产与网络质量较好的公司，但 17.35 元不提供足够安全边际。当前最合理策略是等待 2026 半年报验证新增运力、油价传导和租赁现金流；已有仓位可持有，空仓者不追价。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前观察；14.5—16元小额分批，12.5—14.5元稳健分批，10—12.5元为更强研究区。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "14.5—16元小额分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 14.5,
+            "price_max": 16,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                "line_start": 302,
+                "line_end": 302,
+                "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于14.5—16元小额分批区。",
+            "node_id": "empty-trial-14-5-16-condition"
+          },
+          "path_id": "empty-trial-14-5-16",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+              "line_start": 302,
+              "line_end": 302,
+              "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "12.5—14.5元进入稳健分批区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 12.5,
+            "price_max": 14.5,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                "line_start": 302,
+                "line_end": 302,
+                "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于12.5—14.5元稳健分批区。",
+            "node_id": "empty-entry-12-5-14-5-condition"
+          },
+          "path_id": "empty-entry-12-5-14-5",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+              "line_start": 302,
+              "line_end": 302,
+              "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "10—12.5元为重点买入研究区，仍需确认盈利未崩塌。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 10,
+                "price_max": 12.5,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                    "line_start": 276,
+                    "line_end": 276,
+                    "quote": "| 保守型 | 10.0-12.5 元 | 重点买入区 | 接近悲观价值与历史低估区，但仍需确认盈利未崩塌 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于10—12.5元。",
+                "node_id": "empty-entry-10-12-5-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                    "line_start": 276,
+                    "line_end": 276,
+                    "quote": "| 保守型 | 10.0-12.5 元 | 重点买入区 | 接近悲观价值与历史低估区，但仍需确认盈利未崩塌 |"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "盈利未崩塌。",
+                "node_id": "empty-entry-10-12-5-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                "line_start": 276,
+                "line_end": 276,
+                "quote": "| 保守型 | 10.0-12.5 元 | 重点买入区 | 接近悲观价值与历史低估区，但仍需确认盈利未崩塌 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于10—12.5元且盈利未崩塌。",
+            "node_id": "empty-entry-10-12-5-condition"
+          },
+          "path_id": "empty-entry-10-12-5",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+              "line_start": 276,
+              "line_end": 276,
+              "quote": "| 保守型 | 10.0-12.5 元 | 重点买入区 | 接近悲观价值与历史低估区，但仍需确认盈利未崩塌 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+          "line_start": 302,
+          "line_end": 302,
+          "quote": "| 空仓者 | 17.35 元观察；14.5-16.0 元才开始小额分批，12.5-14.5 元进入稳健买入区 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "持仓者持有，不在当前价加仓，把半年报作为第一复核点。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有并等待半年报。",
+          "path_id": "holder-hold-half-year",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+              "line_start": 303,
+              "line_end": 303,
+              "quote": "| 持仓者 | 持有，不在当前价加仓；把 2026 半年报作为第一复核点 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "价格不高于14.5元且租赁调整后FCF和EPS能力达标时加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 14.5,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                    "line_start": 304,
+                    "line_end": 304,
+                    "quote": "| 加仓信号 | 价格不高于 14.5 元；同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "A股价格不高于14.5元。",
+                "node_id": "holder-add-fcf-eps-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "租赁调整后FCF",
+                "operator": "GTE",
+                "value": 18,
+                "unit": "亿元",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                    "line_start": 304,
+                    "line_end": 304,
+                    "quote": "| 加仓信号 | 价格不高于 14.5 元；同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元 |"
+                  }
+                ],
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "租赁调整后FCF不低于18亿元。",
+                "node_id": "holder-add-fcf-eps-condition-2"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "EPS",
+                "operator": "GTE",
+                "value": 1.6,
+                "unit": "元",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                    "line_start": 304,
+                    "line_end": 304,
+                    "quote": "| 加仓信号 | 价格不高于 14.5 元；同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元 |"
+                  }
+                ],
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "全年EPS能力不低于1.60元。",
+                "node_id": "holder-add-fcf-eps-condition-3"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+                "line_start": 304,
+                "line_end": 304,
+                "quote": "| 加仓信号 | 价格不高于 14.5 元；同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格不高于14.5元、租赁调整后FCF不低于18亿元且全年EPS能力不低于1.60元。",
+            "node_id": "holder-add-fcf-eps-condition"
+          },
+          "path_id": "holder-add-fcf-eps",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+              "line_start": 304,
+              "line_end": 304,
+              "quote": "| 加仓信号 | 价格不高于 14.5 元；同时 LTM 租赁调整后 FCF 不低于 18 亿元、全年 EPS 能力不低于 1.60 元 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+          "line_start": 303,
+          "line_end": 303,
+          "quote": "| 持仓者 | 持有，不在当前价加仓；把 2026 半年报作为第一复核点 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+          "line_start": 305,
+          "line_end": 305,
+          "quote": "| 减仓信号 | 股价高于 22 元但 EPS 和租赁调整后 FCF没有同步增长 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "股价高于22元而EPS和租赁调整后FCF未同步增长时减仓或重审。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+          "line_start": 298,
+          "line_end": 298,
+          "quote": "**基本面建议：观察。** 东航物流是航空物流里资产与网络质量较好的公司，但 17.35 元不提供足够安全边际。当前最合理策略是等待 2026 半年报验证新增运力、油价传导和租赁现金流；已有仓位可持有，空仓者不追价。"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪新增运力、航油传导、租赁现金流和半年报。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": false,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/东航物流/东航物流-investment-research-20260807.md",
+      "line_start": 298,
+      "line_end": 298,
+      "quote": "**基本面建议：观察。** 东航物流是航空物流里资产与网络质量较好的公司，但 17.35 元不提供足够安全边际。当前最合理策略是等待 2026 半年报验证新增运力、油价传导和租赁现金流；已有仓位可持有，空仓者不追价。"
+    }
+  ],
+  "business_risk_reasons": [
+    "AIR_CARGO_CYCLE",
+    "LEASE_ADJUSTED_FCF_GATE"
+  ],
+  "semantic_review_reasons": []
+}

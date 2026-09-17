@@ -1,0 +1,622 @@
+{
+  "schema_version": 2,
+  "ticker": "002683.SZ",
+  "company": "guangdong-hongda",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+    "report_sha256": "73b5fec5160f9bc86c0585305147ff3daa58742ca60a55d74914205860ab152d"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "28.34 元是当前参考价，19.3-53.8 元三情景目标价只是估值参考，不应直接覆盖行动价格带。",
+      "空仓者分为 21 元以下研究、24-25 元以下且经营条件改善的观察，以及现价附近小仓试错；没有把现价直接编译成无条件买入。",
+      "持仓者可审慎持有，但应收、商誉、安全生产和防务订单是持续复核项；五条加仓和五条减仓信号未定义组合关系。",
+      "报告明确不覆盖趋势交易，技术面不能由本基本面合同代替。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "广东宏大是有牌照和一体化壁垒的工程平台，但现金流、商誉、防务兑现和安全生产仍需验证；空仓者观察，持仓者审慎持有。",
+    "evidence": [
+      {
+        "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+        "line_start": 9,
+        "line_end": 9,
+        "quote": "> **结论先行**：广东宏大属于“有门槛但不轻松”的生意。空仓投资者不宜把它当成确定性消费型复利资产追高；更合理的动作是纳入观察池，等待现金流改善、并购协同验证或估值回到更有安全边际的位置。已有持仓者可继续持有但必须盯紧应收、商誉、安全生产和防务订单兑现。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "21 元以下或经营现金流明显改善后再研究买入；24-25 元以下且经营、应收、防务条件改善进入观察池；现价附近只能小仓试错。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "review-below-21-or-cashflow-improves",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "21 元以下，或现金流明显改善且估值未上升时再研究买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LT",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 21,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                    "line_start": 214,
+                    "line_end": 214,
+                    "quote": "| 空仓保守型 | 等待 | **21 元以下**或出现现金流明显改善且估值未上升时再研究买入 |"
+                  }
+                ],
+                "node_id": "review-price-below-21",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "价格低于 21 元。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                        "line_start": 214,
+                        "line_end": 214,
+                        "quote": "| 空仓保守型 | 等待 | **21 元以下**或出现现金流明显改善且估值未上升时再研究买入 |"
+                      }
+                    ],
+                    "node_id": "review-cashflow-improves",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "经营现金流明显改善。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                        "line_start": 214,
+                        "line_end": 214,
+                        "quote": "| 空仓保守型 | 等待 | **21 元以下**或出现现金流明显改善且估值未上升时再研究买入 |"
+                      }
+                    ],
+                    "node_id": "review-valuation-not-up",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "估值未上升。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                    "line_start": 214,
+                    "line_end": 214,
+                    "quote": "| 空仓保守型 | 等待 | **21 元以下**或出现现金流明显改善且估值未上升时再研究买入 |"
+                  }
+                ],
+                "node_id": "review-cashflow-and-valuation",
+                "kind": "ALL",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "经营现金流明显改善且估值未上升。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                "line_start": 214,
+                "line_end": 214,
+                "quote": "| 空仓保守型 | 等待 | **21 元以下**或出现现金流明显改善且估值未上升时再研究买入 |"
+              }
+            ],
+            "node_id": "review-below-21-or-cashflow",
+            "kind": "ANY",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格低于 21 元，或经营现金流改善且估值未上升。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+              "line_start": 214,
+              "line_end": 214,
+              "quote": "| 空仓保守型 | 等待 | **21 元以下**或出现现金流明显改善且估值未上升时再研究买入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-below-25-with-operating-proof",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "24-25 元以下且现金流、应收和防务订单条件改善时进入观察池。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 25,
+                "currency": "CNY",
+                "price_role": "REVIEW_ZONE",
+                "evidence": [
+                  {
+                    "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                    "line_start": 215,
+                    "line_end": 215,
+                    "quote": "| 空仓稳健型 | 观察池 | **24-25 元以下**，且 2026 年经营现金流修复、应收账款未恶化、防务订单有实质兑现 |"
+                  }
+                ],
+                "node_id": "review-price-below-25",
+                "kind": "PRICE_RANGE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "价格不高于 25 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                    "line_start": 215,
+                    "line_end": 215,
+                    "quote": "| 空仓稳健型 | 观察池 | **24-25 元以下**，且 2026 年经营现金流修复、应收账款未恶化、防务订单有实质兑现 |"
+                  }
+                ],
+                "node_id": "review-cashflow-repairs",
+                "kind": "FILING",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "2026 年经营现金流修复。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                    "line_start": 215,
+                    "line_end": 215,
+                    "quote": "| 空仓稳健型 | 观察池 | **24-25 元以下**，且 2026 年经营现金流修复、应收账款未恶化、防务订单有实质兑现 |"
+                  }
+                ],
+                "node_id": "review-receivables-not-worse",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "应收账款未恶化。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                    "line_start": 215,
+                    "line_end": 215,
+                    "quote": "| 空仓稳健型 | 观察池 | **24-25 元以下**，且 2026 年经营现金流修复、应收账款未恶化、防务订单有实质兑现 |"
+                  }
+                ],
+                "node_id": "review-defense-orders",
+                "kind": "QUALITATIVE",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "防务订单有实质兑现。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                "line_start": 215,
+                "line_end": 215,
+                "quote": "| 空仓稳健型 | 观察池 | **24-25 元以下**，且 2026 年经营现金流修复、应收账款未恶化、防务订单有实质兑现 |"
+              }
+            ],
+            "node_id": "review-below-25-all",
+            "kind": "ALL",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格不高于 25 元，且经营现金流修复、应收未恶化、防务订单兑现。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+              "line_start": 215,
+              "line_end": 215,
+              "quote": "| 空仓稳健型 | 观察池 | **24-25 元以下**，且 2026 年经营现金流修复、应收账款未恶化、防务订单有实质兑现 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-current-with-stop-loss",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "现价附近只适合小仓位跟踪，并必须设定基本面止损条件。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                "line_start": 216,
+                "line_end": 216,
+                "quote": "| 空仓激进型 | 小仓位跟踪 | 现价附近只适合以“行业整合 + 防务期权”小仓试错，必须设定基本面止损条件 |"
+              }
+            ],
+            "node_id": "trial-current-manual-review",
+            "kind": "MANUAL_REVIEW",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "人工确认行业整合、防务期权和基本面止损条件后才允许小仓试错。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+              "line_start": 216,
+              "line_end": 216,
+              "quote": "| 空仓激进型 | 小仓位跟踪 | 现价附近只适合以“行业整合 + 防务期权”小仓试错，必须设定基本面止损条件 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "line_start": 9,
+          "line_end": 9,
+          "quote": "> **结论先行**：广东宏大属于“有门槛但不轻松”的生意。空仓投资者不宜把它当成确定性消费型复利资产追高；更合理的动作是纳入观察池，等待现金流改善、并购协同验证或估值回到更有安全边际的位置。已有持仓者可继续持有但必须盯紧应收、商誉、安全生产和防务订单兑现。"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "持有但严控风险，季度复核现金流、应收、商誉、防务和安全生产。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-with-risk-control",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持有但严控风险。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+              "line_start": 217,
+              "line_end": 217,
+              "quote": "| 已有持仓 | 持有但严控风险 | 若 Q2-Q4 现金流修复、商誉无减值、防务收入继续增长，可持有；若应收/合同资产继续高增、重大安全事故或并购失控，应减仓 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-add-signals-manual-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "五条加仓信号的组合关系需人工复核，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                "line_start": 268,
+                "line_end": 272,
+                "quote": "1. 2026 年全年经营现金流明显修复，且不再高度依赖 Q4 单季回款。  \n2. 应收账款和合同资产占收入比重下降或稳定，坏账准备未异常上升。  \n3. 雪峰科技、长之琳贡献可见归母利润和现金流，商誉减值风险下降。  \n4. 防务装备收入、订单和回款有连续披露验证，而不是停留在概念。  \n5. 股价回到 **24 元以下**，且基本面未恶化；或回到 **21 元以下**形成明显安全边际。"
+              }
+            ],
+            "node_id": "holder-add-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认现金流、应收、并购、防务和价格信号的组合关系。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+              "line_start": 268,
+              "line_end": 272,
+              "quote": "1. 2026 年全年经营现金流明显修复，且不再高度依赖 Q4 单季回款。  \n2. 应收账款和合同资产占收入比重下降或稳定，坏账准备未异常上升。  \n3. 雪峰科技、长之琳贡献可见归母利润和现金流，商誉减值风险下降。  \n4. 防务装备收入、订单和回款有连续披露验证，而不是停留在概念。  \n5. 股价回到 **24 元以下**，且基本面未恶化；或回到 **21 元以下**形成明显安全边际。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-reduce-signals-manual-review",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "五条减仓/重新审视信号的组合关系需人工复核，不自动减仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+                "line_start": 276,
+                "line_end": 280,
+                "quote": "1. 发生重大安全事故、停产整改或关键资质受影响。  \n2. 应收账款、合同资产继续快于收入增长，经营现金流持续为负。  \n3. 商誉减值、并购标的业绩承诺落空或少数股东权益显著稀释归母利润。  \n4. 防务业务收入增长停滞、研发资本化或审价回款出现异常。  \n5. 公司继续大额并购但没有清晰 ROIC 和现金流约束。"
+              }
+            ],
+            "node_id": "holder-reduce-signals-manual",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "人工确认安全事故、应收现金流、商誉并购、防务和并购纪律信号。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+              "line_start": 276,
+              "line_end": 280,
+              "quote": "1. 发生重大安全事故、停产整改或关键资质受影响。  \n2. 应收账款、合同资产继续快于收入增长，经营现金流持续为负。  \n3. 商誉减值、并购标的业绩承诺落空或少数股东权益显著稀释归母利润。  \n4. 防务业务收入增长停滞、研发资本化或审价回款出现异常。  \n5. 公司继续大额并购但没有清晰 ROIC 和现金流约束。"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "line_start": 217,
+          "line_end": 217,
+          "quote": "| 已有持仓 | 持有但严控风险 | 若 Q2-Q4 现金流修复、商誉无减值、防务收入继续增长，可持有；若应收/合同资产继续高增、重大安全事故或并购失控，应减仓 |"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "line_start": 217,
+          "line_end": 217,
+          "quote": "| 已有持仓 | 持有但严控风险 | 若 Q2-Q4 现金流修复、商誉无减值、防务收入继续增长，可持有；若应收/合同资产继续高增、重大安全事故或并购失控，应减仓 |"
+        }
+      ],
+      "node_id": "monitor-q2-q4-cashflow-defense",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 Q2-Q4 现金流、应收/合同资产、商誉和防务收入兑现。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-07-09 当前股价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 28.34,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "line_start": 4,
+          "line_end": 4,
+          "quote": "**行情基准**：2026-07-09 16:14:15，腾讯行情显示收盘价 **28.34 元**"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 19.3,
+      "max": 53.8,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "line_start": 200,
+          "line_end": 200,
+          "quote": "| 乐观 | **18%** | **26x** | **2.07 元** | **53.8 元** | **+89.8%** |"
+        },
+        {
+          "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "line_start": 202,
+          "line_end": 202,
+          "quote": "| 悲观 | **3%** | **14x** | **1.38 元** | **19.3 元** | **-32.0%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓和减仓/重新审视信号均列出五项，但未说明是 ALL、ANY 或达到最少数量。",
+      "required_clarification": "由人工或更强模型确认信号组合后再生成确定性 ADD_POSITION、REDUCE 或 EXIT 条件；当前仅保留人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "line_start": 268,
+          "line_end": 272,
+          "quote": "1. 2026 年全年经营现金流明显修复，且不再高度依赖 Q4 单季回款。  \n2. 应收账款和合同资产占收入比重下降或稳定，坏账准备未异常上升。  \n3. 雪峰科技、长之琳贡献可见归母利润和现金流，商誉减值风险下降。  \n4. 防务装备收入、订单和回款有连续披露验证，而不是停留在概念。  \n5. 股价回到 **24 元以下**，且基本面未恶化；或回到 **21 元以下**形成明显安全边际。"
+        },
+        {
+          "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+          "line_start": 276,
+          "line_end": 280,
+          "quote": "1. 发生重大安全事故、停产整改或关键资质受影响。  \n2. 应收账款、合同资产继续快于收入增长，经营现金流持续为负。  \n3. 商誉减值、并购标的业绩承诺落空或少数股东权益显著稀释归母利润。  \n4. 防务业务收入增长停滞、研发资本化或审价回款出现异常。  \n5. 公司继续大额并购但没有清晰 ROIC 和现金流约束。"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-signals-manual-review",
+        "holder-reduce-signals-manual-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/guangdong-hongda/guangdong-hongda-research-report-20260709.md",
+      "line_start": 9,
+      "line_end": 9,
+      "quote": "> **结论先行**：广东宏大属于“有门槛但不轻松”的生意。空仓投资者不宜把它当成确定性消费型复利资产追高；更合理的动作是纳入观察池，等待现金流改善、并购协同验证或估值回到更有安全边际的位置。已有持仓者可继续持有但必须盯紧应收、商誉、安全生产和防务订单兑现。"
+    }
+  ],
+  "business_risk_reasons": [
+    "CASHFLOW_AND_GOODWILL_RISK",
+    "DEFENSE_ORDER_UNVERIFIED"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

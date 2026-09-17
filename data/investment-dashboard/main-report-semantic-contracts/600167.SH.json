@@ -1,0 +1,733 @@
+{
+  "schema_version": 2,
+  "ticker": "600167.SH",
+  "company": "联美量子股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+    "report_sha256": "d207f2ff3a07f65b819724737d144c7434449666eaa444ae604b7257680b68e0"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "联美控股当前 5.78 元基本面建议为观察；5.20 元以下才考虑小仓，4 字头才进入更强买入路径。",
+      "供热需求有区域壁垒但没有自主定价权，现金和 FCF 不能自动等同于可分配回报。",
+      "加仓和卖出信号均为并列条件，旧煤资产改造、回购和金融投资需要人工确认。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "联美控股是有区域热网壁垒的成熟公用事业，但盈利退潮与资本配置风险使 5.78 元安全边际不足；空仓观察，持仓不追涨。",
+    "evidence": [
+      {
+        "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+        "line_start": 366,
+        "line_end": 366,
+        "quote": "**基本面建议：观察。** 联美不是差公司，也不是明显高估公司；它是“好资产、一般增长、需要资本配置证明”的公司。当前价 5.78 元处于合理区间上半部，赔率不够好，空仓者不必急着买。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "5.20-6.50 元继续观察；4.80-5.20 元可小仓试买，4.20-4.80 元进入稳健分批买入区，低于 4.20 元需确认前提未破坏。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-5-2-6-5",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "5.20-6.50 元安全边际不足，空仓观察。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 5.2,
+            "price_max": 6.5,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+                "line_start": 342,
+                "line_end": 342,
+                "quote": "| 5.20-6.50 元 | 大致合理到偏贵，安全边际不足 | 空仓观察；持仓可持有 |"
+              }
+            ],
+            "node_id": "lianmei-watch-zone",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 5.20-6.50 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 342,
+              "line_end": 342,
+              "quote": "| 5.20-6.50 元 | 大致合理到偏贵，安全边际不足 | 空仓观察；持仓可持有 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-entry-4-8-5-2",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "4.80-5.20 元进入部分安全边际，可小仓试买。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 4.8,
+            "price_max": 5.2,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+                "line_start": 343,
+                "line_end": 343,
+                "quote": "| 4.80-5.20 元 | 开始计入部分安全边际 | 激进型可小仓试买 |"
+              }
+            ],
+            "node_id": "lianmei-trial-price",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 4.80-5.20 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 343,
+              "line_end": 343,
+              "quote": "| 4.80-5.20 元 | 开始计入部分安全边际 | 激进型可小仓试买 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conditional-entry-4-2-4-8",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "4.20-4.80 元对盈利停滞已有较充分折价，可稳健分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 4.2,
+            "price_max": 4.8,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+                "line_start": 344,
+                "line_end": 344,
+                "quote": "| 4.20-4.80 元 | 对盈利停滞已有较充分折价 | 稳健型分批买入 |"
+              }
+            ],
+            "node_id": "lianmei-steady-price",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 4.20-4.80 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 344,
+              "line_end": 344,
+              "quote": "| 4.20-4.80 元 | 对盈利停滞已有较充分折价 | 稳健型分批买入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conditional-entry-below-4-2-with-premise",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "低于 4.20 元接近中性估值，只有在基本面前提未破坏时保守分批买入。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 4.2,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+                    "line_start": 345,
+                    "line_end": 345,
+                    "quote": "| 低于 4.20 元 | 接近中性情景估值或更低 | 保守型在前提未破坏时分批买入 |"
+                  }
+                ],
+                "node_id": "lianmei-price-below-4-2",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格低于或等于 4.20 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+                    "line_start": 345,
+                    "line_end": 345,
+                    "quote": "| 低于 4.20 元 | 接近中性情景估值或更低 | 保守型在前提未破坏时分批买入 |"
+                  }
+                ],
+                "node_id": "lianmei-premise-not-broken",
+                "kind": "MANUAL_REVIEW",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "确认买入前提未破坏。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+                "line_start": 345,
+                "line_end": 345,
+                "quote": "| 低于 4.20 元 | 接近中性情景估值或更低 | 保守型在前提未破坏时分批买入 |"
+              }
+            ],
+            "node_id": "lianmei-conservative-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格低于 4.20 元且买入前提未破坏。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 345,
+              "line_end": 345,
+              "quote": "| 低于 4.20 元 | 接近中性情景估值或更低 | 保守型在前提未破坏时分批买入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 370,
+          "line_end": 370,
+          "quote": "| 空仓者 | 观察；5.20 元以下才考虑小仓，4.80 元以下再进入稳健分批区 |"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "持仓者可持有但不追涨，等待中报、回购执行和清洁能源毛利率验证。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持有但不追涨，等待中报、回购执行和清洁能源毛利率变化。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 371,
+              "line_end": 371,
+              "quote": "| 持仓者 | 持有但不追涨；关注 2026 中报、回购执行和清洁能源毛利率 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-add-signals-review",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "扣非利润、供暖面积、回购增厚和价格信号需人工确认组合关系，不自动加仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+                "line_start": 372,
+                "line_end": 372,
+                "quote": "| 加仓信号 | TTM 扣非利润企稳回升；供暖面积仍增长；回购实际执行并以注销/长期持有增厚每股价值；价格进入 4.20-4.80 元 |"
+              }
+            ],
+            "node_id": "lianmei-add-signals-review",
+            "kind": "MANUAL_REVIEW",
+            "effect": "REVIEW_ONLY",
+            "scope": "holder",
+            "description": "人工确认加仓信号组合与资本配置质量。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 372,
+              "line_end": 372,
+              "quote": "| 加仓信号 | TTM 扣非利润企稳回升；供暖面积仍增长；回购实际执行并以注销/长期持有增厚每股价值；价格进入 4.20-4.80 元 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 371,
+          "line_end": 371,
+          "quote": "| 持仓者 | 持有但不追涨；关注 2026 中报、回购执行和清洁能源毛利率 |"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": "清洁能源毛利率",
+      "operator": "LT",
+      "value": 28,
+      "unit": "%",
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+        }
+      ],
+      "node_id": "lianmei-margin-below-28",
+      "kind": "METRIC_COMPARE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "清洁能源毛利率持续低于 28%。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+        }
+      ],
+      "node_id": "lianmei-heating-area-decline",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "平均供暖面积连续两年下降。"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 373,
+              "line_end": 373,
+              "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+            }
+          ],
+          "node_id": "lianmei-coal-no-compensation",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "旧煤资产改造无补偿。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 373,
+              "line_end": 373,
+              "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+            }
+          ],
+          "node_id": "lianmei-coal-cash-erosion",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "旧煤资产改造侵蚀现金。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+        }
+      ],
+      "node_id": "lianmei-coal-retrofit-cash",
+      "kind": "ALL",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "旧煤资产改造无补偿且侵蚀现金。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+        }
+      ],
+      "node_id": "lianmei-cash-financial-investment",
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "大量现金继续流向低回报金融投资。"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "GT",
+          "value": null,
+          "unit": null,
+          "price_min": 6.5,
+          "price_max": null,
+          "currency": "CNY",
+          "price_role": "REDUCE_POSITION",
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 373,
+              "line_end": 373,
+              "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+            }
+          ],
+          "node_id": "lianmei-price-above-6-5",
+          "kind": "PRICE_RANGE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "A 股价格高于 6.50 元。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+              "line_start": 373,
+              "line_end": 373,
+              "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+            }
+          ],
+          "node_id": "lianmei-profit-no-recovery",
+          "kind": "QUALITATIVE",
+          "effect": "REDUCE_TRIGGER",
+          "scope": "both",
+          "description": "盈利没有恢复。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 373,
+          "line_end": 373,
+          "quote": "| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+        }
+      ],
+      "node_id": "lianmei-high-price-no-recovery",
+      "kind": "ALL",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "both",
+      "description": "价格高于 6.50 元而盈利没有恢复。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 371,
+          "line_end": 371,
+          "quote": "| 持仓者 | 持有但不追涨；关注 2026 中报、回购执行和清洁能源毛利率 |"
+        }
+      ],
+      "node_id": "monitor-lianmei-midyear-buyback",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 2026 年中报、回购执行和清洁能源毛利率。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 5.78,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 9,
+          "line_end": 9,
+          "quote": "| 最新收盘价 | 5.78 元（不复权） |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 2.73,
+      "max": 6.14,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 322,
+          "line_end": 322,
+          "quote": "| 乐观 | +5% | 20 倍 | 0.3072 元 | **6.14 元** | **+14.1%** |"
+        },
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 324,
+          "line_end": 324,
+          "quote": "| 悲观 | -5% | 12 倍 | 0.2276 元 | **2.73 元** | **-45.0%** |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "基本面合理价值",
+      "price_role": "FAIR_VALUE",
+      "value": null,
+      "min": 4.8,
+      "max": 6.2,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 335,
+          "line_end": 335,
+          "quote": "综合盈利倍数、净现金和历史区间，**基本面合理价值约 4.8-6.2 元**；想要足够安全边际，买入区应明显低于 5.2 元。"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "PRICE_AND_CAPITAL_ALLOCATION_PRECONDITION",
+      "summary": "低价买入路径仍依赖现金分配、回购执行、旧煤资产改造和盈利恢复，价格本身不是充分条件。",
+      "required_clarification": "确认‘前提未破坏’的具体检查项后，才能把低于 4.20 元的路径升级为正式建仓。",
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 345,
+          "line_end": 345,
+          "quote": "| 低于 4.20 元 | 接近中性情景估值或更低 | 保守型在前提未破坏时分批买入 |"
+        }
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": true
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓与卖出信号是并列清单，未规定任一、全部或最低满足数量。",
+      "required_clarification": "确认信号组合与减仓/退出幅度；当前由人工复核。",
+      "evidence": [
+        {
+          "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+          "line_start": 372,
+          "line_end": 373,
+          "quote": "| 加仓信号 | TTM 扣非利润企稳回升；供暖面积仍增长；回购实际执行并以注销/长期持有增厚每股价值；价格进入 4.20-4.80 元 |\n| 卖出信号 | 清洁能源毛利率持续低于 28%；平均供暖面积连续两年下降；旧煤资产改造无补偿且侵蚀现金；大量现金继续流向低回报金融投资；价格高于 6.50 元而盈利没有恢复 |"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-add-signals-review"
+      ],
+      "affects_entry": false
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+      "line_start": 364,
+      "line_end": 373,
+      "quote": "### 8.2 明确建议\n\n**基本面建议：观察。** 联美不是差公司，也不是明显高估公司；它是“好资产、一般增长、需要资本配置证明”的公司。当前价 5.78 元处于合理区间上半部，赔率不够好，空仓者不必急着买。"
+    },
+    {
+      "report_path": "reports/联美控股/联美控股-investment-research-20260809.md",
+      "line_start": 424,
+      "line_end": 443,
+      "quote": "## 看板决策契约"
+    }
+  ],
+  "business_risk_reasons": [
+    "MAINTENANCE_CAPEX_UNCERTAINTY"
+  ],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

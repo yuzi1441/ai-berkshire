@@ -1,0 +1,334 @@
+{
+  "schema_version": 2,
+  "ticker": "603228.SH",
+  "company": "景旺电子",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+    "report_sha256": "2b48fd5dd7d599e7e893e7200b65a651f0469d5a0aa3a706070e9c462a32ff1d"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "景旺电子当前观察；30—40元才接近基准估值研究区，55—70元只观察/持有，70元以上不建议新买。",
+      "空仓买点与持仓加仓纪律分开，AI/汽车电子叙事没有直接升级为买入。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "景旺电子平台和客户认证真实，但57倍TTM PE已提前计入高端化，当前观察不追高。",
+    "evidence": [
+      {
+        "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+        "line_start": 292,
+        "line_end": 292,
+        "quote": "| 综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。 |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前55—70元观察；30—40元且基本面未恶化时进入重点买入研究区。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "REVIEW",
+          "summary": "40—55元进入可研究区，需结合毛利率、扣非利润和FCF判断。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 40,
+            "price_max": 55,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+                "line_start": 233,
+                "line_end": 233,
+                "quote": "| 40-55 元 | 估值开始回到可研究区 | 需结合毛利率、扣非利润和 FCF 判断。 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A股价格处于40—55元可研究区。",
+            "node_id": "empty-review-40-55-condition"
+          },
+          "path_id": "empty-review-40-55",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+              "line_start": 233,
+              "line_end": 233,
+              "quote": "| 40-55 元 | 估值开始回到可研究区 | 需结合毛利率、扣非利润和 FCF 判断。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "30—40元且基本面未恶化时进入重点买入研究区。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 30,
+                "price_max": 40,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+                    "line_start": 234,
+                    "line_end": 234,
+                    "quote": "| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于30—40元。",
+                "node_id": "empty-entry-30-40-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+                    "line_start": 234,
+                    "line_end": 234,
+                    "quote": "| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "基本面未恶化。",
+                "node_id": "empty-entry-30-40-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+                "line_start": 234,
+                "line_end": 234,
+                "quote": "| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于30—40元且基本面未恶化。",
+            "node_id": "empty-entry-30-40-condition"
+          },
+          "path_id": "empty-entry-30-40",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+              "line_start": 234,
+              "line_end": 234,
+              "quote": "| 30-40 元 | 接近基准估值区 | 若基本面未恶化，可进入重点买入研究区。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+          "line_start": 298,
+          "line_end": 298,
+          "quote": "| 空仓价值投资者 | 不追高，放入观察名单 | 等价格回到 30-40 元，或公司用财报证明 18-20 亿元净利、毛利率与 FCF 修复。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "低成本持仓者可持有但设跟踪纪律，毛利率、扣非利润或存货恶化时减仓。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有但设跟踪纪律。",
+          "path_id": "holder-hold-discipline",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+              "line_start": 299,
+              "line_end": 299,
+              "quote": "| 已持有且成本低 | 可继续持有但设跟踪纪律 | 若毛利率连续低于 18%、扣非净利连续下滑、存货继续上升，应减仓或重审。 |"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "毛利率、扣非利润、现金流、海外产能和估值同时改善后再评估。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+                "line_start": 305,
+                "line_end": 305,
+                "quote": "- 毛利率连续两个季度回到 21%-22% 以上；  "
+              }
+            ],
+            "kind": "MANUAL_REVIEW",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "核验加仓信号中的毛利率、扣非利润、现金流、产能和估值条件。",
+            "node_id": "holder-add-quality-condition"
+          },
+          "path_id": "holder-add-quality",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+              "line_start": 305,
+              "line_end": 305,
+              "quote": "- 毛利率连续两个季度回到 21%-22% 以上；  "
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "| 已持有且成本低 | 可继续持有但设跟踪纪律 | 若毛利率连续低于 18%、扣非净利连续下滑、存货继续上升，应减仓或重审。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+          "line_start": 314,
+          "line_end": 314,
+          "quote": "- 综合毛利率连续两个季度低于 18%；  "
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "综合毛利率连续两个季度低于18%、扣非利润连续下降、存货上升、资本开支/现金流恶化或高端客户导入不及预期时减仓。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "| 已持有且成本低 | 可继续持有但设跟踪纪律 | 若毛利率连续低于 18%、扣非净利连续下滑、存货继续上升，应减仓或重审。 |"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪毛利率、扣非利润、经营现金流、存货和高端客户导入。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": false,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/景旺电子/景旺电子研究报告-20260709.md",
+      "line_start": 292,
+      "line_end": 292,
+      "quote": "| 综合建议 | 观察 / 持有者审慎管理；价值投资者不追高新买。 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "FCF_AND_MARGIN_CONFIRMATION",
+    "HIGH_VALUATION"
+  ],
+  "semantic_review_reasons": []
+}

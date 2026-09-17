@@ -1,0 +1,553 @@
+{
+  "schema_version": 2,
+  "ticker": "603129.SH",
+  "company": "chunfeng-dongli",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+    "report_sha256": "f4ad36040cbd0155f7c099101a9afbc2f07f113f25f69d2f3ff67868df1efc12"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "报告明确允许空仓者当前分批建仓并配置半仓，这是 Golden 样本中的真实当前买入语义",
+      "200-220 元是理想加仓区，低于 200 元是加仓信号，不应与当前建仓动作互相覆盖",
+      "持仓者当前继续持有但不急加仓，等待极核、关税和欧洲渠道三个拐点",
+      "219-676 元是三情景目标价，不是买入区间",
+      "卖出与加仓信号均按各自列示的独立触发项保留"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "OPEN_POSITION",
+    "scope": "both",
+    "summary": "当前估值具备安全边际，空仓者可分批建仓；持仓者继续持有但不急加仓。",
+    "evidence": [
+      {
+        "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+        "line_start": 433,
+        "line_end": 440,
+        "quote": "### 最终决策"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "OPEN_POSITION",
+      "summary": "当前价位可分批建仓并配置半仓，同时跟踪关税影响和极核盈利。",
+      "entry_semantic": "UNCONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "current-batch-entry",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "当前价位可分批建仓并配置半仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+              "line_start": 437,
+              "line_end": 437,
+              "quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "deep-value-below-200",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "低于 200 元进入深度价值区。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "LT",
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": 200,
+            "currency": "CNY",
+            "price_role": "UNCONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+                "line_start": 446,
+                "line_end": 446,
+                "quote": "| 深度价值区 | <200元 | Forward PE<13x，悲观情景已充分定价 |"
+              }
+            ],
+            "node_id": "price-below-200",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格低于 200 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+              "line_start": 446,
+              "line_end": 446,
+              "quote": "| 深度价值区 | <200元 | Forward PE<13x，悲观情景已充分定价 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+          "line_start": 437,
+          "line_end": 437,
+          "quote": "| **空仓者** | **建议分批建仓（当前价位可配置半仓）**。Forward PE 15x+PEG 0.66+净现金25%，估值具备安全边际。但需密切跟踪2026Q2-Q3的关税影响和极核盈利进度。理想加仓价位：200-220元（对应Forward PE 12-14x） |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "继续持有但不急加仓，等待极核毛利率、美国关税和欧洲渠道三个拐点。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-no-add",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "继续持有但暂不急于加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+              "line_start": 438,
+              "line_end": 438,
+              "quote": "| **持仓者** | **继续持有，但不急于加仓**。2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。关注三个拐点：(1) 极核毛利率转正；(2) 美国关税政策明确化；(3) 欧洲渠道重建完成 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "add-on-any-signal",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "任一明确加仓信号出现时进入加仓路径。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LT",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 200,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+                    "line_start": 440,
+                    "line_end": 440,
+                    "quote": "| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |"
+                  }
+                ],
+                "node_id": "price-below-200-add",
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "股价跌至 200 元以下。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "极核电动季度毛利率",
+                "operator": "GT",
+                "value": 0,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+                    "line_start": 440,
+                    "line_end": 440,
+                    "quote": "| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |"
+                  }
+                ],
+                "node_id": "zeeho-margin-positive",
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "极核电动季度毛利率转正。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+                    "line_start": 440,
+                    "line_end": 440,
+                    "quote": "| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |"
+                  }
+                ],
+                "node_id": "trade-eases-tariff-down",
+                "kind": "EVENT",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "中美贸易缓和且关税下调。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "ATV 全球市占率",
+                "operator": "GT",
+                "value": 8,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+                    "line_start": 440,
+                    "line_end": 440,
+                    "quote": "| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |"
+                  }
+                ],
+                "node_id": "atv-share-above-8",
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "ATV 全球市占率突破 8%。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+                "line_start": 440,
+                "line_end": 440,
+                "quote": "| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |"
+              }
+            ],
+            "node_id": "add-signal-any",
+            "kind": "ANY",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "四项加仓信号中任一出现。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+              "line_start": 440,
+              "line_end": 440,
+              "quote": "| **加仓信号** | (1) 股价跌至200元以下（Forward PE<13x，接近悲观情景）；(2) 极核电动季度毛利率转正；(3) 中美贸易缓和、关税下调；(4) ATV全球市占率突破8% |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+          "line_start": 438,
+          "line_end": 438,
+          "quote": "| **持仓者** | **继续持有，但不急于加仓**。2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。关注三个拐点：(1) 极核毛利率转正；(2) 美国关税政策明确化；(3) 欧洲渠道重建完成 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "Forward PE",
+          "operator": "GT",
+          "value": 30,
+          "unit": "x",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+              "line_start": 439,
+              "line_end": 439,
+              "quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+            }
+          ],
+          "node_id": "forward-pe-above-30",
+          "kind": "METRIC_COMPARE",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "Forward PE 升至 30 倍以上。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "美国关税综合税率",
+              "operator": "GT",
+              "value": 50,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+                  "line_start": 439,
+                  "line_end": 439,
+                  "quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+                }
+              ],
+              "node_id": "tariff-above-50",
+              "kind": "METRIC_COMPARE",
+              "effect": "EXIT_TRIGGER",
+              "scope": "holder",
+              "description": "美国关税综合税率突破 50%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+                  "line_start": 439,
+                  "line_end": 439,
+                  "quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+                }
+              ],
+              "node_id": "no-tariff-avoidance",
+              "kind": "QUALITATIVE",
+              "effect": "EXIT_TRIGGER",
+              "scope": "holder",
+              "description": "没有有效规避路径。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+              "line_start": 439,
+              "line_end": 439,
+              "quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+            }
+          ],
+          "node_id": "tariff-above-50-no-route",
+          "kind": "ALL",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "美国关税综合税率突破 50% 且无有效规避路径。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+              "line_start": 439,
+              "line_end": 439,
+              "quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+            }
+          ],
+          "node_id": "profit-growth-single-digit",
+          "kind": "QUALITATIVE",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "2026 全年净利润增速降至个位数。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+              "line_start": 439,
+              "line_end": 439,
+              "quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+            }
+          ],
+          "node_id": "management-large-sale-again",
+          "kind": "EVENT",
+          "effect": "EXIT_TRIGGER",
+          "scope": "holder",
+          "description": "管理层再次大规模减持。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+          "line_start": 439,
+          "line_end": 439,
+          "quote": "| **卖出信号** | (1) Forward PE升至30x以上（股价~470元）；(2) 美国关税综合税率突破50%且无有效规避路径；(3) 2026全年净利润增速降至个位数；(4) 管理层再次大规模减持 |"
+        }
+      ],
+      "node_id": "sell-on-any-signal",
+      "kind": "ANY",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "任一卖出信号出现时触发卖出复核。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+          "line_start": 438,
+          "line_end": 438,
+          "quote": "| **持仓者** | **继续持有，但不急于加仓**。2026Q1利润增速骤降至+1.8%是短期信号，需确认Q2-Q3能否恢复。关注三个拐点：(1) 极核毛利率转正；(2) 美国关税政策明确化；(3) 欧洲渠道重建完成 |"
+        }
+      ],
+      "node_id": "monitor-three-inflections",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪极核毛利率转正、美国关税明确化和欧洲渠道重建完成。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 241.11,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "**股价**：241.11 元 | **市值**：370亿元 | **总股本**：1.5348亿股"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 219,
+      "max": 676,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+          "line_start": 384,
+          "line_end": 388,
+          "quote": "| 情景 | 假设 | 3年后EPS | 给予PE | 目标股价 | 较当前涨跌幅 |\n|------|------|---------|--------|---------|------------|\n| **乐观** | 年增速35%（关税缓解+极核盈利+份额提升） | 27.04元 | 25x | **676元** | **+180%** |\n| **中性** | 年增速25%（一致预期水平） | 21.46元 | 20x | **429元** | **+78%** |\n| **悲观** | 年增速10%（关税恶化+需求放缓） | 14.63元 | 15x | **219元** | **-9%** |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/chunfeng-dongli/chunfeng-dongli-603129-investment-research-20260624.md",
+      "line_start": 420,
+      "line_end": 449,
+      "quote": "## 第八步：综合决策备忘录"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "UNCONDITIONAL_ENTRY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC"
+  ]
+}

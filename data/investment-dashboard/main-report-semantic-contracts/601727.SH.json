@@ -1,0 +1,968 @@
+{
+  "schema_version": 2,
+  "ticker": "601727.SH",
+  "company": "上海电气",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+    "report_sha256": "a25157878fa44869a35ec1661f99f014b553e7da697e50ed5d5213778af7ccb2"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "A 股当前明确回避，H 股只是观望，不能用未分市场的‘观察’覆盖",
+      "A 股 2.5-3.0 元和 H 股 1.8-2.2 港元只是研究区，不是买入区",
+      "A 股不高于 2.1 元、H 股不高于 1.55 港元仍要求基本面通过验证",
+      "基准情景价格与 PB 机械估值仅作估值参考，不是行动阈值",
+      "A 股与 H 股持仓动作不同：A 股显著仓位考虑降低，H 股不追涨且不以低 PB 为唯一理由"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "AVOID",
+    "scope": "both",
+    "summary": "A 股回避；H 股观望，只有深度折价或可验证的盈利质量改善后再重审。",
+    "evidence": [
+      {
+        "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+        "line_start": 22,
+        "line_end": 22,
+        "quote": "**一句话结论：** 上海电气是有国家级制造能力的战略工业平台，却尚未证明自己是一台能把订单、技术和现金稳定转化为归母复利的机器。A 股 6.97 元要求未来三年归母 EPS 以约 40.77% 的年复合速度增长，远超当前盈利质量能支持的程度；H 股虽有显著折价，但 3.25 港元仍高于本报告的保守买入线。**A 股回避；H 股观望，仅在盈利质量改善或价格进入深度安全边际后重审。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "AVOID",
+      "summary": "A 股不买；H 股只观察。两市场均只有基本面验证后的深度折价条件买入路径。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "a-watch-3-3.5",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 3.0-3.5 元只等待、不追价。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 3.0,
+            "price_max": 3.5,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                "line_start": 391,
+                "line_end": 391,
+                "quote": "| A 股观察 | 3.0—3.5 元 | 等待，不追价 |"
+              }
+            ],
+            "node_id": "a-watch-price",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 3.0-3.5 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 391,
+              "line_end": 391,
+              "quote": "| A 股观察 | 3.0—3.5 元 | 等待，不追价 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-review-2.5-3",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 2.5-3.0 元只研究，暂不建仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 2.5,
+            "price_max": 3.0,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                "line_start": 392,
+                "line_end": 392,
+                "quote": "| A 股条件性研究 | 2.5—3.0 元 | 只研究，暂不建仓 |"
+              }
+            ],
+            "node_id": "a-review-price",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 2.5-3.0 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 392,
+              "line_end": 392,
+              "quote": "| A 股条件性研究 | 2.5—3.0 元 | 只研究，暂不建仓 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-entry-below-2.1-after-validation",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股不高于 2.1 元且基本面通过验证后可分批。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 2.1,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                    "line_start": 393,
+                    "line_end": 393,
+                    "quote": "| A 股保守 | **不高于 2.1 元** | 基本面通过验证后分批买入 |"
+                  }
+                ],
+                "node_id": "a-entry-price",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格不高于 2.1 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                    "line_start": 393,
+                    "line_end": 393,
+                    "quote": "| A 股保守 | **不高于 2.1 元** | 基本面通过验证后分批买入 |"
+                  }
+                ],
+                "node_id": "a-fundamentals-validated",
+                "kind": "MANUAL_REVIEW",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "基本面通过验证。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                "line_start": 393,
+                "line_end": 393,
+                "quote": "| A 股保守 | **不高于 2.1 元** | 基本面通过验证后分批买入 |"
+              }
+            ],
+            "node_id": "a-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股不高于 2.1 元且基本面通过验证。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 393,
+              "line_end": 393,
+              "quote": "| A 股保守 | **不高于 2.1 元** | 基本面通过验证后分批买入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "h-watch-2.2-2.5",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "H_SHARE",
+          "summary": "H 股 2.2-2.5 港元只等待、不追价。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 2.2,
+            "price_max": 2.5,
+            "currency": "HKD",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                "line_start": 394,
+                "line_end": 394,
+                "quote": "| H 股观察 | 2.2—2.5 港元 | 等待，不追价 |"
+              }
+            ],
+            "node_id": "h-watch-price",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "H 股价格处于 2.2-2.5 港元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 394,
+              "line_end": 394,
+              "quote": "| H 股观察 | 2.2—2.5 港元 | 等待，不追价 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "h-review-1.8-2.2",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "H_SHARE",
+          "summary": "H 股 1.8-2.2 港元只研究，暂不建仓。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 1.8,
+            "price_max": 2.2,
+            "currency": "HKD",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                "line_start": 395,
+                "line_end": 395,
+                "quote": "| H 股条件性研究 | 1.8—2.2 港元 | 只研究，暂不建仓 |"
+              }
+            ],
+            "node_id": "h-review-price",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "H 股价格处于 1.8-2.2 港元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 395,
+              "line_end": 395,
+              "quote": "| H 股条件性研究 | 1.8—2.2 港元 | 只研究，暂不建仓 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "h-entry-below-1.55-after-validation",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "H_SHARE",
+          "summary": "H 股不高于 1.55 港元且基本面通过验证后可分批。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 1.55,
+                "currency": "HKD",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                    "line_start": 396,
+                    "line_end": 396,
+                    "quote": "| H 股保守 | **不高于 1.55 港元** | 基本面通过验证后分批买入 |"
+                  }
+                ],
+                "node_id": "h-entry-price",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "H 股价格不高于 1.55 港元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                    "line_start": 396,
+                    "line_end": 396,
+                    "quote": "| H 股保守 | **不高于 1.55 港元** | 基本面通过验证后分批买入 |"
+                  }
+                ],
+                "node_id": "h-fundamentals-validated",
+                "kind": "MANUAL_REVIEW",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "基本面通过验证。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                "line_start": 396,
+                "line_end": 396,
+                "quote": "| H 股保守 | **不高于 1.55 港元** | 基本面通过验证后分批买入 |"
+              }
+            ],
+            "node_id": "h-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "H 股不高于 1.55 港元且基本面通过验证。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 396,
+              "line_end": 396,
+              "quote": "| H 股保守 | **不高于 1.55 港元** | 基本面通过验证后分批买入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "line_start": 423,
+          "line_end": 423,
+          "quote": "- **空仓者：** A 股不买；H 股加入观察清单，等待不高于 1.55 港元或基本面出现可验证的结构性改善。"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "REVIEW",
+      "summary": "A 股显著仓位应利用主题情绪评估降低；H 股折价有缓冲但不追涨、不以低 PB 作为唯一持有理由。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "a-holder-reduce-if-significant",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股仓位显著时，利用主题情绪评估降低仓位。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                "line_start": 424,
+                "line_end": 424,
+                "quote": "- **A 股持有者：** 不因“订单创新高”加仓；若仓位显著，利用主题情绪评估降低仓位。只有扣非盈利、归母比例和营运资本连续改善才重建论文。"
+              }
+            ],
+            "node_id": "a-position-significant",
+            "kind": "QUALITATIVE",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "A 股仓位显著。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 424,
+              "line_end": 424,
+              "quote": "- **A 股持有者：** 不因“订单创新高”加仓；若仓位显著，利用主题情绪评估降低仓位。只有扣非盈利、归母比例和营运资本连续改善才重建论文。"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "h-holder-no-chase",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "H_SHARE",
+          "summary": "H 股持有者不追涨，也不以 PB 低于 1 倍作为唯一持有理由。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 425,
+              "line_end": 425,
+              "quote": "- **H 股持有者：** 折价提供一定缓冲，但 3.25 港元不具备本报告要求的 15% 年化安全边际；不追涨、不用 PB 低于 1 倍作为唯一持有理由。"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "line_start": 424,
+          "line_end": 425,
+          "quote": "- **A 股持有者：** 不因“订单创新高”加仓；若仓位显著，利用主题情绪评估降低仓位。只有扣非盈利、归母比例和营运资本连续改善才重建论文。\n- **H 股持有者：** 折价提供一定缓冲，但 3.25 港元不具备本报告要求的 15% 年化安全边际；不追涨、不用 PB 低于 1 倍作为唯一持有理由。"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 274,
+              "line_end": 274,
+              "quote": "- 连续两个完整年度扣非归母利润为负；"
+            }
+          ],
+          "node_id": "adjusted-profit-negative-two-years",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "连续两个完整年度扣非归母利润为负。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "归母净利润占合并净利润（连续两年）",
+          "operator": "LT",
+          "value": 35,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 275,
+              "line_end": 275,
+              "quote": "- 归母净利润占合并净利润连续两年低于 **35%**；"
+            }
+          ],
+          "node_id": "parent-profit-share-below-35",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "归母净利润占合并净利润连续两年低于 35%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "应收账款与流动合同资产/收入",
+          "operator": "GT",
+          "value": 55,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 276,
+              "line_end": 276,
+              "quote": "- 应收账款与流动合同资产合计超过收入的 **55%**；"
+            }
+          ],
+          "node_id": "receivables-contract-assets-above-55",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "应收账款与流动合同资产合计超过收入的 55%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "存货/收入",
+          "operator": "GT",
+          "value": 45,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 277,
+              "line_end": 277,
+              "quote": "- 存货超过收入的 **45%**；"
+            }
+          ],
+          "node_id": "inventory-above-45",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "存货超过收入的 45%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 278,
+              "line_end": 278,
+              "quote": "- 信用与资产减值合计再次超过当年归母净利润；"
+            }
+          ],
+          "node_id": "impairment-above-parent-profit",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "信用与资产减值合计再次超过当年归母净利润。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                  "line_start": 279,
+                  "line_end": 279,
+                  "quote": "- 严格口径净现金持续为负，且短期有息负债增长快于经营现金流；"
+                }
+              ],
+              "node_id": "strict-net-cash-negative",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "严格口径净现金持续为负。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+                  "line_start": 279,
+                  "line_end": 279,
+                  "quote": "- 严格口径净现金持续为负，且短期有息负债增长快于经营现金流；"
+                }
+              ],
+              "node_id": "short-debt-faster-than-ocf",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "短期有息负债增长快于经营现金流。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 279,
+              "line_end": 279,
+              "quote": "- 严格口径净现金持续为负，且短期有息负债增长快于经营现金流；"
+            }
+          ],
+          "node_id": "strict-net-cash-negative-and-short-debt-up",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "严格口径净现金持续为负，且短期有息负债增长快于经营现金流。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 280,
+              "line_end": 280,
+              "quote": "- 再次出现重大财务造假、资金占用或同类信息披露处罚。"
+            }
+          ],
+          "node_id": "major-governance-recurrence",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "再次出现重大财务造假、资金占用或同类信息披露处罚。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "line_start": 270,
+          "line_end": 280,
+          "quote": "### 4.5 论文失效条件"
+        }
+      ],
+      "node_id": "thesis-invalid-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "任一观察规则出现时论文失效或需重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "扣非 ROE（连续两个完整年度）",
+          "operator": "GT",
+          "value": 8,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 427,
+              "line_end": 427,
+              "quote": "- **上调估值触发：** 扣非 ROE 连续两个完整年度超过 8%，扣非/归母超过 70%，归母/合并净利润超过 50%，且经营现金流覆盖资本开支与分红。"
+            }
+          ],
+          "node_id": "adjusted-roe-above-8-two-years",
+          "kind": "METRIC_COMPARE",
+          "effect": "MONITOR",
+          "scope": "both",
+          "description": "扣非 ROE 连续两个完整年度超过 8%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "扣非/归母",
+          "operator": "GT",
+          "value": 70,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 427,
+              "line_end": 427,
+              "quote": "- **上调估值触发：** 扣非 ROE 连续两个完整年度超过 8%，扣非/归母超过 70%，归母/合并净利润超过 50%，且经营现金流覆盖资本开支与分红。"
+            }
+          ],
+          "node_id": "adjusted-parent-above-70",
+          "kind": "METRIC_COMPARE",
+          "effect": "MONITOR",
+          "scope": "both",
+          "description": "扣非归母利润占归母净利润超过 70%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "归母/合并净利润",
+          "operator": "GT",
+          "value": 50,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 427,
+              "line_end": 427,
+              "quote": "- **上调估值触发：** 扣非 ROE 连续两个完整年度超过 8%，扣非/归母超过 70%，归母/合并净利润超过 50%，且经营现金流覆盖资本开支与分红。"
+            }
+          ],
+          "node_id": "parent-consolidated-above-50",
+          "kind": "METRIC_COMPARE",
+          "effect": "MONITOR",
+          "scope": "both",
+          "description": "归母净利润占合并净利润超过 50%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+              "line_start": 427,
+              "line_end": 427,
+              "quote": "- **上调估值触发：** 扣非 ROE 连续两个完整年度超过 8%，扣非/归母超过 70%，归母/合并净利润超过 50%，且经营现金流覆盖资本开支与分红。"
+            }
+          ],
+          "node_id": "ocf-covers-capex-dividend",
+          "kind": "QUALITATIVE",
+          "effect": "MONITOR",
+          "scope": "both",
+          "description": "经营现金流覆盖资本开支与分红。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "line_start": 427,
+          "line_end": 427,
+          "quote": "- **上调估值触发：** 扣非 ROE 连续两个完整年度超过 8%，扣非/归母超过 70%，归母/合并净利润超过 50%，且经营现金流覆盖资本开支与分红。"
+        }
+      ],
+      "node_id": "rerating-all",
+      "kind": "ALL",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "扣非 ROE、扣非利润占比、归母利润占比和现金覆盖四项全部改善后上调估值。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 6.97,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 收盘价 | 6.97 元人民币 | 3.25 港元 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 3.25,
+      "min": null,
+      "max": null,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "line_start": 13,
+          "line_end": 13,
+          "quote": "| 收盘价 | 6.97 元人民币 | 3.25 港元 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三情景价格",
+      "price_role": "SCENARIO_VALUE",
+      "value": null,
+      "min": 1.2,
+      "max": 8.0,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "line_start": 371,
+          "line_end": 373,
+          "quote": "| 乐观 | 40% | 35 倍 | 8.0 元 | +14.8% | 20 倍 | 5.3 港元 | +62.4% |\n| 基准 | 20% | 22 倍 | 3.2 元 | -54.6% | 14 倍 | 2.3 港元 | -28.4% |\n| 悲观 | 0% | 15 倍 | 1.2 元 | -82.1% | 8 倍 | 0.8 港元 | -76.3% |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股三情景价格",
+      "price_role": "SCENARIO_VALUE",
+      "value": null,
+      "min": 0.8,
+      "max": 5.3,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+          "line_start": 371,
+          "line_end": 373,
+          "quote": "| 乐观 | 40% | 35 倍 | 8.0 元 | +14.8% | 20 倍 | 5.3 港元 | +62.4% |\n| 基准 | 20% | 22 倍 | 3.2 元 | -54.6% | 14 倍 | 2.3 港元 | -28.4% |\n| 悲观 | 0% | 15 倍 | 1.2 元 | -82.1% | 8 倍 | 0.8 港元 | -76.3% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约将 A/H 分化结论压成统一‘观察’，并把 A 股观察区误列为激进型动作，遗漏 A 股当前回避。",
+    "evidence": [
+      {
+        "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+        "line_start": 508,
+        "line_end": 515,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | - 空仓者： A 股不买；H 股加入观察清单，等待不高于 1.55 港元或基本面出现可验证的结构性改善。 |\n| 激进型动作 | 等待，不追价 |\n| 激进型价格区间 | 3.0—3.5 元 |\n| 稳健型动作 | 未给出 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 基本面通过验证后分批买入 |\n| 保守型价格区间 | 不高于 2.1 元 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+      "line_start": 385,
+      "line_end": 398,
+      "quote": "### 7.4 价格纪律"
+    },
+    {
+      "report_path": "reports/上海电气/上海电气研究报告-20260730.md",
+      "line_start": 421,
+      "line_end": 443,
+      "quote": "### 8.2 对不同持有者的建议"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "MULTI_MARKET"
+  ]
+}

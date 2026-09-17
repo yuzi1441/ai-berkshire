@@ -1,0 +1,669 @@
+{
+  "schema_version": 2,
+  "ticker": "002352.SZ",
+  "company": "顺丰控股股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+    "report_sha256": "a61d4247dc1281b20ca959b7b4e16a1e0b0b7ceaaa27cc82185174eff4b8596e"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "A 股与 H 股价格路径通过 instrument_scope 分离，港元区间不会成为 A 股买入价",
+      "A 股 30-34 元只编译为小额试探，27-30 元才是分批买入路径",
+      "A 股 23-26 元是重点研究区而非直接买入区",
+      "H 股 31.4-34.9 港元分批路径保留半年报确认扣非利润和 FCF 改善的前提",
+      "论文失效条件保留 ALL 与重大事件 OR 的嵌套逻辑"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "A 股接近合理价以观察为主；H 股折价后可在验证前提下分批研究。",
+    "evidence": [
+      {
+        "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+        "line_start": 231,
+        "line_end": 233,
+        "quote": "### 明确结论\n\n**基本面建议：A股观察，H股可分批研究买入。** 顺丰是值得长期跟踪的高质量物流系统，但不是高毛利复利股。33.80元A股对应中性情景的上行空间有限；33.26港元H股因人民币折价约15.38%，风险收益比更好，但不能忽略汇率、海外和交叉持股风险。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "A 股当前观察；A 股有试探、分批与重点研究三层价格语义，H 股分批路径需要半年报验证。",
+      "entry_semantic": "UNCONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "a-trial-30-34",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 30-34 元仅可小额试探。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 30,
+            "price_max": 34,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                "line_start": 209,
+                "line_end": 209,
+                "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
+              }
+            ],
+            "node_id": "a-price-30-34",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 30-34 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+              "line_start": 209,
+              "line_end": 209,
+              "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-entry-27-30",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 27-30 元可分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 27,
+            "price_max": 30,
+            "currency": "CNY",
+            "price_role": "UNCONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                "line_start": 209,
+                "line_end": 209,
+                "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
+              }
+            ],
+            "node_id": "a-price-27-30",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 27-30 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+              "line_start": 209,
+              "line_end": 209,
+              "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-review-23-26",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股 23-26 元进入重点研究买入区，不等于自动买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 23,
+            "price_max": 26,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                "line_start": 209,
+                "line_end": 209,
+                "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
+              }
+            ],
+            "node_id": "a-review-price-23-26",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 23-26 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+              "line_start": 209,
+              "line_end": 209,
+              "quote": "| A股 | 30-34元，小额试探 | 27-30元，分批买入 | 23-26元，重点研究买入 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "h-entry-31.4-34.9-after-h1",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "H_SHARE",
+          "summary": "H 股 31.4-34.9 港元且半年报确认扣非利润和 FCF 改善后可分批。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 31.4,
+                "price_max": 34.9,
+                "currency": "HKD",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                    "line_start": 237,
+                    "line_end": 237,
+                    "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
+                  }
+                ],
+                "node_id": "h-price-31.4-34.9",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "H 股价格处于 31.4-34.9 港元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                    "line_start": 237,
+                    "line_end": 237,
+                    "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
+                  }
+                ],
+                "node_id": "h1-profit-fcf-improve",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "半年报确认扣非利润和 FCF 改善。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                "line_start": 237,
+                "line_end": 237,
+                "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
+              }
+            ],
+            "node_id": "h-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "H 股价格处于 31.4-34.9 港元并通过半年报验证。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+              "line_start": 237,
+              "line_end": 237,
+              "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+          "line_start": 237,
+          "line_end": 237,
+          "quote": "| 空仓者 | A股观察；H股在31.4-34.9港元可分批，前提是半年报确认扣非利润和FCF改善 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "继续持有，不在 A 股 33.80 元追涨，以半年报和经营简报复核。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "a-add-below-30-with-quality",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股低于 30 元且单票收入、毛利率和 FCF 条件同时满足时加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 30,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                    "line_start": 239,
+                    "line_end": 239,
+                    "quote": "| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |"
+                  }
+                ],
+                "node_id": "a-add-price-below-30",
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "A 股价格低于 30 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                    "line_start": 239,
+                    "line_end": 239,
+                    "quote": "| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |"
+                  }
+                ],
+                "node_id": "unit-price-stable",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "单票收入稳定。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "毛利率",
+                "operator": "GTE",
+                "value": 13,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                    "line_start": 239,
+                    "line_end": 239,
+                    "quote": "| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |"
+                  }
+                ],
+                "node_id": "margin-at-least-13",
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "毛利率不低于 13%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                    "line_start": 239,
+                    "line_end": 239,
+                    "quote": "| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |"
+                  }
+                ],
+                "node_id": "fcf-not-continuing-decline",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "FCF 不再连续下降。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                "line_start": 239,
+                "line_end": 239,
+                "quote": "| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |"
+              }
+            ],
+            "node_id": "a-add-all",
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "A 股低于 30 元且经营质量三项同时满足。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+              "line_start": 239,
+              "line_end": 239,
+              "quote": "| 加仓信号 | A股回到30元以下或H股回到31.4港元以下，且单票收入稳定、毛利率不低于13%、FCF不再连续下降 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+          "line_start": 238,
+          "line_end": 238,
+          "quote": "| 持仓者 | 继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "连续两个报告期毛利率",
+              "operator": "LT",
+              "value": 12.5,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                  "line_start": 241,
+                  "line_end": 241,
+                  "quote": "| 卖出或论文失效 | 连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出；或出现重大安全、治理和减值事件 |"
+                }
+              ],
+              "node_id": "margin-below-12.5-two-periods",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "连续两个报告期毛利率低于 12.5%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                  "line_start": 241,
+                  "line_end": 241,
+                  "quote": "| 卖出或论文失效 | 连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出；或出现重大安全、治理和减值事件 |"
+                }
+              ],
+              "node_id": "adjusted-profit-negative-yoy",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "扣非利润同比转负。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+                  "line_start": 241,
+                  "line_end": 241,
+                  "quote": "| 卖出或论文失效 | 连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出；或出现重大安全、治理和减值事件 |"
+                }
+              ],
+              "node_id": "ocf-below-capex",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "经营现金流低于资本支出。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+              "line_start": 241,
+              "line_end": 241,
+              "quote": "| 卖出或论文失效 | 连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出；或出现重大安全、治理和减值事件 |"
+            }
+          ],
+          "node_id": "two-period-operating-failure",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "连续两个报告期毛利率低于 12.5%，扣非利润同比转负且经营现金流低于资本支出。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+              "line_start": 241,
+              "line_end": 241,
+              "quote": "| 卖出或论文失效 | 连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出；或出现重大安全、治理和减值事件 |"
+            }
+          ],
+          "node_id": "major-safety-governance-impairment",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "出现重大安全、治理或减值事件。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+          "line_start": 241,
+          "line_end": 241,
+          "quote": "| 卖出或论文失效 | 连续两个报告期毛利率低于12.5%，扣非利润同比转负且经营现金流低于资本支出；或出现重大安全、治理和减值事件 |"
+        }
+      ],
+      "node_id": "thesis-invalid-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "经营三项同时恶化，或发生重大安全、治理、减值事件时论文失效。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+          "line_start": 238,
+          "line_end": 238,
+          "quote": "| 持仓者 | 继续持有，不在A股33.80元追涨；以半年报和经营简报为复核节点 |"
+        }
+      ],
+      "node_id": "monitor-h1-and-monthly",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "以半年报和经营简报复核利润、现金流和经营质量。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 20.5,
+      "max": 49.0,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+          "line_start": 197,
+          "line_end": 201,
+          "quote": "| 情景 | 三年年化EPS增速 | 退出PE | 三年目标价 | 相对33.80元 |\n|---|---:|---:|---:|---:|\n| 乐观 | +12% | 16倍 | **49.0元** | +45.0% |\n| 中性 | +7% | 14倍 | **37.4元** | +10.7% |\n| 悲观 | -2% | 10倍 | **20.5元** | -39.3% |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 33.26,
+      "min": null,
+      "max": null,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> A股收盘价：33.80元；H股收盘价：33.26港元，按港元兑人民币0.859906656719折合28.60元  "
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/顺丰控股/顺丰控股研究报告-20260810.md",
+      "line_start": 205,
+      "line_end": 241,
+      "quote": "### 价格带与行动阈值"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "UNCONDITIONAL_ENTRY",
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "MULTI_MARKET"
+  ]
+}

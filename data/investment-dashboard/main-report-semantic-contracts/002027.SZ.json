@@ -1,0 +1,663 @@
+{
+  "schema_version": 2,
+  "ticker": "002027.SZ",
+  "company": "分众传媒",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+    "report_sha256": "d4434d4217086e14591bc6fe9128ecf00d43690dcc1b59a5d0139ec4f8fdb8e5"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "4.8-5.3 元是现价附近的小仓试仓路径，首仓不超过目标仓位 25%-30%，不是无条件重仓",
+      "4.3-4.8 元和 3.8-4.2 元是更厚安全边际的条件买入区，目标价 3.9-7.9 元没有被当成买入价",
+      "5.3-7.4 元的持有区只适用于已有持仓者，未泄漏为空仓买入",
+      "新潮并购协同没有提前计入；并购审批、商誉、客户集中和现金流条件保留为风险约束",
+      "买入论文失效条件保留了连续半年收入下降、经济 FCF、第一大客户、并购后八季度和核心点位五组逻辑"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "TRIAL_POSITION",
+    "scope": "both",
+    "summary": "核心点位和现金流质量较好，现价可分批建立小仓，但并购稀释、客户集中和广告周期使其不是高确定性重仓机会。",
+    "evidence": [
+      {
+        "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+        "line_start": 6,
+        "line_end": 6,
+        "quote": "> 一句话结论：**好生意、中等价钱、有现金回报，但不是垄断成长股；现价适合分批，不适合重仓押注并购。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "TRIAL_POSITION",
+      "summary": "现价 4.8-5.3 元可小仓分批；4.3-4.8 元和 3.8-4.2 元分别提供更厚安全边际，均需接受周期及并购风险。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "trial-4.8-5.3",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "4.8-5.3 元现价附近小仓分批，首仓不超过目标仓位 25%-30%。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 4.8,
+            "price_max": 5.3,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                "line_start": 251,
+                "line_end": 251,
+                "quote": "| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |"
+              }
+            ],
+            "node_id": "trial-price-4.8-5.3",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 4.8-5.3 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 251,
+              "line_end": 251,
+              "quote": "| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conditional-4.3-4.8",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "4.3-4.8 元等待更厚安全边际后分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 4.3,
+            "price_max": 4.8,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                "line_start": 252,
+                "line_end": 252,
+                "quote": "| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |"
+              }
+            ],
+            "node_id": "entry-price-4.3-4.8",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 4.3-4.8 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 252,
+              "line_end": 252,
+              "quote": "| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conditional-3.8-4.2",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "3.8-4.2 元深度折价时买入，为并购和客户集中留出余量。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 3.8,
+            "price_max": 4.2,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                "line_start": 253,
+                "line_end": 253,
+                "quote": "| 保守型 | 仅深度折价时买入 | 3.8—4.2 元 | 10.0—11.1 倍 | 接近悲观情景，为并购和客户集中留出余量 |"
+              }
+            ],
+            "node_id": "entry-price-3.8-4.2",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 3.8-4.2 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 253,
+              "line_end": 253,
+              "quote": "| 保守型 | 仅深度折价时买入 | 3.8—4.2 元 | 10.0—11.1 倍 | 接近悲观情景，为并购和客户集中留出余量 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+          "line_start": 247,
+          "line_end": 255,
+          "quote": "### 8.3 价格与动作\n\n| 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 |\n|---|---|---:|---:|---|\n| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |\n| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |\n| 保守型 | 仅深度折价时买入 | 3.8—4.2 元 | 10.0—11.1 倍 | 接近悲观情景，为并购和客户集中留出余量 |\n| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |\n| 所有投资者 | 考虑减持 | ≥7.5 元 | ≥19.8 倍 | 若基本面没有同步上修，股息与增长难支撑更高估值 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "5.3-7.4 元持有但不追高，继续收取现金回报并等待业绩验证。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-5.3-7.4",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "持有，不追高，等待业绩验证。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 254,
+              "line_end": 254,
+              "quote": "| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+          "line_start": 254,
+          "line_end": 254,
+          "quote": "| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "楼宇媒体收入同比变化",
+              "operator": "LT",
+              "value": "10%",
+              "unit": "decline_threshold",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                  "line_start": 291,
+                  "line_end": 291,
+                  "quote": "1. 连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长；"
+                }
+              ],
+              "node_id": "building-revenue-down-10",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "连续两个半年期楼宇媒体收入下降超过 10%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                  "line_start": 291,
+                  "line_end": 291,
+                  "quote": "1. 连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长；"
+                }
+              ],
+              "node_id": "industry-total-still-grows",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "行业总量仍增长。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 291,
+              "line_end": 291,
+              "quote": "1. 连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长；"
+            }
+          ],
+          "node_id": "building-revenue-down-and-market-up",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "年化经济 FCF",
+          "operator": "LT",
+          "value": 35,
+          "unit": "CNY亿元",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 292,
+              "line_end": 292,
+              "quote": "2. 年化经济 FCF 降至 35 亿元以下，且非单纯因客户回款季节性波动；"
+            }
+          ],
+          "node_id": "economic-fcf-below-35",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "年化经济 FCF 降至 35 亿元以下，且不是单纯客户回款季节性波动。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "第一大客户收入占比",
+              "operator": "GT",
+              "value": 0.2,
+              "unit": "ratio",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                  "line_start": 293,
+                  "line_end": 293,
+                  "quote": "3. 第一大客户收入持续超过 20%，随后客户大幅削减投放，且无新行业补位；"
+                }
+              ],
+              "node_id": "largest-customer-above-20",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "第一大客户收入持续超过 20%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                  "line_start": 293,
+                  "line_end": 293,
+                  "quote": "3. 第一大客户收入持续超过 20%，随后客户大幅削减投放，且无新行业补位；"
+                }
+              ],
+              "node_id": "customer-cut-no-replacement",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "客户大幅削减投放且无新行业补位。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 293,
+              "line_end": 293,
+              "quote": "3. 第一大客户收入持续超过 20%，随后客户大幅削减投放，且无新行业补位；"
+            }
+          ],
+          "node_id": "largest-customer-concentration-and-cut",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "第一大客户收入持续超过 20%，随后客户大幅削减投放且无新行业补位。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                  "line_start": 294,
+                  "line_end": 294,
+                  "quote": "4. 新潮完成后八个季度内，每股经济 FCF 仍未恢复至并购前水平，或发生重大商誉减值；"
+                }
+              ],
+              "node_id": "post-merger-eight-quarters-no-recovery",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "新潮完成后八个季度内每股经济 FCF 仍未恢复至并购前水平。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                  "line_start": 294,
+                  "line_end": 294,
+                  "quote": "4. 新潮完成后八个季度内，每股经济 FCF 仍未恢复至并购前水平，或发生重大商誉减值；"
+                }
+              ],
+              "node_id": "material-goodwill-impairment",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "发生重大商誉减值。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 294,
+              "line_end": 294,
+              "quote": "4. 新潮完成后八个季度内，每股经济 FCF 仍未恢复至并购前水平，或发生重大商誉减值；"
+            }
+          ],
+          "node_id": "post-merger-fcf-or-goodwill",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "新潮完成后八个季度内每股经济 FCF 未恢复并购前水平，或发生重大商誉减值。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                  "line_start": 295,
+                  "line_end": 295,
+                  "quote": "5. 核心楼宇资源明显流失，且媒体资源成本或租赁现金流连续两期快于收入增长。"
+                }
+              ],
+              "node_id": "core-site-loss",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "核心楼宇资源明显流失。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+                  "line_start": 295,
+                  "line_end": 295,
+                  "quote": "5. 核心楼宇资源明显流失，且媒体资源成本或租赁现金流连续两期快于收入增长。"
+                }
+              ],
+              "node_id": "rent-cost-faster-than-revenue",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "媒体资源成本或租赁现金流连续两期快于收入增长。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+              "line_start": 295,
+              "line_end": 295,
+              "quote": "5. 核心楼宇资源明显流失，且媒体资源成本或租赁现金流连续两期快于收入增长。"
+            }
+          ],
+          "node_id": "core-sites-and-rent-cost",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "核心楼宇资源明显流失，且媒体资源成本或租赁现金流连续两期快于收入增长。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+          "line_start": 289,
+          "line_end": 295,
+          "quote": "**买入失效条件：**\n\n1. 连续两个半年期楼宇媒体收入下降超过 10%，同时行业总量仍增长；\n2. 年化经济 FCF 降至 35 亿元以下，且非单纯因客户回款季节性波动；\n3. 第一大客户收入持续超过 20%，随后客户大幅削减投放，且无新行业补位；\n4. 新潮完成后八个季度内，每股经济 FCF 仍未恢复至并购前水平，或发生重大商誉减值；\n5. 核心楼宇资源明显流失，且媒体资源成本或租赁现金流连续两期快于收入增长。"
+        }
+      ],
+      "node_id": "thesis-invalidation-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "买入论文失效条件任一满足时重审或减持。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+          "line_start": 297,
+          "line_end": 299,
+          "quote": "### 9.4 下次复核\n\n**建议在 2026-09-05 前后复核**，重点看 2026 年半年报的客户行业结构、阿里系贡献、租赁现金流、经济 FCF、新潮审核是否恢复及交易方案有无调整。"
+        }
+      ],
+      "node_id": "media-fcf-merger-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控客户行业结构、阿里系贡献、租赁现金流、经济 FCF、新潮审核和交易方案变化。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "最新收盘",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 5.14,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> 最新收盘：5.14 元；总市值：742.33 亿元"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 3.9,
+      "max": 7.9,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+          "line_start": 239,
+          "line_end": 243,
+          "quote": "| 情景 | EPS 年增速 | 2029 EPS | 目标 PE | 目标价 | 较 5.14 元 |\n|---|---:|---:|---:|---:|---:|\n| 乐观 | 8% | 0.47 元 | 17 倍 | 7.9 元 | +54.2% |\n| 基准 | 4% | 0.42 元 | 15 倍 | 6.2 元 | +21.5% |\n| 悲观 | -4% | 0.33 元 | 12 倍 | 3.9 元 | -23.6% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约表达了价格带和部分失效条件，但没有保留持有者价格区间、并购审批与客户集中等完整语义。",
+    "evidence": [
+      {
+        "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+        "line_start": 374,
+        "line_end": 382,
+        "quote": "| 基本面建议动作 | 分批买入 |\n| 结论摘要 | 核心点位与现金流优质，现价可分批，但并购稀释和客户集中压低确定性。 |\n| 激进型动作 | 现价附近小仓分批 |\n| 激进型价格区间 | 4.8-5.3 元 |\n| 稳健型动作 | 等待更厚安全边际 |\n| 稳健型价格区间 | 4.3-4.8 元 |\n| 保守型动作 | 仅在深度折价时买入 |\n| 保守型价格区间 | 3.8-4.2 元 |\n| 买入失效条件 | 楼宇收入两个半年降幅超 10%；经济 FCF 低于 35 亿元；并购后八季度每股 FCF 未恢复或重大商誉减值 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/分众传媒/分众传媒研究报告-20260808.md",
+      "line_start": 247,
+      "line_end": 257,
+      "quote": "### 8.3 价格与动作\n\n| 投资者 | 动作 | 价格区间 | 约对应正常化 PE | 理由 |\n|---|---|---:|---:|---|\n| 进攻型 | 现价附近小仓分批 | 4.8—5.3 元 | 12.7—14.0 倍 | 接受并购与广告周期波动，主要收获现金回报 |\n| 稳健型 | 等待更厚安全边际 | 4.3—4.8 元 | 11.3—12.7 倍 | 对应经济 FCF 收益率约 6.4%—7.2% |\n| 保守型 | 仅深度折价时买入 | 3.8—4.2 元 | 10.0—11.1 倍 | 接近悲观情景，为并购和客户集中留出余量 |\n| 持有者 | 持有，不追高 | 5.3—7.4 元 | 14.0—19.5 倍 | 继续收取现金回报，等待业绩验证 |\n| 所有投资者 | 考虑减持 | ≥7.5 元 | ≥19.8 倍 | 若基本面没有同步上修，股息与增长难支撑更高估值 |\n\n**大师会问：如果交易所明天关门，我愿意持有五年吗？** 在不把 6.61% 历史股息率当作保底，且接受一个完整广告周期的前提下，4.3—5.3 元区间可以；高于 7.5 元则需要新的增长证据。"
+    }
+  ],
+  "business_risk_reasons": [
+    "MERGER_UNCERTAINTY"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
+  ]
+}

@@ -1,0 +1,738 @@
+{
+  "schema_version": 2,
+  "ticker": "002050.SZ",
+  "company": "浙江三花智能控制股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+    "report_sha256": "41c278ff94673f896ac0b63cb11c6c922d9060cf9c478b1cb207218e5282c87e"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "本合同只编译 A 股语义；报告同时有 H 股价格和路径，H 股不进入 A 股动作结果，但作为多市场强复核原因保留。",
+      "A 股 28-32 元是小额分批区，23-28 元是分批买入区，16-23 元是重点研究与分批区；38.53 元明确在买入带之外。",
+      "三年后价格 21.20-67.10 元及折现现值 15.95-50.44 元是估值参考，不直接等于当前买入区。",
+      "机器人和液冷仍缺少可核验收入，未把研发、送样或远期空间编译成确定性买入条件。",
+      "持仓者加仓需要价格进入对应买入带、扣非利润双位数增长且经营现金流不弱于利润；减仓和论文失效路径独立保留。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "三花智控是热管理控制部件全球化制造龙头，但 A 股 38.53 元已预支较强增长，机器人和液冷尚不足以支撑基准估值，当前观察不追价。",
+    "evidence": [
+      {
+        "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+        "line_start": 13,
+        "line_end": 13,
+        "quote": "| 基本面动作 | **观察，不追价** | **有港股条件者可小额分批研究** |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "A 股当前 38.53 元在买入带之外；28-32 元可小额分批，23-28 元分批买入，16-23 元重点研究后分批。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-a-share-current-38-53",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股当前 38.53 元在买入带之外，等待更好价格或新业务兑现。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                "line_start": 268,
+                "line_end": 268,
+                "quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
+              }
+            ],
+            "node_id": "watch-a-share-current",
+            "kind": "QUALITATIVE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股当前 38.53 元在买入带之外。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 268,
+              "line_end": 268,
+              "quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-share-trial-28-32",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "28-32 元接近基准现值，可小额分批并承受新业务兑现波动。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 28,
+            "price_max": 32,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                "line_start": 262,
+                "line_end": 262,
+                "quote": "| A 股激进型 | 28-32 元 | 小额分批 | 接近基准现值，仍需承受新业务兑现波动 |"
+              }
+            ],
+            "node_id": "a-share-trial-price-28-32",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 28-32 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 262,
+              "line_end": 262,
+              "quote": "| A 股激进型 | 28-32 元 | 小额分批 | 接近基准现值，仍需承受新业务兑现波动 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-share-conditional-23-28",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "23-28 元对基准价值有一定折价时分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 23,
+            "price_max": 28,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                "line_start": 263,
+                "line_end": 263,
+                "quote": "| A 股稳健型 | 23-28 元 | 分批买入 | 对基准价值有一定折价，接近 H 股当前估值 |"
+              }
+            ],
+            "node_id": "a-share-entry-price-23-28",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 23-28 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 263,
+              "line_end": 263,
+              "quote": "| A 股稳健型 | 23-28 元 | 分批买入 | 对基准价值有一定折价，接近 H 股当前估值 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-share-conditional-16-23",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "16-23 元接近悲观至基准区间，论文未受损时重点研究与分批。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 16,
+            "price_max": 23,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                "line_start": 264,
+                "line_end": 264,
+                "quote": "| A 股保守型 | 16-23 元 | 重点研究与分批 | 接近悲观至基准区间，前提是论文未受损 |"
+              }
+            ],
+            "node_id": "a-share-entry-price-16-23",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 16-23 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 264,
+              "line_end": 264,
+              "quote": "| A 股保守型 | 16-23 元 | 重点研究与分批 | 接近悲观至基准区间，前提是论文未受损 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 268,
+          "line_end": 268,
+          "quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "A 股基本面未坏可持有但当前不加仓；价格显著高于 50 元且利润未上修时考虑降低估值风险。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "a-share-holder-hold",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股基本面未坏可持有，但当前不加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 298,
+              "line_end": 298,
+              "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-share-holder-add-with-quality",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "价格进入对应 A 股买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润时才考虑加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                    "line_start": 300,
+                    "line_end": 300,
+                    "quote": "| 加仓信号 | 价格进入对应买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润 |"
+                  }
+                ],
+                "node_id": "a-share-holder-add-price-band",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "价格进入对应 A 股买入带。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                    "line_start": 300,
+                    "line_end": 300,
+                    "quote": "| 加仓信号 | 价格进入对应买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润 |"
+                  }
+                ],
+                "node_id": "a-share-holder-add-profit-growth",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "TTM 扣非利润保持双位数增长。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                    "line_start": 300,
+                    "line_end": 300,
+                    "quote": "| 加仓信号 | 价格进入对应买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润 |"
+                  }
+                ],
+                "node_id": "a-share-holder-add-cfo",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "经营现金流不弱于利润。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                "line_start": 300,
+                "line_end": 300,
+                "quote": "| 加仓信号 | 价格进入对应买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润 |"
+              }
+            ],
+            "node_id": "a-share-holder-add-all",
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格进入对应买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 300,
+              "line_end": 300,
+              "quote": "| 加仓信号 | 价格进入对应买入带，且 TTM 扣非利润保持双位数增长、经营现金流不弱于利润 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "a-share-holder-reduce-above-50",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "A 股价格显著高于 50 元且利润未上修时，考虑降低估值风险。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "GT",
+                "value": null,
+                "unit": null,
+                "price_min": 50,
+                "price_max": null,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                    "line_start": 298,
+                    "line_end": 298,
+                    "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
+                  }
+                ],
+                "node_id": "a-share-holder-reduce-price-50",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格显著高于 50 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                    "line_start": 298,
+                    "line_end": 298,
+                    "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
+                  }
+                ],
+                "node_id": "a-share-holder-reduce-no-profit-upgrade",
+                "kind": "QUALITATIVE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "利润未上修。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+                "line_start": 298,
+                "line_end": 298,
+                "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
+              }
+            ],
+            "node_id": "a-share-holder-reduce-all",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "价格显著高于 50 元且利润未上修。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 298,
+              "line_end": 298,
+              "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 298,
+          "line_end": 298,
+          "quote": "| A 股持仓者 | 基本面未坏可持有，但当前不加仓；若价格显著高于 50 元且利润未上修，可考虑降低估值风险 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "核心热管理业务毛利率",
+          "operator": "LT",
+          "value": "25%",
+          "unit": "ratio",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 302,
+              "line_end": 302,
+              "quote": "| 论文失效 | 核心热管理业务毛利率连续两个报告期低于 25%、主要产品份额显著下降、经营现金流持续弱于利润，或重大治理问题出现 |"
+            }
+          ],
+          "node_id": "core-margin-below-25",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "核心热管理业务毛利率连续两个报告期低于 25%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 302,
+              "line_end": 302,
+              "quote": "| 论文失效 | 核心热管理业务毛利率连续两个报告期低于 25%、主要产品份额显著下降、经营现金流持续弱于利润，或重大治理问题出现 |"
+            }
+          ],
+          "node_id": "major-product-share-down",
+          "kind": "QUALITATIVE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "主要产品份额显著下降。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 302,
+              "line_end": 302,
+              "quote": "| 论文失效 | 核心热管理业务毛利率连续两个报告期低于 25%、主要产品份额显著下降、经营现金流持续弱于利润，或重大治理问题出现 |"
+            }
+          ],
+          "node_id": "cfo-weaker-than-profit",
+          "kind": "QUALITATIVE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "经营现金流持续弱于利润。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+              "line_start": 302,
+              "line_end": 302,
+              "quote": "| 论文失效 | 核心热管理业务毛利率连续两个报告期低于 25%、主要产品份额显著下降、经营现金流持续弱于利润，或重大治理问题出现 |"
+            }
+          ],
+          "node_id": "material-governance-problem",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "出现重大治理问题。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 302,
+          "line_end": 302,
+          "quote": "| 论文失效 | 核心热管理业务毛利率连续两个报告期低于 25%、主要产品份额显著下降、经营现金流持续弱于利润，或重大治理问题出现 |"
+        }
+      ],
+      "node_id": "thesis-invalidation-any",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "论文失效条件任一满足时停止沿用原结论并重审。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 324,
+          "line_end": 324,
+          "quote": "1. 2026H1 制冷和汽车两大业务的收入、毛利率与现金流是否继续改善。"
+        }
+      ],
+      "node_id": "a-share-h1-core-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "复核 2026H1 制冷和汽车两大业务的收入、毛利率与现金流是否继续改善。"
+    },
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 326,
+          "line_end": 327,
+          "quote": "3. 数据中心液冷是否披露客户结构、定点、收入或产能利用率。\n4. 机器人是否从研发、试制、迭代、送样跨入可核验的定点与量产阶段。"
+        }
+      ],
+      "node_id": "new-business-validation-monitor",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪液冷客户结构、定点、收入和产能利用率，以及机器人是否进入可核验定点与量产。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股 2026-08-10 收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 38.53,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 8,
+          "line_end": 8,
+          "quote": "| 2026-08-10 收盘价 | 38.53 元 | 26.10 港元 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三年后情景价格范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 21.2,
+      "max": 67.1,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 240,
+          "line_end": 240,
+          "quote": "| 乐观 | 20% | 40 倍 | 1.68 元 | 67.10 元 | **50.44 元** | 汽车恢复、液冷放量、机器人开始贡献且高估值维持 |"
+        },
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 242,
+          "line_end": 242,
+          "quote": "| 悲观 | 3% | 20 倍 | 1.06 元 | 21.20 元 | **15.95 元** | 需求和价格承压、扩产回报偏低、估值回归制造业 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股三年后折现情景现值范围",
+      "price_role": "VALUATION_REFERENCE",
+      "value": null,
+      "min": 15.95,
+      "max": 50.44,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 240,
+          "line_end": 240,
+          "quote": "| 乐观 | 20% | 40 倍 | 1.68 元 | 67.10 元 | **50.44 元** | 汽车恢复、液冷放量、机器人开始贡献且高估值维持 |"
+        },
+        {
+          "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+          "line_start": 242,
+          "line_end": 242,
+          "quote": "| 悲观 | 3% | 20 倍 | 1.06 元 | 21.20 元 | **15.95 元** | 需求和价格承压、扩产回报偏低、估值回归制造业 |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "报告底部契约保留了 A 股观察和价格带，但没有表达多市场分离、持仓者加仓/减仓和新业务证据门槛的完整语义。",
+    "evidence": [
+      {
+        "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+        "line_start": 360,
+        "line_end": 360,
+        "quote": "| 基本面建议动作 | 观察 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/三花智控/三花智控-investment-research-20260810.md",
+      "line_start": 268,
+      "line_end": 268,
+      "quote": "| A 股当前 38.53 元 | 买入带之外 | **观察** | 安全边际不足，不为传闻付费 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "NEW_BUSINESS_UNVERIFIED"
+  ],
+  "semantic_review_reasons": [
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
+  ]
+}

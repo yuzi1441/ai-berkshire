@@ -1,0 +1,878 @@
+{
+  "schema_version": 1,
+  "authority": "candidate",
+  "production_consumable": false,
+  "description": "Evidence-bound Priority 20 leaf resolutions; never caches prices or evaluator states.",
+  "resolutions": [
+    {
+      "ticker": "603606.SH",
+      "company": "东方电缆",
+      "node_id": "h1-ocf-nonnegative",
+      "node_kind": "METRIC_COMPARE",
+      "semantic_contract_sha256": "8a218d6b2e60e1654b40bb5ab73dd6dd22014da4214dcc611263ed80ecdaabf0",
+      "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+      "node_semantic_fingerprint": "20681c48762ae1506a90222b6da5381d1036537984d3e53912226f9934dedced",
+      "state": true,
+      "resolution_status": "VALID",
+      "resolution_method": "deterministic_metric_from_verified_sources",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "东方电缆2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "date": "2026-08-05",
+          "value": "经营现金流 -1.5731 亿元"
+        },
+        {
+          "source_type": "financial_data",
+          "source": "东方财富2026H1财务解读",
+          "source_path": "https://finance.eastmoney.com/a/202608043831388121.html",
+          "date": "2026-08-04",
+          "value": "经营现金流与公司半年报核心数字一致；双源偏差0.00%"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "content_sha256": "fae291a3fa712537a96b7d2d3f32335ee31f814705c3852ff32ca9f08f949bf5"
+        },
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://finance.eastmoney.com/a/202608043831388121.html",
+          "content_sha256": "7fe5049569c6f2c2ea2df78613391989ce888d3808492b674147b17e893c6b02"
+        }
+      ],
+      "source_date": "2026-08-05",
+      "reporting_period": "2026H1",
+      "required_period": "2026H1",
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-12-31",
+      "review_after": null,
+      "reason_code": "DETERMINISTIC_METRIC_VERIFIED",
+      "reason": null,
+      "reviewed_by": "current_page_codex_semantic_review",
+      "actual_value": -1.5731,
+      "unit": "亿元"
+    },
+    {
+      "ticker": "603606.SH",
+      "company": "东方电缆",
+      "node_id": "empty-block-before-h1-review",
+      "node_kind": "MANUAL_REVIEW",
+      "semantic_contract_sha256": "8a218d6b2e60e1654b40bb5ab73dd6dd22014da4214dcc611263ed80ecdaabf0",
+      "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+      "node_semantic_fingerprint": "aea076ae4cecb022506ace9f1b041597063cfb3d8e79c800a9f42133328b55b9",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "东方电缆2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "date": "2026-08-05",
+          "value": "半年报已披露"
+        },
+        {
+          "source_type": "checklist",
+          "source": "东方电缆买入前Checklist",
+          "source_path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "date": "2026-08-20",
+          "value": "已按2026H1经营事实完成复核"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "content_sha256": "0a7b7d30e1bc3be0b9e26c1db1e1c4987e31fc9fb639d09dccf5f9e78f9cbc23"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "content_sha256": "a09e1febab5ca68efabc7d07b18b10aac673fb5bff977beeb73bd082722389bb"
+        }
+      ],
+      "source_date": "2026-08-20",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-12-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "2026H1半年报已经披露，并已完成基于该报告的买入前Checklist复核。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "000568.SZ",
+      "company": "泸州老窖",
+      "node_id": "contract-liability-recovery",
+      "node_kind": "QUALITATIVE",
+      "semantic_contract_sha256": "3a27abe87c7606f94cd1a8a3d2ece868c8be023fdab4d6cc372a4944e4b1c135",
+      "report_sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c",
+      "node_semantic_fingerprint": "572364498cf831a14069084de9d2aeaa21de0ea0da8971382f280f9b7f7baef2",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "泸州老窖2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501255.PDF",
+          "date": "2026-08-26",
+          "value": "H1合同负债24.37亿元，年初33.67亿元"
+        },
+        {
+          "source_type": "repo_fact",
+          "source": "泸州老窖公司系列复核",
+          "source_path": "reports/泸州老窖/《看懂泸州老窖》/04-终章-便宜不等于值得买.md",
+          "date": "2026-07-19",
+          "value": "2026Q1末合同负债约27.9亿元，仍在下降"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501255.PDF",
+          "content_sha256": "5623fcd75bd04d7f338a5f31480897f6a9b25994511fa737b127e8c2e97cd2ac"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/泸州老窖/《看懂泸州老窖》/04-终章-便宜不等于值得买.md",
+          "content_sha256": "d1d0c551f5cc87d24bd19dd200657755d0771770691e92411c2ddc2933958f62"
+        }
+      ],
+      "source_date": "2026-08-26",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "2026H1合同负债24.37亿元，低于2025年末33.67亿元和2026Q1约27.9亿元，不满足连续两季环比回升。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "000568.SZ",
+      "company": "泸州老窖",
+      "node_id": "profit-decline-narrows",
+      "node_kind": "QUALITATIVE",
+      "semantic_contract_sha256": "3a27abe87c7606f94cd1a8a3d2ece868c8be023fdab4d6cc372a4944e4b1c135",
+      "report_sha256": "a3181e0d1a61b7464d2c95f3f5c93f14407e4685bcbfd32087ddaab227fb666c",
+      "node_semantic_fingerprint": "ac14a4ded5b76b4cfd7cb2bac6c4331706100d172728f7515144d074a13d2c0e",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "泸州老窖2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501255.PDF",
+          "date": "2026-08-26",
+          "value": "H1归母净利润43.39亿元，同比-43.37%"
+        },
+        {
+          "source_type": "financial_data",
+          "source": "东方财富F10财务数据",
+          "record": "RPT_F10_FINANCE_MAINFINADATA:000568.SZ:2026H1/2026Q1",
+          "date": "2026-08-26",
+          "value": "H1同比-43.37%，Q1同比-19.25%"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501255.PDF",
+          "content_sha256": "0d215bf1f615e4064754a4bcc44359d62020dc2dc43a048ea1700fc867224aef"
+        },
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "RPT_F10_FINANCE_MAINFINADATA:000568.SZ:2026H1/2026Q1",
+          "content_sha256": "ca6542bdffdc28184e9bdc3c25189c894af2f9478e78bba18ba86c8d505e6b4b"
+        }
+      ],
+      "source_date": "2026-08-26",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "2026H1归母净利润同比-43.37%，较Q1同比-19.25%进一步扩大，未收窄至个位数。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "002415.SZ",
+      "company": "海康威视",
+      "node_id": "trial-cashflow-not-weaker",
+      "node_kind": "QUALITATIVE",
+      "semantic_contract_sha256": "254f20d770b903ad28da69e43e612e24a31d7444f18a207055369f976b9dcfcb",
+      "report_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db",
+      "node_semantic_fingerprint": "d28dd07917286d9ac9453d7d5cbed997b1a6ec556a9adcd800600073ff6b403c",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "海康威视2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225440236.PDF",
+          "date": "2026-07-25",
+          "value": "H1 OCF 32.31亿元、归母净利78.96亿元；上年同期53.43亿元、56.57亿元"
+        },
+        {
+          "source_type": "financial_data",
+          "source": "海康威视主报告双源核验",
+          "source_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "date": "2026-08-03",
+          "value": "H1 OCF 32.3141亿元，双源偏差0.00%"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225440236.PDF",
+          "content_sha256": "91db8fd197d7ee4e6183227410b2308dfde089de8c95a153aa47304dc710e52a"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "content_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db"
+        }
+      ],
+      "source_date": "2026-08-03",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "2025H1和2026H1经营现金流均低于同期归母净利润，2026H1现金流同比-39.52%。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "002415.SZ",
+      "company": "海康威视",
+      "node_id": "review-inventory-receivables-controlled",
+      "node_kind": "QUALITATIVE",
+      "semantic_contract_sha256": "254f20d770b903ad28da69e43e612e24a31d7444f18a207055369f976b9dcfcb",
+      "report_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db",
+      "node_semantic_fingerprint": "e2dd5c75070eec723089f91d97edcff1d1c097f514a3f9cab698abad321b2326",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "海康威视2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225440236.PDF",
+          "date": "2026-07-25",
+          "value": "应收277.84亿元、存货294.88亿元；年初298.12亿元、204.72亿元"
+        },
+        {
+          "source_type": "financial_data",
+          "source": "海康威视主报告复核",
+          "source_path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "date": "2026-08-03",
+          "value": "存货较年末增加约90.16亿元"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225440236.PDF",
+          "content_sha256": "e9ed1e6df9cf7224776782b5421b83ebe61ac47f723ee37f0d86c831b5168589"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/海康威视/海康威视研究报告-20260803.md",
+          "content_sha256": "d0144f3cca3e3ba8b110e0d193f774b5aeaf8fe2c91c0628488335494a5d54db"
+        }
+      ],
+      "source_date": "2026-08-03",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "应收下降但存货由204.72亿元升至294.88亿元，增加约90.16亿元，共同可控条件未成立。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "600276.SH",
+      "company": "恒瑞医疗",
+      "node_id": "hengrui-half-year-and-crl",
+      "node_kind": "MANUAL_REVIEW",
+      "semantic_contract_sha256": "1b42db840483f13bd406c5ca90bd927dc96dc30253132ad45062463af84868bb",
+      "report_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
+      "node_semantic_fingerprint": "e4fe6f490a9a32ea31ff14c1d5ad459d77a795e69034e252ba48f3a9bd98b5e7",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "thesis_tracker",
+          "source": "恒瑞医药2026H1投资论文复核",
+          "source_path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "date": "2026-08-21",
+          "value": "H1已复核；未披露CRL整改、复检或重报进展"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "repo_file",
+          "path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "content_sha256": "9018ca3ec438f403475b5df66c8d6c6310f760694802b8ed30b76ea160035889"
+        }
+      ],
+      "source_date": "2026-08-21",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "H1已复核，但CRL整改、复检或重报进展未披露。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "600276.SH",
+      "company": "恒瑞医疗",
+      "node_id": "hengrui-core-fundamentals-intact",
+      "node_kind": "MANUAL_REVIEW",
+      "semantic_contract_sha256": "1b42db840483f13bd406c5ca90bd927dc96dc30253132ad45062463af84868bb",
+      "report_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
+      "node_semantic_fingerprint": "b167e7f8073044bdcf8c492ae58b7abdf466720f9fd362f8ea592302b07174d0",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing_review",
+          "source": "恒瑞医药2026H1投资论文复核",
+          "source_path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "date": "2026-08-21",
+          "value": "健康度7/10降至5/10，经营论文边际弱化"
+        },
+        {
+          "source_type": "independent_media",
+          "source": "21世纪经济报道独立摘要",
+          "source_path": "https://www.21jingji.com/article/20260819/herald/0394857b6f2d9c611d064689a766b126.html",
+          "date": "2026-08-19",
+          "value": "H1经营和创新药数据交叉核验"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "repo_file",
+          "path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "content_sha256": "9018ca3ec438f403475b5df66c8d6c6310f760694802b8ed30b76ea160035889"
+        },
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://www.21jingji.com/article/20260819/herald/0394857b6f2d9c611d064689a766b126.html",
+          "content_sha256": "2ea1edea5f7d42fee16b41fb5db5f8352616f6038b38e1c766931d4d1326d779"
+        }
+      ],
+      "source_date": "2026-08-21",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "产品销售仅增1.87%、创新药增速低于20%阈值、OCF同比-53.8%，经营论文明确边际弱化。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "600276.SH",
+      "company": "恒瑞医疗",
+      "node_id": "hengrui-conservative-fundamentals-intact",
+      "node_kind": "MANUAL_REVIEW",
+      "semantic_contract_sha256": "1b42db840483f13bd406c5ca90bd927dc96dc30253132ad45062463af84868bb",
+      "report_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
+      "node_semantic_fingerprint": "b11674e02599fadf19a50cf05d873377f6269e34c7637cc3b2dab800849e0cbd",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing_review",
+          "source": "恒瑞医药2026H1投资论文复核",
+          "source_path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "date": "2026-08-21",
+          "value": "产品销售与现金流低于原论文要求"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "repo_file",
+          "path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "content_sha256": "9018ca3ec438f403475b5df66c8d6c6310f760694802b8ed30b76ea160035889"
+        }
+      ],
+      "source_date": "2026-08-21",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "同一H1复核显示经营论文边际弱化，未满足基本面未坏这一建仓前提。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "600276.SH",
+      "company": "恒瑞医疗",
+      "node_id": "hengrui-half-year-report-review",
+      "node_kind": "FILING",
+      "semantic_contract_sha256": "1b42db840483f13bd406c5ca90bd927dc96dc30253132ad45062463af84868bb",
+      "report_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
+      "node_semantic_fingerprint": "cac5c225b5fc6bf8cbe7e06c65cd193b1be61cfc2bec3fc559de4de1909a871c",
+      "state": true,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "恒瑞医药2026年中期报告",
+          "source_path": "research/source_docs/恒瑞医药/恒瑞医药-2026中期报告-公司官网-20260819.pdf",
+          "date": "2026-08-19",
+          "value": "2026H1中期报告已披露"
+        },
+        {
+          "source_type": "filing_review",
+          "source": "恒瑞医药2026H1投资论文复核",
+          "source_path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "date": "2026-08-21",
+          "value": "已完成H1逐项复核"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "repo_file",
+          "path": "research/source_docs/恒瑞医药/恒瑞医药-2026中期报告-公司官网-20260819.pdf",
+          "content_sha256": "8e2ffb330d85ea3375de846e4103992f842a419a8e3aa8c209137e46f56ed0d3"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "content_sha256": "9018ca3ec438f403475b5df66c8d6c6310f760694802b8ed30b76ea160035889"
+        }
+      ],
+      "source_date": "2026-08-21",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "2026年中期报告已披露并完成复核。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "600276.SH",
+      "company": "恒瑞医疗",
+      "node_id": "hengrui-crl-remediation-review",
+      "node_kind": "EVENT",
+      "semantic_contract_sha256": "1b42db840483f13bd406c5ca90bd927dc96dc30253132ad45062463af84868bb",
+      "report_sha256": "8ff10f760cb2a2f6e2651051444cb58eea0b6513d477f6acc06e9ee5fc468c34",
+      "node_semantic_fingerprint": "e47f6be5d3d96858fdd9c628fe840a125ca043fca935611299dc91f949e69aaf",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing_review",
+          "source": "恒瑞医药2026H1投资论文复核",
+          "source_path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "date": "2026-08-21",
+          "value": "H1未披露CRL整改、复检或重报进展"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "repo_file",
+          "path": "reports/恒瑞医疗/恒瑞医药-thesis-tracker-20260821.md",
+          "content_sha256": "9018ca3ec438f403475b5df66c8d6c6310f760694802b8ed30b76ea160035889"
+        }
+      ],
+      "source_date": "2026-08-21",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "未披露CRL已完成整改、复检或重报，整改路径尚不可核对。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "600426.SH",
+      "company": "山东华鲁恒升化工股份有限公司",
+      "node_id": "empty-trial-18-21-condition-2",
+      "node_kind": "FILING",
+      "semantic_contract_sha256": "b37a16b56691ad7f00b0fb79e7a40985e1e5a03cf6f77e3b78c3bacdf345a3f3",
+      "report_sha256": "e977bf171bb606663913ef22b915e245f59411b9c96dda8ba711b4083e1a6b31",
+      "node_semantic_fingerprint": "0a998263834b49a01b1a2c3bcc0328bf6ccfad9ddb644b6474a18d99b6a915b1",
+      "state": true,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "华鲁恒升2026年半年度报告",
+          "source_path": "research/source_docs/华鲁恒升/华鲁恒升2026年半年度报告.txt",
+          "date": "2026-08-20",
+          "value": "归母净利+49.98%、扣非+50.49%、OCF+15.46%"
+        },
+        {
+          "source_type": "financial_data",
+          "source": "华鲁恒升半年报Checklist双源复核",
+          "source_path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260823.md",
+          "date": "2026-08-23",
+          "value": "公司报告与东方财富偏差0.00%，修复延续至Q2"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "repo_file",
+          "path": "research/source_docs/华鲁恒升/华鲁恒升2026年半年度报告.txt",
+          "content_sha256": "7b65febf398bc9f8a800c712ff24f4cbdb877177941274355f060b511072a6c3"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/华鲁恒升/华鲁恒升-investment-checklist-20260823.md",
+          "content_sha256": "eff3ad482faaeaee83c6740046162e96764378ae0fd368795ac45a372c8f84fb"
+        }
+      ],
+      "source_date": "2026-08-23",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "H1收入、利润、毛利率、OCF和FCF共同改善，确认经营修复延续。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "603606.SH",
+      "company": "东方电缆",
+      "node_id": "h1-subsea-margin-at-least-30",
+      "node_kind": "METRIC_COMPARE",
+      "semantic_contract_sha256": "8a218d6b2e60e1654b40bb5ab73dd6dd22014da4214dcc611263ed80ecdaabf0",
+      "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+      "node_semantic_fingerprint": "dbe4aba5357c6103d7868e4e7aeecfb83b96862627de6f3208dc7c22cdf6861e",
+      "state": true,
+      "resolution_status": "VALID",
+      "resolution_method": "deterministic_metric_from_verified_sources",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "东方电缆2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "date": "2026-08-05",
+          "value": "海缆与高压电缆毛利率26.13%"
+        },
+        {
+          "source_type": "independent_research",
+          "source": "洞见研报中报摘要",
+          "source_path": "https://www.djyanbao.com/preview/4677114",
+          "date": "2026-08-30",
+          "value": "毛利率26.1%，偏差0.03个百分点"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "content_sha256": "5d6577c2a03a462715fa1c5b11ff40caae8b2f6971ba08ca7ddafac7cae3c8a3"
+        },
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://www.djyanbao.com/preview/4677114",
+          "content_sha256": "6ffcf6163fb223a37eb82f9e2688461ecfd303732580a9e2008ae60269077c09"
+        }
+      ],
+      "source_date": "2026-08-30",
+      "reporting_period": "2026H1",
+      "required_period": "2026H1",
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-12-31",
+      "review_after": null,
+      "reason_code": "DETERMINISTIC_METRIC_VERIFIED",
+      "reason": null,
+      "reviewed_by": "current_page_codex_semantic_review",
+      "actual_value": 26.13,
+      "unit": "%"
+    },
+    {
+      "ticker": "603606.SH",
+      "company": "东方电缆",
+      "node_id": "h1-subsea-growth-above-company",
+      "node_kind": "QUALITATIVE",
+      "semantic_contract_sha256": "8a218d6b2e60e1654b40bb5ab73dd6dd22014da4214dcc611263ed80ecdaabf0",
+      "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+      "node_semantic_fingerprint": "e0344ecc77e7df8e03b767cc1fac9999f1d1f43516ed8290b3303caac830f7f4",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "东方电缆2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "date": "2026-08-05",
+          "value": "海缆+20.90%，整体+30.85%"
+        },
+        {
+          "source_type": "checklist",
+          "source": "东方电缆买入前Checklist",
+          "source_path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "date": "2026-08-20",
+          "value": "海缆增速低于整体"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "content_sha256": "72c7782f26a47ed2dfe8cb59a7bbe8aba1f6c47f69859fa63a5d83004bde0a07"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "content_sha256": "a09e1febab5ca68efabc7d07b18b10aac673fb5bff977beeb73bd082722389bb"
+        }
+      ],
+      "source_date": "2026-08-20",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-12-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "海缆收入同比+20.90%，低于公司整体+30.85%。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "603606.SH",
+      "company": "东方电缆",
+      "node_id": "h1-total-orders-at-least-180",
+      "node_kind": "METRIC_COMPARE",
+      "semantic_contract_sha256": "8a218d6b2e60e1654b40bb5ab73dd6dd22014da4214dcc611263ed80ecdaabf0",
+      "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+      "node_semantic_fingerprint": "1c5b3e4f3e7c2a5bb52ffbf155bdd883ea8942088d2f661555e8b1e20955d0c3",
+      "state": true,
+      "resolution_status": "VALID",
+      "resolution_method": "deterministic_metric_from_verified_sources",
+      "evidence": [
+        {
+          "source_type": "professional_media",
+          "source": "新浪财经半年报解读",
+          "source_path": "https://finance.sina.com.cn/tech/roll/2026-08-05/doc-inimfshi3628839.shtml",
+          "date": "2026-08-05",
+          "value": "截至8月3日在手订单179.34亿元"
+        },
+        {
+          "source_type": "independent_research",
+          "source": "洞见研报中报摘要",
+          "source_path": "https://www.djyanbao.com/preview/4677114",
+          "date": "2026-08-30",
+          "value": "在手订单179.34亿元，偏差0.00%"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://finance.sina.com.cn/tech/roll/2026-08-05/doc-inimfshi3628839.shtml",
+          "content_sha256": "d1e8066a353dc629d93ebaaecaa94ad931e60738dff037481a33325602b2a002"
+        },
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://www.djyanbao.com/preview/4677114",
+          "content_sha256": "34852e9b7a23978625e13c89e18bcf29ecae48e51224a771c9f1d6d888a461a9"
+        }
+      ],
+      "source_date": "2026-08-30",
+      "reporting_period": "2026-08-03",
+      "required_period": "2026-08-03",
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-10-31",
+      "review_after": null,
+      "reason_code": "DETERMINISTIC_METRIC_VERIFIED",
+      "reason": null,
+      "reviewed_by": "current_page_codex_semantic_review",
+      "actual_value": 179.34,
+      "unit": "亿元"
+    },
+    {
+      "ticker": "603606.SH",
+      "company": "东方电缆",
+      "node_id": "h1-receivables-growth-below-revenue",
+      "node_kind": "QUALITATIVE",
+      "semantic_contract_sha256": "8a218d6b2e60e1654b40bb5ab73dd6dd22014da4214dcc611263ed80ecdaabf0",
+      "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+      "node_semantic_fingerprint": "4ea81c39272dd78709c6937f9500882b5d439dbcc864d86fe32b8afb8cd1f6ff",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "filing",
+          "source": "东方电缆2026年半年度报告",
+          "source_path": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "date": "2026-08-05",
+          "value": "应收+32.44%，收入+30.85%"
+        },
+        {
+          "source_type": "checklist",
+          "source": "东方电缆买入前Checklist",
+          "source_path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "date": "2026-08-20",
+          "value": "应收增速略快于收入"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "evidence_excerpt",
+          "source_identity": "https://static.cninfo.com.cn/finalpage/2026-08-05/1225457907.PDF",
+          "content_sha256": "7cf266a164ac7f0197edd7b4179a7dc79e7acea3d8eff444d68ca3770050767f"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "content_sha256": "a09e1febab5ca68efabc7d07b18b10aac673fb5bff977beeb73bd082722389bb"
+        }
+      ],
+      "source_date": "2026-08-20",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-12-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "应收较年初+32.44%，快于收入+30.85%。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "603606.SH",
+      "company": "东方电缆",
+      "node_id": "empty-entry-h1-not-negative",
+      "node_kind": "QUALITATIVE",
+      "semantic_contract_sha256": "8a218d6b2e60e1654b40bb5ab73dd6dd22014da4214dcc611263ed80ecdaabf0",
+      "report_sha256": "b1eb2c72686fa7cb8fae9d375ca7508fa5b01a44afb7059c5a6269f8a965c2e3",
+      "node_semantic_fingerprint": "ff6eff1d511837be8b4f7c40159497ec634dd085aa360031011f9487f6a2b3e8",
+      "state": false,
+      "resolution_status": "VALID",
+      "resolution_method": "current_page_semantic_evidence_review",
+      "evidence": [
+        {
+          "source_type": "checklist",
+          "source": "东方电缆买入前Checklist",
+          "source_path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "date": "2026-08-20",
+          "value": "现金流、毛利、增速与应收形成负面证据"
+        },
+        {
+          "source_type": "thesis_drift",
+          "source": "东方电缆论文漂移复核",
+          "source_path": "reports/东方电缆/东方电缆-thesis-drift-20260911.md",
+          "date": "2026-09-11",
+          "value": "六项0正面、4负面、2混合"
+        }
+      ],
+      "source_fingerprints": [
+        {
+          "kind": "repo_file",
+          "path": "reports/东方电缆/东方电缆-investment-checklist-20260820.md",
+          "content_sha256": "a09e1febab5ca68efabc7d07b18b10aac673fb5bff977beeb73bd082722389bb"
+        },
+        {
+          "kind": "repo_file",
+          "path": "reports/东方电缆/东方电缆-thesis-drift-20260911.md",
+          "content_sha256": "77efc3387c4a3f63e0647a40277969c163216d15364addd6fc0684b19efe6974"
+        }
+      ],
+      "source_date": "2026-09-11",
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": "2026-12-31",
+      "review_after": null,
+      "reason_code": "EVIDENCE_CONFIRMED",
+      "reason": "H1六项判决0正面、4负面、2混合，不能判为中报未转负面。",
+      "reviewed_by": "current_page_codex_semantic_review"
+    },
+    {
+      "ticker": "603659.SH",
+      "company": "璞泰来",
+      "node_id": "empty-trial-below-25-with-q-condition-2",
+      "node_kind": "QUALITATIVE",
+      "semantic_contract_sha256": "703300ca1557f23730a4f4fd9a1f4c1a0b2c76edbf4f6d486bb7b76b555b9841",
+      "report_sha256": "f0b8d4afdb8ed6cb569a2bd029cc90d6451822d8a96bd5b53dd9a9511676e3b6",
+      "node_semantic_fingerprint": "faee04988e7223a9842e12f5750085d0873e25a91bf137720d2d2d292375de97",
+      "state": "unknown",
+      "resolution_status": "UNKNOWN",
+      "resolution_method": "future_disclosure_cache",
+      "evidence": [],
+      "source_fingerprints": [],
+      "source_date": null,
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": null,
+      "review_after": "2026-10-31",
+      "reason_code": "FUTURE_DISCLOSURE",
+      "reason": "截至9月16日Q3尚未披露，不能确认Q2/Q3持续向好。",
+      "reviewed_by": "current_page_codex_semantic_review",
+      "filing_watch_paths": []
+    },
+    {
+      "ticker": "605117.SH",
+      "company": "deye",
+      "node_id": "trial-q2-q3-growth",
+      "node_kind": "FILING",
+      "semantic_contract_sha256": "e9150ef59fb0aa888858d0d19cf43790f47dadf7035b89189aa86ac8e43ea789",
+      "report_sha256": "47e29ae9a2228d85aa34ddf19b1898a0dbd3097af7ade60dc19bf283010a9267",
+      "node_semantic_fingerprint": "11d9c46cac1ba89bbe9dbf204091547e89f5a9b33fd8c839ce4e235c13db9276",
+      "state": "unknown",
+      "resolution_status": "UNKNOWN",
+      "resolution_method": "future_disclosure_cache",
+      "evidence": [],
+      "source_fingerprints": [],
+      "source_date": null,
+      "reporting_period": null,
+      "required_period": null,
+      "created_at": "2026-09-16T19:30:00+08:00",
+      "reviewed_at": "2026-09-16T19:30:00+08:00",
+      "valid_until": null,
+      "review_after": "2026-10-31",
+      "reason_code": "FUTURE_DISCLOSURE",
+      "reason": "截至9月16日Q3尚未披露，不能确认Q2-Q3均保持高增长。",
+      "reviewed_by": "current_page_codex_semantic_review",
+      "filing_watch_paths": []
+    }
+  ]
+}

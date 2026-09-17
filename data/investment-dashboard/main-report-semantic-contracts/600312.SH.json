@@ -1,0 +1,661 @@
+{
+  "schema_version": 2,
+  "ticker": "600312.SH",
+  "company": "平高电气",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+    "report_sha256": "5f5c19c9e46a9a84a5f71438b3524b9c09aea8b5809cfb2c866ce317468487c7"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "正文结论是观望偏持有、空仓不追；12—14 元是合理买入区，12 元以下才是强安全边际，价格角色不能与目标价混淆。",
+      "≤12 元仍附带利润未结构性下滑的前提；14—17 元只是观察/小仓位并等待订单或现金流验证，不能自动升级为建仓。",
+      "加仓信号与卖出/减仓信号是并列清单，正文没有规定任一触发还是组合触发及处置幅度，因此保留人工复核。",
+      "底部看板契约只给出观察和结论摘要，分层动作、失效条件和复核日期均未给出；本候选以正文为准但不静默升级为 ready。"
+    ]
+  },
+  "semantic_status": "partial",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "平高电气是特高压与高压开关设备的重要央企制造商，但项目制、招标定价、现金流和原材料风险使当前 17.64 元缺少足够安全边际；空仓观察、持仓按纪律跟踪。",
+    "evidence": [
+      {
+        "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+        "line_start": 287,
+        "line_end": 287,
+        "quote": "**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓者在 17.64 元附近不追高；14—17 元观察并等待订单/现金流验证，12—14 元为分批建仓区，12 元以下为积极买入区但仍需确认利润未结构性下滑。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "empty-watch-current-17-64",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "空仓者放入观察池，不在 17.64 元附近追高。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+              "line_start": 295,
+              "line_end": 295,
+              "quote": "| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "empty-review-14-17",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "14—17 元安全边际一般，只观察或小仓位，等待订单或现金流验证。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 14,
+            "price_max": 17,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                "line_start": 264,
+                "line_end": 264,
+                "quote": "| **14-17 元** | 安全边际一般，预期收益主要来自中性增长 + 分红。 | 观察/小仓位，等待订单或现金流验证。 |"
+              }
+            ],
+            "node_id": "pinggao-review-price-14-17",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 14—17 元，仅形成观察/小仓位复核区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+              "line_start": 264,
+              "line_end": 264,
+              "quote": "| **14-17 元** | 安全边际一般，预期收益主要来自中性增长 + 分红。 | 观察/小仓位，等待订单或现金流验证。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "empty-entry-12-14",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "12—14 元是报告明确列示的分批建仓区，仍属于条件性行动而非无条件买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 12,
+            "price_max": 14,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                "line_start": 263,
+                "line_end": 263,
+                "quote": "| **12-14 元** | 对应约 15-17x 2025 EPS，接近中性估值折价。 | 分批建仓区，适合愿意承受项目周期波动的投资者。 |"
+              }
+            ],
+            "node_id": "pinggao-entry-price-12-14",
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格处于 12—14 元分批建仓区。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+              "line_start": 263,
+              "line_end": 263,
+              "quote": "| **12-14 元** | 对应约 15-17x 2025 EPS，接近中性估值折价。 | 分批建仓区，适合愿意承受项目周期波动的投资者。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "empty-entry-below-12-with-profit-check",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "12 元以下可列为积极买入区，但必须先确认利润没有结构性下滑。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 12,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                    "line_start": 262,
+                    "line_end": 262,
+                    "quote": "| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |"
+                  }
+                ],
+                "node_id": "pinggao-price-lte-12",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A 股价格不高于 12 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                    "line_start": 262,
+                    "line_end": 262,
+                    "quote": "| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |"
+                  }
+                ],
+                "node_id": "pinggao-profit-not-structurally-down",
+                "kind": "MANUAL_REVIEW",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "利润未结构性下滑。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                "line_start": 262,
+                "line_end": 262,
+                "quote": "| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |"
+              }
+            ],
+            "node_id": "pinggao-conservative-entry-gate",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A 股价格不高于 12 元，且利润未结构性下滑。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+              "line_start": 262,
+              "line_end": 262,
+              "quote": "| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "empty-watch-17-22",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "17—22 元接近当前区间，赔率一般，空仓者不宜追高。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 17,
+            "price_max": 22,
+            "currency": "CNY",
+            "price_role": "WATCH_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                "line_start": 265,
+                "line_end": 265,
+                "quote": "| **17-22 元** | 接近当前区间，赔率一般；需公司继续超预期。 | 持仓者可持有，空仓者不宜追高。 |"
+              }
+            ],
+            "node_id": "pinggao-watch-price-17-22",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "A 股价格处于 17—22 元，接近当前区间，赔率一般。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+              "line_start": 265,
+              "line_end": 265,
+              "quote": "| **17-22 元** | 接近当前区间，赔率一般；需公司继续超预期。 | 持仓者可持有，空仓者不宜追高。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 295,
+          "line_end": 295,
+          "quote": "| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |"
+        }
+      ],
+      "semantic_status": "partial"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "低成本持仓者可继续持有并等待半年报、现金流和高压板块毛利率验证；不把当前价格当作加仓信号。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-low-cost",
+          "action": "HOLD_NO_ADD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "成本低于 14 元的持仓者可继续持有，关注现金流和高压板块毛利率。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+              "line_start": 296,
+              "line_end": 296,
+              "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-overweight-22-25",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "若仓位过重，22—25 元区间逐步降低预期收益率并控制集中度。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 22,
+                "price_max": 25,
+                "currency": "CNY",
+                "price_role": "REDUCE_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                    "line_start": 296,
+                    "line_end": 296,
+                    "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
+                  }
+                ],
+                "node_id": "pinggao-price-22-25",
+                "kind": "PRICE_RANGE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "A 股价格处于 22—25 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                    "line_start": 296,
+                    "line_end": 296,
+                    "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
+                  }
+                ],
+                "node_id": "pinggao-overweight",
+                "kind": "MANUAL_REVIEW",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "仓位过重。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+                "line_start": 296,
+                "line_end": 296,
+                "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
+              }
+            ],
+            "node_id": "pinggao-overweight-reduce-22-25",
+            "kind": "ALL",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "仓位过重且 A 股价格处于 22—25 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+              "line_start": 296,
+              "line_end": 296,
+              "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        },
+        {
+          "path_id": "holder-review-add-signal-combination",
+          "action": "REVIEW",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "高压收入、现金流/净利、海外毛利率和价格四类加仓信号的组合关系未定义，人工复核后再决定。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+              "line_start": 297,
+              "line_end": 297,
+              "quote": "| 加仓信号 | 1）高压板块收入恢复中高个位数以上增长；2）经营现金流/归母净利润比值修复到 1 倍附近；3）海外板块毛利率转正；4）股价回落至 12-14 元。 |"
+            }
+          ],
+          "semantic_status": "ambiguous"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 296,
+          "line_end": 296,
+          "quote": "| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |"
+        }
+      ],
+      "semantic_status": "partial"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 298,
+          "line_end": 298,
+          "quote": "| 卖出/减仓信号 | 1）高压板块毛利率跌破 25%；2）应收/合同资产持续膨胀且现金流连续弱；3）订单份额明显下滑；4）股价超过 25 元但盈利预测未上修。 |"
+        }
+      ],
+      "node_id": "pinggao-reduce-signals-manual-review",
+      "kind": "MANUAL_REVIEW",
+      "effect": "REDUCE_TRIGGER",
+      "scope": "holder",
+      "description": "高压板块毛利率、应收/合同资产与现金流、订单份额以及高价而盈利未上修等卖出/减仓信号，组合关系和处置幅度需人工确认。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 320,
+          "line_end": 320,
+          "quote": "| 下一步最好验证 | 跟踪 2026 半年报；拆解应收账款/合同资产；跟踪国网/南网高压设备招标份额；比较平高与思源/西电/许继在核心产品中的中标价格与份额。 |"
+        }
+      ],
+      "node_id": "pinggao-h1-and-order-monitoring",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪 2026 半年报、应收账款/合同资产、高压设备招标份额与中标价格、现金流和海外板块毛利率。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 17.64,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 226,
+          "line_end": 226,
+          "quote": "| 股价 | 17.64 元 | 2026-07-06 收盘。 |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "乐观三年目标价",
+      "price_role": "TARGET_PRICE",
+      "value": 25.5,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 254,
+          "line_end": 254,
+          "quote": "| 乐观 | +12% | 22x | 1.16 | **25.5 元** | +44.6% |"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "悲观三年目标价",
+      "price_role": "TARGET_PRICE",
+      "value": 9.3,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 256,
+          "line_end": 256,
+          "quote": "| 悲观 | -2% | 12x | 0.78 | **9.3 元** | -47.2% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部看板契约只有观察和结论摘要，分层动作、价格区间、失效条件和复核日期均未给出；正文能够恢复主要语义，但正式契约边界仍需人工确认。",
+    "evidence": [
+      {
+        "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+        "line_start": 361,
+        "line_end": 361,
+        "quote": "| 激进型动作 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [
+    {
+      "code": "REPORT_CONTRACT_INCOMPLETE",
+      "summary": "底部看板契约没有填写分层行动与失效/复核字段。",
+      "required_clarification": "确认正文分层价格与行动是否要成为正式发布字段，并补齐失效条件和复核日期。",
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 361,
+          "line_end": 361,
+          "quote": "| 激进型动作 | 未给出 |"
+        },
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 367,
+          "line_end": 367,
+          "quote": "| 买入失效条件 | 未给出 |"
+        }
+      ],
+      "classification": "MONITORING",
+      "affected_scopes": [
+        "empty_position"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": false
+    },
+    {
+      "code": "SIGNAL_COMBINATION_UNSPECIFIED",
+      "summary": "加仓与卖出/减仓均为并列清单，未定义各项是任一触发、全部满足还是其他组合。",
+      "required_clarification": "人工确认信号组合、时间窗口和对应处置动作；在此之前不得自动执行。",
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 297,
+          "line_end": 297,
+          "quote": "| 加仓信号 | 1）高压板块收入恢复中高个位数以上增长；2）经营现金流/归母净利润比值修复到 1 倍附近；3）海外板块毛利率转正；4）股价回落至 12-14 元。 |"
+        },
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 298,
+          "line_end": 298,
+          "quote": "| 卖出/减仓信号 | 1）高压板块毛利率跌破 25%；2）应收/合同资产持续膨胀且现金流连续弱；3）订单份额明显下滑；4）股价超过 25 元但盈利预测未上修。 |"
+        }
+      ],
+      "classification": "EXIT_REDUCE",
+      "affected_scopes": [
+        "holder"
+      ],
+      "affected_path_ids": [
+        "holder-reduce-overweight-22-25",
+        "holder-review-add-signal-combination"
+      ],
+      "affects_entry": false
+    },
+    {
+      "code": "PRICE_AND_FUNDAMENTAL_PRECONDITION",
+      "summary": "12 元以下的积极买入区明确要求利润未结构性下滑，14—17 元又要求订单或现金流验证；价格不是单独充分条件。",
+      "required_clarification": "将利润、订单、现金流的核验指标和期间定义为稳定规则后，再决定是否升级为自动条件路径。",
+      "evidence": [
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 262,
+          "line_end": 262,
+          "quote": "| **≤ 12 元** | 接近悲观情景上沿，PE 约 14.5x 以下，具备明显安全边际。 | 可以列为积极买入区，但需确认利润未结构性下滑。 |"
+        },
+        {
+          "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+          "line_start": 264,
+          "line_end": 264,
+          "quote": "| **14-17 元** | 安全边际一般，预期收益主要来自中性增长 + 分红。 | 观察/小仓位，等待订单或现金流验证。 |"
+        }
+      ],
+      "classification": "GLOBAL",
+      "affected_scopes": [
+        "empty_position",
+        "holder"
+      ],
+      "affected_path_ids": [],
+      "affects_entry": true
+    }
+  ],
+  "evidence_index": [
+    {
+      "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+      "line_start": 287,
+      "line_end": 287,
+      "quote": "**结论：观望偏持有，不建议空仓者在 17.64 元附近追高；合理买入区间 12-14 元，强安全边际区间 12 元以下。**"
+    },
+    {
+      "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+      "line_start": 295,
+      "line_end": 298,
+      "quote": "| 空仓者 | 放入观察池；除非已有非常强的行业订单跟踪优势，否则等待 14 元以下再分批建仓。 |\n| 持仓者 | 若成本低于 14 元，可继续持有，关注 2026 半年报现金流和高压板块毛利率；若仓位过重，可在 22-25 元区间逐步降低预期收益率。 |\n| 加仓信号 | 1）高压板块收入恢复中高个位数以上增长；2）经营现金流/归母净利润比值修复到 1 倍附近；3）海外板块毛利率转正；4）股价回落至 12-14 元。 |\n| 卖出/减仓信号 | 1）高压板块毛利率跌破 25%；2）应收/合同资产持续膨胀且现金流连续弱；3）订单份额明显下滑；4）股价超过 25 元但盈利预测未上修。 |"
+    },
+    {
+      "report_path": "reports/平高电气/平高电气研究报告-20260707.md",
+      "line_start": 320,
+      "line_end": 320,
+      "quote": "| 下一步最好验证 | 跟踪 2026 半年报；拆解应收账款/合同资产；跟踪国网/南网高压设备招标份额；比较平高与思源/西电/许继在核心产品中的中标价格与份额。 |"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "SCOPE_AMBIGUITY",
+    "PRICE_ROLE_AMBIGUITY",
+    "REPORT_CONTRACT_CONFLICT",
+    "ENTRY_AMBIGUOUS",
+    "UNRESOLVED_ACTION_MEANING",
+    "PATH_LOCAL_AMBIGUITY"
+  ]
+}

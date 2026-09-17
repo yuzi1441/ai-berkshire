@@ -1,0 +1,885 @@
+{
+  "schema_version": 2,
+  "ticker": "688235.SH",
+  "company": "百济神州",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+    "report_sha256": "5db47fe57a8897243010b3a50da489a15060268d12f5e31670f10d91ed608263"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "240-260 是美股 ONC 美元价格，不是 A 股 240-260 元买入区",
+      "ONC 回到 240-260 美元且基本面未恶化时也只是重新研究建仓，不是自动买入",
+      "稳健型小仓跟踪要求后续季度收入、GAAP 利润率和 FCF 三项继续验证",
+      "A 股只写明显低于当前且财报继续验证，没有可擅自量化的价格阈值",
+      "持仓者可继续持有，但必须按 2026 收入、经营利润和 BRUKINSA 增速验证"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "质量快速改善但估值合理偏贵，持有/观察优先，空仓不急追。",
+    "evidence": [
+      {
+        "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+        "line_start": 345,
+        "line_end": 352,
+        "quote": "| 维度 | 判断 |\n|---|---|\n| 生意质量 | 高，且正在变好；BRUKINSA 已证明全球商业化。 |\n| 护城河 | 中高；最硬在 BTK，平台化仍需验证。 |\n| 财务趋势 | 明显改善；2025 盈利与 FCF 转正是关键拐点。 |\n| 管理层 | 执行强，但治理与激励需打折。 |\n| 估值 | 合理偏贵；不适合用“便宜”形容。 |\n| 综合结论 | **持有/观察优先，等待回调或继续验证；空仓不急追。** |"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "空仓不追；保守型只在 ONC 回落或 A 股明显低于当前且基本面继续验证时重研，稳健型满足三项经营验证后才可小仓跟踪。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "conservative-research-onc-or-a",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "UNKNOWN",
+          "summary": "ONC 240-260 美元且基本面未恶化，或 A 股明显低于当前且财报继续验证时，再研究建仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "BETWEEN",
+                    "value": null,
+                    "unit": null,
+                    "price_min": 240,
+                    "price_max": 260,
+                    "currency": "USD",
+                    "price_role": "REVIEW_ZONE",
+                    "evidence": [
+                      {
+                        "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                        "line_start": 358,
+                        "line_end": 358,
+                        "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
+                      }
+                    ],
+                    "node_id": "onc-price-240-260",
+                    "kind": "PRICE_RANGE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "ONC 价格处于 240-260 美元。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                        "line_start": 358,
+                        "line_end": 358,
+                        "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
+                      }
+                    ],
+                    "node_id": "onc-fundamentals-intact",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "基本面未恶化。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                    "line_start": 358,
+                    "line_end": 358,
+                    "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
+                  }
+                ],
+                "node_id": "onc-review-all",
+                "kind": "ALL",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "ONC 回到 240-260 美元且基本面未恶化。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                        "line_start": 358,
+                        "line_end": 358,
+                        "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
+                      }
+                    ],
+                    "node_id": "a-price-materially-lower",
+                    "kind": "QUALITATIVE",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "A 股价格明显低于当前。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "OCCURS",
+                    "value": true,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                        "line_start": 358,
+                        "line_end": 358,
+                        "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
+                      }
+                    ],
+                    "node_id": "a-filings-continue-validation",
+                    "kind": "FILING",
+                    "effect": "REVIEW_ONLY",
+                    "scope": "empty_position",
+                    "description": "后续财报继续验证基本面。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                    "line_start": 358,
+                    "line_end": 358,
+                    "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
+                  }
+                ],
+                "node_id": "a-review-all",
+                "kind": "ALL",
+                "effect": "REVIEW_ONLY",
+                "scope": "empty_position",
+                "description": "A 股明显低于当前且财报继续验证。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                "line_start": 358,
+                "line_end": 358,
+                "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
+              }
+            ],
+            "node_id": "conservative-review-any",
+            "kind": "ANY",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "ONC 价格与基本面组合，或 A 股明显回落与财报验证组合。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 358,
+              "line_end": 358,
+              "quote": "| 空仓保守型 | 观察，不追高 | 若 ONC 回到 240-260 美元且基本面未恶化，或 A股明显低于当前且财报继续验证，再研究建仓。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "stable-trial-after-three-validations",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "BOTH",
+          "summary": "后续季度收入约增长 30%、GAAP 利润率提升且 FCF 为正时，稳健型才考虑小仓分批。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "季度收入同比增长",
+                "operator": "GTE",
+                "value": 30,
+                "unit": "%",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                    "line_start": 359,
+                    "line_end": 359,
+                    "quote": "| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。 |"
+                  }
+                ],
+                "node_id": "revenue-growth-around-30",
+                "kind": "METRIC_COMPARE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "后续季度收入增长约 30%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                    "line_start": 359,
+                    "line_end": 359,
+                    "quote": "| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。 |"
+                  }
+                ],
+                "node_id": "gaap-margin-improves",
+                "kind": "QUALITATIVE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "GAAP 利润率提升。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "FCF",
+                "operator": "GT",
+                "value": 0,
+                "unit": "USD",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                    "line_start": 359,
+                    "line_end": 359,
+                    "quote": "| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。 |"
+                  }
+                ],
+                "node_id": "fcf-positive",
+                "kind": "METRIC_COMPARE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "FCF 为正。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                "line_start": 359,
+                "line_end": 359,
+                "quote": "| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。 |"
+              }
+            ],
+            "node_id": "stable-trial-all",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "后续季度三项经营指标全部继续验证。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 359,
+              "line_end": 359,
+              "quote": "| 空仓稳健型 | 小仓跟踪，等待确认 | 只有在 2026 后续季度继续实现收入 +30%左右、GAAP利润率提升、FCF 为正时，才考虑分批。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "line_start": 352,
+          "line_end": 359,
+          "quote": "| 综合结论 | **持有/观察优先，等待回调或继续验证；空仓不急追。** |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "可继续持有，但以 2026 收入、GAAP 经营利润和 BRUKINSA 增速为验证线。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-continue-with-validation",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "BOTH",
+          "summary": "继续持有并持续验证收入、经营利润和 BRUKINSA 增速。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 360,
+              "line_end": 360,
+              "quote": "| 已持仓者 | 可继续持有，但设验证线 | 重点盯 2026 收入 63-65 亿美元、GAAP operating income 7.5-8.5 亿美元、BRUKINSA 增速。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "line_start": 360,
+          "line_end": 360,
+          "quote": "| 已持仓者 | 可继续持有，但设验证线 | 重点盯 2026 收入 63-65 亿美元、GAAP operating income 7.5-8.5 亿美元、BRUKINSA 增速。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "BRUKINSA 同比增速（连续两季）",
+          "operator": "LT",
+          "value": 20,
+          "unit": "%",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 373,
+              "line_end": 373,
+              "quote": "1. BRUKINSA 同比连续两季低于 20%。"
+            }
+          ],
+          "node_id": "brukinsa-below-20-two-quarters",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "BRUKINSA 同比连续两季低于 20%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 374,
+              "line_end": 374,
+              "quote": "2. 公司下调 2026 或 2027 收入/经营利润指引。"
+            }
+          ],
+          "node_id": "guidance-cut",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "公司下调 2026 或 2027 收入或经营利润指引。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "毛利率",
+              "operator": "LT",
+              "value": 85,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                  "line_start": 375,
+                  "line_end": 375,
+                  "quote": "3. 毛利率跌破 85% 且不是短期产品组合扰动。"
+                }
+              ],
+              "node_id": "margin-below-85",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "毛利率跌破 85%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                  "line_start": 375,
+                  "line_end": 375,
+                  "quote": "3. 毛利率跌破 85% 且不是短期产品组合扰动。"
+                }
+              ],
+              "node_id": "not-short-term-mix",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "下降不是短期产品组合扰动。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 375,
+              "line_end": 375,
+              "quote": "3. 毛利率跌破 85% 且不是短期产品组合扰动。"
+            }
+          ],
+          "node_id": "margin-below-85-not-mix",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "毛利率跌破 85% 且不是短期产品组合扰动。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": "FCF margin",
+              "operator": "LT",
+              "value": 10,
+              "unit": "%",
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                  "line_start": 376,
+                  "line_end": 376,
+                  "quote": "4. FCF margin 低于 10%，同时费用继续扩张。"
+                }
+              ],
+              "node_id": "fcf-margin-below-10",
+              "kind": "METRIC_COMPARE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "FCF margin 低于 10%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                  "line_start": 376,
+                  "line_end": 376,
+                  "quote": "4. FCF margin 低于 10%，同时费用继续扩张。"
+                }
+              ],
+              "node_id": "expenses-expand",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "费用继续扩张。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 376,
+              "line_end": 376,
+              "quote": "4. FCF margin 低于 10%，同时费用继续扩张。"
+            }
+          ],
+          "node_id": "fcf-below-10-and-expenses-up",
+          "kind": "ALL",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "FCF margin 低于 10% 且费用继续扩张。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 377,
+              "line_end": 377,
+              "quote": "5. 关键管线验证性试验失败或安全性标签恶化。"
+            }
+          ],
+          "node_id": "pipeline-failure-or-safety",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "关键管线验证性试验失败或安全性标签恶化。"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": null,
+              "value": null,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                  "line_start": 378,
+                  "line_end": 378,
+                  "quote": "6. 年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
+                }
+              ],
+              "node_id": "dilution-above-3-5",
+              "kind": "QUALITATIVE",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "年度股本稀释超过 3-5%。"
+            },
+            {
+              "children": [],
+              "minimum": null,
+              "metric": null,
+              "operator": "OCCURS",
+              "value": true,
+              "unit": null,
+              "price_min": null,
+              "price_max": null,
+              "currency": null,
+              "price_role": null,
+              "evidence": [
+                {
+                  "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+                  "line_start": 378,
+                  "line_end": 378,
+                  "quote": "6. 年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
+                }
+              ],
+              "node_id": "large-bd-no-roic",
+              "kind": "EVENT",
+              "effect": "INVALIDATION",
+              "scope": "both",
+              "description": "大额 BD 缺乏 ROIC 纪律。"
+            }
+          ],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 378,
+              "line_end": 378,
+              "quote": "6. 年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
+            }
+          ],
+          "node_id": "dilution-or-undisciplined-bd",
+          "kind": "ANY",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "年度股本稀释超过 3-5%，或大额 BD 缺乏 ROIC 纪律。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+              "line_start": 379,
+              "line_end": 379,
+              "quote": "7. 管理层用更多 Non-GAAP 叙事掩盖 GAAP 利润与每股 FCF 停滞。"
+            }
+          ],
+          "node_id": "non-gaap-masks-stagnation",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "管理层以更多 Non-GAAP 叙事掩盖 GAAP 利润与每股 FCF 停滞。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "line_start": 371,
+          "line_end": 379,
+          "quote": "### 4. 减仓或重审信号"
+        }
+      ],
+      "node_id": "review-on-any-redline",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "任一减仓或重审信号触发复核。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "line_start": 363,
+          "line_end": 369,
+          "quote": "### 3. 加仓信号"
+        }
+      ],
+      "node_id": "monitor-add-signals",
+      "kind": "MANUAL_REVIEW",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "监控 BRUKINSA、费用率、FCF、关键管线和估值回落五组加仓信号；报告未定义组合逻辑。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "A 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 277.0,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> **价格锚点**：2026-07-06，A股 277.00 元，港股 190.50 港元，美股 ONC 约 307.86 美元/ADS。  "
+        }
+      ]
+    },
+    {
+      "instrument_scope": "H_SHARE",
+      "label": "H 股当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 190.5,
+      "min": null,
+      "max": null,
+      "currency": "HKD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> **价格锚点**：2026-07-06，A股 277.00 元，港股 190.50 港元，美股 ONC 约 307.86 美元/ADS。  "
+        }
+      ]
+    },
+    {
+      "instrument_scope": "UNKNOWN",
+      "label": "ONC 当前价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 307.86,
+      "min": null,
+      "max": null,
+      "currency": "USD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "line_start": 5,
+          "line_end": 5,
+          "quote": "> **价格锚点**：2026-07-06，A股 277.00 元，港股 190.50 港元，美股 ONC 约 307.86 美元/ADS。  "
+        }
+      ]
+    },
+    {
+      "instrument_scope": "UNKNOWN",
+      "label": "ONC 三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 182.0,
+      "max": 911.23,
+      "currency": "USD",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+          "line_start": 247,
+          "line_end": 249,
+          "quote": "| 牛市 | 28% | 134.22 亿 | 23% | 30.87 亿 | 35x | 1,080.45 亿 | 911.23 美元 | +196.0% | +43.6% |\n| 基准 | 20% | 110.59 亿 | 18% | 19.91 亿 | 28x | 557.38 亿 | 470.09 美元 | +52.7% | +15.2% |\n| 熊市 | 12% | 89.92 亿 | 12% | 10.79 亿 | 20x | 215.80 亿 | 182.00 美元 | -40.9% | -16.1% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约在 A 股公司条目中无市场标识地记录 240-260 美元，可能被误当成 A 股价格；同时遗漏持仓验证线与 A 股非数值条件。",
+    "evidence": [
+      {
+        "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+        "line_start": 469,
+        "line_end": 477,
+        "quote": "| 基本面建议动作 | 观察 |\n| 结论摘要 | 待复核 |\n| 激进型动作 | 未给出 |\n| 激进型价格区间 | 未给出 |\n| 稳健型动作 | 小仓跟踪，等待确认 |\n| 稳健型价格区间 | 未给出 |\n| 保守型动作 | 观察，不追高 |\n| 保守型价格区间 | 240-260 美元 |\n| 买入失效条件 | 未给出 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/百济神州/百济神州研究报告-20260706.md",
+      "line_start": 341,
+      "line_end": 379,
+      "quote": "## 第十部分：最终投资建议"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT",
+    "MULTI_MARKET"
+  ]
+}

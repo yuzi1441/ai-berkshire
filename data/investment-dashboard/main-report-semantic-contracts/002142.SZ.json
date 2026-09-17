@@ -1,0 +1,945 @@
+{
+  "schema_version": 2,
+  "ticker": "002142.SZ",
+  "company": "宁波银行",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+    "report_sha256": "10d027fe228c84fbef9f0abf54fa5b4e9449003e14b6de1b92300fb5a42a5b36"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "32 元是观察价，不把 7.26 倍 PE 自动解释为买入。",
+      "29-31 元是半年报未恶化时的小仓分批区；26.5-29 元要求个人风险和资本指标稳定；23-26.5 元是优先研究和配置区。",
+      "三年目标价 22.83-46.96 元是情景估值参考，不直接等于买入区。",
+      "持仓加仓保留为 NIM、个人资产质量、重组贷款和 CET1/RWA 的嵌套逻辑；减仓/卖出保留为多个风险触发的 ANY。",
+      "银行没有工业企业式经营现金流判断，未把普通现金流字段误编译成自由现金流条件。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "宁波银行是增长、资产质量和综合金融能力兼备的优质城商行，但 32 元已部分定价其执行力，净息差、个人贷款风险和核心一级资本仍需验证，当前观察。",
+    "evidence": [
+      {
+        "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+        "line_start": 9,
+        "line_end": 9,
+        "quote": "**一句话判断：** 宁波银行是增长、资产质量和综合金融能力兼备的优质城商行，但 32 元已把其高于行业的执行力部分定价；在净息差下行、个人贷款不良率明显高于全行、核心一级资本随扩表下滑的背景下，当前更适合**观察**，而不是把低 PE 等同于厚安全边际。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "32 元观察；29-31 元半年报未恶化时小仓分批，26.5-29 元在风险指标稳定时分批，23-26.5 元优先研究和配置。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "watch-current-32",
+          "action": "WATCH",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "在 32 元观察，等待首档安全边际或半年报验证。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                "line_start": 263,
+                "line_end": 263,
+                "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
+              }
+            ],
+            "node_id": "watch-current-price-32",
+            "kind": "QUALITATIVE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "当前 32 元观察，不把低 PE 等同于厚安全边际。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 263,
+              "line_end": 263,
+              "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "trial-29-31-with-h1-confirmation",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "29-31 元且半年报未恶化时小仓分批，不追高。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 29,
+                "price_max": 31,
+                "currency": "CNY",
+                "price_role": "TRIAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 240,
+                    "line_end": 240,
+                    "quote": "| 激进型 | 29.0-31.0 元 | 约 0.82-0.88 倍 | 半年报未恶化时小仓分批，不追高 |"
+                  }
+                ],
+                "node_id": "trial-price-29-31",
+                "kind": "PRICE_RANGE",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "价格处于 29-31 元区间。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 240,
+                    "line_end": 240,
+                    "quote": "| 激进型 | 29.0-31.0 元 | 约 0.82-0.88 倍 | 半年报未恶化时小仓分批，不追高 |"
+                  }
+                ],
+                "node_id": "trial-h1-not-worse",
+                "kind": "FILING",
+                "effect": "TRIAL_GATE",
+                "scope": "empty_position",
+                "description": "半年报未恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                "line_start": 240,
+                "line_end": 240,
+                "quote": "| 激进型 | 29.0-31.0 元 | 约 0.82-0.88 倍 | 半年报未恶化时小仓分批，不追高 |"
+              }
+            ],
+            "node_id": "trial-29-31-all",
+            "kind": "ALL",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 29-31 元且半年报未恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 240,
+              "line_end": 240,
+              "quote": "| 激进型 | 29.0-31.0 元 | 约 0.82-0.88 倍 | 半年报未恶化时小仓分批，不追高 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conditional-26-5-29-with-risk-stability",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "26.5-29 元且个人风险和资本指标稳定时分批。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 26.5,
+                "price_max": 29.0,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 241,
+                    "line_end": 241,
+                    "quote": "| 稳健型 | 26.5-29.0 元 | 约 0.75-0.82 倍 | 在个人风险和资本指标稳定时分批 |"
+                  }
+                ],
+                "node_id": "entry-price-26-5-29",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格处于 26.5-29 元区间。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 241,
+                    "line_end": 241,
+                    "quote": "| 稳健型 | 26.5-29.0 元 | 约 0.75-0.82 倍 | 在个人风险和资本指标稳定时分批 |"
+                  }
+                ],
+                "node_id": "entry-risk-capital-stable",
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "个人风险和资本指标稳定。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                "line_start": 241,
+                "line_end": 241,
+                "quote": "| 稳健型 | 26.5-29.0 元 | 约 0.75-0.82 倍 | 在个人风险和资本指标稳定时分批 |"
+              }
+            ],
+            "node_id": "entry-26-5-29-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于 26.5-29 元且个人风险和资本指标稳定。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 241,
+              "line_end": 241,
+              "quote": "| 稳健型 | 26.5-29.0 元 | 约 0.75-0.82 倍 | 在个人风险和资本指标稳定时分批 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "review-23-26-5",
+          "action": "REVIEW",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "summary": "23-26.5 元是安全边际较充分、优先研究和配置的区间，仍需确认论文未坏。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 23.0,
+            "price_max": 26.5,
+            "currency": "CNY",
+            "price_role": "REVIEW_ZONE",
+            "evidence": [
+              {
+                "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                "line_start": 242,
+                "line_end": 242,
+                "quote": "| 保守型 | 23.0-26.5 元 | 约 0.65-0.75 倍 | 安全边际较充分，优先研究和配置区间 |"
+              }
+            ],
+            "node_id": "review-price-23-26-5",
+            "kind": "PRICE_RANGE",
+            "effect": "REVIEW_ONLY",
+            "scope": "empty_position",
+            "description": "价格处于 23-26.5 元区间。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 242,
+              "line_end": 242,
+              "quote": "| 保守型 | 23.0-26.5 元 | 约 0.65-0.75 倍 | 安全边际较充分，优先研究和配置区间 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+          "line_start": 263,
+          "line_end": 263,
+          "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD",
+      "summary": "高质量城商行逻辑未坏时可持有；不因低 PE 机械加仓，加仓需满足多个息差、资产质量、重组贷款和资本条件。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "holder-hold-quality-bank",
+          "action": "HOLD",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "若持仓逻辑是高质量城商行，可持有，但不因低 PE 机械加仓。",
+          "condition": null,
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 264,
+              "line_end": 264,
+              "quote": "| 持仓者 | 若持仓逻辑是高质量城商行，可持有；未知成本和仓位下，不建议因“PE 低”机械加仓。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-add-all-quality-capital",
+          "action": "ADD_POSITION",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "NIM 至少稳定在 1.70%，个人贷款不良率不再上行，重组贷款占比受控，且 CET1 回升或风险加权资产增速收敛时考虑加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "净息差",
+                "operator": "GTE",
+                "value": "1.70%",
+                "unit": "ratio",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 265,
+                    "line_end": 265,
+                    "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
+                  }
+                ],
+                "node_id": "holder-add-nim-170",
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "NIM 稳定在 1.70% 以上。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 265,
+                    "line_end": 265,
+                    "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
+                  }
+                ],
+                "node_id": "holder-add-personal-npl-stable",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "个人贷款不良率不再上行。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 265,
+                    "line_end": 265,
+                    "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
+                  }
+                ],
+                "node_id": "holder-add-restructured-controlled",
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "重组贷款占比受控。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                        "line_start": 265,
+                        "line_end": 265,
+                        "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
+                      }
+                    ],
+                    "node_id": "holder-add-cet1-recovery",
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "CET1 回升。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                        "line_start": 265,
+                        "line_end": 265,
+                        "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
+                      }
+                    ],
+                    "node_id": "holder-add-rwa-slower",
+                    "kind": "QUALITATIVE",
+                    "effect": "ADD_GATE",
+                    "scope": "holder",
+                    "description": "风险加权资产增速收敛。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 265,
+                    "line_end": 265,
+                    "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
+                  }
+                ],
+                "node_id": "holder-add-capital-any",
+                "kind": "ANY",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "CET1 回升或风险加权资产增速收敛。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                "line_start": 265,
+                "line_end": 265,
+                "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
+              }
+            ],
+            "node_id": "holder-add-all",
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "NIM 稳定、个人贷款不良率不再上行、重组贷款占比受控，且 CET1 回升或风险加权资产增速收敛。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 265,
+              "line_end": 265,
+              "quote": "| 加仓信号 | NIM 稳定在 1.70% 以上，个人贷款不良率不再上行，重组贷款占比受控，CET1 回升或风险加权资产增速收敛。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "holder-reduce-or-exit-risk-any",
+          "action": "REDUCE",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "summary": "净息差、个人贷款、重组贷款、CET1 或风险偏好出现明确恶化时减仓或卖出。",
+          "condition": {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": "净息差",
+                    "operator": "LT",
+                    "value": "1.60%",
+                    "unit": "ratio",
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                        "line_start": 266,
+                        "line_end": 266,
+                        "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+                      }
+                    ],
+                    "node_id": "reduce-nim-160",
+                    "kind": "METRIC_COMPARE",
+                    "effect": "REDUCE_TRIGGER",
+                    "scope": "holder",
+                    "description": "NIM 低于 1.60%。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                        "line_start": 266,
+                        "line_end": 266,
+                        "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+                      }
+                    ],
+                    "node_id": "reduce-noninterest-no-compensation",
+                    "kind": "QUALITATIVE",
+                    "effect": "REDUCE_TRIGGER",
+                    "scope": "holder",
+                    "description": "非息收入无法补偿。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 266,
+                    "line_end": 266,
+                    "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+                  }
+                ],
+                "node_id": "reduce-nim-and-noninterest",
+                "kind": "ALL",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "NIM 低于 1.60% 且非息收入无法补偿。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "个人贷款不良率",
+                "operator": "GT",
+                "value": "2.50%",
+                "unit": "ratio",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 266,
+                    "line_end": 266,
+                    "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+                  }
+                ],
+                "node_id": "reduce-personal-npl-250",
+                "kind": "METRIC_COMPARE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "个人贷款不良率超过 2.50%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "重组贷款占比",
+                "operator": "GT",
+                "value": "0.60%",
+                "unit": "ratio",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 266,
+                    "line_end": 266,
+                    "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+                  }
+                ],
+                "node_id": "reduce-restructured-060",
+                "kind": "METRIC_COMPARE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "重组贷款占比超过 0.60%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "核心一级资本充足率",
+                "operator": "LT",
+                "value": "8.80%",
+                "unit": "ratio",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 266,
+                    "line_end": 266,
+                    "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+                  }
+                ],
+                "node_id": "reduce-cet1-880",
+                "kind": "METRIC_COMPARE",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "CET1 跌破 8.80%。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                    "line_start": 266,
+                    "line_end": 266,
+                    "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+                  }
+                ],
+                "node_id": "reduce-risk-appetite-expansion",
+                "kind": "EVENT",
+                "effect": "REDUCE_TRIGGER",
+                "scope": "holder",
+                "description": "出现明显放松风险偏好的扩表。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+                "line_start": 266,
+                "line_end": 266,
+                "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+              }
+            ],
+            "node_id": "holder-reduce-any",
+            "kind": "ANY",
+            "effect": "REDUCE_TRIGGER",
+            "scope": "holder",
+            "description": "任一减仓/卖出风险信号满足。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 266,
+              "line_end": 266,
+              "quote": "| 减仓/卖出信号 | NIM 低于 1.60%且非息收入无法补偿；个人贷款不良率超过 2.50%；重组贷款占比超过 0.60%；CET1 跌破 8.80%；出现明显放松风险偏好的扩表。 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+          "line_start": 264,
+          "line_end": 264,
+          "quote": "| 持仓者 | 若持仓逻辑是高质量城商行，可持有；未知成本和仓位下，不建议因“PE 低”机械加仓。 |"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": "净息差",
+          "operator": "LT",
+          "value": "1.60%",
+          "unit": "ratio",
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 319,
+              "line_end": 319,
+              "quote": "| 买入失效条件 | 净息差低于1.60%且个人资产质量资本充足率同时恶化 |"
+            }
+          ],
+          "node_id": "entry-invalidation-nim-160",
+          "kind": "METRIC_COMPARE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "净息差低于 1.60%。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": null,
+          "value": null,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+              "line_start": 319,
+              "line_end": 319,
+              "quote": "| 买入失效条件 | 净息差低于1.60%且个人资产质量资本充足率同时恶化 |"
+            }
+          ],
+          "node_id": "entry-invalidation-risk-capital",
+          "kind": "QUALITATIVE",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "个人资产质量和资本充足率同时恶化。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+          "line_start": 319,
+          "line_end": 319,
+          "quote": "| 买入失效条件 | 净息差低于1.60%且个人资产质量资本充足率同时恶化 |"
+        }
+      ],
+      "node_id": "entry-invalidation-all",
+      "kind": "ALL",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "净息差低于 1.60%，且个人资产质量与资本充足率同时恶化时，买入逻辑失效。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+          "line_start": 284,
+          "line_end": 284,
+          "quote": "**下次复核：** 2026 年半年度报告披露后，重点核对 NIM、个人贷款不良率、重组贷款、拨备覆盖率、CET1 和手续费及佣金收入可持续性。"
+        }
+      ],
+      "node_id": "h1-bank-quality-review",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "2026 年半年度报告披露后，复核 NIM、个人贷款不良率、重组贷款、拨备覆盖率、CET1 和手续费及佣金收入可持续性。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "2026-08-10 收盘价",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 32.0,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+          "line_start": 6,
+          "line_end": 6,
+          "quote": "**行情：** 32.00 元，腾讯与新浪在 2026-08-10 收盘后快照一致。"
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三年情景目标价范围",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 22.83,
+      "max": 46.96,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+          "line_start": 228,
+          "line_end": 228,
+          "quote": "| 乐观 | +10% | 8.0 倍 | **46.96 元** | 4.50 元 | **+17.15%** | NIM 稳定、非息收入持续、CET1 不再下滑 |"
+        },
+        {
+          "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+          "line_start": 230,
+          "line_end": 230,
+          "quote": "| 悲观 | -2% | 5.5 倍 | **22.83 元** | 3.56 元 | **-6.23%** | 个人风险释放、NIM 下破、资本约束压低估值 |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": true,
+    "summary": "底部契约有观察和三档价格，但只保留简化买入失效条件，没有完整表达持仓加仓、减仓/卖出和银行风险触发逻辑。",
+    "evidence": [
+      {
+        "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+        "line_start": 311,
+        "line_end": 311,
+        "quote": "| 基本面建议动作 | 观察 |"
+      }
+    ]
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/宁波银行/宁波银行-investment-research-20260810.md",
+      "line_start": 263,
+      "line_end": 263,
+      "quote": "| 空仓者 | 在 32 元观察，等待 29-31 元的首档安全边际，或等待半年报证明 NIM、个人资产质量和 CET1 没有恶化。 |"
+    }
+  ],
+  "business_risk_reasons": [
+    "BANK_CREDIT_BLACK_BOX",
+    "CAPITAL_AND_NIM_RISK"
+  ],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC",
+    "REPORT_CONTRACT_CONFLICT"
+  ]
+}

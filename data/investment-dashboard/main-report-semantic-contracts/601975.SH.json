@@ -1,0 +1,451 @@
+{
+  "schema_version": 2,
+  "ticker": "601975.SH",
+  "company": "招商局南京油运股份有限公司",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+    "report_sha256": "d405e2898d9f9d63075a478ac47d8e9e12fb3406e599e120da4e9e3f28e1dfcb"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "招商南油3.71元不在买入带，3.2—3.5元小额试仓、2.7—3.2元稳健分批、2.1—2.7元重点买入均等待运价和新船回报验证。",
+      "加仓保留价格、MR TCE、扣非利润、现金流和ROIC的AND条件；卖出触发保留为周期复核。"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "招商南油是强周期重资产公司，当前3.71元安全边际不足，等待半年报与运价验证。",
+    "evidence": [
+      {
+        "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+        "line_start": 289,
+        "line_end": 289,
+        "quote": "### 明确结论：观察"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前观察；3.2—3.5元小额分批，2.7—3.2元稳健分批，2.1—2.7元重点买入但需运价未失速。",
+      "entry_semantic": "CONDITIONAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "TRIAL_POSITION",
+          "summary": "3.2—3.5元小额分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 3.2,
+            "price_max": 3.5,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                "line_start": 267,
+                "line_end": 267,
+                "quote": "| 激进型 | 3.2-3.5 元 | 小额分批买入 | 接近 Base 价值，接受较高周期风险 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于3.2—3.5元小额分批区。",
+            "node_id": "empty-trial-3-2-3-5-condition"
+          },
+          "path_id": "empty-trial-3-2-3-5",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+              "line_start": 267,
+              "line_end": 267,
+              "quote": "| 激进型 | 3.2-3.5 元 | 小额分批买入 | 接近 Base 价值，接受较高周期风险 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "2.7—3.2元分批买入。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 2.7,
+            "price_max": 3.2,
+            "currency": "CNY",
+            "price_role": "CONDITIONAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                "line_start": 268,
+                "line_end": 268,
+                "quote": "| 稳健型 | 2.7-3.2 元 | 分批买入 | 给 Base 目标价约 14%-27% 折价 |"
+              }
+            ],
+            "kind": "PRICE_RANGE",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "A股价格处于2.7—3.2元稳健分批区。",
+            "node_id": "empty-entry-2-7-3-2-condition"
+          },
+          "path_id": "empty-entry-2-7-3-2",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+              "line_start": 268,
+              "line_end": 268,
+              "quote": "| 稳健型 | 2.7-3.2 元 | 分批买入 | 给 Base 目标价约 14%-27% 折价 |"
+            }
+          ],
+          "semantic_status": "ready"
+        },
+        {
+          "action": "OPEN_POSITION",
+          "summary": "2.1—2.7元重点买入，但仍需经营未恶化。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 2.1,
+                "price_max": 2.7,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                    "line_start": 269,
+                    "line_end": 269,
+                    "quote": "| 保守型 | 2.1-2.7 元 | 重点买入 | 接近 Bear 与净现金保护区间，但仍需经营未恶化 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "A股价格处于2.1—2.7元。",
+                "node_id": "empty-entry-2-1-2-7-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                    "line_start": 269,
+                    "line_end": 269,
+                    "quote": "| 保守型 | 2.1-2.7 元 | 重点买入 | 接近 Bear 与净现金保护区间，但仍需经营未恶化 |"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "经营未恶化。",
+                "node_id": "empty-entry-2-1-2-7-condition-2"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                "line_start": 269,
+                "line_end": 269,
+                "quote": "| 保守型 | 2.1-2.7 元 | 重点买入 | 接近 Bear 与净现金保护区间，但仍需经营未恶化 |"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格处于2.1—2.7元且经营未恶化。",
+            "node_id": "empty-entry-2-1-2-7-condition"
+          },
+          "path_id": "empty-entry-2-1-2-7",
+          "scope": "empty_position",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+              "line_start": 269,
+              "line_end": 269,
+              "quote": "| 保守型 | 2.1-2.7 元 | 重点买入 | 接近 Bear 与净现金保护区间，但仍需经营未恶化 |"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+          "line_start": 270,
+          "line_end": 270,
+          "quote": "| 现价 3.71 元 | 不在买入带 | **观察** | 等待半年报、运价和新船回报证据 |"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "HOLD_NO_ADD",
+      "summary": "已有仓位可持有并等待2026H1，不因Q1利润增长追涨。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "action": "HOLD_NO_ADD",
+          "summary": "持有并等待半年报。",
+          "path_id": "holder-hold-half-year",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+              "line_start": 293,
+              "line_end": 293,
+              "quote": "**对持仓者：** 若仓位本来就有，可持有并等待 2026H1；不要因 Q1 归母净利 +51.73% 追涨，也不要把本报告当作个性化仓位建议。本报告不知道用户的成本、仓位和风险承受力。"
+            }
+          ],
+          "condition": null,
+          "semantic_status": "ready"
+        },
+        {
+          "action": "ADD_POSITION",
+          "summary": "价格带、MR TCE、扣非利润、现金流和新船ROIC同时满足时加仓。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "LTE",
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": 3.5,
+                "currency": "CNY",
+                "price_role": "ADD_POSITION",
+                "evidence": [
+                  {
+                    "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                    "line_start": 267,
+                    "line_end": 267,
+                    "quote": "| 激进型 | 3.2-3.5 元 | 小额分批买入 | 接近 Base 价值，接受较高周期风险 |"
+                  }
+                ],
+                "kind": "PRICE_RANGE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "A股价格进入相应价格带。",
+                "node_id": "holder-add-tce-gate-condition-1"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": "亚太MR TCE",
+                "operator": "GTE",
+                "value": 20000,
+                "unit": "美元/天",
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                    "line_start": 358,
+                    "line_end": 358,
+                    "quote": "| 买入失效条件 | 亚太 MR TCE 连续两个季度低于约 20000 美元/天，或新船交付后 ROIC 下滑并伴随净债务上升、减值 |"
+                  }
+                ],
+                "kind": "METRIC_COMPARE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "亚太MR TCE连续两个季度不低于约20000美元/天。",
+                "node_id": "holder-add-tce-gate-condition-2"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                    "line_start": 295,
+                    "line_end": 295,
+                    "quote": "**加仓触发：** 价格进入相应价格带，同时亚太 MR TCE 连续两个季度不低于约 20,000 美元/天，扣非利润和经营现金流改善，新船交付后单船收入/载重吨与 ROIC 不下滑。"
+                  }
+                ],
+                "kind": "QUALITATIVE",
+                "effect": "ADD_GATE",
+                "scope": "holder",
+                "description": "扣非利润和经营现金流改善，交付后ROIC不下滑。",
+                "node_id": "holder-add-tce-gate-condition-3"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+                "line_start": 295,
+                "line_end": 295,
+                "quote": "**加仓触发：** 价格进入相应价格带，同时亚太 MR TCE 连续两个季度不低于约 20,000 美元/天，扣非利润和经营现金流改善，新船交付后单船收入/载重吨与 ROIC 不下滑。"
+              }
+            ],
+            "kind": "ALL",
+            "effect": "ADD_GATE",
+            "scope": "holder",
+            "description": "价格进入价格带、MR TCE连续两个季度不低于约20000美元/天、利润现金流改善且新船ROIC不下滑。",
+            "node_id": "holder-add-tce-gate-condition"
+          },
+          "path_id": "holder-add-tce-gate",
+          "scope": "holder",
+          "instrument_scope": "A_SHARE",
+          "evidence": [
+            {
+              "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+              "line_start": 295,
+              "line_end": 295,
+              "quote": "**加仓触发：** 价格进入相应价格带，同时亚太 MR TCE 连续两个季度不低于约 20,000 美元/天，扣非利润和经营现金流改善，新船交付后单船收入/载重吨与 ROIC 不下滑。"
+            }
+          ],
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+          "line_start": 293,
+          "line_end": 293,
+          "quote": "**对持仓者：** 若仓位本来就有，可持有并等待 2026H1；不要因 Q1 归母净利 +51.73% 追涨，也不要把本报告当作个性化仓位建议。本报告不知道用户的成本、仓位和风险承受力。"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+          "line_start": 297,
+          "line_end": 297,
+          "quote": "**减仓或卖出触发：** 亚太 MR TCE 连续两个季度低于约 20,000 美元/天；新船交付后利用率、收入/载重吨和 ROIC 明显下降；净债务持续上升并伴随新增船舶减值；关联船价、利率或托管费缺乏公允对照；或出现重大安全、监管和资金占用问题。"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "EXIT_TRIGGER",
+      "scope": "holder",
+      "description": "MR TCE持续低于20000美元/天、新船利用率/ROIC下降、净债务上升伴减值或重大安全监管问题时退出。",
+      "node_id": "redline-1"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+          "line_start": 299,
+          "line_end": 299,
+          "quote": "**下一复核日：** 2026-09-01，重点使用预计 2026-08-28 披露的 2026 半年报，核验成品油运价、扣非利润、经营现金流、新船交付与关联交易。"
+        }
+      ],
+      "kind": "QUALITATIVE",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "跟踪成品油运价、MR供给、新船交付、扣非利润、现金流和关联交易。",
+      "node_id": "monitor-1"
+    }
+  ],
+  "valuation_references": [],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": false,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/招商南油/招商南油-investment-research-20260810.md",
+      "line_start": 289,
+      "line_end": 289,
+      "quote": "### 明确结论：观察"
+    }
+  ],
+  "business_risk_reasons": [
+    "NEWBUILD_ROIC_AND_TCE_GATE",
+    "SHIPPING_CYCLE"
+  ],
+  "semantic_review_reasons": []
+}

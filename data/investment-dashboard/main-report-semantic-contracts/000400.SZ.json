@@ -1,0 +1,584 @@
+{
+  "schema_version": 2,
+  "ticker": "000400.SZ",
+  "company": "许继电气",
+  "source": {
+    "authority": "current_reports.json",
+    "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+    "report_sha256": "e7539bbf2d6f5d6fec55d7ba72f8ddc30f47c281a1aeeb7210d51dd2fc7516f6"
+  },
+  "compiler": {
+    "type": "codex_semantic_review",
+    "contract_version": "main-report-semantic-v2",
+    "pass": 2,
+    "adversarial_findings": [
+      "20-22 元仅被保留为小仓观察/试仓，而不是普通买入区间",
+      "16-18 元路径保留了半年报修复的共同前提",
+      "13-15 元或非理性下跌路径保留 OR 以及后者内部的基本面未恶化前提",
+      "30 元附近属于无 EPS 支撑时的减仓/回避信号，不是目标价或买入价",
+      "报告没有给出持仓者当前动作，未从空仓策略自行推断"
+    ]
+  },
+  "semantic_status": "ready",
+  "overall_stance": {
+    "action": "WATCH",
+    "scope": "both",
+    "summary": "好公司但当前安全边际不足，应等待更好价格或半年报修复验证。",
+    "evidence": [
+      {
+        "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+        "line_start": 12,
+        "line_end": 12,
+        "quote": "许继电气是新型电力系统建设中的关键电网装备平台，行业需求确定性较高、2025年现金流和毛利率改善明显；但它不是拥有强定价权的消费/软件型复利机器，国家电网客户集中、招标压价、项目制波动和2026Q1利润大幅下滑，使当前约215亿元市值、约20倍TTM PE下的安全边际并不厚，结论偏“好公司，价格需等待”。"
+      }
+    ]
+  },
+  "scopes": {
+    "empty_position": {
+      "current_action": "WATCH",
+      "summary": "当前跟踪等待；可在 20-22 元作观察仓，或在更低价格并满足相应验证条件时建仓。",
+      "entry_semantic": "TRIAL_ENTRY_DEFINED",
+      "action_paths": [
+        {
+          "path_id": "aggressive-trial-20-22",
+          "action": "TRIAL_POSITION",
+          "scope": "empty_position",
+          "summary": "激进型仅可在约 20-22 元建立小仓观察仓，不追高。",
+          "condition": {
+            "children": [],
+            "minimum": null,
+            "metric": null,
+            "operator": "BETWEEN",
+            "value": null,
+            "unit": null,
+            "price_min": 20,
+            "price_max": 22,
+            "currency": "CNY",
+            "price_role": "TRIAL_ENTRY",
+            "evidence": [
+              {
+                "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                "line_start": 155,
+                "line_end": 155,
+                "quote": "| 激进型 | 小仓观察，不追高 | 约20-22元仅可观察仓；若确认直流/配网订单和利润率修复再加 | 行业景气可跟踪，但Q1利润下滑未消化完 |"
+              }
+            ],
+            "node_id": "trial-price-20-22",
+            "kind": "PRICE_RANGE",
+            "effect": "TRIAL_GATE",
+            "scope": "empty_position",
+            "description": "价格处于约 20-22 元。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+              "line_start": 155,
+              "line_end": 155,
+              "quote": "| 激进型 | 小仓观察，不追高 | 约20-22元仅可观察仓；若确认直流/配网订单和利润率修复再加 | 行业景气可跟踪，但Q1利润下滑未消化完 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "stable-entry-16-18-and-h1-repair",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "summary": "约 16-18 元且半年报确认修复后，稳健型才具备建仓路径。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 16,
+                "price_max": 18,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                    "line_start": 156,
+                    "line_end": 156,
+                    "quote": "| 稳健型 | 等待安全边际 | 约16-18元或PE(TTM)回到15-17x，同时半年报修复 | 给项目制波动和估值回撤留余地 |"
+                  }
+                ],
+                "node_id": "stable-price-16-18",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格约 16-18 元。"
+              },
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "OCCURS",
+                "value": true,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                    "line_start": 149,
+                    "line_end": 149,
+                    "quote": "| 时机 | 等待验证 | 重点看2026半年报利润率、订单和回款是否修复 |"
+                  }
+                ],
+                "node_id": "h1-repair-confirmed",
+                "kind": "FILING",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "半年报确认利润率、订单和回款修复。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                "line_start": 156,
+                "line_end": 156,
+                "quote": "| 稳健型 | 等待安全边际 | 约16-18元或PE(TTM)回到15-17x，同时半年报修复 | 给项目制波动和估值回撤留余地 |"
+              }
+            ],
+            "node_id": "stable-entry-all",
+            "kind": "ALL",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "价格约 16-18 元并且半年报修复。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+              "line_start": 156,
+              "line_end": 156,
+              "quote": "| 稳健型 | 等待安全边际 | 约16-18元或PE(TTM)回到15-17x，同时半年报修复 | 给项目制波动和估值回撤留余地 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        },
+        {
+          "path_id": "conservative-entry-low-price-or-irrational-decline",
+          "action": "OPEN_POSITION",
+          "scope": "empty_position",
+          "summary": "保守型未来只在约 13-15 元，或明显非理性下跌且基本面未恶化时考虑。",
+          "condition": {
+            "children": [
+              {
+                "children": [],
+                "minimum": null,
+                "metric": null,
+                "operator": "BETWEEN",
+                "value": null,
+                "unit": null,
+                "price_min": 13,
+                "price_max": 15,
+                "currency": "CNY",
+                "price_role": "CONDITIONAL_ENTRY",
+                "evidence": [
+                  {
+                    "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                    "line_start": 157,
+                    "line_end": 157,
+                    "quote": "| 保守型 | 暂不买入 | 约13-15元或出现明显非理性下跌且基本面未恶化 | 对应保守情景和更高股息/安全边际 |"
+                  }
+                ],
+                "node_id": "conservative-price-13-15",
+                "kind": "PRICE_RANGE",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "价格约 13-15 元。"
+              },
+              {
+                "children": [
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": "OCCURS",
+                    "value": true,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                        "line_start": 157,
+                        "line_end": 157,
+                        "quote": "| 保守型 | 暂不买入 | 约13-15元或出现明显非理性下跌且基本面未恶化 | 对应保守情景和更高股息/安全边际 |"
+                      }
+                    ],
+                    "node_id": "irrational-decline",
+                    "kind": "EVENT",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "出现明显非理性下跌。"
+                  },
+                  {
+                    "children": [],
+                    "minimum": null,
+                    "metric": null,
+                    "operator": null,
+                    "value": null,
+                    "unit": null,
+                    "price_min": null,
+                    "price_max": null,
+                    "currency": null,
+                    "price_role": null,
+                    "evidence": [
+                      {
+                        "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                        "line_start": 157,
+                        "line_end": 157,
+                        "quote": "| 保守型 | 暂不买入 | 约13-15元或出现明显非理性下跌且基本面未恶化 | 对应保守情景和更高股息/安全边际 |"
+                      }
+                    ],
+                    "node_id": "fundamentals-not-deteriorated",
+                    "kind": "QUALITATIVE",
+                    "effect": "ENTRY_GATE",
+                    "scope": "empty_position",
+                    "description": "基本面未恶化。"
+                  }
+                ],
+                "minimum": null,
+                "metric": null,
+                "operator": null,
+                "value": null,
+                "unit": null,
+                "price_min": null,
+                "price_max": null,
+                "currency": null,
+                "price_role": null,
+                "evidence": [
+                  {
+                    "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                    "line_start": 157,
+                    "line_end": 157,
+                    "quote": "| 保守型 | 暂不买入 | 约13-15元或出现明显非理性下跌且基本面未恶化 | 对应保守情景和更高股息/安全边际 |"
+                  }
+                ],
+                "node_id": "irrational-decline-all",
+                "kind": "ALL",
+                "effect": "ENTRY_GATE",
+                "scope": "empty_position",
+                "description": "出现明显非理性下跌且基本面未恶化。"
+              }
+            ],
+            "minimum": null,
+            "metric": null,
+            "operator": null,
+            "value": null,
+            "unit": null,
+            "price_min": null,
+            "price_max": null,
+            "currency": null,
+            "price_role": null,
+            "evidence": [
+              {
+                "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+                "line_start": 157,
+                "line_end": 157,
+                "quote": "| 保守型 | 暂不买入 | 约13-15元或出现明显非理性下跌且基本面未恶化 | 对应保守情景和更高股息/安全边际 |"
+              }
+            ],
+            "node_id": "conservative-entry-any",
+            "kind": "ANY",
+            "effect": "ENTRY_GATE",
+            "scope": "empty_position",
+            "description": "约 13-15 元，或者明显非理性下跌且基本面未恶化。"
+          },
+          "evidence": [
+            {
+              "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+              "line_start": 157,
+              "line_end": 157,
+              "quote": "| 保守型 | 暂不买入 | 约13-15元或出现明显非理性下跌且基本面未恶化 | 对应保守情景和更高股息/安全边际 |"
+            }
+          ],
+          "instrument_scope": "A_SHARE",
+          "semantic_status": "ready"
+        }
+      ],
+      "evidence": [
+        {
+          "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+          "line_start": 234,
+          "line_end": 234,
+          "quote": "许继电气最吸引人的地方，是它站在新型电力系统的长期主线上：特高压、柔直、配网智能化、智能计量、新能源并网都是真需求；它最容易被高估的地方，也正是“行业很确定”这件事。对股东而言，真正的问题不是有没有电网投资，而是订单利润能否留在许继、价格会不会被招标压下去、回款能否持续、集团治理是否真正保护中小股东。以2026-07-06的21.11元看，当前更适合跟踪和等待验证，而不是用行业景气替代安全边际。"
+        }
+      ],
+      "semantic_status": "ready"
+    },
+    "holder": {
+      "current_action": "UNKNOWN",
+      "summary": "报告没有给出现有持仓者的独立当前动作。",
+      "entry_semantic": "NO_ENTRY_DEFINED",
+      "action_paths": [],
+      "evidence": [
+        {
+          "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+          "line_start": 151,
+          "line_end": 157,
+          "quote": "### 7.2 分层操作建议（非投资建议，仅框架演练）"
+        }
+      ],
+      "semantic_status": "ready"
+    }
+  },
+  "hard_blocks": [],
+  "redlines": [
+    {
+      "children": [
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+              "line_start": 169,
+              "line_end": 169,
+              "quote": "1. 2026全年利润继续大幅下滑，说明价格压力不是季度扰动。"
+            }
+          ],
+          "node_id": "profit-keeps-falling",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "2026 全年利润继续大幅下滑。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+              "line_start": 170,
+              "line_end": 170,
+              "quote": "2. 应收账款重新大幅上升，或3年以上应收/坏账准备恶化。"
+            }
+          ],
+          "node_id": "receivables-worsen",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "应收账款或长期应收坏账恶化。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+              "line_start": 171,
+              "line_end": 171,
+              "quote": "3. 新能源系统集成、充换电等低毛利业务占比提升但利润质量下降。"
+            }
+          ],
+          "node_id": "low-margin-mix-worsens",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "低毛利业务占比提高且利润质量下降。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+              "line_start": 172,
+              "line_end": 172,
+              "quote": "4. 关联交易规模扩大且利润率、公允性披露不足。"
+            }
+          ],
+          "node_id": "related-transactions-expand",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "关联交易扩大且公允性披露不足。"
+        },
+        {
+          "children": [],
+          "minimum": null,
+          "metric": null,
+          "operator": "OCCURS",
+          "value": true,
+          "unit": null,
+          "price_min": null,
+          "price_max": null,
+          "currency": null,
+          "price_role": null,
+          "evidence": [
+            {
+              "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+              "line_start": 173,
+              "line_end": 173,
+              "quote": "5. 股价上行至30元附近但没有相应EPS提升，仅由行业情绪推动。"
+            }
+          ],
+          "node_id": "price-near-30-without-eps",
+          "kind": "EVENT",
+          "effect": "INVALIDATION",
+          "scope": "both",
+          "description": "股价接近 30 元但没有相应 EPS 提升。"
+        }
+      ],
+      "minimum": null,
+      "metric": null,
+      "operator": null,
+      "value": null,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+          "line_start": 168,
+          "line_end": 173,
+          "quote": "**减仓/回避信号：**"
+        }
+      ],
+      "node_id": "avoid-on-any-negative-signal",
+      "kind": "ANY",
+      "effect": "INVALIDATION",
+      "scope": "both",
+      "description": "利润持续大跌、应收恶化、低毛利业务拖累、关联交易不透明或无 EPS 支撑的情绪上涨任一出现时减仓或回避。"
+    }
+  ],
+  "monitoring_conditions": [
+    {
+      "children": [],
+      "minimum": null,
+      "metric": null,
+      "operator": "OCCURS",
+      "value": true,
+      "unit": null,
+      "price_min": null,
+      "price_max": null,
+      "currency": null,
+      "price_role": null,
+      "evidence": [
+        {
+          "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+          "line_start": 149,
+          "line_end": 149,
+          "quote": "| 时机 | 等待验证 | 重点看2026半年报利润率、订单和回款是否修复 |"
+        }
+      ],
+      "node_id": "monitor-h1-repair",
+      "kind": "FILING",
+      "effect": "MONITOR",
+      "scope": "both",
+      "description": "核验 2026 半年报利润率、订单和回款是否修复。"
+    }
+  ],
+  "valuation_references": [
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "当前市场价格",
+      "price_role": "CURRENT_PRICE_REFERENCE",
+      "value": 21.11,
+      "min": null,
+      "max": null,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+          "line_start": 181,
+          "line_end": 181,
+          "quote": "- 腾讯行情与新浪行情均显示：2026-07-06许继电气收盘/最新价为 **21.11元**。  "
+        }
+      ]
+    },
+    {
+      "instrument_scope": "A_SHARE",
+      "label": "三情景目标价",
+      "price_role": "TARGET_PRICE",
+      "value": null,
+      "min": 13.4,
+      "max": 30.8,
+      "currency": "CNY",
+      "actionable": false,
+      "evidence": [
+        {
+          "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+          "line_start": 189,
+          "line_end": 193,
+          "quote": "| 情景 | EPS年增速 | 目标PE | 3年后EPS | 目标价 | 相对21.11元 |\n|---|---:|---:|---:|---:|---:|\n| 保守 | -3% | 14x | 0.96元 | 13.4元 | -36.4% |\n| 中性 | +5% | 18x | 1.22元 | 21.9元 | +3.8% |\n| 乐观 | +10% | 22x | 1.40元 | 30.8元 | +45.8% |"
+        }
+      ]
+    }
+  ],
+  "report_contract_conflict": {
+    "present": false,
+    "summary": null,
+    "evidence": []
+  },
+  "requires_strong_review": true,
+  "ambiguities": [],
+  "evidence_index": [
+    {
+      "report_path": "reports/许继电气/许继电气投资研究报告_20260707.md",
+      "line_start": 139,
+      "line_end": 173,
+      "quote": "## 7. 最终投资建议"
+    }
+  ],
+  "business_risk_reasons": [],
+  "semantic_review_reasons": [
+    "NESTED_LOGIC",
+    "ANY_LOGIC"
+  ]
+}
