@@ -11,6 +11,26 @@ APP = ROOT / "site/assets/app.js"
 
 @unittest.skipUnless(shutil.which("node"), "Node required")
 class DashboardPolishTests(unittest.TestCase):
+    def test_price_trigger_identifies_exact_zone_and_filters_by_state_or_rule(self):
+        self.run_js(
+            ["priceRuleExpression", "currentMatchedPriceZoneSummary", "priceTriggerDisplayLabel",
+             "priceTriggerStateMatches", "priceTriggerZoneMatches", "formatNumber"],
+            '''
+import assert from 'node:assert/strict';
+const zone={rule_id:'moutai-1100-1300',operator:'BETWEEN',price_min:1100,price_max:1300,
+ currency:'CNY',action:'OPEN_POSITION',price_role:'CONDITIONAL_ENTRY'};
+const record={price_trigger_shadow:{price_state:'PRICE_ZONE_MATCHED',matched_rule_ids:[zone.rule_id],matched_price_zones:[zone]}};
+''',
+            '''
+assert.equal(priceRuleExpression(zone),'1,100–1,300');
+assert.equal(currentMatchedPriceZoneSummary(record),'1,100–1,300 CNY · 空仓首次建仓');
+assert.equal(priceTriggerStateMatches(record,'matched'),true);
+assert.equal(priceTriggerStateMatches(record,'OUTSIDE_PRICE_ZONE'),false);
+assert.equal(priceTriggerZoneMatches(record,'moutai-1100-1300'),true);
+assert.equal(priceTriggerZoneMatches(record,'another-zone'),false);
+''',
+        )
+
     def test_candidate_shadow_localizes_display_without_mutating_machine_values(self):
         self.run_js(
             ["renderCandidateShadow", "candidateDisplayLabel", "candidateMachineValue",

@@ -142,6 +142,8 @@ const state = {
   checklist: "all",
   priceNear: false,
   opportunity: "all",
+  priceTriggerState: "all",
+  priceTriggerZone: "all",
   sort: "attention",
   quickFilter: "all",
   page: 1,
@@ -189,6 +191,8 @@ const els = {
   blocker: document.querySelector("#blocker-filter"),
   checklist: document.querySelector("#checklist-filter"),
   opportunity: document.querySelector("#opportunity-filter"),
+  priceTriggerState: document.querySelector("#price-trigger-state-filter"),
+  priceTriggerZone: document.querySelector("#price-trigger-zone-filter"),
   sort: document.querySelector("#sort-filter"),
   quickFilters: document.querySelector(".quick-filter-bar"),
   moreFilters: document.querySelector("#more-filters"),
@@ -1115,10 +1119,11 @@ function renderWatchRow(record) {
   const quote = quoteFor(record);
   const lifecycle = lifecycleOf(record);
   const action = record.next_action;
+  const priceTriggerSummary = currentMatchedPriceZoneSummary(record);
   return `<tr data-ticker="${escapeHtml(record.ticker)}" tabindex="0">
     <td>${compactCompany(record)}</td>
     <td><span class="table-price">${escapeHtml(formatPrice(quote))}</span>${quoteReference(quote) ? `<div class="table-secondary">${escapeHtml(quoteReference(quote))}</div>` : ""}${quoteIsCurrent(quote) && quote?.change_pct != null ? `<div class="table-secondary ${quote.change_pct >= 0 ? "price-change-up" : "price-change-down"}">${quote.change_pct >= 0 ? "+" : ""}${escapeHtml(formatNumber(quote.change_pct, 2))}%</div>` : ""}</td>
-    <td><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycle)}">${escapeHtml(label("lifecycle", lifecycle))}</span><div class="table-secondary">${escapeHtml(record.opportunity_type === "both" ? "价格 + 条件" : record.opportunity_type === "price" ? "价格机会" : record.opportunity_type === "condition" ? "条件机会" : "普通观察")}</div></td>
+    <td><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycle)}">${escapeHtml(label("lifecycle", lifecycle))}</span><div class="table-secondary">${escapeHtml(record.opportunity_type === "both" ? "价格 + 条件" : record.opportunity_type === "price" ? "价格机会" : record.opportunity_type === "condition" ? "条件机会" : "普通观察")}</div>${priceTriggerSummary ? `<div class="table-secondary">当前命中：${escapeHtml(priceTriggerSummary)}</div>` : ""}</td>
     <td><div class="table-condition">${escapeHtml(keyCondition(record))}</div></td>
     <td>${compactDataSummary(record)}</td>
     <td><span class="table-next" data-tone="${escapeHtml(actionTone(action))}">${escapeHtml(actionLabel(record))}</span></td>
@@ -1176,6 +1181,18 @@ function skillMatches(record, value) {
   return guidance.requires_user_action === true && skills.includes(value);
 }
 
+function priceTriggerStateMatches(record, value) {
+  if (!value || value === "all") return true;
+  const priceState = record?.price_trigger_shadow?.price_state;
+  if (value === "matched") return ["PRICE_ZONE_MATCHED", "MULTIPLE_PRICE_ZONES_MATCHED"].includes(priceState);
+  return priceState === value;
+}
+
+function priceTriggerZoneMatches(record, ruleId) {
+  if (!ruleId || ruleId === "all") return true;
+  return (record?.price_trigger_shadow?.matched_rule_ids || []).includes(ruleId);
+}
+
 function matchesUnifiedFilters(record, filters) {
   const search = String(filters.search || "").toLowerCase();
   const guidance = record?.action_guidance || {};
@@ -1201,6 +1218,8 @@ function matchesUnifiedFilters(record, filters) {
     && matchesBlocker
     && matchesChecklist
     && matchesOpportunity
+    && priceTriggerStateMatches(record, filters.priceTriggerState)
+    && priceTriggerZoneMatches(record, filters.priceTriggerZone)
     && matchesPriceNear;
 }
 
@@ -1247,6 +1266,23 @@ function populateDynamicFilters() {
       .map(([value, item]) => ({ value, label: `${item.label} · ${item.count}` })),
   ], state.blocker);
   state.blocker = els.blocker.value;
+  const matchedZones = [];
+  for (const record of records) {
+    const trigger = record?.price_trigger_shadow;
+    const matchedIds = new Set(trigger?.matched_rule_ids || []);
+    for (const zone of trigger?.available_price_zones || []) {
+      if (!matchedIds.has(zone.rule_id)) continue;
+      matchedZones.push({
+        value: zone.rule_id,
+        label: `${record.company} · ${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerDisplayLabel("action", zone.action)}`,
+      });
+    }
+  }
+  setSelectOptions(els.priceTriggerZone, [
+    { value: "all", label: "全部当前命中区间" },
+    ...matchedZones.sort((a, b) => a.label.localeCompare(b.label, "zh-CN")),
+  ], state.priceTriggerZone);
+  state.priceTriggerZone = els.priceTriggerZone.value;
 }
 
 function selectedOptionText(select) {
@@ -1268,6 +1304,8 @@ function activeFilterEntries() {
     ["lightThesis", els.lightThesis, "轻量逻辑"], ["formalDrift", els.formalDrift, "正式复核"],
     ["blocker", els.blocker, "卡点"], ["checklist", els.checklist, "Checklist"],
     ["opportunity", els.opportunity, "条件"],
+    ["priceTriggerState", els.priceTriggerState, "价格状态"],
+    ["priceTriggerZone", els.priceTriggerZone, "命中区间"],
   ]) {
     if (state[key] !== "all" && key !== presetField) entries.push({ key, label: `${prefix}：${selectedOptionText(select)}` });
   }
@@ -1284,7 +1322,7 @@ function renderFilterState() {
   els.activeFilterChips.innerHTML = entries.length
     ? entries.map((entry) => `<button type="button" class="active-filter-chip" data-clear-filter="${escapeHtml(entry.key)}">${escapeHtml(entry.label)}<span aria-hidden="true">×</span></button>`).join("")
     : `<span class="filter-empty-note">当前显示全部公司</span>`;
-  const advancedCount = ["market", "lifecycle", "actionStatus", "skill", "lightThesis", "formalDrift", "blocker", "checklist", "opportunity"].filter((key) => state[key] !== "all").length;
+  const advancedCount = ["market", "lifecycle", "actionStatus", "skill", "lightThesis", "formalDrift", "blocker", "checklist", "opportunity", "priceTriggerState", "priceTriggerZone"].filter((key) => state[key] !== "all").length;
   els.advancedFilterCount.textContent = advancedCount ? `${advancedCount} 项已启用` : "未启用";
 }
 
@@ -1608,16 +1646,26 @@ function priceTriggerDisplayLabel(group, value) {
   return mappings[group]?.[String(value)] || "未分类";
 }
 
-function renderPriceZone(zone, isMatched = false) {
-  const lower = formatNumber(zone.price_min, 2);
-  const upper = formatNumber(zone.price_max, 2);
-  const priceExpression = {
+function priceRuleExpression(zone) {
+  const lower = formatNumber(zone?.price_min, 2);
+  const upper = formatNumber(zone?.price_max, 2);
+  return {
     BETWEEN: `${lower}–${upper}`,
     LT: `< ${upper}`,
     LTE: `≤ ${upper}`,
     GT: `> ${lower}`,
     GTE: `≥ ${lower}`,
-  }[zone.operator] || "价格规则未分类";
+  }[zone?.operator] || "价格规则未分类";
+}
+
+function currentMatchedPriceZoneSummary(record) {
+  const trigger = record?.price_trigger_shadow;
+  const matched = Array.isArray(trigger?.matched_price_zones) ? trigger.matched_price_zones : [];
+  return matched.map((zone) => `${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerDisplayLabel("action", zone.action)}`).join("；");
+}
+
+function renderPriceZone(zone, isMatched = false) {
+  const priceExpression = priceRuleExpression(zone);
   const hints = Array.isArray(zone.manual_check_conditions) ? zone.manual_check_conditions : [];
   const required = hints.filter((hint) => hint.relationship === "REQUIRED_WITH_PRICE");
   const contextual = hints.filter((hint) => hint.relationship !== "REQUIRED_WITH_PRICE");
@@ -1644,7 +1692,7 @@ function renderPriceTriggerShadow(record) {
   const fields = [
     ["价格状态", priceTriggerDisplayLabel("state", trigger.price_state), trigger.price_state],
     ["当前价格", price, trigger.current_price],
-    ["命中价格区间", matched.length ? `${matched.length} 个` : "无", trigger.matched_rule_ids],
+    ["当前命中区间", matched.length ? currentMatchedPriceZoneSummary(record) : "无", trigger.matched_rule_ids],
     ["行情截止日", trigger.price_cutoff || "—", trigger.price_cutoff],
     ["可进入正式决策", "否", trigger.production_eligible],
   ];
@@ -1968,6 +2016,8 @@ function resetFilterState({ preserveSearch = false } = {}) {
   state.checklist = "all";
   state.priceNear = false;
   state.opportunity = "all";
+  state.priceTriggerState = "all";
+  state.priceTriggerZone = "all";
   state.sort = "attention";
   state.quickFilter = "all";
   state.page = 1;
@@ -1984,6 +2034,8 @@ function syncFilterControls() {
   els.blocker.value = state.blocker;
   els.checklist.value = state.checklist;
   els.opportunity.value = state.opportunity;
+  els.priceTriggerState.value = state.priceTriggerState;
+  els.priceTriggerZone.value = state.priceTriggerZone;
   els.sort.value = state.sort;
 }
 
@@ -2087,7 +2139,8 @@ function bindEvents() {
   for (const [select, key] of [
     [els.market, "market"], [els.lifecycle, "lifecycle"], [els.actionStatus, "actionStatus"],
     [els.skill, "skill"], [els.lightThesis, "lightThesis"], [els.formalDrift, "formalDrift"],
-    [els.blocker, "blocker"], [els.checklist, "checklist"], [els.opportunity, "opportunity"], [els.sort, "sort"],
+    [els.blocker, "blocker"], [els.checklist, "checklist"], [els.opportunity, "opportunity"],
+    [els.priceTriggerState, "priceTriggerState"], [els.priceTriggerZone, "priceTriggerZone"], [els.sort, "sort"],
   ]) {
     select.addEventListener("change", () => {
       state[key] = select.value;

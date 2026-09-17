@@ -183,6 +183,8 @@
                     <label class="select-control"><span>当前卡点</span><select id="blocker-filter"><option value="all">全部卡点</option></select></label>
                     <label class="select-control"><span>Checklist 结果</span><select id="checklist-filter"><option value="all">全部 Checklist</option><option value="PASS">通过</option><option value="CONDITIONAL_PASS">条件通过</option><option value="FAIL">未通过</option><option value="UNKNOWN">尚未检查</option></select></label>
                     <label class="select-control"><span>条件类型</span><select id="opportunity-filter"><option value="all">全部条件</option><option value="price">价格条件</option><option value="condition">待验证条件</option></select></label>
+                    <label class="select-control"><span>价格触发状态</span><select id="price-trigger-state-filter"><option value="all">全部价格状态</option><option value="matched">当前已命中任一区间</option><option value="OUTSIDE_PRICE_ZONE">当前在全部区间外</option><option value="PRICE_DATA_UNAVAILABLE">行情不可用</option><option value="NO_PRICE_PATH">无价格路径</option></select></label>
+                    <label class="select-control"><span>当前命中区间</span><select id="price-trigger-zone-filter"><option value="all">全部当前命中区间</option></select></label>
                     <label class="select-control"><span>排序</span><select id="sort-filter"><option value="attention">待处理优先</option><option value="lifecycle">按阶段</option><option value="price">按价格机会</option><option value="name">按公司名</option></select></label>
                   </div>
                 </details>

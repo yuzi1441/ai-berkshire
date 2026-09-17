@@ -172,12 +172,16 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
 
     def test_frontend_warning_and_price_only_fields_are_explicit(self):
         app = (ROOT / "site/assets/app.js").read_text()
+        page = (ROOT / "site/index.html").read_text()
         self.assertIn("价格命中不代表买入条件已经满足，请人工核对报告条件", app)
         self.assertIn("renderPriceTriggerShadow(record)", app)
         self.assertIn("matched_price_zones", app)
         self.assertIn("附加人工核对条件", app)
         self.assertIn("主报告全部价格路径与建议", app)
         self.assertIn("完整候选判断（研究 / 审计）", app)
+        self.assertIn("当前命中区间", app)
+        self.assertIn('id="price-trigger-state-filter"', page)
+        self.assertIn('id="price-trigger-zone-filter"', page)
 
 
 if __name__ == "__main__":
