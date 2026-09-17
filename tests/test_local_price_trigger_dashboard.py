@@ -29,7 +29,7 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.evaluated_at = datetime(2026, 9, 16, 19, 50, tzinfo=ZoneInfo("Asia/Shanghai"))
-        cls.rules = price_trigger.compile_price_rules(ROOT)
+        cls.rules = price_trigger.compile_price_rules(ROOT, price_trigger.PRIORITY_TICKERS)
         cls.quotes = {
             "data_cutoff": "2026-09-16",
             "source_status": "ok",
@@ -59,6 +59,14 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
         self.assertGreater(self.rules["rule_count"], 20)
         self.assertFalse(self.rules["production_consumable"])
         self.assertTrue(all(item["semantic_contract_sha256"] for item in self.rules["companies"]))
+
+    def test_default_rule_compilation_covers_all_a_share_contracts(self):
+        tickers = price_trigger.discover_contract_tickers(ROOT)
+        rules = price_trigger.compile_price_rules(ROOT)
+        self.assertEqual(len(tickers), 93)
+        self.assertEqual(rules["company_count"], 93)
+        self.assertEqual({item["ticker"] for item in rules["companies"]}, set(tickers))
+        self.assertGreater(rules["rule_count"], 200)
 
     def test_quote_only_layer_uses_price_states_not_candidate_states(self):
         self.assertEqual(price_trigger.validate_price_trigger_layer(
@@ -121,7 +129,7 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
         rebuilt = price_trigger.match_price_triggers(self.rules, changed, self.evaluated_at)
         by_ticker = {item["ticker"]: item for item in rebuilt["companies"]}
         self.assertEqual(by_ticker["600519.SH"]["price_state"], "OUTSIDE_PRICE_ZONE")
-        self.assertEqual(self.rules, price_trigger.compile_price_rules(ROOT))
+        self.assertEqual(self.rules, price_trigger.compile_price_rules(ROOT, price_trigger.PRIORITY_TICKERS))
 
     def test_missing_quote_fails_closed(self):
         missing = json.loads(json.dumps(self.quotes))
@@ -180,8 +188,12 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
         self.assertIn("主报告全部价格路径与建议", app)
         self.assertIn("完整候选判断（研究 / 审计）", app)
         self.assertIn("当前命中区间", app)
-        self.assertIn('id="price-trigger-state-filter"', page)
-        self.assertIn('id="price-trigger-zone-filter"', page)
+        self.assertIn('data-workspace="price-zones"', page)
+        self.assertIn('data-workspace-panel="price-zones"', page)
+        self.assertIn('id="price-zone-status-filter"', page)
+        self.assertIn('id="price-zone-exact-filter"', page)
+        self.assertIn('id="price-zone-list"', page)
+        self.assertNotIn('id="price-trigger-state-filter"', page)
 
 
 if __name__ == "__main__":

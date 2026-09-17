@@ -33,6 +33,9 @@
           <button class="workspace-nav-item" type="button" data-workspace="ai-research">
             <span>AI 每日机会</span><span class="workspace-nav-count" id="nav-ai-count">—</span>
           </button>
+          <button class="workspace-nav-item" type="button" data-workspace="price-zones">
+            <span>价格区间</span><span class="workspace-nav-count" id="nav-price-zones-count">—</span>
+          </button>
           <button class="workspace-nav-item" type="button" data-workspace="watchlist">
             <span>研究池</span><span class="workspace-nav-count" id="nav-watchlist-count">—</span>
           </button>
@@ -142,6 +145,40 @@
             </section>
           </section>
 
+          <section class="workspace-panel" data-workspace-panel="price-zones" aria-labelledby="price-zones-title" hidden>
+            <section class="section price-zones-section">
+              <div class="section-heading">
+                <div>
+                  <p class="section-eyebrow">日常价格触发</p>
+                  <h1 id="price-zones-title">A 股价格区间</h1>
+                  <p class="section-note">只判断当前价格落在哪个主报告价格区间。价格命中不代表买入条件已经满足，请人工核对报告条件。</p>
+                </div>
+                <span class="section-count" id="price-zones-count">—</span>
+              </div>
+              <div class="price-zone-summary" id="price-zone-summary" aria-label="价格区间概览"></div>
+              <div class="price-zone-toolbar" aria-label="价格区间筛选">
+                <label class="search-control">
+                  <span class="sr-only">搜索 A 股公司或代码</span>
+                  <input id="price-zone-search" type="search" placeholder="搜索 A 股公司 / ticker" autocomplete="off" />
+                </label>
+                <label class="select-control"><span>价格状态</span><select id="price-zone-status-filter"><option value="all">全部状态</option><option value="matched">当前已进入区间</option><option value="OUTSIDE_PRICE_ZONE">当前在全部区间外</option><option value="PRICE_DATA_UNAVAILABLE">行情不可用</option><option value="NO_PRICE_PATH">报告无价格路径</option></select></label>
+                <label class="select-control"><span>路径类型</span><select id="price-zone-action-filter"><option value="all">全部路径类型</option></select></label>
+                <label class="select-control price-zone-exact-filter"><span>当前所在区间</span><select id="price-zone-exact-filter"><option value="all">全部当前区间</option></select></label>
+                <label class="select-control"><span>排序</span><select id="price-zone-sort"><option value="matched-first">命中优先</option><option value="price-state">按价格状态</option><option value="name">按公司名</option></select></label>
+                <button class="button button-quiet" id="price-zone-clear" type="button">清除筛选</button>
+              </div>
+              <div class="price-zone-meta" id="price-zone-meta">正在加载价格区间…</div>
+              <div class="price-zone-table-wrap">
+                <table class="price-zone-table">
+                  <thead><tr><th>公司</th><th>当前价格</th><th>价格状态</th><th>当前所在区间</th><th>主报告全部价格路径</th><th>人工核对</th></tr></thead>
+                  <tbody id="price-zone-list"></tbody>
+                </table>
+              </div>
+              <button class="button button-outline load-more" id="price-zone-load-more" type="button" hidden>加载更多</button>
+              <div class="empty-state" id="price-zone-empty" hidden><strong>当前没有符合筛选条件的公司</strong><span>可以清除筛选后查看全部 93 家 A 股。</span></div>
+            </section>
+          </section>
+
           <section class="workspace-panel" data-workspace-panel="watchlist" aria-labelledby="watchlist-title" hidden>
             <section class="section watchlist-section" id="watchlist-section">
               <div class="section-heading">
@@ -183,8 +220,6 @@
                     <label class="select-control"><span>当前卡点</span><select id="blocker-filter"><option value="all">全部卡点</option></select></label>
                     <label class="select-control"><span>Checklist 结果</span><select id="checklist-filter"><option value="all">全部 Checklist</option><option value="PASS">通过</option><option value="CONDITIONAL_PASS">条件通过</option><option value="FAIL">未通过</option><option value="UNKNOWN">尚未检查</option></select></label>
                     <label class="select-control"><span>条件类型</span><select id="opportunity-filter"><option value="all">全部条件</option><option value="price">价格条件</option><option value="condition">待验证条件</option></select></label>
-                    <label class="select-control"><span>价格触发状态</span><select id="price-trigger-state-filter"><option value="all">全部价格状态</option><option value="matched">当前已命中任一区间</option><option value="OUTSIDE_PRICE_ZONE">当前在全部区间外</option><option value="PRICE_DATA_UNAVAILABLE">行情不可用</option><option value="NO_PRICE_PATH">无价格路径</option></select></label>
-                    <label class="select-control"><span>当前命中区间</span><select id="price-trigger-zone-filter"><option value="all">全部当前命中区间</option></select></label>
                     <label class="select-control"><span>排序</span><select id="sort-filter"><option value="attention">待处理优先</option><option value="lifecycle">按阶段</option><option value="price">按价格机会</option><option value="name">按公司名</option></select></label>
                   </div>
                 </details>

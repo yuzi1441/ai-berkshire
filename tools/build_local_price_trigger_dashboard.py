@@ -116,7 +116,19 @@ def _deduplicate_hints(hints: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return result
 
 
-def compile_price_rules(repo_root: Path, tickers: Iterable[str] = PRIORITY_TICKERS) -> dict[str, Any]:
+def discover_contract_tickers(repo_root: Path) -> tuple[str, ...]:
+    """Return the tracked A-share semantic-contract universe."""
+    directory = repo_root / CONTRACT_DIRECTORY
+    return tuple(sorted(
+        path.stem for path in directory.glob("*.json")
+        if path.stem.endswith((".SH", ".SZ", ".BJ"))
+    ))
+
+
+def compile_price_rules(
+    repo_root: Path, tickers: Iterable[str] | None = None,
+) -> dict[str, Any]:
+    tickers = tuple(tickers) if tickers is not None else discover_contract_tickers(repo_root)
     companies: list[dict[str, Any]] = []
     for ticker in tickers:
         contract_path = repo_root / CONTRACT_DIRECTORY / f"{ticker}.json"
@@ -326,8 +338,9 @@ def _candidate_snapshot_records(payload: Any, expected_tickers: set[str]) -> dic
         str(item.get("ticker")): item for item in payload.get("companies", [])
         if isinstance(item, dict) and item.get("ticker")
     }
-    if set(records) != expected_tickers:
-        raise ValueError("full candidate snapshot ticker set does not match price trigger layer")
+    unexpected = set(records) - expected_tickers
+    if unexpected:
+        raise ValueError(f"full candidate snapshot contains tickers outside price trigger layer: {sorted(unexpected)}")
     return records
 
 

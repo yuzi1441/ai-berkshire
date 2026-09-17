@@ -43,6 +43,7 @@ const WORKSPACES = {
   holdings: "我的持仓",
   opportunities: "买入候选",
   "ai-research": "AI 每日机会",
+  "price-zones": "价格区间",
   watchlist: "研究池",
 };
 
@@ -142,8 +143,12 @@ const state = {
   checklist: "all",
   priceNear: false,
   opportunity: "all",
-  priceTriggerState: "all",
-  priceTriggerZone: "all",
+  priceZoneSearch: "",
+  priceZoneStatus: "all",
+  priceZoneAction: "all",
+  priceZoneExact: "all",
+  priceZoneSort: "matched-first",
+  priceZonePage: 1,
   sort: "attention",
   quickFilter: "all",
   page: 1,
@@ -191,8 +196,18 @@ const els = {
   blocker: document.querySelector("#blocker-filter"),
   checklist: document.querySelector("#checklist-filter"),
   opportunity: document.querySelector("#opportunity-filter"),
-  priceTriggerState: document.querySelector("#price-trigger-state-filter"),
-  priceTriggerZone: document.querySelector("#price-trigger-zone-filter"),
+  priceZoneSummary: document.querySelector("#price-zone-summary"),
+  priceZoneCount: document.querySelector("#price-zones-count"),
+  priceZoneMeta: document.querySelector("#price-zone-meta"),
+  priceZoneList: document.querySelector("#price-zone-list"),
+  priceZoneSearch: document.querySelector("#price-zone-search"),
+  priceZoneStatus: document.querySelector("#price-zone-status-filter"),
+  priceZoneAction: document.querySelector("#price-zone-action-filter"),
+  priceZoneExact: document.querySelector("#price-zone-exact-filter"),
+  priceZoneSort: document.querySelector("#price-zone-sort"),
+  priceZoneClear: document.querySelector("#price-zone-clear"),
+  priceZoneLoadMore: document.querySelector("#price-zone-load-more"),
+  priceZoneEmpty: document.querySelector("#price-zone-empty"),
   sort: document.querySelector("#sort-filter"),
   quickFilters: document.querySelector(".quick-filter-bar"),
   moreFilters: document.querySelector("#more-filters"),
@@ -219,6 +234,7 @@ const els = {
   navHoldingsCount: document.querySelector("#nav-holdings-count"),
   navOpportunitiesCount: document.querySelector("#nav-opportunities-count"),
   navAiCount: document.querySelector("#nav-ai-count"),
+  navPriceZonesCount: document.querySelector("#nav-price-zones-count"),
   navWatchlistCount: document.querySelector("#nav-watchlist-count"),
 };
 
@@ -513,11 +529,13 @@ function aiNavigationCount() {
 
 function renderWorkspaceNav() {
   const attentionToday = attentionRecords().length;
+  const priceZoneCompanies = stateRecords().filter((record) => record?.price_trigger_shadow).length;
   const counts = {
     attention: attentionToday,
     holdings: stateCount("HOLDING"),
     opportunities: checklistRecords().length,
     "ai-research": aiNavigationCount(),
+    "price-zones": priceZoneCompanies || "—",
     watchlist: stateRecords().length,
   };
   const elements = {
@@ -525,6 +543,7 @@ function renderWorkspaceNav() {
     holdings: els.navHoldingsCount,
     opportunities: els.navOpportunitiesCount,
     "ai-research": els.navAiCount,
+    "price-zones": els.navPriceZonesCount,
     watchlist: els.navWatchlistCount,
   };
   for (const [workspace, element] of Object.entries(elements)) {
@@ -1119,11 +1138,10 @@ function renderWatchRow(record) {
   const quote = quoteFor(record);
   const lifecycle = lifecycleOf(record);
   const action = record.next_action;
-  const priceTriggerSummary = currentMatchedPriceZoneSummary(record);
   return `<tr data-ticker="${escapeHtml(record.ticker)}" tabindex="0">
     <td>${compactCompany(record)}</td>
     <td><span class="table-price">${escapeHtml(formatPrice(quote))}</span>${quoteReference(quote) ? `<div class="table-secondary">${escapeHtml(quoteReference(quote))}</div>` : ""}${quoteIsCurrent(quote) && quote?.change_pct != null ? `<div class="table-secondary ${quote.change_pct >= 0 ? "price-change-up" : "price-change-down"}">${quote.change_pct >= 0 ? "+" : ""}${escapeHtml(formatNumber(quote.change_pct, 2))}%</div>` : ""}</td>
-    <td><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycle)}">${escapeHtml(label("lifecycle", lifecycle))}</span><div class="table-secondary">${escapeHtml(record.opportunity_type === "both" ? "价格 + 条件" : record.opportunity_type === "price" ? "价格机会" : record.opportunity_type === "condition" ? "条件机会" : "普通观察")}</div>${priceTriggerSummary ? `<div class="table-secondary">当前命中：${escapeHtml(priceTriggerSummary)}</div>` : ""}</td>
+    <td><span class="lifecycle-badge" data-lifecycle="${escapeHtml(lifecycle)}">${escapeHtml(label("lifecycle", lifecycle))}</span><div class="table-secondary">${escapeHtml(record.opportunity_type === "both" ? "价格 + 条件" : record.opportunity_type === "price" ? "价格机会" : record.opportunity_type === "condition" ? "条件机会" : "普通观察")}</div></td>
     <td><div class="table-condition">${escapeHtml(keyCondition(record))}</div></td>
     <td>${compactDataSummary(record)}</td>
     <td><span class="table-next" data-tone="${escapeHtml(actionTone(action))}">${escapeHtml(actionLabel(record))}</span></td>
@@ -1218,8 +1236,6 @@ function matchesUnifiedFilters(record, filters) {
     && matchesBlocker
     && matchesChecklist
     && matchesOpportunity
-    && priceTriggerStateMatches(record, filters.priceTriggerState)
-    && priceTriggerZoneMatches(record, filters.priceTriggerZone)
     && matchesPriceNear;
 }
 
@@ -1266,23 +1282,7 @@ function populateDynamicFilters() {
       .map(([value, item]) => ({ value, label: `${item.label} · ${item.count}` })),
   ], state.blocker);
   state.blocker = els.blocker.value;
-  const matchedZones = [];
-  for (const record of records) {
-    const trigger = record?.price_trigger_shadow;
-    const matchedIds = new Set(trigger?.matched_rule_ids || []);
-    for (const zone of trigger?.available_price_zones || []) {
-      if (!matchedIds.has(zone.rule_id)) continue;
-      matchedZones.push({
-        value: zone.rule_id,
-        label: `${record.company} · ${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerDisplayLabel("action", zone.action)}`,
-      });
-    }
-  }
-  setSelectOptions(els.priceTriggerZone, [
-    { value: "all", label: "全部当前命中区间" },
-    ...matchedZones.sort((a, b) => a.label.localeCompare(b.label, "zh-CN")),
-  ], state.priceTriggerZone);
-  state.priceTriggerZone = els.priceTriggerZone.value;
+  populatePriceZoneFilters();
 }
 
 function selectedOptionText(select) {
@@ -1304,8 +1304,6 @@ function activeFilterEntries() {
     ["lightThesis", els.lightThesis, "轻量逻辑"], ["formalDrift", els.formalDrift, "正式复核"],
     ["blocker", els.blocker, "卡点"], ["checklist", els.checklist, "Checklist"],
     ["opportunity", els.opportunity, "条件"],
-    ["priceTriggerState", els.priceTriggerState, "价格状态"],
-    ["priceTriggerZone", els.priceTriggerZone, "命中区间"],
   ]) {
     if (state[key] !== "all" && key !== presetField) entries.push({ key, label: `${prefix}：${selectedOptionText(select)}` });
   }
@@ -1322,7 +1320,7 @@ function renderFilterState() {
   els.activeFilterChips.innerHTML = entries.length
     ? entries.map((entry) => `<button type="button" class="active-filter-chip" data-clear-filter="${escapeHtml(entry.key)}">${escapeHtml(entry.label)}<span aria-hidden="true">×</span></button>`).join("")
     : `<span class="filter-empty-note">当前显示全部公司</span>`;
-  const advancedCount = ["market", "lifecycle", "actionStatus", "skill", "lightThesis", "formalDrift", "blocker", "checklist", "opportunity", "priceTriggerState", "priceTriggerZone"].filter((key) => state[key] !== "all").length;
+  const advancedCount = ["market", "lifecycle", "actionStatus", "skill", "lightThesis", "formalDrift", "blocker", "checklist", "opportunity"].filter((key) => state[key] !== "all").length;
   els.advancedFilterCount.textContent = advancedCount ? `${advancedCount} 项已启用` : "未启用";
 }
 
@@ -1702,6 +1700,131 @@ function renderPriceTriggerShadow(record) {
   return `<div class="detail-section candidate-shadow price-trigger-shadow" data-price-state="${escapeHtml(trigger.price_state || "")}"><div class="detail-section-head"><h3>价格触发（日常）</h3><div class="candidate-shadow-badges"><span class="mini-badge">仅价格</span><span class="mini-badge">每日刷新</span><span class="mini-badge">非正式</span></div></div><p class="detail-copy"><strong>价格命中不代表买入条件已经满足，请人工核对报告条件。</strong> 本区不会判断利润、现金流、事件或其他经营条件，也不会覆盖正式行动指引。</p><div class="detail-grid">${fields.map(([name, value, raw]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${candidateMachineValue(value, raw)}</div></div>`).join("")}</div>${zones}</div>`;
 }
 
+function priceTriggerRecords() {
+  return stateRecords().filter((record) => record?.price_trigger_shadow);
+}
+
+function priceStateIsMatched(value) {
+  return ["PRICE_ZONE_MATCHED", "MULTIPLE_PRICE_ZONES_MATCHED"].includes(value);
+}
+
+function allPriceZoneSummary(record) {
+  const zones = record?.price_trigger_shadow?.available_price_zones || [];
+  return zones.map((zone) => `${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerDisplayLabel("action", zone.action)}`).join("；");
+}
+
+function matchedManualChecks(record) {
+  const zones = record?.price_trigger_shadow?.matched_price_zones || [];
+  const checks = [];
+  const seen = new Set();
+  for (const zone of zones) {
+    for (const hint of zone.manual_check_conditions || []) {
+      if (hint.relationship !== "REQUIRED_WITH_PRICE") continue;
+      const value = String(hint.description || "").trim();
+      if (value && !seen.has(value)) { seen.add(value); checks.push(value); }
+    }
+  }
+  return checks;
+}
+
+function populatePriceZoneFilters() {
+  if (!els.priceZoneAction || !els.priceZoneExact) return;
+  const records = priceTriggerRecords();
+  const actions = new Set();
+  const exact = [];
+  for (const record of records) {
+    const trigger = record.price_trigger_shadow;
+    for (const zone of trigger.available_price_zones || []) if (zone.action) actions.add(zone.action);
+    for (const zone of trigger.matched_price_zones || []) {
+      exact.push({
+        value: zone.rule_id,
+        label: `${record.company} · ${priceRuleExpression(zone)} ${zone.currency || ""} · ${priceTriggerDisplayLabel("action", zone.action)}`,
+      });
+    }
+  }
+  setSelectOptions(els.priceZoneAction, [
+    { value: "all", label: "全部路径类型" },
+    ...[...actions].sort().map((value) => ({ value, label: priceTriggerDisplayLabel("action", value) })),
+  ], state.priceZoneAction);
+  setSelectOptions(els.priceZoneExact, [
+    { value: "all", label: "全部当前区间" },
+    ...exact.sort((a, b) => a.label.localeCompare(b.label, "zh-CN")),
+  ], state.priceZoneExact);
+  state.priceZoneAction = els.priceZoneAction.value;
+  state.priceZoneExact = els.priceZoneExact.value;
+}
+
+function filteredPriceZoneRecords() {
+  const query = state.priceZoneSearch.toLowerCase();
+  const records = priceTriggerRecords().filter((record) => {
+    const trigger = record.price_trigger_shadow;
+    const matchesSearch = !query || `${record.company} ${record.ticker}`.toLowerCase().includes(query);
+    const matchesStatus = state.priceZoneStatus === "all"
+      || (state.priceZoneStatus === "matched" && priceStateIsMatched(trigger.price_state))
+      || trigger.price_state === state.priceZoneStatus;
+    const matchesAction = state.priceZoneAction === "all"
+      || (trigger.available_price_zones || []).some((zone) => zone.action === state.priceZoneAction);
+    const matchesExact = state.priceZoneExact === "all"
+      || (trigger.matched_rule_ids || []).includes(state.priceZoneExact);
+    return matchesSearch && matchesStatus && matchesAction && matchesExact;
+  });
+  const stateRank = {
+    MULTIPLE_PRICE_ZONES_MATCHED: 0,
+    PRICE_ZONE_MATCHED: 1,
+    OUTSIDE_PRICE_ZONE: 2,
+    PRICE_DATA_UNAVAILABLE: 3,
+    NO_PRICE_PATH: 4,
+  };
+  return records.sort((left, right) => {
+    if (state.priceZoneSort === "name") return left.company.localeCompare(right.company, "zh-CN");
+    const rank = (stateRank[left.price_trigger_shadow.price_state] ?? 9) - (stateRank[right.price_trigger_shadow.price_state] ?? 9);
+    return rank || left.company.localeCompare(right.company, "zh-CN");
+  });
+}
+
+function renderPriceZoneRow(record) {
+  const trigger = record.price_trigger_shadow;
+  const matched = currentMatchedPriceZoneSummary(record);
+  const allZones = allPriceZoneSummary(record);
+  const checks = matchedManualChecks(record);
+  const price = trigger.current_price == null ? "—" : `${formatNumber(trigger.current_price, 2)} 元`;
+  const statusTone = priceStateIsMatched(trigger.price_state) ? "matched"
+    : trigger.price_state === "OUTSIDE_PRICE_ZONE" ? "outside" : "muted";
+  return `<tr data-ticker="${escapeHtml(record.ticker)}" tabindex="0">
+    <td>${compactCompany(record)}</td>
+    <td><span class="table-price">${escapeHtml(price)}</span><div class="table-secondary">截至 ${escapeHtml(trigger.price_cutoff || "未知")}</div></td>
+    <td><span class="price-zone-status" data-tone="${statusTone}" data-machine-value="${escapeHtml(trigger.price_state)}">${escapeHtml(priceTriggerDisplayLabel("state", trigger.price_state))}</span></td>
+    <td><div class="price-zone-current">${escapeHtml(matched || "无")}</div>${matched ? `<div class="table-secondary">命中 ${trigger.matched_price_zones.length} 条路径</div>` : ""}</td>
+    <td><div class="price-zone-all-paths">${escapeHtml(allZones || "主报告无可匹配价格路径")}</div><div class="table-secondary">共 ${(trigger.available_price_zones || []).length} 条 · 点击查看报告建议</div></td>
+    <td><div class="price-zone-manual">${escapeHtml(checks.length ? checks.join("；") : (matched ? "无附加必须条件" : "进入区间后再核对"))}</div></td>
+  </tr>`;
+}
+
+function renderPriceZones() {
+  if (!els.priceZoneList) return;
+  const all = priceTriggerRecords();
+  const filtered = filteredPriceZoneRecords();
+  const visible = filtered.slice(0, state.priceZonePage * 25);
+  const counts = {
+    matched: all.filter((record) => priceStateIsMatched(record.price_trigger_shadow.price_state)).length,
+    outside: all.filter((record) => record.price_trigger_shadow.price_state === "OUTSIDE_PRICE_ZONE").length,
+    unavailable: all.filter((record) => record.price_trigger_shadow.price_state === "PRICE_DATA_UNAVAILABLE").length,
+    noPath: all.filter((record) => record.price_trigger_shadow.price_state === "NO_PRICE_PATH").length,
+  };
+  els.priceZoneSummary.innerHTML = [
+    ["A 股覆盖", all.length, "93 份语义合同"],
+    ["已进入区间", counts.matched, "只表示价格命中"],
+    ["区间外", counts.outside, "等待价格变化"],
+    ["行情不可用 / 无路径", counts.unavailable + counts.noPath, `${counts.unavailable} / ${counts.noPath}`],
+  ].map(([labelText, value, note]) => `<div class="price-zone-summary-card"><span>${escapeHtml(labelText)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></div>`).join("");
+  els.priceZoneCount.textContent = `${filtered.length} / ${all.length} 家`;
+  els.priceZoneMeta.textContent = `当前结果：${filtered.length} / ${all.length} 家${visible.length < filtered.length ? ` · 已显示 ${visible.length} 家` : ""}`;
+  els.priceZoneList.innerHTML = visible.map(renderPriceZoneRow).join("");
+  els.priceZoneLoadMore.hidden = visible.length >= filtered.length;
+  els.priceZoneLoadMore.textContent = `加载更多（剩余 ${Math.max(0, filtered.length - visible.length)} 家）`;
+  els.priceZoneEmpty.hidden = filtered.length > 0;
+}
+
 function renderDetail(record) {
   const ruleCount = rulesFor(record).length;
   els.drawerKicker.textContent = `${record.market || "待识别"} · ${record.ticker}`;
@@ -1982,6 +2105,7 @@ function renderAll() {
   renderOpportunities();
   renderAiOpportunities();
   renderHoldings();
+  renderPriceZones();
   renderWatchlist();
   renderWorkspaceNav();
   scheduleQuoteExpiry();
@@ -2016,8 +2140,6 @@ function resetFilterState({ preserveSearch = false } = {}) {
   state.checklist = "all";
   state.priceNear = false;
   state.opportunity = "all";
-  state.priceTriggerState = "all";
-  state.priceTriggerZone = "all";
   state.sort = "attention";
   state.quickFilter = "all";
   state.page = 1;
@@ -2034,8 +2156,6 @@ function syncFilterControls() {
   els.blocker.value = state.blocker;
   els.checklist.value = state.checklist;
   els.opportunity.value = state.opportunity;
-  els.priceTriggerState.value = state.priceTriggerState;
-  els.priceTriggerZone.value = state.priceTriggerZone;
   els.sort.value = state.sort;
 }
 
@@ -2139,8 +2259,7 @@ function bindEvents() {
   for (const [select, key] of [
     [els.market, "market"], [els.lifecycle, "lifecycle"], [els.actionStatus, "actionStatus"],
     [els.skill, "skill"], [els.lightThesis, "lightThesis"], [els.formalDrift, "formalDrift"],
-    [els.blocker, "blocker"], [els.checklist, "checklist"], [els.opportunity, "opportunity"],
-    [els.priceTriggerState, "priceTriggerState"], [els.priceTriggerZone, "priceTriggerZone"], [els.sort, "sort"],
+    [els.blocker, "blocker"], [els.checklist, "checklist"], [els.opportunity, "opportunity"], [els.sort, "sort"],
   ]) {
     select.addEventListener("change", () => {
       state[key] = select.value;
@@ -2163,6 +2282,30 @@ function bindEvents() {
     renderWatchlist();
   });
   els.loadMore.addEventListener("click", () => { state.page += 1; renderWatchlist(); });
+  els.priceZoneSearch.addEventListener("input", () => {
+    state.priceZoneSearch = els.priceZoneSearch.value.trim(); state.priceZonePage = 1; renderPriceZones();
+  });
+  for (const [select, key] of [
+    [els.priceZoneStatus, "priceZoneStatus"], [els.priceZoneAction, "priceZoneAction"],
+    [els.priceZoneExact, "priceZoneExact"], [els.priceZoneSort, "priceZoneSort"],
+  ]) {
+    select.addEventListener("change", () => { state[key] = select.value; state.priceZonePage = 1; renderPriceZones(); });
+  }
+  els.priceZoneClear.addEventListener("click", () => {
+    state.priceZoneSearch = ""; state.priceZoneStatus = "all"; state.priceZoneAction = "all";
+    state.priceZoneExact = "all"; state.priceZoneSort = "matched-first"; state.priceZonePage = 1;
+    els.priceZoneSearch.value = ""; els.priceZoneStatus.value = "all"; els.priceZoneAction.value = "all";
+    els.priceZoneExact.value = "all"; els.priceZoneSort.value = "matched-first"; renderPriceZones();
+  });
+  els.priceZoneLoadMore.addEventListener("click", () => { state.priceZonePage += 1; renderPriceZones(); });
+  els.priceZoneList.addEventListener("click", (event) => {
+    const row = event.target.closest("tr[data-ticker]"); if (row) openDetail(row.dataset.ticker);
+  });
+  els.priceZoneList.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" && event.key !== " ") return;
+    const row = event.target.closest("tr[data-ticker]");
+    if (row) { event.preventDefault(); openDetail(row.dataset.ticker); }
+  });
   els.drawerClose.addEventListener("click", closeDetail);
   els.backdrop.addEventListener("click", closeDetail);
   els.drawerContent.addEventListener("click", (event) => {
