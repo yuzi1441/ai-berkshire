@@ -139,8 +139,10 @@ class LocalCandidateDashboardTests(unittest.TestCase):
     def test_frontend_shadow_section_is_optional_and_explicit(self):
         app = (ROOT / "site/assets/app.js").read_text()
         self.assertIn('if (!candidate) return "";', app)
-        self.assertIn("NOT PRODUCTION", app)
-        self.assertIn("不会覆盖正式 Action Guidance", app)
+        self.assertIn("候选决策影子", app)
+        self.assertIn("非正式", app)
+        self.assertIn("不会覆盖正式行动指引", app)
+        self.assertIn('data-machine-value=', app)
 
 
 if __name__ == "__main__":

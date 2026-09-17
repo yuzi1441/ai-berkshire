@@ -1475,27 +1475,96 @@ function renderDecisionContext(record) {
   return `<div class="detail-section decision-context"><div class="detail-section-head"><h3>现在该做什么</h3><span class="mini-badge">确定性状态导航</span></div><div class="decision-context-grid">${fields.map(({ name, value, html = false }) => `<div class="decision-context-item"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${html ? value : escapeHtml(value)}</div></div>`).join("")}</div></div>`;
 }
 
+function candidateDisplayLabel(group, value) {
+  const mappings = {
+    candidateState: {
+      NO_ENTRY_PATH: "暂无可执行建仓路径",
+      BUY_READY: "满足候选买入条件",
+      TRIAL_READY: "满足试仓候选条件",
+      PRICE_MATCHED_CONDITIONS_PENDING: "价格已进入区间，条件待确认",
+      PRICE_MATCHED_CONDITIONS_NOT_MET: "价格已进入区间，但条件未满足",
+      CONDITIONS_MET_PRICE_PENDING: "条件已满足，等待价格进入区间",
+      PRICE_NOT_REACHED: "价格尚未进入区间",
+      REVIEW_ZONE: "进入复核区",
+      HARD_BLOCKED: "存在硬性阻断",
+      HARD_BLOCK_PENDING: "硬性阻断待确认",
+      EXPLICIT_NO_BUY: "明确不买入",
+      ENTRY_SEMANTIC_AMBIGUOUS: "建仓语义存在歧义",
+      NOT_EVALUATED: "尚未完成评估",
+    },
+    publication: {
+      STRONG_REVIEW_PASSED: "强复核已通过",
+      CANDIDATE_READY: "候选结果已就绪",
+      SEMANTIC_AMBIGUOUS: "语义存在歧义",
+      FACTS_PENDING: "事实条件待确认",
+      STRONG_REVIEW_REQUIRED: "需要强复核",
+      SEMANTIC_REVIEW_FAILED: "语义复核未通过",
+    },
+    semanticReview: {
+      PASS: "通过",
+      NEEDS_CLARIFICATION: "需要人工澄清",
+      FAIL: "未通过",
+      PENDING: "待复核",
+      NOT_REQUIRED: "无需复核",
+    },
+    hardBlock: {
+      true: "已触发",
+      false: "未触发",
+      unknown: "待确认",
+      not_applicable: "不适用",
+    },
+    boolean: { YES: "是", NO: "否" },
+  };
+  return mappings[group]?.[String(value)] || (value == null || value === "" ? "无" : "未知状态");
+}
+
+function candidateMachineValue(display, rawValue) {
+  const raw = Array.isArray(rawValue) ? rawValue.join("、") : String(rawValue ?? "");
+  const attributes = raw
+    ? ` data-machine-value="${escapeHtml(raw)}" title="原始值：${escapeHtml(raw)}"`
+    : "";
+  return `<span${attributes}>${escapeHtml(display)}</span>`;
+}
+
+function candidateListValue(value, presentLabel) {
+  const items = (Array.isArray(value) ? value : [value])
+    .filter((item) => item != null && item !== "" && item !== 0 && item !== "0");
+  return {
+    display: items.length ? presentLabel(items.length) : "无",
+    raw: items,
+  };
+}
+
 function renderCandidateShadow(record) {
   const candidate = record?.candidate_shadow;
   if (!candidate) return "";
-  const list = (value) => Array.isArray(value) && value.length ? value.join("、") : "0";
   const price = candidate.current_price == null
     ? "—"
-    : `${formatNumber(candidate.current_price, 2)} ${candidate.currency || ""}`.trim();
+    : candidate.currency === "CNY"
+      ? `${formatNumber(candidate.current_price, 2)} 元`
+      : `${formatNumber(candidate.current_price, 2)} ${candidate.currency || ""}`.trim();
+  const paths = candidateListValue(candidate.matched_path_ids, (count) => `已命中 ${count} 条路径`);
+  const mandatoryUnknown = candidateListValue(
+    candidate.unknown_mandatory_gate_ids, (count) => `${count} 项待确认`,
+  );
+  const alternativeUnknown = candidateListValue(
+    candidate.alternative_unknown_gate_ids, (count) => `${count} 项待确认`,
+  );
+  const mandatoryCount = Number(candidate.mandatory_gate_count || 0);
   const fields = [
-    ["Candidate State", candidate.candidate_state],
-    ["Publication", candidate.publication_status],
-    ["Current Price", price],
-    ["Matched Path", list(candidate.matched_path_ids)],
-    ["Mandatory Gates", candidate.mandatory_gate_count],
-    ["Mandatory Unknown", list(candidate.unknown_mandatory_gate_ids)],
-    ["Alternative Unknown", list(candidate.alternative_unknown_gate_ids)],
-    ["Hard Block", candidate.hard_block_state],
-    ["Semantic Review", candidate.semantic_review_status],
-    ["Price Cutoff", candidate.price_cutoff || "—"],
-    ["Production Eligible", candidate.production_eligible === true ? "YES" : "NO"],
+    ["候选状态", candidateDisplayLabel("candidateState", candidate.candidate_state), candidate.candidate_state],
+    ["发布状态", candidateDisplayLabel("publication", candidate.publication_status), candidate.publication_status],
+    ["当前价格", price, candidate.current_price],
+    ["命中的决策路径", paths.display, paths.raw],
+    ["必须满足的条件", mandatoryCount ? `${mandatoryCount} 项` : "无", candidate.mandatory_gate_ids],
+    ["必须条件待确认", mandatoryUnknown.display, mandatoryUnknown.raw],
+    ["替代条件待确认", alternativeUnknown.display, alternativeUnknown.raw],
+    ["硬性阻断", candidateDisplayLabel("hardBlock", candidate.hard_block_state), candidate.hard_block_state],
+    ["语义复核", candidateDisplayLabel("semanticReview", candidate.semantic_review_status), candidate.semantic_review_status],
+    ["行情截止日", candidate.price_cutoff || "—", candidate.price_cutoff],
+    ["可进入正式决策", candidateDisplayLabel("boolean", candidate.production_eligible === true ? "YES" : "NO"), candidate.production_eligible],
   ];
-  return `<div class="detail-section candidate-shadow"><div class="detail-section-head"><h3>Candidate Shadow</h3><div class="candidate-shadow-badges"><span class="mini-badge">CANDIDATE</span><span class="mini-badge">SHADOW MODE</span><span class="mini-badge">NOT PRODUCTION</span></div></div><p class="detail-copy">本区仅展示语义合同与当前事实的候选求值，不是交易指令，也不会覆盖正式 Action Guidance。</p><div class="detail-grid">${fields.map(([name, value]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${escapeHtml(value ?? "—")}</div></div>`).join("")}</div></div>`;
+  return `<div class="detail-section candidate-shadow" data-candidate-state="${escapeHtml(candidate.candidate_state || "")}" data-publication-status="${escapeHtml(candidate.publication_status || "")}" data-semantic-review-status="${escapeHtml(candidate.semantic_review_status || "")}"><div class="detail-section-head"><h3>候选决策影子</h3><div class="candidate-shadow-badges"><span class="mini-badge">候选</span><span class="mini-badge">影子模式</span><span class="mini-badge">非正式</span></div></div><p class="detail-copy">本区仅展示语义合同与当前事实的候选求值，不是交易指令，也不会覆盖正式行动指引。</p><div class="detail-grid">${fields.map(([name, value, raw]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${candidateMachineValue(value ?? "—", raw)}</div></div>`).join("")}</div></div>`;
 }
 
 function renderDetail(record) {

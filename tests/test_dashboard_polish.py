@@ -11,6 +11,48 @@ APP = ROOT / "site/assets/app.js"
 
 @unittest.skipUnless(shutil.which("node"), "Node required")
 class DashboardPolishTests(unittest.TestCase):
+    def test_candidate_shadow_localizes_display_without_mutating_machine_values(self):
+        self.run_js(
+            ["renderCandidateShadow", "candidateDisplayLabel", "candidateMachineValue",
+             "candidateListValue", "formatNumber", "escapeHtml"],
+            '''
+import assert from 'node:assert/strict';
+const machine = {
+ candidate_state:'BUY_READY', publication_status:'STRONG_REVIEW_PASSED',
+ current_price:4.68, currency:'CNY', matched_path_ids:['conditional-4.3-4.8'],
+ mandatory_gate_count:1, mandatory_gate_ids:['price-gate'],
+ unknown_mandatory_gate_ids:[], alternative_unknown_gate_ids:['catalyst-a','catalyst-b'],
+ hard_block_state:'not_applicable', semantic_review_status:'PASS',
+ price_cutoff:'2026-09-16', production_eligible:false,
+};
+const record={candidate_shadow:machine};
+''',
+            '''
+const before=JSON.stringify(machine), html=renderCandidateShadow(record);
+assert.ok(html.includes('候选决策影子'));
+assert.ok(html.includes('满足候选买入条件'));
+assert.ok(html.includes('强复核已通过'));
+assert.ok(html.includes('当前价格'));
+assert.ok(html.includes('4.68 元'));
+assert.ok(html.includes('已命中 1 条路径'));
+assert.ok(html.includes('必须条件待确认'));
+assert.ok(html.includes('>无<'));
+assert.ok(html.includes('2 项待确认'));
+assert.ok(html.includes('不适用'));
+assert.ok(html.includes('通过'));
+assert.ok(html.includes('>否<'));
+assert.ok(html.includes('data-machine-value="BUY_READY"'));
+assert.ok(html.includes('title="原始值：conditional-4.3-4.8"'));
+for (const visibleEnglish of ['Candidate Shadow','Candidate State','Publication','Current Price','NOT PRODUCTION']) {
+ assert.ok(!html.includes(visibleEnglish));
+}
+assert.equal(JSON.stringify(machine),before);
+const empty=renderCandidateShadow({candidate_shadow:{...machine,matched_path_ids:[],alternative_unknown_gate_ids:[]}});
+assert.ok(!empty.includes('>0<'));
+assert.equal(renderCandidateShadow({}), '');
+''',
+        )
+
     def test_quote_expiry_repaints_without_network_and_waits_for_confirmation(self):
         self.run_js(["scheduleQuoteExpiry", "quoteIsCurrent"], '''
 import assert from 'node:assert/strict';
