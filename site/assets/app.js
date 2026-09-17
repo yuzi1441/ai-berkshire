@@ -1567,6 +1567,91 @@ function renderCandidateShadow(record) {
   return `<div class="detail-section candidate-shadow" data-candidate-state="${escapeHtml(candidate.candidate_state || "")}" data-publication-status="${escapeHtml(candidate.publication_status || "")}" data-semantic-review-status="${escapeHtml(candidate.semantic_review_status || "")}"><div class="detail-section-head"><h3>候选决策影子</h3><div class="candidate-shadow-badges"><span class="mini-badge">候选</span><span class="mini-badge">影子模式</span><span class="mini-badge">非正式</span></div></div><p class="detail-copy">本区仅展示语义合同与当前事实的候选求值，不是交易指令，也不会覆盖正式行动指引。</p><div class="detail-grid">${fields.map(([name, value, raw]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${candidateMachineValue(value ?? "—", raw)}</div></div>`).join("")}</div></div>`;
 }
 
+function priceTriggerDisplayLabel(group, value) {
+  const mappings = {
+    state: {
+      NO_PRICE_PATH: "主报告暂无价格路径",
+      OUTSIDE_PRICE_ZONE: "当前价格未进入关注区间",
+      PRICE_ZONE_MATCHED: "已进入关注区间",
+      MULTIPLE_PRICE_ZONES_MATCHED: "已进入多个关注区间",
+      PRICE_DATA_UNAVAILABLE: "当前行情不可用",
+    },
+    action: {
+      OPEN_POSITION: "空仓首次建仓",
+      TRIAL_POSITION: "试仓",
+      ADD_POSITION: "持仓加仓",
+      REDUCE: "减仓",
+      EXIT: "退出",
+      REVIEW: "重新审视",
+      WATCH: "观察",
+      HOLD: "持有",
+      HOLD_NO_ADD: "持有但不加仓",
+      AVOID: "回避",
+    },
+    priceRole: {
+      UNCONDITIONAL_ENTRY: "空仓建仓价格区",
+      CONDITIONAL_ENTRY: "条件建仓价格区",
+      TRIAL_ENTRY: "试仓价格区",
+      REVIEW_ZONE: "重新审视区",
+      WATCH_ZONE: "关注区",
+      ADD_POSITION: "加仓价格区",
+      REDUCE_POSITION: "减仓价格区",
+      EXIT_ZONE: "退出价格区",
+      NOT_ACTIONABLE: "非行动价格参考",
+    },
+    relationship: {
+      REQUIRED_WITH_PRICE: "需人工同时核对",
+      ALTERNATIVE_TO_PRICE: "替代路径（无需因本价格命中而核对）",
+      CONTEXT_ONLY: "上下文提示",
+    },
+  };
+  return mappings[group]?.[String(value)] || "未分类";
+}
+
+function renderPriceZone(zone) {
+  const lower = formatNumber(zone.price_min, 2);
+  const upper = formatNumber(zone.price_max, 2);
+  const priceExpression = {
+    BETWEEN: `${lower}–${upper}`,
+    LT: `< ${upper}`,
+    LTE: `≤ ${upper}`,
+    GT: `> ${lower}`,
+    GTE: `≥ ${lower}`,
+  }[zone.operator] || "价格规则未分类";
+  const hints = Array.isArray(zone.manual_check_conditions) ? zone.manual_check_conditions : [];
+  const required = hints.filter((hint) => hint.relationship === "REQUIRED_WITH_PRICE");
+  const contextual = hints.filter((hint) => hint.relationship !== "REQUIRED_WITH_PRICE");
+  const hintList = required.length
+    ? required.map((hint) => `<li data-machine-value="${escapeHtml(hint.node_id || "")}">${escapeHtml(hint.description || "请打开主报告人工核对")}</li>`).join("")
+    : "<li>无附加的必须人工核对条件</li>";
+  const contextCopy = contextual.length
+    ? `<div class="detail-copy">其他条件结构：${contextual.map((hint) => `${priceTriggerDisplayLabel("relationship", hint.relationship)}：${hint.description || "未说明"}`).map(escapeHtml).join("；")}</div>`
+    : "";
+  return `<div class="rule-card" data-rule-id="${escapeHtml(zone.rule_id || "")}" data-path-id="${escapeHtml(zone.path_id || "")}" data-action="${escapeHtml(zone.action || "")}" data-price-role="${escapeHtml(zone.price_role || "")}"><div class="rule-topline"><span class="rule-kind">${escapeHtml(priceTriggerDisplayLabel("priceRole", zone.price_role))}</span><span class="rule-status">${escapeHtml(priceTriggerDisplayLabel("action", zone.action))}</span></div><div class="rule-condition">${escapeHtml(priceExpression)} ${escapeHtml(zone.currency || "")}</div><div class="detail-field-label">命中的决策路径</div><div class="detail-copy" title="原始路径：${escapeHtml(zone.path_id || "")}">${escapeHtml(zone.path_summary || zone.price_description || "主报告价格路径")}</div><div class="detail-field-label">附加人工核对条件</div><ul class="compact-list">${hintList}</ul>${contextCopy}</div>`;
+}
+
+function renderPriceTriggerShadow(record) {
+  const trigger = record?.price_trigger_shadow;
+  if (!trigger) return "";
+  const price = trigger.current_price == null
+    ? "—"
+    : trigger.currency === "CNY"
+      ? `${formatNumber(trigger.current_price, 2)} 元`
+      : `${formatNumber(trigger.current_price, 2)} ${trigger.currency || ""}`.trim();
+  const matched = Array.isArray(trigger.matched_price_zones) ? trigger.matched_price_zones : [];
+  const fields = [
+    ["价格状态", priceTriggerDisplayLabel("state", trigger.price_state), trigger.price_state],
+    ["当前价格", price, trigger.current_price],
+    ["命中价格区间", matched.length ? `${matched.length} 个` : "无", trigger.matched_rule_ids],
+    ["行情截止日", trigger.price_cutoff || "—", trigger.price_cutoff],
+    ["可进入正式决策", "否", trigger.production_eligible],
+  ];
+  const zones = matched.length
+    ? `<div class="rule-list">${matched.map(renderPriceZone).join("")}</div>`
+    : `<p class="detail-copy">${trigger.price_state === "NO_PRICE_PATH" ? "主报告没有可供日常匹配的 A 股价格路径。" : "当前没有命中的主报告价格区间。"}</p>`;
+  return `<div class="detail-section candidate-shadow price-trigger-shadow" data-price-state="${escapeHtml(trigger.price_state || "")}"><div class="detail-section-head"><h3>价格触发影子</h3><div class="candidate-shadow-badges"><span class="mini-badge">仅价格</span><span class="mini-badge">影子模式</span><span class="mini-badge">非正式</span></div></div><p class="detail-copy"><strong>价格命中不代表买入条件已经满足，请人工核对报告条件。</strong> 本区不会判断利润、现金流、事件或其他经营条件，也不会覆盖正式行动指引。</p><div class="detail-grid">${fields.map(([name, value, raw]) => `<div class="detail-field"><div class="detail-field-label">${escapeHtml(name)}</div><div class="detail-field-value">${candidateMachineValue(value, raw)}</div></div>`).join("")}</div>${zones}</div>`;
+}
+
 function renderDetail(record) {
   const ruleCount = rulesFor(record).length;
   els.drawerKicker.textContent = `${record.market || "待识别"} · ${record.ticker}`;
@@ -1574,6 +1659,7 @@ function renderDetail(record) {
   els.drawerSubtitle.textContent = `${label("lifecycle", lifecycleOf(record))} · ${actionLabel(record)} · ${ruleCount} 条已保存规则`;
   els.drawerContent.innerHTML = [
     renderDecisionContext(record),
+    renderPriceTriggerShadow(record),
     renderCandidateShadow(record),
     renderDispositionControls(record),
     renderCurrentJudgment(record),

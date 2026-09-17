@@ -1,0 +1,161 @@
+from __future__ import annotations
+
+import json
+import sys
+import tempfile
+import unittest
+from datetime import datetime
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "tools"))
+
+import build_local_price_trigger_dashboard as price_trigger  # noqa: E402
+
+
+class LocalPriceTriggerDashboardTests(unittest.TestCase):
+    PRICES = {
+        "002027.SZ": 4.68, "600519.SH": 1258.0, "601127.SH": 45.52,
+        "603129.SH": 296.88, "000400.SZ": 20.36, "002028.SZ": 135.08,
+        "002352.SZ": 30.75, "300274.SZ": 85.18, "600309.SH": 70.78,
+        "601179.SH": 12.17, "603288.SH": 33.93, "688676.SH": 64.14,
+        "000568.SZ": 72.35, "002415.SZ": 32.61, "600276.SH": 43.52,
+        "600426.SH": 19.73, "601126.SH": 40.04, "603606.SH": 36.06,
+        "603659.SH": 22.4, "605117.SH": 85.12,
+    }
+
+    @classmethod
+    def setUpClass(cls):
+        cls.evaluated_at = datetime(2026, 9, 16, 19, 50, tzinfo=ZoneInfo("Asia/Shanghai"))
+        cls.rules = price_trigger.compile_price_rules(ROOT)
+        cls.quotes = {
+            "data_cutoff": "2026-09-16",
+            "source_status": "ok",
+            "market_snapshots": {
+                "A股": {
+                    "market": "A股", "source_status": "ok", "refresh_status": "success",
+                    "data_cutoff": "2026-09-16",
+                }
+            },
+            "quotes": [
+                {
+                    "ticker": ticker, "market": "A股", "price": value, "currency": "CNY",
+                    "provider_timestamp": "20260916160000", "data_cutoff": "2026-09-16",
+                    "snapshot_status": "current",
+                }
+                for ticker, value in cls.PRICES.items()
+            ],
+        }
+        cls.layer = price_trigger.match_price_triggers(cls.rules, cls.quotes, cls.evaluated_at)
+        cls.by_ticker = {item["ticker"]: item for item in cls.layer["companies"]}
+
+    def test_static_rules_are_bound_to_contracts_and_are_shadow_only(self):
+        self.assertEqual(price_trigger.validate_price_rules(
+            self.rules, set(price_trigger.PRIORITY_TICKERS)
+        ), [])
+        self.assertEqual(self.rules["company_count"], 20)
+        self.assertGreater(self.rules["rule_count"], 20)
+        self.assertFalse(self.rules["production_consumable"])
+        self.assertTrue(all(item["semantic_contract_sha256"] for item in self.rules["companies"]))
+
+    def test_quote_only_layer_uses_price_states_not_candidate_states(self):
+        self.assertEqual(price_trigger.validate_price_trigger_layer(
+            self.layer, set(price_trigger.PRIORITY_TICKERS)
+        ), [])
+        self.assertTrue(all(item["price_state"] in price_trigger.PRICE_STATES for item in self.layer["companies"]))
+        self.assertTrue(all("candidate_state" not in item for item in self.layer["companies"]))
+        self.assertTrue(all(item["production_eligible"] is False for item in self.layer["companies"]))
+
+    def test_moutai_price_match_does_not_claim_investment_eligibility(self):
+        moutai = self.by_ticker["600519.SH"]
+        self.assertEqual(moutai["price_state"], "PRICE_ZONE_MATCHED")
+        self.assertEqual(moutai["matched_path_ids"], ["empty-entry-1100-1300"])
+        zone = moutai["matched_price_zones"][0]
+        self.assertEqual((zone["price_min"], zone["price_max"]), (1100, 1300))
+        self.assertEqual(zone["action"], "OPEN_POSITION")
+        self.assertFalse(moutai["production_eligible"])
+
+    def test_moutai_holder_add_rule_retains_manual_profit_check(self):
+        company = next(item for item in self.rules["companies"] if item["ticker"] == "600519.SH")
+        rule = next(item for item in company["price_rules"] if item["path_id"] == "holder-add-1000-1100")
+        required = [item for item in rule["manual_check_conditions"]
+                    if item["relationship"] == "REQUIRED_WITH_PRICE"]
+        self.assertEqual(len(required), 1)
+        self.assertIn("利润恢复至5%以上", required[0]["description"])
+
+    def test_sailisi_any_catalysts_are_alternatives_not_mandatory_checks(self):
+        sailisi = self.by_ticker["601127.SH"]
+        self.assertEqual(sailisi["price_state"], "PRICE_ZONE_MATCHED")
+        hints = sailisi["matched_price_zones"][0]["manual_check_conditions"]
+        self.assertTrue(hints)
+        self.assertTrue(all(item["relationship"] == "ALTERNATIVE_TO_PRICE" for item in hints))
+
+    def test_jinpan_is_not_reintroduced_as_trial_ready(self):
+        jinpan = self.by_ticker["688676.SH"]
+        self.assertEqual(jinpan["price_state"], "OUTSIDE_PRICE_ZONE")
+        self.assertNotIn("candidate_state", jinpan)
+        company = next(item for item in self.rules["companies"] if item["ticker"] == "688676.SH")
+        self.assertTrue(any(rule["action"] == "REVIEW" for rule in company["price_rules"]))
+        self.assertFalse(any(rule["action"] == "TRIAL_POSITION" for rule in company["price_rules"]))
+
+    def test_one_sided_price_rules_are_deterministic(self):
+        self.assertTrue(price_trigger._price_matches({"operator": "LTE", "price_max": 10}, 10))
+        self.assertFalse(price_trigger._price_matches({"operator": "LT", "price_max": 10}, 10))
+        self.assertTrue(price_trigger._price_matches({"operator": "GTE", "price_min": 10}, 10))
+        self.assertFalse(price_trigger._price_matches({"operator": "GT", "price_min": 10}, 10))
+
+    def test_daily_match_does_not_import_full_candidate_dependencies(self):
+        source = (ROOT / "tools/build_local_price_trigger_dashboard.py").read_text()
+        for forbidden in (
+            "main_report_current_facts", "main_report_candidate_store",
+            "evaluate_main_report_semantics", "main-report-current-fact-resolutions",
+            "main-report-semantic-review-approvals",
+        ):
+            self.assertNotIn(forbidden, source)
+
+    def test_price_change_reuses_identical_static_rules(self):
+        changed = json.loads(json.dumps(self.quotes))
+        next(row for row in changed["quotes"] if row["ticker"] == "600519.SH")["price"] = 1400
+        rebuilt = price_trigger.match_price_triggers(self.rules, changed, self.evaluated_at)
+        by_ticker = {item["ticker"]: item for item in rebuilt["companies"]}
+        self.assertEqual(by_ticker["600519.SH"]["price_state"], "OUTSIDE_PRICE_ZONE")
+        self.assertEqual(self.rules, price_trigger.compile_price_rules(ROOT))
+
+    def test_missing_quote_fails_closed(self):
+        missing = json.loads(json.dumps(self.quotes))
+        missing["quotes"] = [row for row in missing["quotes"] if row["ticker"] != "600519.SH"]
+        rebuilt = price_trigger.match_price_triggers(self.rules, missing, self.evaluated_at)
+        row = next(item for item in rebuilt["companies"] if item["ticker"] == "600519.SH")
+        self.assertEqual(row["price_state"], "PRICE_DATA_UNAVAILABLE")
+        self.assertEqual(row["matched_price_zones"], [])
+
+    def test_local_site_injection_preserves_source_and_action_guidance(self):
+        source = ROOT / "site/data/dashboard_core.json"
+        before_bytes = source.read_bytes()
+        before = json.loads(before_bytes)
+        with tempfile.TemporaryDirectory() as directory:
+            site = price_trigger.build_local_site(ROOT, Path(directory), self.layer)
+            after = json.loads((site / "data/dashboard_core.json").read_text())
+        self.assertEqual(source.read_bytes(), before_bytes)
+        before_guidance = {item["ticker"]: item.get("action_guidance")
+                           for item in before["companyState"]["companies"]}
+        after_guidance = {item["ticker"]: item.get("action_guidance")
+                          for item in after["companyState"]["companies"]}
+        self.assertEqual(before_guidance, after_guidance)
+        self.assertEqual(sum("price_trigger_shadow" in item
+                             for item in after["companyState"]["companies"]), 20)
+        self.assertEqual(sum("candidate_shadow" in item
+                             for item in after["companyState"]["companies"]), 0)
+
+    def test_frontend_warning_and_price_only_fields_are_explicit(self):
+        app = (ROOT / "site/assets/app.js").read_text()
+        self.assertIn("价格命中不代表买入条件已经满足，请人工核对报告条件", app)
+        self.assertIn("renderPriceTriggerShadow(record)", app)
+        self.assertIn("matched_price_zones", app)
+        self.assertIn("附加人工核对条件", app)
+
+
+if __name__ == "__main__":
+    unittest.main()
