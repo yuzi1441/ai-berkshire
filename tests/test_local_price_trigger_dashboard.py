@@ -13,9 +13,66 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 import build_local_price_trigger_dashboard as price_trigger  # noqa: E402
+import refresh_price_trigger_dashboard as price_refresh
+import dashboard_snapshot
 
 
 class LocalPriceTriggerDashboardTests(unittest.TestCase):
+    def test_independent_refresh_ignores_broken_research_and_preserves_formal_state(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            contract = price_trigger.CONTRACT_DIRECTORY / "600519.SH.json"
+            (root / contract).parent.mkdir(parents=True)
+            (root / contract).write_bytes((ROOT / contract).read_bytes())
+            data = root / "data/investment-dashboard"
+            public = root / "site/data"
+            rules = price_trigger.compile_price_rules(root, production=True)
+            price_trigger._write_json(data / "price_trigger_rules.json", rules)
+            price_trigger._write_json(data / "quotes/latest.json", self.quotes)
+            (data / "financial_facts.json").write_text("INVALID JSON")
+            formal = {"ticker": "600519.SH", "company": rules["companies"][0]["company"],
+                      "action_guidance": {"action": "unchanged"}}
+            dashboard_snapshot.publish_snapshot(public / dashboard_snapshot.FILENAME,
+                board={}, layers={"state": {"companies": [formal]},
+                                   "rules": {"companies": [{"ticker": "600519.SH"}]}, "technical": {}},
+                tracking={}, original_theses={})
+            before = price_trigger.load_json(public / dashboard_snapshot.FILENAME)
+            first = price_refresh.refresh(root, self.evaluated_at)
+            second = price_refresh.refresh(root, self.evaluated_at)
+            self.assertEqual(first, second)
+            after = price_trigger.load_json(public / dashboard_snapshot.FILENAME)
+            dashboard_snapshot.validate_snapshot(after)
+            self.assertEqual(after["companyState"]["companies"][0]["action_guidance"], formal["action_guidance"])
+            self.assertEqual(after["rules"], before["rules"])
+            self.assertEqual(after["companyState"]["companies"][0]["price_trigger_shadow"]["price_state"], "PRICE_ZONE_MATCHED")
+            self.assertFalse((data / "decision_board.json").exists())
+
+    def test_manual_hints_preserve_not_any_and_at_least_groups(self):
+        leaf = lambda name: {"node_id": name, "kind": "QUALITATIVE", "description": name}
+        gate = {"node_id": "risk", "kind": "ALL", "children": [
+            {"node_id": "not", "kind": "NOT", "children": [leaf("列入实体清单")]},
+            {"node_id": "any", "kind": "ANY", "children": [leaf("国防"), leaf("数据中心")]},
+            {"node_id": "four", "kind": "AT_LEAST", "minimum": 4,
+             "children": [leaf(str(i)) for i in range(6)]}]}
+        tree = {"kind": "ALL", "children": [{"kind": "PRICE_RANGE", "node_id": "price"}, gate]}
+        found, hints = price_trigger._manual_hints(tree, "price")
+        self.assertTrue(found)
+        self.assertEqual(len(hints), 1)
+        self.assertEqual(hints[0]["condition_tree"], gate)
+        self.assertIn("不满足（列入实体清单）", hints[0]["description"])
+        self.assertIn("任一满足（国防；数据中心）", hints[0]["description"])
+        self.assertIn("以下6项至少满足4项", hints[0]["description"])
+
+    def test_quote_expiry_tracks_actual_evaluation_time(self):
+        row = self.by_ticker["600519.SH"]
+        self.assertTrue(row["valid_until"])
+        self.assertTrue(row["quote_observed_at"])
+        future = datetime(2026, 9, 17, 10, tzinfo=ZoneInfo("Asia/Shanghai"))
+        layer = price_trigger.match_price_triggers(self.rules, self.quotes, future)
+        expired = next(row for row in layer["companies"] if row["ticker"] == "600519.SH")
+        self.assertEqual(expired["price_state"], "PRICE_DATA_UNAVAILABLE")
+        self.assertFalse(expired["matched_price_zones"])
+
     PRICES = {
         "002027.SZ": 4.68, "600519.SH": 1258.0, "601127.SH": 45.52,
         "603129.SH": 296.88, "000400.SZ": 20.36, "002028.SZ": 135.08,

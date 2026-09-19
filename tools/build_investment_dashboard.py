@@ -6043,7 +6043,8 @@ def refresh_daily_price_triggers(
 
     quote_path = data_directory / "quotes" / "latest.json"
     quotes = load_json(quote_path, {"data_cutoff": None, "quotes": []})
-    evaluated_at = datetime.fromisoformat(generated_at)
+    # Provenance timestamps must never freeze quote freshness at an old build.
+    evaluated_at = datetime.now().astimezone()
     layer = price_trigger_layer.match_price_triggers(
         rules, quotes, evaluated_at, production=True
     )

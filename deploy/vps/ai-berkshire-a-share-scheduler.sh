@@ -174,7 +174,12 @@ cd "${REPO_ROOT}"
 status_start
 
 build_dashboard() {
+    local manifest_args=()
+    if [[ -f "${REPO_ROOT}/.tracked-assets.json" ]]; then
+        manifest_args=(--tracked-assets-manifest "${REPO_ROOT}/.tracked-assets.json")
+    fi
     "${PYTHON}" tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" \
+        "${manifest_args[@]}" \
         --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"
 }
 
@@ -214,6 +219,8 @@ run_morning() {
 run_market() {
     status_phase market_snapshot "刷新 A/H 行情"
     "${PYTHON}" tools/market_snapshot.py --repo-root "${REPO_ROOT}" --markets A股,港股
+    status_phase price_match "独立刷新价格区间（不判断经营条件）"
+    "${PYTHON}" tools/refresh_price_trigger_dashboard.py --repo-root "${REPO_ROOT}"
     status_phase build "按同一行情快照重建状态"
     "${PYTHON}" tools/build_investment_dashboard.py --repo-root "${REPO_ROOT}" --state-only \
         --investment-dispositions "${INVESTMENT_DISPOSITIONS_PATH}"

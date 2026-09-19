@@ -11,6 +11,34 @@ APP = ROOT / "site/assets/app.js"
 
 @unittest.skipUnless(shutil.which("node"), "Node required")
 class DashboardPolishTests(unittest.TestCase):
+    def test_price_expiry_is_read_only_and_fails_closed(self):
+        self.run_js(["withCurrentPriceTrigger"], "import assert from 'node:assert/strict';", '''
+const record={action_guidance:'unchanged',price_trigger_shadow:{price_state:'PRICE_ZONE_MATCHED',
+ valid_until:'2026-09-21T01:30:00Z',current_price:10,matched_rule_ids:['a'],matched_price_zones:[{}]}};
+assert.equal(withCurrentPriceTrigger(record,Date.parse('2026-09-21T01:29:59Z')),record);
+const expired=withCurrentPriceTrigger(record,Date.parse('2026-09-21T01:30:00Z'));
+assert.equal(expired.price_trigger_shadow.price_state,'PRICE_DATA_UNAVAILABLE');
+assert.equal(expired.price_trigger_shadow.matched_price_zones.length,0);
+assert.equal(expired.action_guidance,'unchanged');
+assert.equal(record.price_trigger_shadow.price_state,'PRICE_ZONE_MATCHED');
+assert.equal(withCurrentPriceTrigger({price_trigger_shadow:{price_state:'OUTSIDE_PRICE_ZONE'}}).price_trigger_shadow.price_state,'PRICE_DATA_UNAVAILABLE');
+''')
+
+    def test_action_filter_uses_the_same_matched_zone(self):
+        self.run_js(["filteredPriceZoneRecords", "priceStateIsMatched", "priceZoneGroupKey", "matchedPriceZoneGroups", "priceTriggerPathLabel", "priceTriggerDisplayLabel"], '''
+import assert from 'node:assert/strict';
+const watch={action:'WATCH',operator:'BETWEEN',price_min:75,price_max:88};
+const entry={action:'OPEN_POSITION',operator:'LTE',price_max:60};
+const records=[{ticker:'000333.SZ',company:'美的',price_trigger_shadow:{price_state:'PRICE_ZONE_MATCHED',available_price_zones:[watch,entry],matched_price_zones:[watch]}}];
+function priceTriggerRecords(){return records;}
+const state={priceZoneSearch:'',priceZoneStatus:'matched',priceZoneAction:'OPEN_POSITION',priceZoneExact:'all'};
+''', '''
+assert.equal(filteredPriceZoneRecords().length,0);
+state.priceZoneAction='WATCH';assert.equal(filteredPriceZoneRecords().length,1);
+state.priceZoneStatus='all';state.priceZoneAction='OPEN_POSITION';assert.equal(filteredPriceZoneRecords().length,1);
+state.priceZoneExact='000333.SZ::'+priceZoneGroupKey(watch);assert.equal(filteredPriceZoneRecords().length,0);
+''')
+
     def test_price_trigger_identifies_exact_zone_and_filters_by_state_or_rule(self):
         self.run_js(
             ["priceRuleExpression", "currentMatchedPriceZoneSummary", "priceTriggerDisplayLabel",
@@ -48,7 +76,7 @@ const record={price_trigger_shadow:{price_state:'MULTIPLE_PRICE_ZONES_MATCHED',m
             '''
 assert.equal(currentMatchedPriceZoneSummary(record),'43–46 CNY · 重新审视区 / 条件建仓价格参考（非买入资格） · 语义待澄清');
 assert.equal(matchedPriceZoneGroups(record).length,1);
-assert.equal(priceTriggerStateLabelForRecord(record),'已进入关注区间（含多条报告路径）');
+assert.equal(priceTriggerStateLabelForRecord(record),'价格命中（含多条报告路径）');
 assert.ok(!currentMatchedPriceZoneSummary(record).includes('空仓首次建仓'));
 ''',
         )
@@ -104,7 +132,7 @@ Date.now=()=>now;
 const setTimeout=(fn,ms)=>{callback=fn;delay=ms;return 1;};
 const clearTimeout=()=>{};
 const formatPrice=()=> '10';
-const state={quotes:new Map([['A',{quality:{eligible:true,evaluated_at:new Date(0).toISOString(),valid_until:new Date(2000).toISOString()}}]])};
+const state={companyState:new Map(),quotes:new Map([['A',{quality:{eligible:true,evaluated_at:new Date(0).toISOString(),valid_until:new Date(2000).toISOString()}}]])};
 const document={activeElement:null};
 const els={drawer:{hidden:true}};
 const renderAll=()=>{paints++;scheduleQuoteExpiry();};

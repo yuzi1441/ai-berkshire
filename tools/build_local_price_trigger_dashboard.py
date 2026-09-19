@@ -66,11 +66,15 @@ def _nodes(node: Any) -> Iterable[dict[str, Any]]:
         yield from _nodes(child)
 
 
-def _non_price_leaves(node: Any) -> list[dict[str, Any]]:
-    return [
-        item for item in _nodes(node)
-        if not item.get("children") and item.get("kind") != "PRICE_RANGE" and item.get("node_id")
-    ]
+def _condition_text(node: dict[str, Any]) -> str:
+    """Describe the original tree without interpreting or evaluating its facts."""
+    children = [_condition_text(child) for child in node.get("children", [])]
+    kind = node.get("kind")
+    if children and kind in {"ALL", "ANY", "AT_LEAST", "NOT"}:
+        label = {"ALL": "全部满足", "ANY": "任一满足", "NOT": "不满足",
+                 "AT_LEAST": f"以下{len(children)}项至少满足{node.get('minimum')}项"}[kind]
+        return label + "（" + "；".join(children) + "）"
+    return str(node.get("description") or "请打开主报告人工核对")
 
 
 def _manual_hints(node: Any, target_id: str) -> tuple[bool, list[dict[str, Any]]]:
@@ -93,14 +97,14 @@ def _manual_hints(node: Any, target_id: str) -> tuple[bool, list[dict[str, Any]]
         for sibling in children:
             if sibling is selected:
                 continue
-            for leaf in _non_price_leaves(sibling):
-                hints.append({
-                    "node_id": str(leaf.get("node_id")),
-                    "kind": leaf.get("kind"),
-                    "description": leaf.get("description"),
-                    "relationship": relation,
-                    "evidence": list(leaf.get("evidence") or []),
-                })
+            hints.append({
+                "node_id": str(sibling.get("node_id") or ""),
+                "kind": sibling.get("kind"),
+                "description": _condition_text(sibling),
+                "relationship": relation,
+                "condition_tree": sibling,
+                "evidence": list(sibling.get("evidence") or []),
+            })
         return True, hints
     return False, []
 
@@ -314,6 +318,9 @@ def match_price_triggers(
             "currency": quote.get("currency", "CNY") if quote else "CNY",
             "price_cutoff": quote.get("data_cutoff") if quote else quote_payload.get("data_cutoff"),
             "quote_quality": quality.get("reason"),
+            "quote_observed_at": quality.get("observed_at"),
+            "evaluated_at": quality.get("evaluated_at"),
+            "valid_until": quality.get("valid_until"),
             "matched_rule_ids": [item["rule_id"] for item in matched],
             "matched_path_ids": list(dict.fromkeys(item["path_id"] for item in matched)),
             "matched_price_zones": matched,

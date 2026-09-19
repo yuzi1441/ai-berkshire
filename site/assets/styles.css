@@ -411,6 +411,8 @@ main { width: min(var(--max-width), calc(100% - 80px)); margin: 0 auto; padding:
 .price-zone-table tbody tr:last-child td { border-bottom: 0; }
 .price-zone-status { display: inline-flex; padding: 4px 7px; border-radius: 999px; color: var(--muted); background: rgba(255,255,255,.04); font-size: 10px; white-space: nowrap; }
 .price-zone-status[data-tone="matched"] { color: var(--green); background: var(--green-soft); }
+.price-zone-status[data-tone="neutral"] { color: var(--blue); background: var(--blue-soft); }
+.price-zone-status[data-tone="caution"] { color: #934b14; background: #fff1dc; }
 .price-zone-status[data-tone="outside"] { color: var(--text-soft); background: var(--blue-soft); }
 .price-zone-current { max-width: 260px; color: var(--text); font-weight: 580; line-height: 1.55; }
 .price-zone-all-paths { display: -webkit-box; max-width: 390px; overflow: hidden; color: var(--text-soft); line-height: 1.55; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
