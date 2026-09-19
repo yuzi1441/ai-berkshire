@@ -126,7 +126,7 @@ def discover_contract_tickers(repo_root: Path) -> tuple[str, ...]:
 
 
 def compile_price_rules(
-    repo_root: Path, tickers: Iterable[str] | None = None,
+    repo_root: Path, tickers: Iterable[str] | None = None, *, production: bool = False,
 ) -> dict[str, Any]:
     tickers = tuple(tickers) if tickers is not None else discover_contract_tickers(repo_root)
     companies: list[dict[str, Any]] = []
@@ -173,23 +173,29 @@ def compile_price_rules(
     payload = {
         "schema_version": SCHEMA_VERSION,
         "authority": "semantic_contract_price_rules",
-        "production_consumable": False,
+        "production_consumable": production,
         "company_count": len(companies),
         "rule_count": sum(len(item["price_rules"]) for item in companies),
         "companies": companies,
     }
-    errors = validate_price_rules(payload, set(tickers))
+    errors = validate_price_rules(payload, set(tickers), production=production)
     if errors:
         raise ValueError("invalid price trigger rules: " + "; ".join(errors))
     return payload
 
 
-def validate_price_rules(payload: Any, expected_tickers: set[str] | None = None) -> list[str]:
+def validate_price_rules(
+    payload: Any, expected_tickers: set[str] | None = None, *, production: bool | None = None,
+) -> list[str]:
     if not isinstance(payload, dict) or payload.get("schema_version") != SCHEMA_VERSION:
         return ["price rules schema_version must be 1"]
     errors: list[str] = []
-    if payload.get("authority") != "semantic_contract_price_rules" or payload.get("production_consumable") is not False:
-        errors.append("price rules must be local non-production semantic-contract output")
+    if payload.get("authority") != "semantic_contract_price_rules":
+        errors.append("price rules must use semantic-contract authority")
+    if not isinstance(payload.get("production_consumable"), bool):
+        errors.append("price rules production_consumable must be boolean")
+    elif production is not None and payload.get("production_consumable") is not production:
+        errors.append(f"price rules production_consumable must be {production}")
     seen: set[str] = set()
     rule_ids: set[str] = set()
     companies = payload.get("companies")
@@ -224,11 +230,36 @@ def validate_price_rules(payload: Any, expected_tickers: set[str] | None = None)
     return errors
 
 
+def validate_price_rule_bindings(payload: Any, repo_root: Path) -> list[str]:
+    """Verify that saved static rules still bind to the exact tracked contracts."""
+    errors: list[str] = []
+    for company in payload.get("companies", []) if isinstance(payload, dict) else []:
+        ticker = str(company.get("ticker") or "")
+        path = repo_root / CONTRACT_DIRECTORY / f"{ticker}.json"
+        if not path.is_file():
+            errors.append(f"{ticker}: semantic contract missing")
+            continue
+        if company.get("semantic_contract_sha256") != _sha256(path):
+            errors.append(f"{ticker}: semantic contract SHA changed; full rule rebuild required")
+            continue
+        contract = load_json(path)
+        if company.get("report_path") != contract.get("report_path"):
+            errors.append(f"{ticker}: canonical report path binding changed")
+        if company.get("report_sha256") != contract.get("report_sha256"):
+            errors.append(f"{ticker}: canonical report SHA binding changed")
+    return errors
+
+
 def _eligible_quote(
     ticker: str, quote_payload: dict[str, Any], evaluated_at: datetime,
 ) -> tuple[dict[str, Any] | None, dict[str, Any]]:
     quote = quote_quality.with_quote_metadata(quote_payload).get(ticker)
     quality = quote_quality.quote_quality(quote, evaluated_at)
+    if quality.get("eligible") and (
+        quote.get("market") != "A股" or quote.get("currency", "CNY") != "CNY"
+    ):
+        quality = dict(quality)
+        quality.update({"eligible": False, "reason": "a_share_market_or_currency_mismatch"})
     return (quote if quality.get("eligible") else None), quality
 
 
@@ -249,8 +280,9 @@ def _price_matches(rule: dict[str, Any], price: float) -> bool:
 
 def match_price_triggers(
     rules_payload: dict[str, Any], quote_payload: dict[str, Any], evaluated_at: datetime,
+    *, production: bool = False,
 ) -> dict[str, Any]:
-    errors = validate_price_rules(rules_payload)
+    errors = validate_price_rules(rules_payload, production=production)
     if errors:
         raise ValueError("invalid price trigger rules: " + "; ".join(errors))
     companies: list[dict[str, Any]] = []
@@ -288,38 +320,49 @@ def match_price_triggers(
             "report_sha256": company.get("report_sha256"),
             "semantic_contract_sha256": company.get("semantic_contract_sha256"),
             "production_eligible": False,
-            "shadow_mode": True,
+            "shadow_mode": not production,
         })
     payload = {
         "schema_version": SCHEMA_VERSION,
-        "authority": "price_trigger_shadow",
-        "production_consumable": False,
+        "authority": "price_trigger_daily" if production else "price_trigger_shadow",
+        "production_consumable": production,
         "generated_at": evaluated_at.isoformat(),
         "price_cutoff": quote_payload.get("data_cutoff"),
         "company_count": len(companies),
         "state_counts": dict(sorted(Counter(item["price_state"] for item in companies).items())),
         "companies": companies,
     }
-    layer_errors = validate_price_trigger_layer(payload, {item["ticker"] for item in rules_payload["companies"]})
+    layer_errors = validate_price_trigger_layer(
+        payload, {item["ticker"] for item in rules_payload["companies"]}, production=production
+    )
     if layer_errors:
         raise ValueError("invalid price trigger layer: " + "; ".join(layer_errors))
     return payload
 
 
-def validate_price_trigger_layer(payload: Any, expected_tickers: set[str] | None = None) -> list[str]:
+def validate_price_trigger_layer(
+    payload: Any, expected_tickers: set[str] | None = None, *, production: bool | None = None,
+) -> list[str]:
     if not isinstance(payload, dict) or payload.get("schema_version") != SCHEMA_VERSION:
         return ["price trigger layer schema_version must be 1"]
     errors: list[str] = []
-    if payload.get("authority") != "price_trigger_shadow" or payload.get("production_consumable") is not False:
-        errors.append("price trigger layer must remain shadow-only")
+    is_production = payload.get("authority") == "price_trigger_daily"
+    if payload.get("authority") not in {"price_trigger_shadow", "price_trigger_daily"}:
+        errors.append("unsupported price trigger authority")
+    if payload.get("production_consumable") is not is_production:
+        errors.append("price trigger authority/production_consumable mismatch")
+    if production is not None and is_production is not production:
+        errors.append(f"price trigger production mode must be {production}")
     seen: set[str] = set()
     for item in payload.get("companies", []):
         ticker = str(item.get("ticker") or "")
         seen.add(ticker)
         if item.get("price_state") not in PRICE_STATES:
             errors.append(f"{ticker}: invalid price state")
-        if item.get("production_eligible") is not False or item.get("shadow_mode") is not True:
-            errors.append(f"{ticker}: price trigger must not be production eligible")
+        if item.get("production_eligible") is not False:
+            errors.append(f"{ticker}: price trigger must not be investment eligible")
+        if item.get("shadow_mode") is not (not is_production):
+            errors.append(f"{ticker}: price trigger shadow mode mismatch")
         if item.get("currency") != "CNY" or not ticker.endswith((".SH", ".SZ", ".BJ")):
             errors.append(f"{ticker}: A-share/CNY isolation failed")
     if expected_tickers is not None and seen != expected_tickers:
@@ -357,7 +400,12 @@ def build_local_site(
     by_ticker = {item["ticker"]: item for item in layer["companies"]}
     candidates = _candidate_snapshot_records(candidate_snapshot, set(by_ticker))
     rendered = 0
+    # A local shadow preview may be built from an already production-enriched
+    # dashboard.  Remove that projection in the copy so the requested local
+    # ticker population is exact; the source dashboard is never modified.
+    core.get("companyState", {}).pop("price_trigger_daily", None)
     for company in core.get("companyState", {}).get("companies", []):
+        company.pop("price_trigger_shadow", None)
         trigger = by_ticker.get(str(company.get("ticker") or ""))
         if trigger is None:
             continue

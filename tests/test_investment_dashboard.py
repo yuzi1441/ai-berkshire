@@ -1,6 +1,7 @@
 import json
 import hashlib
 import os
+import shutil
 import sys
 import tempfile
 import unittest
@@ -52,6 +53,49 @@ class InvestmentDashboardTests(unittest.TestCase):
                 dashboard.dashboard_projection_generated_at(root),
                 "2026-09-08T01:51:29+08:00",
             )
+
+    def test_production_daily_price_trigger_is_read_only_and_quote_refresh_reuses_rules(self):
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            contracts = root / "data" / "investment-dashboard" / "main-report-semantic-contracts"
+            shutil.copytree(
+                ROOT / "data" / "investment-dashboard" / "main-report-semantic-contracts",
+                contracts,
+            )
+            rows = []
+            for path in sorted(contracts.glob("*.json")):
+                contract = json.loads(path.read_text(encoding="utf-8"))
+                rows.append({
+                    "ticker": contract["ticker"], "company": contract["company"],
+                    "action_guidance": "正式逻辑保持不变",
+                })
+            state = {"companies": rows}
+            quotes = root / "data" / "investment-dashboard" / "quotes" / "latest.json"
+            quotes.parent.mkdir(parents=True)
+            quotes.write_text(json.dumps({
+                "data_cutoff": "2026-09-16", "source_status": "ok",
+                "market_snapshots": {"A股": {"market": "A股", "source_status": "ok",
+                    "refresh_status": "success", "data_cutoff": "2026-09-16"}},
+                "quotes": [{"ticker": "600519.SH", "market": "A股", "price": 1258.0,
+                    "currency": "CNY", "provider_timestamp": "20260916160000",
+                    "data_cutoff": "2026-09-16", "snapshot_status": "current"}],
+            }, ensure_ascii=False), encoding="utf-8")
+            generated_at = "2026-09-16T19:50:00+08:00"
+            first = dashboard.refresh_daily_price_triggers(
+                root, state, generated_at=generated_at, compile_rules=True
+            )
+            rules_path = root / "data" / "investment-dashboard" / "price_trigger_rules.json"
+            rules_before = rules_path.read_bytes()
+            self.assertEqual(first["company_count"], 93)
+            self.assertEqual(sum("price_trigger_shadow" in row for row in rows), 93)
+            self.assertTrue(all(row["action_guidance"] == "正式逻辑保持不变" for row in rows))
+            self.assertTrue(all(row["price_trigger_shadow"]["production_eligible"] is False for row in rows))
+            second = dashboard.refresh_daily_price_triggers(
+                root, state, generated_at=generated_at, compile_rules=False
+            )
+            self.assertEqual(second["company_count"], 93)
+            self.assertEqual(rules_path.read_bytes(), rules_before)
+            self.assertTrue((root / "site" / "data" / "price_triggers.json").is_file())
 
     def test_explicit_as_of_is_recorded_without_becoming_source_time(self):
         with tempfile.TemporaryDirectory() as temporary_directory:

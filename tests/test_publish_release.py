@@ -403,6 +403,7 @@ class PublishReleaseTests(unittest.TestCase):
             for name in (
                 "automation_status.py",
                 "build_investment_dashboard.py",
+                "build_local_price_trigger_dashboard.py",
                 "current_reports.py",
                 "dashboard_snapshot.py",
                 "quote_quality.py",

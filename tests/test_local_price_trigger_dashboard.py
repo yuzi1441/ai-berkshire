@@ -68,6 +68,31 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
         self.assertEqual({item["ticker"] for item in rules["companies"]}, set(tickers))
         self.assertGreater(rules["rule_count"], 200)
 
+    def test_production_price_layer_covers_all_contracts_without_investment_claim(self):
+        rules = price_trigger.compile_price_rules(ROOT, production=True)
+        self.assertTrue(rules["production_consumable"])
+        self.assertEqual(price_trigger.validate_price_rules(
+            rules, set(price_trigger.discover_contract_tickers(ROOT)), production=True
+        ), [])
+        self.assertEqual(price_trigger.validate_price_rule_bindings(rules, ROOT), [])
+        layer = price_trigger.match_price_triggers(
+            rules, self.quotes, self.evaluated_at, production=True
+        )
+        self.assertEqual(layer["authority"], "price_trigger_daily")
+        self.assertTrue(layer["production_consumable"])
+        self.assertEqual(layer["company_count"], 93)
+        self.assertEqual(price_trigger.validate_price_trigger_layer(
+            layer, set(price_trigger.discover_contract_tickers(ROOT)), production=True
+        ), [])
+        self.assertTrue(all(item["production_eligible"] is False for item in layer["companies"]))
+        self.assertTrue(all(item["shadow_mode"] is False for item in layer["companies"]))
+
+    def test_static_rule_binding_fails_closed_after_contract_change(self):
+        stale = json.loads(json.dumps(self.rules))
+        stale["companies"][0]["semantic_contract_sha256"] = "0" * 64
+        findings = price_trigger.validate_price_rule_bindings(stale, ROOT)
+        self.assertTrue(any("full rule rebuild required" in item for item in findings))
+
     def test_quote_only_layer_uses_price_states_not_candidate_states(self):
         self.assertEqual(price_trigger.validate_price_trigger_layer(
             self.layer, set(price_trigger.PRIORITY_TICKERS)
@@ -138,6 +163,19 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
         row = next(item for item in rebuilt["companies"] if item["ticker"] == "600519.SH")
         self.assertEqual(row["price_state"], "PRICE_DATA_UNAVAILABLE")
         self.assertEqual(row["matched_price_zones"], [])
+
+    def test_a_share_quote_rejects_h_market_or_currency_contamination(self):
+        contaminated = json.loads(json.dumps(self.quotes))
+        row = next(item for item in contaminated["quotes"] if item["ticker"] == "600519.SH")
+        row.update({"market": "港股", "currency": "HKD"})
+        contaminated["market_snapshots"] = {
+            "港股": {"market": "港股", "source_status": "ok", "refresh_status": "success",
+                    "data_cutoff": "2026-09-16"}
+        }
+        rebuilt = price_trigger.match_price_triggers(self.rules, contaminated, self.evaluated_at)
+        result = next(item for item in rebuilt["companies"] if item["ticker"] == "600519.SH")
+        self.assertEqual(result["price_state"], "PRICE_DATA_UNAVAILABLE")
+        self.assertEqual(result["quote_quality"], "a_share_market_or_currency_mismatch")
 
     def test_local_site_injection_preserves_source_and_action_guidance(self):
         source = ROOT / "site/data/dashboard_core.json"
