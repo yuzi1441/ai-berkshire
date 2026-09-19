@@ -28,7 +28,7 @@
             <span>我的持仓</span><span class="workspace-nav-count" id="nav-holdings-count">—</span>
           </button>
           <button class="workspace-nav-item" type="button" data-workspace="opportunities">
-            <span>买入候选</span><span class="workspace-nav-count" id="nav-opportunities-count">—</span>
+            <span>正式流程待处理</span><span class="workspace-nav-count" id="nav-opportunities-count">—</span>
           </button>
           <button class="workspace-nav-item" type="button" data-workspace="ai-research">
             <span>AI 每日机会</span><span class="workspace-nav-count" id="nav-ai-count">—</span>
@@ -52,8 +52,10 @@
           </div>
           <div class="topbar-meta">
             <div class="meta-block">
-              <span class="meta-label">看板构建时间（北京时间）</span>
+              <span class="meta-label">数据来源截止时间（北京时间）</span>
               <strong id="last-updated">加载中</strong>
+              <span class="section-note" id="evaluation-time"></span>
+              <span class="section-note" id="release-time"></span>
             </div>
             <div class="meta-block meta-scale">
               <span class="meta-label">数据规模</span>
@@ -107,11 +109,12 @@
               <div class="section-heading section-heading-tight">
                 <div>
                   <p class="section-eyebrow">机会</p>
-                  <h1 id="opportunity-title">买入候选</h1>
+                  <h1 id="opportunity-title">正式流程待处理</h1>
+                  <p class="section-note">此处沿用正式行动指引，不是日常价格筛选。<a href="#price-zones">日常找价格区间 →</a></p>
                 </div>
                 <div class="segmented-control" id="opportunity-tabs" role="tablist" aria-label="买入机会类型">
                   <button class="segment is-active" type="button" data-opportunity-view="checklist" role="tab" aria-selected="true">推进候选 <span id="checklist-tab-count">0</span></button>
-                  <button class="segment" type="button" data-opportunity-view="price" role="tab" aria-selected="false">价格条件池 <span id="price-count">0</span></button>
+                  <button class="segment" type="button" data-opportunity-view="price" role="tab" aria-selected="false">正式价格规则参考 <span id="price-count">0</span></button>
                   <button class="segment" type="button" data-opportunity-view="condition" role="tab" aria-selected="false">待验证条件 <span id="condition-count">0</span></button>
                 </div>
               </div>
@@ -163,6 +166,7 @@
                 </label>
                 <label class="select-control"><span>价格状态</span><select id="price-zone-status-filter"><option value="all">全部状态</option><option value="matched">当前已进入区间</option><option value="OUTSIDE_PRICE_ZONE">当前在全部区间外</option><option value="PRICE_DATA_UNAVAILABLE">行情不可用</option><option value="NO_PRICE_PATH">报告无价格路径</option></select></label>
                 <label class="select-control"><span>路径类型</span><select id="price-zone-action-filter"><option value="all">全部路径类型</option></select></label>
+                <label class="select-control"><span>本人持仓</span><select id="price-zone-holding-filter"><option value="all">全部公司</option><option value="unheld">未持仓</option><option value="held">已持仓</option></select></label>
                 <label class="select-control price-zone-exact-filter"><span>当前所在区间</span><select id="price-zone-exact-filter"><option value="all">全部当前区间</option></select></label>
                 <label class="select-control"><span>排序</span><select id="price-zone-sort"><option value="matched-first">命中优先</option><option value="price-state">按价格状态</option><option value="name">按公司名</option></select></label>
                 <button class="button button-quiet" id="price-zone-clear" type="button">清除筛选</button>
@@ -170,7 +174,7 @@
               <div class="price-zone-meta" id="price-zone-meta">正在加载价格区间…</div>
               <div class="price-zone-table-wrap">
                 <table class="price-zone-table">
-                  <thead><tr><th>公司</th><th>当前价格</th><th>价格状态</th><th>当前所在区间</th><th>主报告全部价格路径</th><th>人工核对</th></tr></thead>
+                  <thead><tr><th>公司</th><th>当前价格</th><th>命中区间与路径性质</th><th>人工核对与报告建议</th></tr></thead>
                   <tbody id="price-zone-list"></tbody>
                 </table>
               </div>

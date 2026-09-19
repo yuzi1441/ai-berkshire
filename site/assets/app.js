@@ -41,7 +41,7 @@ const LABELS = {
 const WORKSPACES = {
   attention: "今日处理",
   holdings: "我的持仓",
-  opportunities: "买入候选",
+  opportunities: "正式流程待处理",
   "ai-research": "AI 每日机会",
   "price-zones": "价格区间",
   watchlist: "研究池",
@@ -94,6 +94,7 @@ const DATA_FILES = {
   intraday: "./data/intraday_technical.json",
   opportunityScans: "./data/opportunity_scans.json",
   opportunityScanStatus: "./data/opportunity_scan_status.json",
+  release: "./data/release_validation.json",
 };
 
 const OPTIONAL_DATA_FALLBACKS = {
@@ -106,6 +107,7 @@ const OPTIONAL_DATA_FALLBACKS = {
   intraday: { companies: [] },
   opportunityScans: { schema_version: 1, status: "unavailable", scans: [] },
   opportunityScanStatus: { schema_version: 1 },
+  release: {},
 };
 
 const state = {
@@ -146,6 +148,7 @@ const state = {
   priceZoneSearch: "",
   priceZoneStatus: "all",
   priceZoneAction: "all",
+  priceZoneHolding: "all",
   priceZoneExact: "all",
   priceZoneSort: "matched-first",
   priceZonePage: 1,
@@ -159,6 +162,8 @@ const state = {
 
 const els = {
   lastUpdated: document.querySelector("#last-updated"),
+  evaluationTime: document.querySelector("#evaluation-time"),
+  releaseTime: document.querySelector("#release-time"),
   dataSource: document.querySelector("#data-source"),
   datasetSummary: document.querySelector("#dataset-summary"),
   quoteStatus: document.querySelector("#quote-status"),
@@ -203,6 +208,7 @@ const els = {
   priceZoneSearch: document.querySelector("#price-zone-search"),
   priceZoneStatus: document.querySelector("#price-zone-status-filter"),
   priceZoneAction: document.querySelector("#price-zone-action-filter"),
+  priceZoneHolding: document.querySelector("#price-zone-holding-filter"),
   priceZoneExact: document.querySelector("#price-zone-exact-filter"),
   priceZoneSort: document.querySelector("#price-zone-sort"),
   priceZoneClear: document.querySelector("#price-zone-clear"),
@@ -695,6 +701,13 @@ function renderStatusCards() {
 function renderTopMeta() {
   const generated = state.board?.generated_at || state.loadedAt;
   els.lastUpdated.textContent = formatDateTime(generated);
+  if (els.evaluationTime) els.evaluationTime.textContent = `正式评估基准：${formatDateTime(state.companyStateMeta?.evaluated_at)} · 价格匹配：${formatDateTime(state.companyStateMeta?.price_trigger_daily?.generated_at)}`;
+  if (els.releaseTime) {
+    const release = state.releaseMeta;
+    const sameVersion = release?.source_sha === state.companyStateMeta?.source_sha;
+    els.releaseTime.textContent = sameVersion && release?.activation === "pass"
+      ? `版本发布：${formatDateTime(release.activated_at)}` : "版本发布时间：暂未取得同版本记录";
+  }
   if (els.dataSource) {
     const local = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
     const metadata = state.companyStateMeta || {};
@@ -726,7 +739,8 @@ function renderTopMeta() {
   els.quoteStatus.dataset.tone = isComplete ? "fresh" : "stale";
   let quoteLabel = quoteMeta._load_state === "missing" || (!quoteMeta.source_status && !quoteMeta.generated_at && !quoteCount && !quoteMeta._load_state)
     ? "尚未取得行情快照"
-    : quoteMeta._load_state === "load_failed" ? "行情快照读取失败"
+    : quoteMeta._load_state === "load_failed" ? "本次行情读取失败（不等于后台行情失效）"
+    : quoteMeta._load_state === "retained_after_failure" ? "本次读取失败 · 保留上次行情并继续检查时效"
     : ["unavailable", "error", "failed"].includes(sourceStatus)
     ? state.quotes.size ? "行情更新失败 · 保留上次数据" : "行情更新失败"
     : quoteCount < quoteTotal
@@ -742,11 +756,16 @@ function renderTopMeta() {
 
 function cardCompany(record) {
   const quote = quoteFor(record);
-  return `<div class="card-company"><span class="company-name">${escapeHtml(text(record.company))}</span><span class="company-code">${escapeHtml(record.market || "待识别")} · ${escapeHtml(record.ticker)}</span><span class="price-value">${escapeHtml(formatPrice(quote))}</span>${quoteReference(quote) ? `<span class="source-line">${escapeHtml(quoteReference(quote))}</span>` : ""}</div>`;
+  return `<div class="card-company"><span class="company-name">${escapeHtml(companyDisplayName(record))}</span><span class="company-code">${escapeHtml(record.market || "待识别")} · ${escapeHtml(record.ticker)}</span><span class="price-value">${escapeHtml(formatPrice(quote))}</span>${quoteReference(quote) ? `<span class="source-line">${escapeHtml(quoteReference(quote))}</span>` : ""}</div>`;
+}
+
+function companyDisplayName(record) {
+  // Presentation aliases only: ticker/source identity and report binding stay intact.
+  return {"600276.SH": "恒瑞医药", "603005.SH": "晶方科技"}[record?.ticker] || record?.company || "未命名公司";
 }
 
 function compactCompany(record) {
-  return `<div class="card-company"><span class="company-name">${escapeHtml(text(record.company))}</span><span class="company-code">${escapeHtml(record.market || "待识别")} · ${escapeHtml(record.ticker)}</span></div>`;
+  return `<div class="card-company"><span class="company-name">${escapeHtml(companyDisplayName(record))}</span><span class="company-code">${escapeHtml(record.market || "待识别")} · ${escapeHtml(record.ticker)}</span></div>`;
 }
 
 function renderAttentionCard(record) {
@@ -868,7 +887,7 @@ function renderOpportunityCard(item, kind) {
     : opportunityTarget(opportunity, record);
   return `<article class="opportunity-card" data-ticker="${escapeHtml(record.ticker)}" tabindex="0" role="button">
     <div class="opportunity-topline">${cardCompany(record)}<span class="mini-badge opportunity-status" data-status="${escapeHtml(status)}">${escapeHtml(label("ruleStatus", status))}</span></div>
-    <div class="opportunity-context"><span class="opportunity-label">${escapeHtml(contextLabel)}</span><span class="opportunity-condition">${escapeHtml(contextValue)}</span></div>
+    ${kind === "price" ? `<div class="opportunity-context"><span class="opportunity-label">正式规则参考</span><span class="opportunity-condition">旧规则状态，不代表新价格路径命中。<a href="#price-zones/company=${encodeURIComponent(record.ticker)}">查看分层价格路径 →</a></span></div><details><summary>展开原规则文本（可能合并价格层级）</summary><p class="detail-copy">${escapeHtml(contextValue)}</p></details>` : `<div class="opportunity-context"><span class="opportunity-label">${escapeHtml(contextLabel)}</span><span class="opportunity-condition">${escapeHtml(contextValue)}</span></div>`}
     <div class="opportunity-action" data-tone="${escapeHtml(actionTone(record.next_action))}">${escapeHtml(actionLabel(record))}<span aria-hidden="true">→</span></div>
   </article>`;
 }
@@ -892,12 +911,12 @@ function renderOpportunities() {
       els.opportunityPoolNote.textContent = "只展示当前已有推进动作的候选；观察中的公司不会被自动改成买入前生命周期。";
     } else {
       const statusCounts = currentOpportunityStatusCounts(state.opportunityView === "price" ? prices : conditions);
-      els.opportunityPoolNote.textContent = `这是条件池：已触发 ${statusCounts.triggered} · 接近 ${statusCounts.near_trigger} · 待判断 ${statusCounts.unknown} · 未触发 ${statusCounts.not_triggered}。只有已触发且通过资格校验的条件，才会进入买入前检查。`;
+      els.opportunityPoolNote.textContent = `正式流程规则参考（非日常价格筛选）：已触发 ${statusCounts.triggered} · 接近 ${statusCounts.near_trigger} · 待判断 ${statusCounts.unknown} · 未触发 ${statusCounts.not_triggered}。旧规则可能合并多个价格层级；日常筛选及准确分层请使用「价格区间」。此处不改变正式行动指引。`;
     }
   }
   const current = state.opportunityView === "checklist" ? checklists : state.opportunityView === "price" ? prices : conditions;
   const visible = state.opportunityExpanded ? current : current.slice(0, 8);
-  els.opportunityList.innerHTML = current.length ? visible.map((item) => renderOpportunityCard(item, state.opportunityView)).join("") : `<div class="loading-card">暂时没有可展示的机会。</div>`;
+  els.opportunityList.innerHTML = current.length ? visible.map((item) => renderOpportunityCard(item, state.opportunityView)).join("") : `<div class="loading-card">暂无正式流程待推进事项。这不代表没有价格命中；<a href="#price-zones">查看日常价格区间</a>。</div>`;
   els.opportunityViewAll.hidden = current.length <= 8;
   const viewLabel = state.opportunityView === "checklist" ? "研究候选" : "条件池";
   els.opportunityViewAll.textContent = state.opportunityExpanded ? `收起${viewLabel}` : `查看全部${viewLabel}（${current.length}）`;
@@ -1078,9 +1097,9 @@ function redlineRules(record) {
 
 function renderHoldingReview(tracking) {
   if (tracking?.research_binding_status !== "matched") {
-    return `<div class="source-line">持仓研究身份待核对，不能将旧周期结论作为当前建议。</div>`;
+    return `<div class="source-line">后续研究绑定：待核对。与买入基线绑定是两项独立检查；不能将旧周期研究结论作为当前建议。</div>`;
   }
-  return `<div class="source-line">最近持仓复核：${escapeHtml(formatDate(tracking.last_review_date))} · 下次复核：${escapeHtml(formatDate(tracking.next_review_date))}</div><p class="detail-copy">研究建议：${escapeHtml(tracking.review_action || "尚未记录建议")}（不是成交记录）</p>`;
+  return `<div class="source-line">后续研究绑定：已核对当前持仓周期。最近持仓复核：${escapeHtml(formatDate(tracking.last_review_date))} · 下次复核：${escapeHtml(formatDate(tracking.next_review_date))}</div><p class="detail-copy">研究建议：${escapeHtml(tracking.review_action || "尚未记录建议")}（不是成交记录）</p>`;
 }
 
 function renderHoldingCard(record) {
@@ -1098,6 +1117,7 @@ function renderHoldingCard(record) {
       <div><span class="metric-label">仓位</span><strong class="metric-value">${escapeHtml(tracking.position_weight == null ? "—" : `${formatNumber(tracking.position_weight, 1)}%`)}</strong></div>
       <div><span class="metric-label">${quoteIsCurrent(quote) ? "当前价格" : "历史参考价格"}</span><strong class="metric-value">${escapeHtml(formatPrice(quote))}</strong>${quoteReference(quote) ? `<span class="source-line">${escapeHtml(quoteReference(quote))}</span>` : ""}</div>
     </div>
+    <div class="source-line">买入基线绑定：${snapshot ? "已绑定当前持仓周期" : "尚未加载当前周期基线"}。后续研究绑定状态另列于下方。</div>
     <div class="holding-bottom">
       <div><div class="holding-detail-label">买入日期</div><div class="holding-detail-value">${escapeHtml(formatDate(tracking.buy_date))}</div><div class="holding-detail-label" style="margin-top:9px">原始买入逻辑</div><div class="holding-detail-value">${snapshot ? "已绑定当前持仓周期" : "冻结基线未加载"}</div>${renderFrozenThesis(snapshot)}<div class="holding-detail-label" style="margin-top:9px">最新研究</div><div class="holding-detail-value"><a class="text-link" href="${escapeHtml(reportHref(tracking.thesis_report_path || record.canonical_report))}" target="_blank" rel="noreferrer" data-stop-card>查看最新研究</a></div></div>
       <div><div class="holding-detail-label">投资逻辑状态 / 最近漂移</div><div class="holding-detail-value">${escapeHtml(thesisLabel(tracking.thesis_status))} · ${escapeHtml(label("drift", drift.direction))}</div><div class="holding-detail-label" style="margin-top:9px">关键失效条件</div><ul class="redline-list">${redlines.length ? redlines.map((rule) => `<li>${escapeHtml(rule.condition)}</li>`).join("") : "<li>报告未提取明确失效条件</li>"}</ul></div>
@@ -1226,7 +1246,7 @@ function matchesUnifiedFilters(record, filters) {
   const search = String(filters.search || "").toLowerCase();
   const guidance = record?.action_guidance || {};
   const checklistStatus = String(record?.checklist?.status || "UNKNOWN").toUpperCase();
-  const matchesSearch = !search || `${record.company || ""} ${record.ticker || ""}`.toLowerCase().includes(search);
+  const matchesSearch = !search || `${companyDisplayName(record)} ${record.company || ""} ${record.ticker || ""}`.toLowerCase().includes(search);
   const matchesMarket = filters.market === "all" || record.market === filters.market;
   const matchesLifecycle = filters.lifecycle === "all" || lifecycleOf(record) === filters.lifecycle;
   const matchesLight = filters.lightThesis === "all" || lightThesisFilterValue(record) === filters.lightThesis;
@@ -1740,8 +1760,8 @@ function priceTriggerStateLabelForRecord(record) {
 function renderPriceZone(zone, isMatched = false) {
   const priceExpression = priceRuleExpression(zone);
   const hints = Array.isArray(zone.manual_check_conditions) ? zone.manual_check_conditions : [];
-  const required = hints.filter((hint) => hint.relationship === "REQUIRED_WITH_PRICE");
-  const contextual = hints.filter((hint) => hint.relationship !== "REQUIRED_WITH_PRICE");
+  const required = hints.filter((hint) => ["REQUIRED_WITH_PRICE", "GROUP_WITH_PRICE"].includes(hint.relationship));
+  const contextual = hints.filter((hint) => !["REQUIRED_WITH_PRICE", "GROUP_WITH_PRICE"].includes(hint.relationship));
   const hintList = required.length
     ? required.map((hint) => `<li data-machine-value="${escapeHtml(hint.node_id || "")}">${escapeHtml(hint.description || "请打开主报告人工核对")}</li>`).join("")
     : "<li>此路径未列出附加条件；仍请核对完整主报告</li>";
@@ -1794,7 +1814,7 @@ function matchedManualChecks(record) {
   const seen = new Set();
   for (const zone of zones) {
     for (const hint of zone.manual_check_conditions || []) {
-      if (hint.relationship !== "REQUIRED_WITH_PRICE") continue;
+      if (!["REQUIRED_WITH_PRICE", "GROUP_WITH_PRICE"].includes(hint.relationship)) continue;
       const value = String(hint.description || "").trim();
       if (value && !seen.has(value)) { seen.add(value); checks.push(value); }
     }
@@ -1814,7 +1834,7 @@ function populatePriceZoneFilters() {
       const zone = group.zone;
       exact.push({
         value: `${record.ticker}::${group.key}`,
-        label: `${record.company} · ${priceRuleExpression(zone)} ${zone.currency || ""} · ${group.labels.join(" / ")}${group.needsClarification ? " · 语义待澄清" : ""}`,
+        label: `${companyDisplayName(record)} · ${priceRuleExpression(zone)} ${zone.currency || ""} · ${group.labels.join(" / ")}${group.needsClarification ? " · 语义待澄清" : ""}`,
       });
     }
   }
@@ -1834,7 +1854,10 @@ function filteredPriceZoneRecords() {
   const query = state.priceZoneSearch.toLowerCase();
   const records = priceTriggerRecords().filter((record) => {
     const trigger = record.price_trigger_shadow;
-    const matchesSearch = !query || `${record.company} ${record.ticker}`.toLowerCase().includes(query);
+    const matchesSearch = !query || `${companyDisplayName(record)} ${record.company} ${record.ticker}`.toLowerCase().includes(query);
+    const held = record.lifecycle === "HOLDING";
+    const matchesHolding = !state.priceZoneHolding || state.priceZoneHolding === "all"
+      || (state.priceZoneHolding === "held" ? held : !held);
     const matchesStatus = state.priceZoneStatus === "all"
       || (state.priceZoneStatus === "matched" && priceStateIsMatched(trigger.price_state))
       || trigger.price_state === state.priceZoneStatus;
@@ -1847,7 +1870,7 @@ function filteredPriceZoneRecords() {
         && (state.priceZoneExact === "all" || `${record.ticker}::${priceZoneGroupKey(zone)}` === state.priceZoneExact));
     const matchesExact = state.priceZoneExact === "all"
       || matchedPriceZoneGroups(record).some((group) => `${record.ticker}::${group.key}` === state.priceZoneExact);
-    return matchesSearch && matchesStatus && matchesAction && matchesExact;
+    return matchesSearch && matchesStatus && matchesAction && matchesExact && matchesHolding;
   });
   const stateRank = {
     MULTIPLE_PRICE_ZONES_MATCHED: 0,
@@ -1866,19 +1889,16 @@ function filteredPriceZoneRecords() {
 function renderPriceZoneRow(record) {
   const trigger = record.price_trigger_shadow;
   const matched = currentMatchedPriceZoneSummary(record);
-  const allZones = allPriceZoneSummary(record);
   const checks = matchedManualChecks(record);
   const price = trigger.current_price == null ? "—" : `${formatNumber(trigger.current_price, 2)} 元`;
   const defensive = (trigger.matched_price_zones || []).some(zone => ["AVOID", "REDUCE", "EXIT"].includes(zone.action));
   const statusTone = priceStateIsMatched(trigger.price_state) ? (defensive ? "caution" : "neutral")
     : trigger.price_state === "OUTSIDE_PRICE_ZONE" ? "outside" : "muted";
   return `<tr data-ticker="${escapeHtml(record.ticker)}" tabindex="0">
-    <td>${compactCompany(record)}</td>
+    <td>${compactCompany(record)}<div class="table-secondary">本人：${record.lifecycle === "HOLDING" ? "已持仓" : "未持仓"}</div></td>
     <td><span class="table-price">${escapeHtml(price)}</span><div class="table-secondary">截至 ${escapeHtml(trigger.price_cutoff || "未知")}</div></td>
-    <td><span class="price-zone-status" data-tone="${statusTone}" data-machine-value="${escapeHtml(trigger.price_state)}">${escapeHtml(priceTriggerStateLabelForRecord(record))}</span></td>
-    <td><div class="price-zone-current">${escapeHtml(matched || "无")}</div>${matched ? `<div class="table-secondary">命中 ${trigger.matched_price_zones.length} 条路径</div>` : ""}</td>
-    <td><div class="price-zone-all-paths">${escapeHtml(allZones || "主报告无可匹配价格路径")}</div><div class="table-secondary">共 ${(trigger.available_price_zones || []).length} 条 · 点击查看报告建议</div></td>
-    <td><div class="price-zone-manual">${escapeHtml(checks.length ? checks.join("；") : (matched ? "请核对完整主报告" : "进入区间后再核对"))}</div></td>
+    <td><span class="price-zone-status" data-tone="${statusTone}" data-machine-value="${escapeHtml(trigger.price_state)}">${escapeHtml(priceTriggerStateLabelForRecord(record))}</span><div class="price-zone-current">${escapeHtml(matched || "无")}</div></td>
+    <td><div class="price-zone-manual">${escapeHtml(checks.length ? checks.join("；") : (matched ? "请核对完整主报告" : "进入区间后再核对"))}</div><button type="button" class="text-link">查看全部 ${(trigger.available_price_zones || []).length} 条路径与报告建议 →</button></td>
   </tr>`;
 }
 
@@ -1902,7 +1922,7 @@ function renderPriceZones() {
     ["行情不可用 / 无路径", counts.unavailable + counts.noPath, `${counts.unavailable} / ${counts.noPath}`],
   ].map(([labelText, value, note]) => `<div class="price-zone-summary-card"><span>${escapeHtml(labelText)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></div>`).join("");
   els.priceZoneCount.textContent = `${filtered.length} / ${all.length} 家`;
-  els.priceZoneMeta.textContent = `当前结果：${filtered.length} / ${all.length} 家${visible.length < filtered.length ? ` · 已显示 ${visible.length} 家` : ""}`;
+  els.priceZoneMeta.textContent = `当前结果：${filtered.length} / ${all.length} 家${visible.length < filtered.length ? ` · 已显示 ${visible.length} 家` : ""}。上方统计为全部 A 股；本人持仓与报告路径身份独立。${state.priceZoneStatus === "all" && state.priceZoneExact === "all" ? "当前按报告包含的路径类型筛选；要找当前命中，请选「当前已进入区间」。" : "当前按命中的路径筛选。"}`;
   els.priceZoneList.innerHTML = visible.map(renderPriceZoneRow).join("");
   els.priceZoneLoadMore.hidden = visible.length >= filtered.length;
   els.priceZoneLoadMore.textContent = `加载更多（剩余 ${Math.max(0, filtered.length - visible.length)} 家）`;
@@ -1912,7 +1932,7 @@ function renderPriceZones() {
 function renderDetail(record) {
   const ruleCount = rulesFor(record).length;
   els.drawerKicker.textContent = `${record.market || "待识别"} · ${record.ticker}`;
-  els.drawerTitle.textContent = text(record.company);
+  els.drawerTitle.textContent = companyDisplayName(record);
   els.drawerSubtitle.textContent = `${label("lifecycle", lifecycleOf(record))} · ${actionLabel(record)} · ${ruleCount} 条已保存规则`;
   els.drawerContent.innerHTML = [
     renderDecisionContext(record),
@@ -2012,7 +2032,7 @@ async function loadJson(path) {
   const separator = path.includes("?") ? "&" : "?";
   const requestVersion = `${Date.now()}-${++dataRequestSequence}`;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), path === DATA_FILES.core ? 15000 : 4000);
+  const timer = setTimeout(() => controller.abort(), path === DATA_FILES.core ? 15000 : path === DATA_FILES.quotes ? 8000 : 4000);
   try {
     const response = await fetch(`${path}${separator}v=${requestVersion}`, {
       cache: "no-store", signal: controller.signal,
@@ -2039,6 +2059,14 @@ async function loadDispositionAuthority() {
   } catch {
     return { authorized: false, payload: null };
   }
+}
+
+function retainQuoteSnapshot(previous, incoming) {
+  if (["load_failed", "missing"].includes(incoming?._load_state) && previous?.quotes?.length) {
+    // Keep original per-quote quality/expiry. Never make old quotes fresh.
+    return {...previous, _load_state: "retained_after_failure"};
+  }
+  return incoming;
 }
 
 function dispositionOverlayMatches(current, overlay) {
@@ -2114,8 +2142,10 @@ async function loadData({ silent = false } = {}) {
   const payload = Object.fromEntries(entries);
   applyDispositionAuthority(dispositionResult);
   state.sentiment = indexByTicker(payload.sentiment?.companies);
-  state.quotes = indexByTicker(payload.quotes?.quotes);
-  state.quoteMeta = payload.quotes;
+  const quotes = retainQuoteSnapshot(state.quoteMeta, payload.quotes);
+  state.quotes = indexByTicker(quotes?.quotes);
+  state.quoteMeta = quotes;
+  state.releaseMeta = payload.release;
   state.sentimentMeta = { ...(payload.sentiment || {}), ...(payload.sentimentStatus || {}) };
   const scanPayload = payload.opportunityScans && Array.isArray(payload.opportunityScans.scans)
     ? payload.opportunityScans
@@ -2374,12 +2404,14 @@ function bindEvents() {
   });
   for (const [select, key] of [
     [els.priceZoneStatus, "priceZoneStatus"], [els.priceZoneAction, "priceZoneAction"],
+    [els.priceZoneHolding, "priceZoneHolding"],
     [els.priceZoneExact, "priceZoneExact"], [els.priceZoneSort, "priceZoneSort"],
   ]) {
     select.addEventListener("change", () => { state[key] = select.value; state.priceZonePage = 1; renderPriceZones(); });
   }
   els.priceZoneClear.addEventListener("click", () => {
     state.priceZoneSearch = ""; state.priceZoneStatus = "all"; state.priceZoneAction = "all";
+    state.priceZoneHolding = "all"; els.priceZoneHolding.value = "all";
     state.priceZoneExact = "all"; state.priceZoneSort = "matched-first"; state.priceZonePage = 1;
     els.priceZoneSearch.value = ""; els.priceZoneStatus.value = "all"; els.priceZoneAction.value = "all";
     els.priceZoneExact.value = "all"; els.priceZoneSort.value = "matched-first"; renderPriceZones();

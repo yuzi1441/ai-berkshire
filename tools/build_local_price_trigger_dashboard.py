@@ -88,6 +88,17 @@ def _manual_hints(node: Any, target_id: str) -> tuple[bool, list[dict[str, Any]]
         found, hints = _manual_hints(selected, target_id)
         if not found:
             continue
+        if node.get("kind") in {"AT_LEAST", "NOT"}:
+            # A price leaf participates in this group; siblings alone cannot
+            # convey the threshold or negation. Display the untouched group.
+            return True, [{
+                "node_id": str(node.get("node_id") or ""),
+                "kind": node.get("kind"),
+                "description": _condition_text(node),
+                "relationship": "GROUP_WITH_PRICE",
+                "condition_tree": node,
+                "evidence": list(node.get("evidence") or []),
+            }]
         relation = {
             "ALL": "REQUIRED_WITH_PRICE",
             "ANY": "ALTERNATIVE_TO_PRICE",

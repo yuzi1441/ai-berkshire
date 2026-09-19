@@ -689,6 +689,7 @@ class DashboardActionClassifierTests(unittest.TestCase):
                 "priceTriggerStateMatches",
                 "priceTriggerZoneMatches",
                 "matchesUnifiedFilters",
+                "companyDisplayName",
             )
         )
         script = f"""

@@ -18,6 +18,15 @@ import dashboard_snapshot
 
 
 class LocalPriceTriggerDashboardTests(unittest.TestCase):
+    def test_price_participating_in_at_least_keeps_the_whole_group(self):
+        company = next(row for row in self.rules["companies"] if row["ticker"] == "600276.SH")
+        grouped = [hint for rule in company["price_rules"] for hint in rule["manual_check_conditions"]
+                   if hint["relationship"] == "GROUP_WITH_PRICE"]
+        self.assertTrue(grouped)
+        self.assertTrue(any("以下3项至少满足2项" in hint["description"] for hint in grouped))
+        self.assertTrue(any(node["kind"] == "PRICE_RANGE"
+                            for hint in grouped for node in price_trigger._nodes(hint["condition_tree"])))
+
     def test_independent_refresh_ignores_broken_research_and_preserves_formal_state(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

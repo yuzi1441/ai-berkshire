@@ -11,6 +11,26 @@ APP = ROOT / "site/assets/app.js"
 
 @unittest.skipUnless(shutil.which("node"), "Node required")
 class DashboardPolishTests(unittest.TestCase):
+    def test_quote_failure_retains_but_does_not_revalidate_previous_quotes(self):
+        self.run_js(["retainQuoteSnapshot", "quoteIsCurrent", "formatPrice", "formatNumber"], "import assert from 'node:assert/strict';", '''
+const quality={eligible:true,evaluated_at:'2026-09-18T08:00:00Z',valid_until:'2026-09-21T01:30:00Z'};
+const previous={quotes:[{ticker:'A',price:10,quality}],data_cutoff:'2026-09-18'};
+const retained=retainQuoteSnapshot(previous,{_load_state:'load_failed',quotes:[]});
+assert.equal(retained._load_state,'retained_after_failure');
+assert.equal(retained.quotes[0].quality,quality);
+assert.equal(quoteIsCurrent(retained.quotes[0],Date.parse('2026-09-21T02:00:00Z')),false);
+assert.equal(previous._load_state,undefined);
+const fresh={quotes:[]};assert.equal(retainQuoteSnapshot(previous,fresh),fresh);
+assert.equal(retainQuoteSnapshot(null,{_load_state:'load_failed'})._load_state,'load_failed');
+''')
+
+    def test_display_aliases_leave_machine_identity_intact(self):
+        self.run_js(["companyDisplayName"], "import assert from 'node:assert/strict';", '''
+const a={ticker:'600276.SH',company:'恒瑞医疗'};
+assert.equal(companyDisplayName(a),'恒瑞医药');assert.equal(a.company,'恒瑞医疗');
+assert.equal(companyDisplayName({ticker:'603005.SH',company:'jingfang-keji'}),'晶方科技');
+''')
+
     def test_price_expiry_is_read_only_and_fails_closed(self):
         self.run_js(["withCurrentPriceTrigger"], "import assert from 'node:assert/strict';", '''
 const record={action_guidance:'unchanged',price_trigger_shadow:{price_state:'PRICE_ZONE_MATCHED',
@@ -37,6 +57,9 @@ assert.equal(filteredPriceZoneRecords().length,0);
 state.priceZoneAction='WATCH';assert.equal(filteredPriceZoneRecords().length,1);
 state.priceZoneStatus='all';state.priceZoneAction='OPEN_POSITION';assert.equal(filteredPriceZoneRecords().length,1);
 state.priceZoneExact='000333.SZ::'+priceZoneGroupKey(watch);assert.equal(filteredPriceZoneRecords().length,0);
+state.priceZoneExact='all';state.priceZoneAction='all';state.priceZoneHolding='held';assert.equal(filteredPriceZoneRecords().length,0);
+records[0].lifecycle='HOLDING';assert.equal(filteredPriceZoneRecords().length,1);
+state.priceZoneHolding='unheld';assert.equal(filteredPriceZoneRecords().length,0);
 ''')
 
     def test_price_trigger_identifies_exact_zone_and_filters_by_state_or_rule(self):
@@ -275,6 +298,7 @@ assert.equal(currentRecord('X').action_guidance.requires_user_action,false);
     def run_js(self, names, setup, checks):
         app = APP.read_text()
         functions = []
+        names = list(dict.fromkeys(names + ["companyDisplayName", "retainQuoteSnapshot"]))
         for name in names:
             match = re.search(r"(?:async )?function " + name + r"\(", app)
             following = re.search(r"\n(?:async )?function ", app[match.end():])
