@@ -34,6 +34,7 @@ import investment_dispositions
 import holding_research_reviews
 import dashboard_snapshot
 import quote_quality
+import build_local_price_trigger_dashboard as price_trigger_layer
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -5994,6 +5995,94 @@ def quarantine_stale_rule_identities(
     return result
 
 
+def refresh_daily_price_triggers(
+    repo_root: Path,
+    company_state: dict[str, Any],
+    *,
+    generated_at: str,
+    compile_rules: bool,
+) -> dict[str, Any]:
+    """Build and attach the production read-only daily price-trigger layer.
+
+    Full dashboard builds compile static rules from reviewed Semantic Contracts.
+    Quote-only ``--state-only`` refreshes consume the saved rules and run only
+    deterministic price matching.  Neither path loads persistent facts, review
+    approvals, or the Full Candidate evaluator, and this projection never
+    changes Action Guidance or claims investment eligibility.
+    """
+    contract_directory = repo_root / price_trigger_layer.CONTRACT_DIRECTORY
+    contract_paths = sorted(contract_directory.glob("*.json"))
+    if not contract_paths:
+        # Minimal legacy-mode test repositories do not contain Semantic
+        # Contracts.  Production validation separately requires the canonical
+        # repository and exercises the full 93-company population.
+        return {"company_count": 0, "state_counts": {}, "skipped": True}
+
+    data_directory = repo_root / "data" / "investment-dashboard"
+    site_data_directory = repo_root / "site" / "data"
+    rules_path = data_directory / "price_trigger_rules.json"
+    if compile_rules:
+        rules = price_trigger_layer.compile_price_rules(repo_root, production=True)
+        write_json(rules_path, rules)
+    else:
+        if not rules_path.is_file():
+            raise ValueError(
+                "production price-trigger rules missing; run a full dashboard build after contract changes"
+            )
+        rules = load_json(rules_path, {})
+        rule_errors = price_trigger_layer.validate_price_rules(
+            rules,
+            set(price_trigger_layer.discover_contract_tickers(repo_root)),
+            production=True,
+        )
+        if rule_errors:
+            raise ValueError("Invalid production price-trigger rules: " + "; ".join(rule_errors))
+    binding_errors = price_trigger_layer.validate_price_rule_bindings(rules, repo_root)
+    if binding_errors:
+        raise ValueError("Stale production price-trigger rules: " + "; ".join(binding_errors))
+
+    quote_path = data_directory / "quotes" / "latest.json"
+    quotes = load_json(quote_path, {"data_cutoff": None, "quotes": []})
+    evaluated_at = datetime.fromisoformat(generated_at)
+    layer = price_trigger_layer.match_price_triggers(
+        rules, quotes, evaluated_at, production=True
+    )
+    by_ticker = {str(item["ticker"]): item for item in layer["companies"]}
+    rendered = 0
+    for company in company_state.get("companies", []):
+        trigger = by_ticker.get(str(company.get("ticker") or ""))
+        if trigger is None:
+            continue
+        if company.get("company") != trigger.get("company"):
+            raise ValueError(f"daily price-trigger company mismatch for {trigger['ticker']}")
+        # Backward-compatible field name used by the current UI.  The payload
+        # itself declares price_trigger_daily + production_consumable=true and
+        # remains explicitly non-eligible for formal investment decisions.
+        company["price_trigger_shadow"] = trigger
+        rendered += 1
+    if rendered != len(by_ticker):
+        raise ValueError(
+            f"daily price-trigger render population mismatch: {rendered}/{len(by_ticker)}"
+        )
+    company_state["price_trigger_daily"] = {
+        "authority": layer["authority"],
+        "production_consumable": True,
+        "generated_at": layer["generated_at"],
+        "price_cutoff": layer.get("price_cutoff"),
+        "company_count": rendered,
+        "state_counts": layer["state_counts"],
+        "investment_eligibility": False,
+    }
+    write_json(data_directory / "price_triggers.json", layer)
+    write_json(site_data_directory / "price_trigger_rules.json", rules)
+    write_json(site_data_directory / "price_triggers.json", layer)
+    return {
+        "company_count": rendered,
+        "state_counts": layer["state_counts"],
+        "price_cutoff": layer.get("price_cutoff"),
+    }
+
+
 def refresh_runtime_state(
     repo_root: Path = ROOT,
     *,
@@ -6075,6 +6164,9 @@ def refresh_runtime_state(
     errors = decision_state.validate_payloads(layers)
     if errors:
         raise ValueError("Invalid structured state: " + "; ".join(errors))
+    price_trigger_summary = refresh_daily_price_triggers(
+        repo_root, layers["state"], generated_at=generated_at, compile_rules=False
+    )
     outputs = {
         "company_state.json": layers["state"],
         "technical_latest.json": layers["technical"],
@@ -6111,6 +6203,7 @@ def refresh_runtime_state(
         "decision_count": len(decisions),
         "rule_count": layers["rules"].get("rule_count", 0),
         "evaluation_count": layers["evaluations"].get("evaluation_count", 0),
+        "price_trigger_count": price_trigger_summary.get("company_count", 0),
     }
 
 
@@ -6601,6 +6694,9 @@ def build_dashboard(
     state_errors = decision_state.validate_payloads(state_layers)
     if state_errors:
         raise ValueError("Invalid structured state: " + "; ".join(state_errors))
+    refresh_daily_price_triggers(
+        repo_root, state_layers["state"], generated_at=generated_at, compile_rules=True
+    )
     decision_state.attach_company_states(decisions, state_layers["state"])
     for decision in decisions:
         decision["realtime_scope"] = (
