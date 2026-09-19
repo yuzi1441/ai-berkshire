@@ -133,6 +133,7 @@ def compile_price_rules(
     for ticker in tickers:
         contract_path = repo_root / CONTRACT_DIRECTORY / f"{ticker}.json"
         contract = load_json(contract_path)
+        source = contract.get("source") or {}
         rules: list[dict[str, Any]] = []
         for scope_name, scope in contract.get("scopes", {}).items():
             for path in scope.get("action_paths", []):
@@ -165,8 +166,8 @@ def compile_price_rules(
         companies.append({
             "ticker": ticker,
             "company": contract.get("company"),
-            "report_path": contract.get("report_path"),
-            "report_sha256": contract.get("report_sha256"),
+            "report_path": source.get("report_path"),
+            "report_sha256": source.get("report_sha256"),
             "semantic_contract_sha256": _sha256(contract_path),
             "price_rules": rules,
         })
@@ -243,9 +244,10 @@ def validate_price_rule_bindings(payload: Any, repo_root: Path) -> list[str]:
             errors.append(f"{ticker}: semantic contract SHA changed; full rule rebuild required")
             continue
         contract = load_json(path)
-        if company.get("report_path") != contract.get("report_path"):
+        source = contract.get("source") or {}
+        if company.get("report_path") != source.get("report_path"):
             errors.append(f"{ticker}: canonical report path binding changed")
-        if company.get("report_sha256") != contract.get("report_sha256"):
+        if company.get("report_sha256") != source.get("report_sha256"):
             errors.append(f"{ticker}: canonical report SHA binding changed")
     return errors
 

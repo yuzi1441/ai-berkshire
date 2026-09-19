@@ -59,6 +59,13 @@ class LocalPriceTriggerDashboardTests(unittest.TestCase):
         self.assertGreater(self.rules["rule_count"], 20)
         self.assertFalse(self.rules["production_consumable"])
         self.assertTrue(all(item["semantic_contract_sha256"] for item in self.rules["companies"]))
+        self.assertTrue(all(item["report_path"] for item in self.rules["companies"]))
+        self.assertTrue(all(item["report_sha256"] for item in self.rules["companies"]))
+        for item in self.rules["companies"]:
+            contract = json.loads((ROOT / price_trigger.CONTRACT_DIRECTORY
+                                   / f"{item['ticker']}.json").read_text())
+            self.assertEqual(item["report_path"], contract["source"]["report_path"])
+            self.assertEqual(item["report_sha256"], contract["source"]["report_sha256"])
 
     def test_default_rule_compilation_covers_all_a_share_contracts(self):
         tickers = price_trigger.discover_contract_tickers(ROOT)
